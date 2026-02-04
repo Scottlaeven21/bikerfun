@@ -98,49 +98,49 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            🏍️ Occasions
+            Occasions
           </Link>
           <Link
             href="/motorkleding"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            👕 Motorkleding
+            Motorkleding
           </Link>
           <Link
             href="/accessoires"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            🧢 Accessoires
+            Accessoires
           </Link>
           <Link
             href="/over-ons"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            ℹ️ Over Ons
+            Over Ons
           </Link>
           <Link
             href="/motor-op-aanvraag"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            🔧 Motor op Aanvraag
+            Motor op Aanvraag
           </Link>
           <Link
             href="/contact"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            📧 Contact
+            Contact
           </Link>
           <Link
             href="/inruilen"
             className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
             onClick={() => setMenuOpen(false)}
           >
-            🔄 Inruilen
+            Inruilen
           </Link>
 
           {/* Extra CTA at bottom */}
