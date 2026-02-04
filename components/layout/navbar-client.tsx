@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { useCart } from '@/hooks/use-cart';
 import { Navbar } from './navbar';
 
@@ -9,6 +10,12 @@ interface NavbarClientProps {
 }
 
 export function NavbarClient({ user, isAdmin }: NavbarClientProps) {
+  const [cartCount, setCartCount] = useState(0);
   const { getTotalItems } = useCart();
-  return <Navbar user={user} isAdmin={isAdmin} cartItemCount={getTotalItems()} />;
+
+  useEffect(() => {
+    setCartCount(getTotalItems());
+  }, [getTotalItems]);
+
+  return <Navbar user={user} isAdmin={isAdmin} cartItemCount={cartCount} />;
 }
