@@ -33,8 +33,9 @@ export default async function ProductsPage({
       .ilike('name', params.category)
       .single();
 
-    if (categoryData) {
-      query = query.eq('category_id', categoryData.id);
+    const category = categoryData as { id: string } | null;
+    if (category) {
+      query = query.eq('category_id', category.id);
     }
   }
 
