@@ -47,7 +47,7 @@ export default function CartPage() {
             <div className="bg-white rounded-lg shadow-md overflow-hidden">
               <div className="divide-y divide-gray-200">
                 {items.map((item) => (
-                  <CartItem key={item.id} item={item} />
+                  <CartItem key={item.product_id} item={item} />
                 ))}
               </div>
             </div>
