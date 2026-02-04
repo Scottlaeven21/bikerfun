@@ -32,23 +32,23 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             </Link>
 
             {/* Desktop Navigation - Rechts */}
-            <div className="flex items-center space-x-8">
+            <div className="flex items-center space-x-4">
               {/* Aanbod Button */}
               <Link
                 href="/occasions"
-                className="text-white hover:text-biker-yellow transition-colors font-bold text-lg"
+                className="relative bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-lg font-bold text-lg transition-all transform hover:scale-105 hover:shadow-xl shadow-lg border-2 border-transparent hover:border-biker-yellowHover"
               >
-                Aanbod
+                <span className="relative z-10">Aanbod</span>
               </Link>
 
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="text-white hover:text-biker-yellow transition-colors font-bold text-lg flex items-center space-x-2"
+                className="relative bg-gradient-to-r from-biker-yellow to-biker-yellowHover hover:from-biker-yellowHover hover:to-biker-yellow text-biker-black px-6 py-3 rounded-lg font-bold text-lg flex items-center space-x-2 transition-all transform hover:scale-105 hover:shadow-xl shadow-lg border-2 border-transparent hover:border-biker-yellowHover group"
               >
-                <span>Menu</span>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                <span className="relative z-10">Menu</span>
+                <svg className="w-5 h-5 relative z-10 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>
