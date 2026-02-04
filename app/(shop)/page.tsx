@@ -28,7 +28,7 @@ export default async function HomePage() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center 20%' }}
+          style={{ objectPosition: 'center 10%' }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
