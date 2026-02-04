@@ -111,24 +111,29 @@ export default async function HomePage() {
               </div>
             </div>
 
-            {/* Right Stats/Features */}
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
-                <div className="text-4xl font-bold text-biker-yellow mb-2">15+</div>
-                <div className="text-biker-light">Jaar Ervaring</div>
-              </div>
-              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
-                <div className="text-4xl font-bold text-biker-yellow mb-2">500+</div>
-                <div className="text-biker-light">Tevreden Klanten</div>
-              </div>
-              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
-                <div className="text-4xl font-bold text-biker-yellow mb-2">100%</div>
-                <div className="text-biker-light">Kwaliteitsgarantie</div>
-              </div>
-              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
-                <div className="text-4xl font-bold text-biker-yellow mb-2">24/7</div>
-                <div className="text-biker-light">Service & Advies</div>
-              </div>
+            {/* Right - TikTok Videos Grid */}
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+              {[1, 2, 3, 4, 5, 6].map((num) => (
+                <div 
+                  key={num}
+                  className="relative aspect-[9/16] rounded-lg overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group"
+                >
+                  <video
+                    loop
+                    muted
+                    playsInline
+                    className="absolute inset-0 w-full h-full object-cover"
+                    onMouseEnter={(e) => e.currentTarget.play()}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.pause();
+                      e.currentTarget.currentTime = 0;
+                    }}
+                  >
+                    <source src={`/tiktok-${num}.mp4`} type="video/mp4" />
+                  </video>
+                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-all pointer-events-none"></div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
