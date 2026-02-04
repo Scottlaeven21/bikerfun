@@ -16,9 +16,9 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow"
+      className="group bg-biker-black rounded-lg overflow-hidden hover:ring-2 hover:ring-biker-yellow transition-all transform hover:scale-[1.02]"
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <div className="relative aspect-square overflow-hidden bg-biker-dark">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -27,44 +27,44 @@ export function ProductCard({ product }: ProductCardProps) {
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400">
+          <div className="w-full h-full flex items-center justify-center text-biker-muted">
             <span className="text-6xl">📦</span>
           </div>
         )}
         
         {hasDiscount && (
-          <div className="absolute top-2 right-2 bg-red-600 text-white px-2 py-1 rounded-md text-sm font-semibold">
+          <div className="absolute top-2 right-2 bg-biker-yellow text-biker-black px-3 py-1 rounded-md text-sm font-bold shadow-lg">
             -{discountPercentage}%
           </div>
         )}
 
         {product.stock === 0 && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <span className="bg-white text-gray-900 px-4 py-2 rounded-lg font-semibold">
+          <div className="absolute inset-0 bg-biker-black bg-opacity-80 flex items-center justify-center">
+            <span className="bg-biker-yellow text-biker-black px-4 py-2 rounded-lg font-bold">
               Uitverkocht
             </span>
           </div>
         )}
       </div>
 
-      <div className="p-4">
-        <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-red-600 transition-colors">
+      <div className="p-4 bg-biker-black">
+        <h3 className="font-bold text-white mb-2 line-clamp-2 group-hover:text-biker-yellow transition-colors">
           {product.name}
         </h3>
 
         <div className="flex items-baseline space-x-2">
-          <span className="text-xl font-bold text-gray-900">
+          <span className="text-xl font-bold text-biker-yellow">
             {formatPrice(product.price)}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-gray-500 line-through">
+            <span className="text-sm text-biker-muted line-through">
               {formatPrice(product.compare_at_price!)}
             </span>
           )}
         </div>
 
         {product.stock > 0 && product.stock <= 5 && (
-          <p className="text-sm text-orange-600 mt-2">
+          <p className="text-sm text-biker-yellow mt-2 font-semibold">
             Nog {product.stock} op voorraad
           </p>
         )}

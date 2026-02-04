@@ -27,12 +27,12 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="bg-slate-900 text-white shadow-lg">
+    <nav className="bg-biker-black text-white shadow-lg border-b-2 border-biker-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold">Bikerfun</span>
+          <Link href="/" className="flex items-center space-x-2 group">
+            <span className="text-2xl font-bold group-hover:text-biker-yellow transition-colors">Bikerfun</span>
             <span className="text-2xl">🏍️</span>
           </Link>
 
@@ -40,16 +40,16 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           <div className="hidden md:flex items-center space-x-8">
             <Link
               href="/"
-              className={`hover:text-red-500 transition-colors ${
-                isActive('/') ? 'text-red-500' : ''
+              className={`hover:text-biker-yellow transition-colors ${
+                isActive('/') ? 'text-biker-yellow' : ''
               }`}
             >
               Home
             </Link>
             <Link
               href="/products"
-              className={`hover:text-red-500 transition-colors ${
-                isActive('/products') ? 'text-red-500' : ''
+              className={`hover:text-biker-yellow transition-colors ${
+                isActive('/products') ? 'text-biker-yellow' : ''
               }`}
             >
               Producten
@@ -57,8 +57,8 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             {isAdmin && (
               <Link
                 href="/admin"
-                className={`hover:text-red-500 transition-colors ${
-                  pathname.startsWith('/admin') ? 'text-red-500' : ''
+                className={`hover:text-biker-yellow transition-colors ${
+                  pathname.startsWith('/admin') ? 'text-biker-yellow' : ''
                 }`}
               >
                 Admin
@@ -70,11 +70,11 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           <div className="hidden md:flex items-center space-x-6">
             <Link
               href="/cart"
-              className="relative hover:text-red-500 transition-colors"
+              className="relative hover:text-biker-yellow transition-colors"
             >
               <span className="text-xl">🛒</span>
               {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                <span className="absolute -top-2 -right-2 bg-biker-yellow text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   {cartItemCount}
                 </span>
               )}
@@ -84,15 +84,15 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               <>
                 <Link
                   href="/dashboard"
-                  className={`hover:text-red-500 transition-colors ${
-                    pathname.startsWith('/dashboard') ? 'text-red-500' : ''
+                  className={`hover:text-biker-yellow transition-colors ${
+                    pathname.startsWith('/dashboard') ? 'text-biker-yellow' : ''
                   }`}
                 >
                   Dashboard
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold px-4 py-2 rounded-lg transition-colors"
                 >
                   Uitloggen
                 </button>
@@ -101,13 +101,13 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               <>
                 <Link
                   href="/login"
-                  className="hover:text-red-500 transition-colors"
+                  className="hover:text-biker-yellow transition-colors font-semibold"
                 >
                   Inloggen
                 </Link>
                 <Link
                   href="/register"
-                  className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-lg transition-colors"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-4 py-2 rounded-lg font-bold transition-all"
                 >
                   Registreren
                 </Link>
@@ -144,21 +144,21 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
         <div className="md:hidden bg-slate-800 px-4 py-4 space-y-3">
           <Link
             href="/"
-            className="block hover:text-red-500"
+            className="block hover:text-biker-yellow"
             onClick={() => setMobileMenuOpen(false)}
           >
             Home
           </Link>
           <Link
             href="/products"
-            className="block hover:text-red-500"
+            className="block hover:text-biker-yellow"
             onClick={() => setMobileMenuOpen(false)}
           >
             Producten
           </Link>
           <Link
             href="/cart"
-            className="block hover:text-red-500"
+            className="block hover:text-biker-yellow"
             onClick={() => setMobileMenuOpen(false)}
           >
             Winkelwagen ({cartItemCount})
@@ -166,7 +166,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           {isAdmin && (
             <Link
               href="/admin"
-              className="block hover:text-red-500"
+              className="block hover:text-biker-yellow"
               onClick={() => setMobileMenuOpen(false)}
             >
               Admin
@@ -176,7 +176,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             <>
               <Link
                 href="/dashboard"
-                className="block hover:text-red-500"
+                className="block hover:text-biker-yellow"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Dashboard
@@ -186,7 +186,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                   handleSignOut();
                   setMobileMenuOpen(false);
                 }}
-                className="block w-full text-left hover:text-red-500"
+                className="block w-full text-left hover:text-biker-yellow"
               >
                 Uitloggen
               </button>
@@ -195,14 +195,14 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             <>
               <Link
                 href="/login"
-                className="block hover:text-red-500"
+                className="block hover:text-biker-yellow"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Inloggen
               </Link>
               <Link
                 href="/register"
-                className="block hover:text-red-500"
+                className="block hover:text-biker-yellow"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Registreren
