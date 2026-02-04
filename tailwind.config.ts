@@ -12,7 +12,7 @@ export default {
         background: "var(--background)",
         foreground: "var(--foreground)",
         biker: {
-          yellow: '#f6c90e',
+          yellow: '#f5c80d',
           yellowHover: '#ffd84d',
           black: '#000000',
           dark: '#0f0f0f',
@@ -21,7 +21,7 @@ export default {
           muted: '#bdbdbd',
         },
         primary: {
-          DEFAULT: '#f6c90e',
+          DEFAULT: '#f5c80d',
           50: "#fffbeb",
           100: "#fef3c7",
           200: "#fde68a",
