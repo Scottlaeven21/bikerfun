@@ -34,9 +34,9 @@ export default function CheckoutPage() {
         },
         body: JSON.stringify({
           items: items.map((item) => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
+            id: item.product_id,
+            name: item.product_name,
+            price: item.unit_price,
             quantity: item.quantity,
           })),
           customerInfo: formData,
@@ -200,11 +200,11 @@ export default function CheckoutPage() {
             </h2>
             <div className="space-y-3">
               {items.map((item) => (
-                <div key={item.id} className="flex justify-between text-gray-700">
+                <div key={item.product_id} className="flex justify-between text-gray-700">
                   <span>
-                    {item.name} × {item.quantity}
+                    {item.product_name} × {item.quantity}
                   </span>
-                  <span>{formatPrice(item.price * item.quantity)}</span>
+                  <span>{formatPrice(item.unit_price * item.quantity)}</span>
                 </div>
               ))}
               <div className="border-t pt-3 flex justify-between text-lg font-bold text-gray-900">
