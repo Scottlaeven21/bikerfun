@@ -71,36 +71,68 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Featured Products */}
-      {featuredProducts && featuredProducts.length > 0 && (
-        <section className="py-16 bg-biker-light">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold text-biker-black mb-4">
-                Uitgelichte <span className="text-biker-yellow">Producten</span>
+      {/* Over Ons Section */}
+      <section className="py-20 bg-biker-black text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            {/* Left Content */}
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                Over <span className="text-biker-yellow">Bikerfun</span>
               </h2>
-              <p className="text-lg text-biker-gray">
-                Onze meest populaire motor gear en accessoires
-              </p>
+              <div className="space-y-4 text-lg text-biker-light">
+                <p>
+                  Welkom bij Bikerfun, jouw specialist in occasions en motorkleding. 
+                  Met jarenlange ervaring in de motorwereld begrijpen wij als geen ander 
+                  wat motorrijders zoeken.
+                </p>
+                <p>
+                  Of je nu op zoek bent naar een betrouwbare occasion, de nieuwste motorkleding, 
+                  of professioneel advies - bij Bikerfun ben je aan het juiste adres. 
+                  Onze passie voor motoren en de rijderscultuur staat centraal in alles wat we doen.
+                </p>
+                <p className="text-biker-yellow font-semibold">
+                  "Rijden met passie, adviseren met kennis."
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/over-ons"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg text-center"
+                >
+                  Lees Meer Over Ons
+                </Link>
+                <Link
+                  href="/contact"
+                  className="bg-transparent border-2 border-biker-yellow hover:bg-biker-yellow hover:text-biker-black text-biker-yellow px-8 py-4 rounded-lg font-bold transition-all text-center"
+                >
+                  Neem Contact Op
+                </Link>
+              </div>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-              {featuredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Link
-                href="/products"
-                className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3 rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg"
-              >
-                Bekijk Alle Producten
-              </Link>
+            {/* Right Stats/Features */}
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
+                <div className="text-4xl font-bold text-biker-yellow mb-2">15+</div>
+                <div className="text-biker-light">Jaar Ervaring</div>
+              </div>
+              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
+                <div className="text-4xl font-bold text-biker-yellow mb-2">500+</div>
+                <div className="text-biker-light">Tevreden Klanten</div>
+              </div>
+              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
+                <div className="text-4xl font-bold text-biker-yellow mb-2">100%</div>
+                <div className="text-biker-light">Kwaliteitsgarantie</div>
+              </div>
+              <div className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all">
+                <div className="text-4xl font-bold text-biker-yellow mb-2">24/7</div>
+                <div className="text-biker-light">Service & Advies</div>
+              </div>
             </div>
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* Features */}
       <section className="py-16 bg-white">
