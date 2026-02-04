@@ -2,10 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { createClient } from '@/lib/supabase/client';
-import { useRouter } from 'next/navigation';
 
 interface NavbarProps {
   user: { id: string; email?: string } | null;
@@ -14,26 +11,17 @@ interface NavbarProps {
 }
 
 export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
-  const pathname = usePathname();
-  const router = useRouter();
+  const [aanbodOpen, setAanbodOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleSignOut = async () => {
-    const supabase = createClient();
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
-  };
-
-  const isActive = (path: string) => pathname === path;
-
   return (
-    <nav className="bg-biker-black text-white shadow-lg border-b-2 border-biker-dark">
+    <nav className="bg-biker-black text-white shadow-lg border-b-2 border-biker-dark sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-10 h-10 transition-transform group-hover:scale-110">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo - Links */}
+          <Link href="/" className="flex items-center group">
+            <div className="relative w-12 h-12 transition-transform group-hover:scale-110">
               <Image
                 src="/bikerfun-logo.png"
                 alt="Bikerfun Logo"
@@ -42,182 +30,183 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 priority
               />
             </div>
-            <span className="text-2xl font-bold group-hover:text-biker-yellow transition-colors">Bikerfun</span>
           </Link>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - Rechts */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/"
-              className={`hover:text-biker-yellow transition-colors ${
-                isActive('/') ? 'text-biker-yellow' : ''
-              }`}
+            {/* Aanbod Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setAanbodOpen(true)}
+              onMouseLeave={() => setAanbodOpen(false)}
             >
-              Home
-            </Link>
-            <Link
-              href="/products"
-              className={`hover:text-biker-yellow transition-colors ${
-                isActive('/products') ? 'text-biker-yellow' : ''
-              }`}
-            >
-              Producten
-            </Link>
-            {isAdmin && (
-              <Link
-                href="/admin"
-                className={`hover:text-biker-yellow transition-colors ${
-                  pathname.startsWith('/admin') ? 'text-biker-yellow' : ''
-                }`}
-              >
-                Admin
-              </Link>
-            )}
-          </div>
-
-          {/* Right side */}
-          <div className="hidden md:flex items-center space-x-6">
-            <Link
-              href="/cart"
-              className="relative hover:text-biker-yellow transition-colors"
-            >
-              <span className="text-xl">🛒</span>
-              {cartItemCount > 0 && (
-                <span className="absolute -top-2 -right-2 bg-biker-yellow text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                  {cartItemCount}
-                </span>
+              <button className="text-white hover:text-biker-yellow transition-colors font-bold text-lg flex items-center space-x-1">
+                <span>Aanbod</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {aanbodOpen && (
+                <div className="absolute top-full left-0 mt-2 w-56 bg-biker-dark rounded-lg shadow-xl border-2 border-biker-gray py-2">
+                  <Link
+                    href="/occasions"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Occasion Aanbod
+                  </Link>
+                </div>
               )}
-            </Link>
+            </div>
 
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className={`hover:text-biker-yellow transition-colors ${
-                    pathname.startsWith('/dashboard') ? 'text-biker-yellow' : ''
-                  }`}
-                >
-                  Dashboard
-                </Link>
-                <button
-                  onClick={handleSignOut}
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold px-4 py-2 rounded-lg transition-colors"
-                >
-                  Uitloggen
-                </button>
-              </>
-            ) : (
-              <>
-                <Link
-                  href="/login"
-                  className="hover:text-biker-yellow transition-colors font-semibold"
-                >
-                  Inloggen
-                </Link>
-                <Link
-                  href="/register"
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-4 py-2 rounded-lg font-bold transition-all"
-                >
-                  Registreren
-                </Link>
-              </>
-            )}
+            {/* Menu Dropdown */}
+            <div 
+              className="relative"
+              onMouseEnter={() => setMenuOpen(true)}
+              onMouseLeave={() => setMenuOpen(false)}
+            >
+              <button className="text-white hover:text-biker-yellow transition-colors font-bold text-lg flex items-center space-x-1">
+                <span>Menu</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {menuOpen && (
+                <div className="absolute top-full right-0 mt-2 w-56 bg-biker-dark rounded-lg shadow-xl border-2 border-biker-gray py-2">
+                  <Link
+                    href="/occasions"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Occasions
+                  </Link>
+                  <Link
+                    href="/motorkleding"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Motorkleding
+                  </Link>
+                  <Link
+                    href="/accessoires"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Accessoires
+                  </Link>
+                  <Link
+                    href="/over-ons"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Over Ons
+                  </Link>
+                  <Link
+                    href="/motor-op-aanvraag"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Motor op Aanvraag
+                  </Link>
+                  <Link
+                    href="/contact"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Contact
+                  </Link>
+                  <Link
+                    href="/inruilen"
+                    className="block px-4 py-3 hover:bg-biker-black hover:text-biker-yellow transition-colors font-semibold"
+                  >
+                    Inruilen
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden text-white"
+            className="md:hidden text-white hover:text-biker-yellow transition-colors"
           >
-            <svg
-              className="h-6 w-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {mobileMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
           </button>
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden bg-slate-800 px-4 py-4 space-y-3">
-          <Link
-            href="/"
-            className="block hover:text-biker-yellow"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Home
-          </Link>
-          <Link
-            href="/products"
-            className="block hover:text-biker-yellow"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Producten
-          </Link>
-          <Link
-            href="/cart"
-            className="block hover:text-biker-yellow"
-            onClick={() => setMobileMenuOpen(false)}
-          >
-            Winkelwagen ({cartItemCount})
-          </Link>
-          {isAdmin && (
-            <Link
-              href="/admin"
-              className="block hover:text-biker-yellow"
-              onClick={() => setMobileMenuOpen(false)}
-            >
-              Admin
-            </Link>
-          )}
-          {user ? (
-            <>
+        <div className="md:hidden bg-biker-dark border-t-2 border-biker-gray">
+          <div className="px-4 py-4 space-y-1">
+            {/* Aanbod Section */}
+            <div className="py-2">
+              <div className="text-biker-yellow font-bold mb-2 text-sm uppercase">Aanbod</div>
               <Link
-                href="/dashboard"
-                className="block hover:text-biker-yellow"
+                href="/occasions"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Dashboard
+                Occasion Aanbod
               </Link>
-              <button
-                onClick={() => {
-                  handleSignOut();
-                  setMobileMenuOpen(false);
-                }}
-                className="block w-full text-left hover:text-biker-yellow"
-              >
-                Uitloggen
-              </button>
-            </>
-          ) : (
-            <>
+            </div>
+
+            {/* Menu Section */}
+            <div className="py-2 border-t border-biker-gray">
+              <div className="text-biker-yellow font-bold mb-2 text-sm uppercase">Menu</div>
               <Link
-                href="/login"
-                className="block hover:text-biker-yellow"
+                href="/occasions"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Inloggen
+                Occasions
               </Link>
               <Link
-                href="/register"
-                className="block hover:text-biker-yellow"
+                href="/motorkleding"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Registreren
+                Motorkleding
               </Link>
-            </>
-          )}
+              <Link
+                href="/accessoires"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Accessoires
+              </Link>
+              <Link
+                href="/over-ons"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Over Ons
+              </Link>
+              <Link
+                href="/motor-op-aanvraag"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Motor op Aanvraag
+              </Link>
+              <Link
+                href="/contact"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
+              <Link
+                href="/inruilen"
+                className="block py-2 px-4 hover:bg-biker-black hover:text-biker-yellow transition-colors rounded"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Inruilen
+              </Link>
+            </div>
+          </div>
         </div>
       )}
     </nav>
