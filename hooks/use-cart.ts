@@ -1,7 +1,6 @@
 'use client';
 
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 import { CartItem } from '@/types';
 
 interface CartState {
@@ -21,9 +20,7 @@ const SHIPPING_COST = 7.50;
 const FREE_SHIPPING_THRESHOLD = 75;
 const TAX_RATE = 0.21; // 21% BTW
 
-export const useCart = create<CartState>()(
-  persist(
-    (set, get) => ({
+export const useCart = create<CartState>()((set, get) => ({
       items: [],
 
       addItem: (newItem) => {
@@ -100,9 +97,4 @@ export const useCart = create<CartState>()(
         const tax = get().getTax();
         return subtotal + shipping + tax;
       },
-    }),
-    {
-      name: 'bikerfun-cart',
-    }
-  )
-);
+    }));
