@@ -15,7 +15,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
   return (
     <>
-      <nav className="bg-biker-black text-white shadow-lg border-b-2 border-biker-dark sticky top-0 z-40">
+      <nav className="absolute top-0 left-0 right-0 text-white z-50 bg-gradient-to-b from-black/80 via-black/40 to-transparent backdrop-blur-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-28">
           {/* Logo + Brand - Links */}
