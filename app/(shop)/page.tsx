@@ -1,22 +1,6 @@
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
-import { ProductCard } from '@/components/products/product-card';
-import { Product } from '@/types';
 
-export default async function HomePage() {
-  const supabase = await createClient();
-
-  // Fetch featured products
-  const { data } = await supabase
-    .from('products')
-    .select('*')
-    .eq('is_featured', true)
-    .eq('is_active', true)
-    .order('created_at', { ascending: false })
-    .limit(6);
-
-  const featuredProducts = data as Product[] | null;
-
+export default function HomePage() {
   return (
     <div>
       {/* Hero Section with Video Background */}
