@@ -82,16 +82,16 @@ export default function HomePage() {
               </div>
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
-                  href="/over-ons"
+                  href="/occasions"
                   className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg text-center"
                 >
-                  Lees Meer Over Ons
+                  Aanbod
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/motor-op-aanvraag"
                   className="bg-transparent border-2 border-biker-yellow hover:bg-biker-yellow hover:text-biker-black text-biker-yellow px-8 py-4 rounded-lg font-bold transition-all text-center"
                 >
-                  Neem Contact Op
+                  Aanvraag
                 </Link>
               </div>
             </div>
