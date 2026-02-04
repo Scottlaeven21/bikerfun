@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -31,9 +32,17 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2 group">
+          <Link href="/" className="flex items-center space-x-3 group">
+            <div className="relative w-10 h-10 transition-transform group-hover:scale-110">
+              <Image
+                src="/bikerfun-logo.png"
+                alt="Bikerfun Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
             <span className="text-2xl font-bold group-hover:text-biker-yellow transition-colors">Bikerfun</span>
-            <span className="text-2xl">🏍️</span>
           </Link>
 
           {/* Desktop Navigation */}

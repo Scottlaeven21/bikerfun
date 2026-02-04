@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { createClient } from '@/lib/supabase/server';
 import { ProductCard } from '@/components/products/product-card';
 import { Product } from '@/types';
@@ -24,6 +25,17 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-biker-dark via-biker-black to-biker-dark opacity-90"></div>
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24">
           <div className="text-center">
+            <div className="flex justify-center mb-8">
+              <div className="relative w-32 h-32 md:w-40 md:h-40">
+                <Image
+                  src="/bikerfun-logo.png"
+                  alt="Bikerfun Logo"
+                  fill
+                  className="object-contain animate-pulse"
+                  priority
+                />
+              </div>
+            </div>
             <h1 className="text-5xl md:text-6xl font-bold mb-6">
               Welcome to <span className="text-biker-yellow">Bikerfun</span>
             </h1>
