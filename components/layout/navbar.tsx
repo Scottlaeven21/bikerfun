@@ -17,19 +17,19 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
     <>
       <nav className="bg-biker-black text-white shadow-lg border-b-2 border-biker-dark sticky top-0 z-40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-20">
-            {/* Logo - Links */}
-            <Link href="/" className="flex items-center group">
-              <div className="relative w-12 h-12 transition-transform group-hover:scale-110">
-                <Image
-                  src="/bikerfun-logo.png"
-                  alt="Bikerfun Logo"
-                  fill
-                  className="object-contain"
-                  priority
-                />
-              </div>
-            </Link>
+          <div className="flex items-center justify-between h-24">
+          {/* Logo - Links */}
+          <Link href="/" className="flex items-center group">
+            <div className="relative w-20 h-20 transition-transform group-hover:scale-110">
+              <Image
+                src="/bikerfun-logo.png"
+                alt="Bikerfun Logo"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
+          </Link>
 
             {/* Desktop Navigation - Rechts */}
             <div className="flex items-center space-x-4">
