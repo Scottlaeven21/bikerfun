@@ -9,6 +9,14 @@ const FREE_SHIPPING_THRESHOLD = 75;
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if Stripe is configured
+    if (!stripe) {
+      return NextResponse.json(
+        { error: 'Stripe is not configured. Please add your Stripe API keys to environment variables.' },
+        { status: 503 }
+      );
+    }
+
     const body = await request.json();
     const { items, formData }: { items: CartItem[]; formData: CheckoutFormData } = body;
 
