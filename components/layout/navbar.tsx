@@ -15,7 +15,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
   return (
     <>
-      <nav className="absolute top-0 left-0 right-0 text-white z-50 bg-gradient-to-b from-black/80 via-black/40 to-transparent backdrop-blur-sm">
+      <nav className="absolute top-0 left-0 right-0 text-white z-50 bg-gradient-to-b from-black/30 via-black/10 to-transparent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-28">
           {/* Logo + Brand - Links */}
