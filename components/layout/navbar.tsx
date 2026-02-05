@@ -65,94 +65,68 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
       )}
 
       {/* Slide-in Menu van Rechts */}
-      <div className={`fixed top-0 right-0 h-full w-80 bg-biker-black text-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+      <div className={`fixed top-0 right-0 h-full w-96 bg-black text-white shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
         menuOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
-        {/* Menu Header */}
-        <div className="flex items-center justify-between p-6 border-b-2 border-biker-dark">
-          <div className="flex items-center space-x-3">
-            <div className="relative w-16 h-10">
-              <Image
-                src="/bikerfun-new-logo.png"
-                alt="Bikerfun Logo"
-                fill
-                className="object-contain"
-              />
-            </div>
-            <h2 className="text-2xl font-bold text-biker-yellow">Menu</h2>
-          </div>
+        {/* Close Button */}
+        <div className="absolute top-6 right-6">
           <button
             onClick={() => setMenuOpen(false)}
-            className="text-white hover:text-biker-yellow transition-colors"
+            className="bg-biker-yellow text-biker-black p-2 rounded-full hover:bg-biker-yellowHover transition-colors"
           >
-            <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
 
         {/* Menu Items */}
-        <nav className="flex flex-col p-6 space-y-2 overflow-y-auto h-[calc(100%-88px)]">
+        <nav 
+          style={{ fontFamily: 'var(--font-inter)' }}
+          className="flex flex-col justify-center h-full px-12 space-y-1"
+        >
+          <Link
+            href="/"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            onClick={() => setMenuOpen(false)}
+          >
+            Home
+          </Link>
           <Link
             href="/occasions"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
-            Occasions
-          </Link>
-          <Link
-            href="/motorkleding"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
-            onClick={() => setMenuOpen(false)}
-          >
-            Motorkleding
-          </Link>
-          <Link
-            href="/accessoires"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
-            onClick={() => setMenuOpen(false)}
-          >
-            Accessoires
+            Aanbod
           </Link>
           <Link
             href="/over-ons"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
             Over Ons
           </Link>
           <Link
-            href="/motor-op-aanvraag"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
+            href="/motorkleding"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
-            Motor op Aanvraag
+            Webshop
+          </Link>
+          <Link
+            href="/motor-op-aanvraag"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            onClick={() => setMenuOpen(false)}
+          >
+            Aanvraag
           </Link>
           <Link
             href="/contact"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
+            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
             Contact
           </Link>
-          <Link
-            href="/inruilen"
-            className="py-4 px-4 hover:bg-biker-dark hover:text-biker-yellow transition-all rounded-lg font-semibold text-lg border-b border-biker-dark"
-            onClick={() => setMenuOpen(false)}
-          >
-            Inruilen
-          </Link>
-
-          {/* Extra CTA at bottom */}
-          <div className="pt-8">
-            <Link
-              href="/occasions"
-              className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black py-4 px-6 rounded-lg font-bold text-center transition-all transform hover:scale-105"
-              onClick={() => setMenuOpen(false)}
-            >
-              Bekijk Ons Aanbod
-            </Link>
-          </div>
         </nav>
       </div>
     </>
