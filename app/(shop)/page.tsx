@@ -133,6 +133,33 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Contact CTA Section */}
+      <section className="py-16 bg-gradient-to-r from-biker-dark via-biker-black to-biker-dark border-y-4 border-biker-yellow/30">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+            Op zoek naar <span className="text-biker-yellow">iets anders</span>?
+          </h2>
+          <p className="text-lg text-biker-light mb-8 max-w-3xl mx-auto">
+            Indien wij de occasion die u zoekt niet aanbieden, neem contact met ons op. 
+            Wij proberen op aanvraag te gaan zoeken voor een occasion die bij u past.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/contact"
+              className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+            >
+              NEEM CONTACT OP
+            </Link>
+            <Link
+              href="/motor-op-aanvraag"
+              className="bg-transparent hover:bg-biker-yellow/10 text-white hover:text-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all border-2 border-white/30 hover:border-biker-yellow"
+            >
+              MOTOR OP AANVRAAG
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Webshop Section */}
       <section className="py-20 bg-gradient-to-b from-biker-light via-white to-biker-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
