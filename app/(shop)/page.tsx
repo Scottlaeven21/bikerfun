@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { TikTokGrid } from '@/components/tiktok-grid';
 import { OccasionsCarousel } from '@/components/occasions-carousel';
 
@@ -161,30 +162,120 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories */}
-      <section className="py-16 bg-biker-black">
+      {/* Webshop Section */}
+      <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              <span className="text-biker-yellow">Categorieën</span>
+            <h2 className="text-4xl md:text-5xl font-bold text-biker-black mb-4">
+              Onze <span className="text-biker-yellow">Webshop</span>
             </h2>
-            <p className="text-lg text-biker-light">
-              Browse onze collectie per categorie
+            <p className="text-xl text-biker-gray">
+              Premium motorkleding en accessoires voor elke rijder
             </p>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            {['Helmen', 'Jassen', 'Handschoenen', 'Laarzen', 'Accessoires'].map(
-              (category) => (
-                <Link
-                  key={category}
-                  href={`/products?category=${category.toLowerCase()}`}
-                  className="bg-biker-dark p-6 rounded-lg border-2 border-biker-gray hover:border-biker-yellow transition-all text-center group"
-                >
-                  <h3 className="font-bold text-white group-hover:text-biker-yellow transition-colors">{category}</h3>
-                </Link>
-              )
-            )}
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+            {/* Helmen */}
+            <Link
+              href="/products?category=helmen"
+              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-helmet.jpg"
+                  alt="Motorhelmen"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-6 text-center bg-biker-black">
+                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                  Helmen
+                </h3>
+              </div>
+            </Link>
+
+            {/* Jassen */}
+            <Link
+              href="/products?category=jassen"
+              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-jacket.jpg"
+                  alt="Motorjassen"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-6 text-center bg-biker-black">
+                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                  Jassen
+                </h3>
+              </div>
+            </Link>
+
+            {/* Handschoenen */}
+            <Link
+              href="/products?category=handschoenen"
+              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-gloves.jpg"
+                  alt="Motorhandschoenen"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-6 text-center bg-biker-black">
+                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                  Handschoenen
+                </h3>
+              </div>
+            </Link>
+
+            {/* Sleutelhangers */}
+            <Link
+              href="/products?category=sleutelhangers"
+              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-keychain.jpg"
+                  alt="Motor Sleutelhangers"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-6 text-center bg-biker-black">
+                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                  Sleutelhangers
+                </h3>
+              </div>
+            </Link>
+
+            {/* Helmet Covers */}
+            <Link
+              href="/products?category=helmet-covers"
+              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+            >
+              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-biker-gray to-biker-dark flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-2">🎨</div>
+                  <div className="text-white font-bold text-sm">FOTO VOLGT</div>
+                </div>
+              </div>
+              <div className="p-6 text-center bg-biker-black">
+                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                  Helmet Covers
+                </h3>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
