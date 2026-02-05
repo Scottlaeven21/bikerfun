@@ -24,28 +24,30 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/80"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center justify-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
-              Welkom bij <span className="text-biker-yellow">Bikerfun</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-lg">
-              Jouw specialist in occasions en motor accessoires. 
-              Van droommotor tot beschermende kleding - alles onder één dak.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link
-                href="/occasions"
-                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
-              >
-                BEKIJK AANBOD
-              </Link>
-              <Link
-                href="/contact"
-                className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
-              >
-                CONTACT
-              </Link>
+        <div className="relative h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
+            <div className="max-w-3xl">
+              <h1 className="font-['var(--font-playfair)'] text-6xl md:text-8xl lg:text-9xl font-black mb-6 text-white drop-shadow-2xl leading-tight">
+                Vrijheid begint op <span className="text-biker-yellow italic">twee wielen</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-lg font-light">
+                Ontdek jouw perfecte occasion en rijd met stijl. 
+                Bij Bikerfun vind je alles voor de ultieme rijervaring.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Link
+                  href="/occasions"
+                  className="font-['var(--font-montserrat)'] bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
+                >
+                  BEKIJK AANBOD
+                </Link>
+                <Link
+                  href="/contact"
+                  className="font-['var(--font-montserrat)'] bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
+                >
+                  CONTACT
+                </Link>
+              </div>
             </div>
           </div>
         </div>
