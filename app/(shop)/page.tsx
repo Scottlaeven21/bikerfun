@@ -279,11 +279,14 @@ export default function HomePage() {
               href="/products?category=overige"
               className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">🔧</div>
-                  <div className="text-biker-light group-hover:text-biker-yellow font-bold text-sm uppercase tracking-wider transition-colors">Accessoires</div>
-                </div>
+              <div className="relative aspect-square overflow-hidden bg-biker-black">
+                <Image
+                  src="/product-accessories.jpg"
+                  alt="Motor Accessoires"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
               </div>
               <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
@@ -318,11 +321,14 @@ export default function HomePage() {
               href="/products?category=helmet-covers"
               className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">🎨</div>
-                  <div className="text-biker-light group-hover:text-biker-yellow font-bold text-sm uppercase tracking-wider transition-colors">Foto Volgt</div>
-                </div>
+              <div className="relative aspect-square overflow-hidden bg-biker-black">
+                <Image
+                  src="/product-helmet-cover.jpg"
+                  alt="Helmet Covers"
+                  fill
+                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
               </div>
               <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
