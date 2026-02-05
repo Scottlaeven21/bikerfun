@@ -148,7 +148,7 @@ export function OccasionsCarousel() {
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
-            className="flex-none w-[400px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
+            className="flex-none w-[320px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
