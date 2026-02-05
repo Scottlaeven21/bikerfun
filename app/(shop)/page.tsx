@@ -273,23 +273,20 @@ export default function HomePage() {
               </div>
             </Link>
 
-            {/* Handschoenen */}
+            {/* Overige */}
             <Link
-              href="/products?category=handschoenen"
+              href="/products?category=overige"
               className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
             >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-gloves.jpg"
-                  alt="Motorhandschoenen"
-                  fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
+              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-biker-gray to-biker-dark flex items-center justify-center">
+                <div className="text-center">
+                  <div className="text-6xl mb-2">🔧</div>
+                  <div className="text-white font-bold text-sm">ACCESSOIRES</div>
+                </div>
               </div>
               <div className="p-6 text-center bg-biker-black">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Handschoenen
+                  Overige
                 </h3>
               </div>
             </Link>
