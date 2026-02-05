@@ -217,7 +217,7 @@ export default function HomePage() {
       </section>
 
       {/* Webshop Section */}
-      <section className="py-20 bg-biker-dark border-y-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark noise-overlay border-y-2 border-biker-gray">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Header */}
           <div className="text-center mb-16">
