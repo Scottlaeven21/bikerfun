@@ -59,7 +59,7 @@ export default function HomePage() {
       </section>
 
       {/* Occasions Carousel Section */}
-      <section className="py-20 bg-gradient-to-b from-biker-black via-biker-dark to-biker-black">
+      <section className="py-20 bg-gradient-to-b from-biker-black via-biker-dark to-biker-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -88,7 +88,7 @@ export default function HomePage() {
       </section>
 
       {/* Over Ons Section */}
-      <section className="py-20 bg-gradient-to-br from-biker-black via-biker-dark to-black text-white">
+      <section className="py-20 bg-gradient-to-b from-biker-dark via-biker-black to-biker-dark text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -134,7 +134,7 @@ export default function HomePage() {
       </section>
 
       {/* Contact CTA Section */}
-      <section className="py-16 bg-gradient-to-r from-biker-dark via-biker-black to-biker-dark border-y-4 border-biker-yellow/30">
+      <section className="py-16 bg-gradient-to-b from-biker-dark via-biker-black to-biker-gray">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Op zoek naar <span className="text-biker-yellow">iets anders</span>?
@@ -153,7 +153,7 @@ export default function HomePage() {
       </section>
 
       {/* Webshop Section */}
-      <section className="py-20 bg-gradient-to-b from-biker-light via-white to-biker-light">
+      <section className="py-20 bg-gradient-to-b from-biker-gray via-biker-light to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-biker-black mb-4">
