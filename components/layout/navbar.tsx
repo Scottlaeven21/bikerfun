@@ -107,7 +107,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             Over Ons
           </Link>
           <Link
-            href="/motorkleding"
+            href="/products"
             className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
