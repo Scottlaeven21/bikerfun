@@ -148,7 +148,7 @@ export function OccasionsCarousel() {
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
-            className="flex-none w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
+            className="flex-none w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start flex flex-col"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
@@ -172,7 +172,7 @@ export function OccasionsCarousel() {
             </div>
 
             {/* Content */}
-            <div className="p-6">
+            <div className="p-6 flex flex-col flex-1">
               {/* Brand & Model */}
               <div className="mb-4">
                 <h3 className="text-biker-yellow font-bold text-sm uppercase tracking-wider mb-1">
@@ -220,11 +220,11 @@ export function OccasionsCarousel() {
               </div>
 
               {/* Features */}
-              <div className="flex flex-wrap gap-2 mb-4">
+              <div className="flex flex-wrap gap-2 mb-4 min-h-[60px]">
                 {occasion.features.map((feature, idx) => (
                   <span
                     key={idx}
-                    className="text-xs px-2 py-1 bg-biker-black text-biker-light rounded border border-biker-gray"
+                    className="text-xs px-2 py-1 bg-biker-black text-biker-light rounded border border-biker-gray h-fit"
                   >
                     {feature}
                   </span>
@@ -234,7 +234,7 @@ export function OccasionsCarousel() {
               {/* CTA Button */}
               <Link
                 href={`/occasions/${occasion.id}`}
-                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
+                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto"
               >
                 BEKIJK DETAILS
               </Link>
