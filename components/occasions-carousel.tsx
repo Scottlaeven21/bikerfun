@@ -124,7 +124,7 @@ export function OccasionsCarousel() {
       {/* Scroll Buttons */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all -translate-x-16 hidden lg:block"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all -translate-x-24 hidden lg:block"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -132,7 +132,7 @@ export function OccasionsCarousel() {
       </button>
       <button
         onClick={() => scroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all translate-x-16 hidden lg:block"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all translate-x-24 hidden lg:block"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -148,7 +148,7 @@ export function OccasionsCarousel() {
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
-            className="flex-none w-[320px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
+            className="flex-none w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
