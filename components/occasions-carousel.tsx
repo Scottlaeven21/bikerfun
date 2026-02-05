@@ -234,7 +234,7 @@ export function OccasionsCarousel() {
               {/* CTA Button */}
               <Link
                 href={`/occasions/${occasion.id}`}
-                className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_15px_40px_-10px_rgba(245,200,13,0.6)] hover:scale-[1.02] active:scale-95"
+                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
               >
                 BEKIJK DETAILS
               </Link>
