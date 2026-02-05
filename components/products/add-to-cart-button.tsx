@@ -48,7 +48,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="px-4 py-2 text-white hover:bg-biker-gray transition-colors font-bold"
+              className="btn-ripple px-4 py-2 text-white hover:bg-biker-gray hover:scale-110 transition-all font-bold"
             >
               -
             </button>
@@ -61,12 +61,12 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
               onChange={(e) =>
                 setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))
               }
-              className="w-16 text-center border-x-2 border-biker-gray py-2 bg-biker-black text-white font-bold focus:outline-none focus:ring-2 focus:ring-biker-yellow"
+              className="w-16 text-center border-x-2 border-biker-gray py-2 bg-biker-black text-white font-bold focus:outline-none focus:ring-2 focus:ring-biker-yellow transition-all"
             />
             <button
               type="button"
               onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-              className="px-4 py-2 text-white hover:bg-biker-gray transition-colors font-bold"
+              className="btn-ripple px-4 py-2 text-white hover:bg-biker-gray hover:scale-110 transition-all font-bold"
             >
               +
             </button>
@@ -80,8 +80,8 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           onClick={handleAddToCart}
           disabled={product.stock === 0}
           style={{ fontFamily: 'var(--font-montserrat)' }}
-          className={`btn-secondary flex-1 bg-transparent text-white px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed ${
-            added ? 'bg-biker-yellow text-biker-black border-biker-yellow' : ''
+          className={`btn-secondary btn-shimmer btn-ripple btn-3d flex-1 bg-transparent text-white px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed ${
+            added ? 'bg-biker-yellow text-biker-black border-biker-yellow btn-success' : ''
           }`}
         >
           {added ? '✓ Toegevoegd!' : product.stock === 0 ? 'Uitverkocht' : 'Toevoegen'}
@@ -90,7 +90,7 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           onClick={handleBuyNow}
           disabled={product.stock === 0}
           style={{ fontFamily: 'var(--font-montserrat)' }}
-          className="btn-primary flex-1 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary btn-shimmer btn-glow btn-3d flex-1 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Direct kopen
         </button>
