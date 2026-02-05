@@ -279,13 +279,13 @@ export default function OccasionDetailPage() {
                     PLAN BEZICHTIGING
                   </Link>
                   <a
-                    href="tel:+31201234567"
+                    href="tel:+31615452108"
                     className="btn-secondary block w-full bg-transparent text-white text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 border-2 border-white"
                   >
                     BEL ONS
                   </a>
                   <a
-                    href="mailto:info@bikerfun.nl"
+                    href="mailto:bikerfun.info@gmail.com"
                     className="block w-full bg-biker-dark hover:bg-biker-gray text-white text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 border-2 border-biker-gray"
                   >
                     MAIL ONS

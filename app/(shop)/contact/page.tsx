@@ -143,9 +143,9 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Bezoekadres</h3>
                     <p className="text-biker-light">
-                      Bikerfun Occasions<br />
-                      Motorstraat 123<br />
-                      1234 AB Amsterdam
+                      Bikerfun<br />
+                      Hendrik Luijtenstraat 3<br />
+                      6136 CS Sittard
                     </p>
                   </div>
                 </div>
@@ -162,13 +162,13 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Telefoon</h3>
                     <p className="text-biker-light">
-                      <a href="tel:+31201234567" className="hover:text-biker-yellow transition-colors">
-                        020 - 123 45 67
+                      <a href="tel:+31615452108" className="hover:text-biker-yellow transition-colors">
+                        06 15 45 21 08
                       </a>
                     </p>
                     <p className="text-sm text-biker-muted mt-1">
-                      Ma-Vr: 09:00 - 18:00<br />
-                      Za: 10:00 - 17:00
+                      Ma-Vr: 07:00 - 17:00<br />
+                      Za: 12:00 - 17:00
                     </p>
                   </div>
                 </div>
@@ -185,8 +185,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">E-mail</h3>
                     <p className="text-biker-light">
-                      <a href="mailto:info@bikerfun.nl" className="hover:text-biker-yellow transition-colors">
-                        info@bikerfun.nl
+                      <a href="mailto:bikerfun.info@gmail.com" className="hover:text-biker-yellow transition-colors">
+                        bikerfun.info@gmail.com
                       </a>
                     </p>
                     <p className="text-sm text-biker-muted mt-1">

@@ -237,11 +237,10 @@ export default function VoorwaardenPage() {
               </h2>
               <div className="space-y-2 text-biker-light">
                 <p><strong>Bedrijfsnaam:</strong> Bikerfun</p>
-                <p><strong>Adres:</strong> Motorstraat 123, 1234 AB Amsterdam</p>
-                <p><strong>KVK-nummer:</strong> 12345678</p>
-                <p><strong>BTW-nummer:</strong> NL123456789B01</p>
-                <p><strong>E-mail:</strong> info@bikerfun.nl</p>
-                <p><strong>Telefoon:</strong> 020 - 123 45 67</p>
+                <p><strong>Adres:</strong> Hendrik Luijtenstraat 3, 6136 CS Sittard</p>
+                <p><strong>E-mail:</strong> bikerfun.info@gmail.com</p>
+                <p><strong>Telefoon:</strong> 06 15 45 21 08</p>
+                <p><strong>Openingstijden:</strong> Ma-Vr: 07:00 - 17:00, Za: 12:00 - 17:00</p>
               </div>
             </div>
           </div>

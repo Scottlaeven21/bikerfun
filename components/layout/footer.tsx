@@ -18,9 +18,13 @@ export function Footer() {
                 />
               </div>
             </div>
-            <p className="text-biker-muted">
-              Premium motor gear en lifestyle producten voor echte motorliefhebbers.
+            <p className="text-biker-muted text-sm">
+              Jouw partner voor occasions en motorkleding. Van cruisers tot sportmotoren - bij Bikerfun vind je kwaliteit en passie.
             </p>
+            <div className="mt-4 text-sm text-biker-muted">
+              <p>Hendrik Luijtenstraat 3</p>
+              <p>6136 CS Sittard</p>
+            </div>
           </div>
 
           {/* Occasions */}
@@ -82,6 +86,11 @@ export function Footer() {
             <h4 className="text-lg font-bold mb-4 text-biker-yellow">Informatie</h4>
             <ul className="space-y-2 text-biker-muted">
               <li>
+                <Link href="/verzending" className="hover:text-biker-yellow transition-colors">
+                  Verzending & Levering
+                </Link>
+              </li>
+              <li>
                 <Link href="/privacy" className="hover:text-biker-yellow transition-colors">
                   Privacybeleid
                 </Link>
@@ -92,14 +101,20 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="tel:+31201234567" className="hover:text-biker-yellow transition-colors">
-                  020 - 123 45 67
+                <a href="tel:+31615452108" className="hover:text-biker-yellow transition-colors">
+                  06 15 45 21 08
                 </a>
               </li>
               <li>
-                <a href="mailto:info@bikerfun.nl" className="hover:text-biker-yellow transition-colors">
-                  info@bikerfun.nl
+                <a href="mailto:bikerfun.info@gmail.com" className="hover:text-biker-yellow transition-colors">
+                  bikerfun.info@gmail.com
                 </a>
+              </li>
+              <li className="text-sm">
+                Ma-Vr: 07:00 - 17:00
+              </li>
+              <li className="text-sm">
+                Za: 12:00 - 17:00
               </li>
             </ul>
           </div>
