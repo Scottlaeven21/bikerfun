@@ -11,19 +11,40 @@ export const metadata: Metadata = {
 export default function OverOnsPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-20 bg-gradient-to-b from-biker-dark to-black">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 
-            style={{ fontFamily: 'var(--font-inter)' }}
-            className="text-5xl md:text-6xl font-bold mb-6 uppercase tracking-tight"
-          >
-            Over <span className="text-biker-yellow">Bikerfun</span>
-          </h1>
-          <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
-            Passie voor motoren, oog voor kwaliteit en persoonlijke service. 
-            Dat is waar Bikerfun voor staat.
-          </p>
+      {/* Hero Section with Video */}
+      <section className="relative h-[50vh] overflow-hidden">
+        {/* Video Background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ objectPosition: 'center center' }}
+        >
+          <source src="/hero-over-ons.mp4" type="video/mp4" />
+        </video>
+
+        {/* Dark Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
+
+        {/* Hero Content */}
+        <div className="relative h-full flex items-center">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
+            <h1 
+              style={{ 
+                fontFamily: 'var(--font-inter)',
+                letterSpacing: '0.05em'
+              }}
+              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white drop-shadow-2xl uppercase"
+            >
+              Over <span className="text-biker-yellow">Bikerfun</span>
+            </h1>
+            <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
+              Passie voor motoren, oog voor kwaliteit en persoonlijke service. 
+              Dat is waar Bikerfun voor staat.
+            </p>
+          </div>
         </div>
       </section>
 
