@@ -35,23 +35,23 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           </Link>
 
             {/* Desktop Navigation - Rechts */}
-            <div className="flex items-center space-x-4">
-              {/* Aanbod Button */}
+            <div className="flex items-center space-x-3">
+              {/* Aanbod Button - Black with White Text */}
               <Link
                 href="/occasions"
-                className="relative bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-lg font-bold text-lg transition-all transform hover:scale-105 hover:shadow-xl shadow-lg border-2 border-transparent hover:border-biker-yellowHover"
+                className="bg-biker-black hover:bg-biker-dark text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all shadow-lg hover:shadow-xl border border-white/20"
               >
-                <span className="relative z-10">Aanbod</span>
+                AANBOD
               </Link>
 
-              {/* Menu Button */}
+              {/* Menu Button - Yellow/Orange with White Text */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="relative bg-gradient-to-r from-biker-yellow to-biker-yellowHover hover:from-biker-yellowHover hover:to-biker-yellow text-biker-black px-6 py-3 rounded-lg font-bold text-lg flex items-center space-x-2 transition-all transform hover:scale-105 hover:shadow-xl shadow-lg border-2 border-transparent hover:border-biker-yellowHover group"
+                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all shadow-lg hover:shadow-xl"
               >
-                <span className="relative z-10">Menu</span>
-                <svg className="w-5 h-5 relative z-10 transition-transform group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
+                <span>MENU</span>
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
             </div>

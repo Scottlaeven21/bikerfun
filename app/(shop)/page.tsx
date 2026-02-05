@@ -34,15 +34,15 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/occasions"
-                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-lg text-lg font-bold transition-all transform hover:scale-105 shadow-2xl"
+                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
               >
-                Bekijk Aanbod
+                BEKIJK AANBOD
               </Link>
               <Link
                 href="/contact"
-                className="bg-transparent border-2 border-biker-yellow hover:bg-biker-yellow hover:text-biker-black text-white px-8 py-4 rounded-lg text-lg font-bold transition-all backdrop-blur-sm"
+                className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
               >
-                Contact
+                CONTACT
               </Link>
             </div>
           </div>
@@ -83,15 +83,15 @@ export default function HomePage() {
               <div className="mt-8 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/occasions"
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-lg font-bold transition-all transform hover:scale-105 shadow-lg text-center"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl text-center"
                 >
-                  Aanbod
+                  BEKIJK AANBOD
                 </Link>
                 <Link
                   href="/motor-op-aanvraag"
-                  className="bg-transparent border-2 border-biker-yellow hover:bg-biker-yellow hover:text-biker-black text-biker-yellow px-8 py-4 rounded-lg font-bold transition-all text-center"
+                  className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg border border-white/30 text-center"
                 >
-                  Aanvraag
+                  MOTOR OP AANVRAAG
                 </Link>
               </div>
             </div>
