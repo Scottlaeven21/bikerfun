@@ -59,7 +59,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '111 PK',
-    image: '',
+    image: '/ducati-monster.jpg',
     features: ['Cornering ABS', 'Traction Control', 'Keyless', 'TFT'],
   },
   {
@@ -73,7 +73,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '136 PK',
-    image: '',
+    image: '/bmw-r1250gs.jpg',
     features: ['Dynamic ESA', 'Cruise Control', 'Keyless', 'GPS'],
   },
   {
