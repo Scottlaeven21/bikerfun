@@ -71,7 +71,7 @@ export default function HomePage() {
       </section>
 
       {/* Occasions Carousel Section */}
-      <section className="py-20 bg-gradient-to-b from-black via-biker-black to-black">
+      <section className="py-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-biker-dark/20 via-black to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-12">
@@ -100,7 +100,7 @@ export default function HomePage() {
       </section>
 
       {/* Over Ons Section */}
-      <section className="py-20 bg-gradient-to-b from-black via-biker-black to-black text-white">
+      <section className="py-20 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-biker-dark/20 via-black to-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -146,7 +146,7 @@ export default function HomePage() {
       </section>
 
       {/* Contact CTA Section */}
-      <section className="py-16 bg-gradient-to-b from-black via-biker-black to-black border-y-4 border-biker-yellow/30">
+      <section className="py-16 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-biker-dark/20 via-black to-black border-y-4 border-biker-yellow/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
             Op zoek naar <span className="text-biker-yellow">iets anders</span>?
