@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { TikTokGrid } from '@/components/tiktok-grid';
+import { OccasionsCarousel } from '@/components/occasions-carousel';
 
 export default function HomePage() {
   return (
@@ -53,6 +54,35 @@ export default function HomePage() {
           <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
+        </div>
+      </section>
+
+      {/* Occasions Carousel Section */}
+      <section className="py-20 bg-gradient-to-b from-biker-black via-biker-dark to-biker-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Section Header */}
+          <div className="text-center mb-12">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+              Ons <span className="text-biker-yellow">Aanbod</span>
+            </h2>
+            <p className="text-xl text-biker-light max-w-3xl mx-auto">
+              Ontdek onze collectie zorgvuldig geselecteerde occasions. 
+              Van sportmotoren tot tourers - wij hebben iets voor elke rijder.
+            </p>
+          </div>
+
+          {/* Carousel */}
+          <OccasionsCarousel />
+
+          {/* View All Button */}
+          <div className="text-center mt-12">
+            <Link
+              href="/occasions"
+              className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+            >
+              BEKIJK ALLE OCCASIONS
+            </Link>
+          </div>
         </div>
       </section>
 
