@@ -142,13 +142,13 @@ export function OccasionsCarousel() {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 pb-4 snap-x snap-mandatory scrollbar-hide"
+        className="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory scrollbar-hide"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
-            className="flex-none w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
+            className="flex-none w-[400px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
