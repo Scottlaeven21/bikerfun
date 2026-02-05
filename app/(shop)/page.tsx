@@ -46,14 +46,14 @@ export default function HomePage() {
                 <Link
                   href="/occasions"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(245,200,13,0.5)] hover:scale-105 active:scale-95"
                 >
                   BEKIJK AANBOD
                 </Link>
                 <Link
                   href="/contact"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
+                  className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-2xl hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)] border border-white/30 hover:border-white/60 hover:scale-105 active:scale-95"
                 >
                   CONTACT
                 </Link>
@@ -92,7 +92,7 @@ export default function HomePage() {
             <Link
               href="/occasions"
               style={{ fontFamily: 'var(--font-montserrat)' }}
-              className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+              className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_20px_60px_-15px_rgba(245,200,13,0.5)] hover:scale-105 active:scale-95"
             >
               BEKIJK ALLE OCCASIONS
             </Link>
@@ -128,14 +128,14 @@ export default function HomePage() {
                 <Link
                   href="/occasions"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl text-center"
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_20px_60px_-15px_rgba(245,200,13,0.5)] hover:scale-105 active:scale-95 text-center"
                 >
                   BEKIJK AANBOD
                 </Link>
                 <Link
                   href="/motor-op-aanvraag"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="bg-biker-black hover:bg-biker-dark text-white px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg border border-white/30 text-center"
+                  className="bg-biker-black hover:bg-biker-dark text-white px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_20px_60px_-15px_rgba(255,255,255,0.3)] border border-white/30 hover:border-white/60 hover:scale-105 active:scale-95 text-center"
                 >
                   MOTOR OP AANVRAAG
                 </Link>
@@ -209,7 +209,7 @@ export default function HomePage() {
           <Link
             href="/contact"
             style={{ fontFamily: 'var(--font-montserrat)' }}
-            className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
+            className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_20px_60px_-15px_rgba(245,200,13,0.5)] hover:scale-105 active:scale-95"
           >
             NEEM CONTACT OP
           </Link>

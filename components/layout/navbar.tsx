@@ -36,7 +36,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Aanbod Button - Black with White Text */}
               <Link
                 href="/occasions"
-                className="bg-biker-black hover:bg-biker-dark text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all shadow-lg hover:shadow-xl border border-white/20"
+                className="bg-biker-black hover:bg-biker-dark text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-[0_15px_40px_-10px_rgba(255,255,255,0.3)] border border-white/20 hover:border-white/40 hover:scale-105 active:scale-95"
               >
                 AANBOD
               </Link>
@@ -44,10 +44,10 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Menu Button - Yellow/Orange with White Text */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all shadow-lg hover:shadow-xl"
+                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300 shadow-lg hover:shadow-[0_15px_40px_-10px_rgba(245,200,13,0.5)] hover:scale-105 active:scale-95"
               >
                 <span>MENU</span>
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <svg className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
