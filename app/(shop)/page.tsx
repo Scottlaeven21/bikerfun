@@ -74,11 +74,11 @@ export default function HomePage() {
       <section className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <div className="text-center mb-16">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
               Ons <span className="text-biker-yellow">Aanbod</span>
             </h2>
-            <p className="text-xl text-biker-light max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
               Ontdek onze collectie zorgvuldig geselecteerde occasions. 
               Van sportmotoren tot tourers - wij hebben iets voor elke rijder.
             </p>
@@ -88,9 +88,10 @@ export default function HomePage() {
           <OccasionsCarousel />
 
           {/* View All Button */}
-          <div className="text-center mt-12">
+          <div className="text-center mt-16">
             <Link
               href="/occasions"
+              style={{ fontFamily: 'var(--font-montserrat)' }}
               className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
             >
               BEKIJK ALLE OCCASIONS
@@ -105,10 +106,10 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div>
-              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold mb-8 uppercase tracking-tight">
                 Over <span className="text-biker-yellow">Bikerfun</span>
               </h2>
-              <div className="space-y-4 text-lg text-biker-light">
+              <div className="space-y-4 text-base md:text-lg text-biker-light">
                 <p>
                   Welkom bij Bikerfun, jouw specialist in occasions en motorkleding. 
                   Met jarenlange ervaring in de motorwereld begrijpen wij als geen ander 
@@ -123,16 +124,18 @@ export default function HomePage() {
                   "Rijden met passie, adviseren met kennis."
                 </p>
               </div>
-              <div className="mt-8 flex flex-col sm:flex-row gap-4">
+              <div className="mt-10 flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/occasions"
-                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl text-center"
+                  style={{ fontFamily: 'var(--font-montserrat)' }}
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl text-center"
                 >
                   BEKIJK AANBOD
                 </Link>
                 <Link
                   href="/motor-op-aanvraag"
-                  className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg border border-white/30 text-center"
+                  style={{ fontFamily: 'var(--font-montserrat)' }}
+                  className="bg-biker-black hover:bg-biker-dark text-white px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg border border-white/30 text-center"
                 >
                   MOTOR OP AANVRAAG
                 </Link>
@@ -194,17 +197,18 @@ export default function HomePage() {
       </section>
 
       {/* Contact CTA Section */}
-      <section className="py-16 bg-black border-y-4 border-biker-yellow/30">
+      <section className="py-20 bg-black border-y-4 border-biker-yellow/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+          <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
             Op zoek naar <span className="text-biker-yellow">iets anders</span>?
           </h2>
-          <p className="text-lg text-biker-light mb-8 max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-biker-light mb-10 max-w-3xl mx-auto">
             Indien wij de occasion die u zoekt niet aanbieden, neem contact met ons op. 
             Wij proberen op aanvraag te gaan zoeken voor een occasion die bij u past.
           </p>
           <Link
             href="/contact"
+            style={{ fontFamily: 'var(--font-montserrat)' }}
             className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-lg hover:shadow-xl"
           >
             NEEM CONTACT OP
@@ -215,11 +219,11 @@ export default function HomePage() {
       {/* Webshop Section */}
       <section className="py-20 bg-gradient-to-b from-biker-light via-white to-biker-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-bold text-biker-black mb-4">
+          <div className="text-center mb-16">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight">
               Onze <span className="text-biker-yellow">Webshop</span>
             </h2>
-            <p className="text-xl text-biker-gray max-w-4xl mx-auto">
+            <p className="text-lg md:text-xl text-biker-gray max-w-4xl mx-auto">
               Bij een nieuwe occasion hoort ook een nieuwe outfit. Ontdek onze collectie premium motorkleding 
               en accessoires - van veilige helmen tot stijlvolle handschoenen. Rijd niet alleen veilig, 
               maar ook met stijl. Compleet je motor ervaring vandaag nog!
@@ -242,7 +246,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="p-6 text-center bg-biker-black">
-                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmen
                 </h3>
               </div>
@@ -263,7 +267,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="p-6 text-center bg-biker-black">
-                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Jassen
                 </h3>
               </div>
@@ -284,7 +288,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="p-6 text-center bg-biker-black">
-                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Handschoenen
                 </h3>
               </div>
@@ -305,7 +309,7 @@ export default function HomePage() {
                 />
               </div>
               <div className="p-6 text-center bg-biker-black">
-                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Sleutelhangers
                 </h3>
               </div>
@@ -323,7 +327,7 @@ export default function HomePage() {
                 </div>
               </div>
               <div className="p-6 text-center bg-biker-black">
-                <h3 className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmet Covers
                 </h3>
               </div>
