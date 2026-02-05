@@ -29,12 +29,12 @@ export default function HomePage() {
             <div className="max-w-4xl">
               <h1 
                 style={{ 
-                  fontFamily: 'var(--font-playfair)',
-                  letterSpacing: '0.15em'
+                  fontFamily: 'var(--font-inter)',
+                  letterSpacing: '0.05em'
                 }} 
-                className="text-5xl md:text-6xl lg:text-7xl font-light mb-8 text-white drop-shadow-2xl leading-tight uppercase"
+                className="text-5xl md:text-6xl lg:text-7xl font-bold mb-8 text-white drop-shadow-2xl leading-tight uppercase"
               >
-                Vrijheid begint op <span className="text-biker-yellow font-normal">twee wielen</span>
+                Vrijheid begint op <span className="text-biker-yellow font-black">twee wielen</span>
               </h1>
               <p 
                 style={{ fontFamily: 'var(--font-montserrat)' }}

@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Montserrat } from 'next/font/google';
+import { Inter, Montserrat } from 'next/font/google';
 import "./globals.css";
 
-const playfair = Playfair_Display({ 
+const inter = Inter({ 
   subsets: ['latin'],
-  variable: '--font-playfair',
-  weight: ['400', '700', '900'],
+  variable: '--font-inter',
+  weight: ['400', '600', '700', '800', '900'],
 });
 
 const montserrat = Montserrat({ 
@@ -43,7 +43,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className={`${playfair.variable} ${montserrat.variable}`}>
+    <html lang="nl" className={`${inter.variable} ${montserrat.variable}`}>
       <body className="antialiased">
         {children}
       </body>
