@@ -2,6 +2,7 @@
 
 import { useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 interface Occasion {
   id: number;
@@ -30,7 +31,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '94 PK',
-    image: '/placeholder-bike.jpg',
+    image: '/harley-street-bob.jpg',
     features: ['ABS', 'Cruise Control', 'LED Verlichting', 'Quick Shifter'],
   },
   {
@@ -44,7 +45,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '119 PK',
-    image: '/placeholder-bike.jpg',
+    image: '/yamaha-mt09.jpg',
     features: ['Quickshifter', 'TFT Display', 'Rijmodi', 'ABS'],
   },
   {
@@ -58,7 +59,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '111 PK',
-    image: '/placeholder-bike.jpg',
+    image: '',
     features: ['Cornering ABS', 'Traction Control', 'Keyless', 'TFT'],
   },
   {
@@ -72,7 +73,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '136 PK',
-    image: '/placeholder-bike.jpg',
+    image: '',
     features: ['Dynamic ESA', 'Cruise Control', 'Keyless', 'GPS'],
   },
   {
@@ -86,7 +87,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '200 PK',
-    image: '/placeholder-bike.jpg',
+    image: '',
     features: ['Supercharged', 'Cornering ABS', 'Quick Shifter', 'TFT'],
   },
   {
@@ -100,7 +101,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '180 PK',
-    image: '/placeholder-bike.jpg',
+    image: '',
     features: ['Öhlins Suspension', 'Brembo', 'Quick Shifter', 'Rijmodi'],
   },
 ];
@@ -151,13 +152,23 @@ export function OccasionsCarousel() {
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
-                <div className="text-center">
-                  <div className="text-6xl mb-4">🏍️</div>
-                  <div className="text-white font-bold text-lg mb-1">FOTO'S VOLGEN</div>
-                  <div className="text-biker-yellow font-bold text-xl">BINNENKORT</div>
+              {occasion.image ? (
+                <Image
+                  src={occasion.image}
+                  alt={`${occasion.brand} ${occasion.model}`}
+                  fill
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
+                />
+              ) : (
+                <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-6xl mb-4">🏍️</div>
+                    <div className="text-white font-bold text-lg mb-1">FOTO'S VOLGEN</div>
+                    <div className="text-biker-yellow font-bold text-xl">BINNENKORT</div>
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
 
             {/* Content */}
