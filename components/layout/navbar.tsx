@@ -20,7 +20,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           <div className="flex items-center justify-between h-28">
           {/* Logo + Brand - Links */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-32 h-24 transition-transform group-hover:scale-110">
+            <div className="relative w-24 h-18 transition-transform group-hover:scale-110">
               <Image
                 src="/bikerfun-new-logo.png"
                 alt="Bikerfun Logo"
