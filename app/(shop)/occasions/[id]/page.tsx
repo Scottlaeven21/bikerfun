@@ -94,7 +94,7 @@ export default function OccasionDetailPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Image */}
-      <section className="relative h-[60vh] bg-biker-black">
+      <section className="relative h-[60vh] bg-biker-black mt-28">
         {occasion.image ? (
           <Image
             src={occasion.image}

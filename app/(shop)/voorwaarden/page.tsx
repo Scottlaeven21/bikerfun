@@ -9,7 +9,7 @@ export default function VoorwaardenPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
-      <section className="relative py-20 bg-gradient-to-b from-biker-dark to-black">
+      <section className="relative pt-32 pb-20 bg-gradient-to-b from-biker-dark to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 
             style={{ fontFamily: 'var(--font-inter)' }}
