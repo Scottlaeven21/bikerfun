@@ -27,11 +27,11 @@ export default function HomePage() {
         <div className="relative h-full flex items-center justify-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <h1 className="text-5xl md:text-7xl font-bold mb-6 text-white drop-shadow-2xl">
-              Welcome to <span className="text-biker-yellow">Bikerfun</span>
+              Welkom bij <span className="text-biker-yellow">Bikerfun</span>
             </h1>
             <p className="text-xl md:text-2xl text-white mb-8 max-w-3xl mx-auto drop-shadow-lg">
-              Premium motor gear en lifestyle producten voor echte motorliefhebbers.
-              Veiligheid, stijl en kwaliteit in één shop.
+              Jouw specialist in occasions en motor accessoires. 
+              Van droommotor tot beschermende kleding - alles onder één dak.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
