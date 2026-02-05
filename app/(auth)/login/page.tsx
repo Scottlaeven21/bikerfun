@@ -3,29 +3,29 @@ import Link from 'next/link';
 import { LoginForm } from '@/components/auth/login-form';
 
 export const metadata: Metadata = {
-  title: 'Inloggen',
+  title: 'Inloggen - Bikerfun',
   description: 'Log in op je Bikerfun account',
 };
 
 export default function LoginPage() {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8">
+    <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-8 shadow-2xl">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Welkom terug
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-white mb-3 uppercase tracking-tight">
+          Welkom <span className="text-biker-yellow">Terug</span>
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-biker-light text-lg">
           Log in op je account
         </p>
       </div>
 
       <LoginForm />
 
-      <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-6 text-center text-sm text-biker-light">
         Nog geen account?{' '}
         <Link
           href="/register"
-          className="font-medium text-red-600 hover:text-red-500"
+          className="font-semibold text-biker-yellow hover:text-biker-yellowHover transition-colors"
         >
           Registreer nu
         </Link>

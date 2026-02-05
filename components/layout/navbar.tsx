@@ -33,7 +33,34 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
             {/* Desktop Navigation - Rechts */}
             <div className="flex items-center space-x-3">
-              {/* Aanbod Button - Black with White Text */}
+              {/* Cart Icon */}
+              <Link
+                href="/cart"
+                className="relative bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 group"
+                title="Winkelwagen"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                {cartItemCount > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-biker-yellow text-biker-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center group-hover:bg-biker-black group-hover:text-biker-yellow transition-all">
+                    {cartItemCount}
+                  </span>
+                )}
+              </Link>
+
+              {/* Account Icon */}
+              <Link
+                href={user ? "/account" : "/login"}
+                className="bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                title={user ? "Mijn Account" : "Inloggen"}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </Link>
+
+              {/* Aanbod Button */}
               <Link
                 href="/occasions"
                 className="btn-secondary bg-transparent text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white"
@@ -41,7 +68,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 AANBOD
               </Link>
 
-              {/* Menu Button - Yellow/Orange with White Text */}
+              {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
                 className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
@@ -127,6 +154,45 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           >
             Contact
           </Link>
+
+          {/* User Section */}
+          <div className="pt-6 mt-6 border-t border-biker-gray">
+            {user ? (
+              <>
+                <Link
+                  href="/account"
+                  className="py-3 text-2xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight flex items-center space-x-3"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  <span>Mijn Account</span>
+                </Link>
+                <Link
+                  href="/cart"
+                  className="py-3 text-2xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight flex items-center space-x-3"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                  </svg>
+                  <span>Winkelwagen {cartItemCount > 0 && `(${cartItemCount})`}</span>
+                </Link>
+              </>
+            ) : (
+              <Link
+                href="/login"
+                className="py-3 text-2xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight flex items-center space-x-3"
+                onClick={() => setMenuOpen(false)}
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                </svg>
+                <span>Inloggen</span>
+              </Link>
+            )}
+          </div>
         </nav>
       </div>
     </>

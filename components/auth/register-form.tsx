@@ -65,7 +65,7 @@ export function RegisterForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
+        <div className="bg-red-900/20 border-2 border-red-500 text-red-400 px-4 py-3 rounded-lg">
           {error}
         </div>
       )}
@@ -73,7 +73,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="fullName"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
         >
           Volledige naam
         </label>
@@ -83,7 +83,7 @@ export function RegisterForm() {
           value={fullName}
           onChange={(e) => setFullName(e.target.value)}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
           placeholder="Jan Jansen"
         />
       </div>
@@ -91,7 +91,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
         >
           E-mailadres
         </label>
@@ -101,7 +101,7 @@ export function RegisterForm() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
           placeholder="je@email.com"
         />
       </div>
@@ -109,7 +109,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2"
+          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
         >
           Wachtwoord
         </label>
@@ -120,7 +120,7 @@ export function RegisterForm() {
           onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-slate-700 dark:border-slate-600 dark:text-white"
+          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
           placeholder="Minimaal 6 karakters"
         />
       </div>
@@ -128,8 +128,8 @@ export function RegisterForm() {
       <button
         type="submit"
         disabled={loading}
-        className={`w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed font-semibold btn-shimmer btn-3d ${
-          loading ? 'btn-loading' : ''
+        className={`btn-primary w-full bg-biker-yellow text-biker-black py-4 px-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+          loading ? 'opacity-50' : ''
         }`}
       >
         {loading ? 'Account aanmaken...' : 'Registreren'}

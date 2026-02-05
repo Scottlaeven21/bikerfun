@@ -15,18 +15,19 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-black pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Je winkelwagen is leeg
+            <div className="text-8xl mb-6">🛒</div>
+            <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+              Je winkelwagen is <span className="text-biker-yellow">leeg</span>
             </h1>
-            <p className="text-gray-600 mb-8">
+            <p className="text-lg text-biker-light mb-8">
               Ontdek onze producten en voeg items toe aan je winkelwagen
             </p>
             <Link
               href="/products"
-              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer btn-3d"
+              className="btn-primary inline-block bg-biker-yellow text-biker-black px-12 py-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
             >
               Verder Shoppen
             </Link>
@@ -37,81 +38,86 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-black pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Winkelwagen</h1>
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-8 uppercase tracking-tight">
+          Winkel<span className="text-biker-yellow">wagen</span>
+        </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="divide-y divide-gray-200">
+            <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray overflow-hidden">
+              <div className="divide-y divide-biker-gray">
                 {items.map((item) => (
                   <CartItem key={item.product_id} item={item} />
                 ))}
               </div>
             </div>
 
-            <div className="mt-4">
+            <div className="mt-6">
               <Link
                 href="/products"
-                className="text-red-600 hover:text-red-700 font-medium"
+                className="text-biker-yellow hover:text-biker-yellowHover font-semibold uppercase text-sm tracking-wider inline-flex items-center space-x-2 transition-colors"
               >
-                ← Verder shoppen
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                <span>Verder shoppen</span>
               </Link>
             </div>
           </div>
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-md p-6 sticky top-4">
-              <h2 className="text-xl font-bold text-gray-900 mb-4">
-                Bestelling Overzicht
+            <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-6 sticky top-32">
+              <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">
+                Overzicht
               </h2>
 
-              <div className="space-y-3 mb-6">
-                <div className="flex justify-between text-gray-600">
+              <div className="space-y-4 mb-6">
+                <div className="flex justify-between text-biker-light">
                   <span>Subtotaal</span>
-                  <span>{formatPrice(subtotal)}</span>
+                  <span className="font-semibold">{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-biker-light">
                   <span>Verzending</span>
-                  <span>{shipping === 0 ? 'Gratis' : formatPrice(shipping)}</span>
+                  <span className="font-semibold">{shipping === 0 ? <span className="text-biker-yellow">Gratis</span> : formatPrice(shipping)}</span>
                 </div>
-                <div className="flex justify-between text-gray-600">
+                <div className="flex justify-between text-biker-light">
                   <span>BTW (21%)</span>
-                  <span>{formatPrice(tax)}</span>
+                  <span className="font-semibold">{formatPrice(tax)}</span>
                 </div>
-                <div className="border-t pt-3 flex justify-between text-lg font-bold text-gray-900">
+                <div className="border-t border-biker-gray pt-4 flex justify-between text-xl font-bold text-white">
                   <span>Totaal</span>
-                  <span>{formatPrice(total)}</span>
+                  <span className="text-biker-yellow">{formatPrice(total)}</span>
                 </div>
               </div>
 
               {shipping === 0 && subtotal >= 75 && (
-                <p className="text-sm text-green-600 mb-4">
-                  🎉 Je hebt gratis verzending!
+                <p className="text-sm text-biker-yellow mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
+                  ✓ Je hebt gratis verzending!
                 </p>
               )}
 
               {subtotal < 75 && (
-                <p className="text-sm text-gray-600 mb-4">
+                <p className="text-sm text-biker-light mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
                   Nog {formatPrice(75 - subtotal)} tot gratis verzending
                 </p>
               )}
 
               <Link
                 href="/checkout"
-                className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-8 py-4 rounded-lg font-semibold btn-shimmer btn-glow btn-pulse btn-3d"
+                className="btn-primary block w-full bg-biker-yellow text-biker-black text-center px-8 py-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
               >
                 Afrekenen
               </Link>
 
-              <div className="mt-6 pt-6 border-t border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-3">
+              <div className="mt-6 pt-6 border-t border-biker-gray">
+                <h3 className="font-semibold text-white mb-3 uppercase text-sm tracking-wider">
                   Veilig betalen met:
                 </h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                <div className="flex items-center space-x-2 text-sm text-biker-light">
                   <span>🔒</span>
                   <span>Stripe - Veilige betalingen</span>
                 </div>

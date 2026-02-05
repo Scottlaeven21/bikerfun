@@ -61,15 +61,16 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-black pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              Je winkelwagen is leeg
+            <div className="text-8xl mb-6">🛒</div>
+            <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+              Je winkelwagen is <span className="text-biker-yellow">leeg</span>
             </h1>
             <Link
               href="/products"
-              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer btn-3d"
+              className="btn-primary inline-block bg-biker-yellow text-biker-black px-12 py-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
             >
               Verder Shoppen
             </Link>
@@ -80,24 +81,26 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-black pt-32 pb-20">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-8">Afrekenen</h1>
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-8 uppercase tracking-tight">
+          Afre<span className="text-biker-yellow">kenen</span>
+        </h1>
 
         {error && (
-          <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+          <div className="mb-6 bg-red-900/20 border-2 border-red-500 text-red-400 px-4 py-3 rounded-lg">
             {error}
           </div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-6">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">
               Contact Informatie
             </h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                   Email *
                 </label>
                 <input
@@ -106,12 +109,13 @@ export default function CheckoutPage() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+                  placeholder="je@email.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="name" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                   Volledige Naam *
                 </label>
                 <input
@@ -120,19 +124,20 @@ export default function CheckoutPage() {
                   required
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+                  placeholder="Jouw naam"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-6">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">
               Verzendadres
             </h2>
             <div className="space-y-4">
               <div>
-                <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="address" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                   Adres *
                 </label>
                 <input
@@ -141,13 +146,14 @@ export default function CheckoutPage() {
                   required
                   value={formData.address}
                   onChange={(e) => setFormData({ ...formData, address: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+                  placeholder="Straat en huisnummer"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label htmlFor="postalCode" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="postalCode" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                     Postcode *
                   </label>
                   <input
@@ -156,12 +162,13 @@ export default function CheckoutPage() {
                     required
                     value={formData.postalCode}
                     onChange={(e) => setFormData({ ...formData, postalCode: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+                    placeholder="1234 AB"
                   />
                 </div>
 
                 <div>
-                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="city" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                     Stad *
                   </label>
                   <input
@@ -170,13 +177,14 @@ export default function CheckoutPage() {
                     required
                     value={formData.city}
                     onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                    className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+                    placeholder="Amsterdam"
                   />
                 </div>
               </div>
 
               <div>
-                <label htmlFor="country" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="country" className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider">
                   Land *
                 </label>
                 <select
@@ -184,7 +192,7 @@ export default function CheckoutPage() {
                   required
                   value={formData.country}
                   onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent"
+                  className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
                 >
                   <option value="Nederland">Nederland</option>
                   <option value="België">België</option>
@@ -194,22 +202,22 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-4">
+          <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-6">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">
               Bestelling Samenvatting
             </h2>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {items.map((item) => (
-                <div key={item.product_id} className="flex justify-between text-gray-700">
+                <div key={item.product_id} className="flex justify-between text-biker-light">
                   <span>
-                    {item.product_name} × {item.quantity}
+                    {item.product_name} <span className="text-biker-yellow">× {item.quantity}</span>
                   </span>
-                  <span>{formatPrice(item.unit_price * item.quantity)}</span>
+                  <span className="font-semibold text-white">{formatPrice(item.unit_price * item.quantity)}</span>
                 </div>
               ))}
-              <div className="border-t pt-3 flex justify-between text-lg font-bold text-gray-900">
+              <div className="border-t border-biker-gray pt-4 flex justify-between text-xl font-bold text-white">
                 <span>Totaal</span>
-                <span>{formatPrice(getTotal())}</span>
+                <span className="text-biker-yellow">{formatPrice(getTotal())}</span>
               </div>
             </div>
           </div>
@@ -217,8 +225,8 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={loading}
-            className={`w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-8 py-4 rounded-lg text-lg font-semibold btn-shimmer btn-glow btn-3d ${
-              loading ? 'btn-loading' : ''
+            className={`btn-primary w-full bg-biker-yellow hover:bg-biker-yellowHover disabled:bg-biker-gray disabled:cursor-not-allowed text-biker-black px-8 py-4 rounded-full text-lg font-bold uppercase tracking-wider transition-all duration-300 ${
+              loading ? 'opacity-50' : ''
             }`}
           >
             {loading ? 'Bezig met laden...' : 'Doorgaan naar Betaling'}

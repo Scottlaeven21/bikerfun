@@ -3,29 +3,29 @@ import Link from 'next/link';
 import { RegisterForm } from '@/components/auth/register-form';
 
 export const metadata: Metadata = {
-  title: 'Registreren',
+  title: 'Registreren - Bikerfun',
   description: 'Maak een Bikerfun account aan',
 };
 
 export default function RegisterPage() {
   return (
-    <div className="bg-white dark:bg-slate-800 rounded-lg shadow-xl p-8">
+    <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-8 shadow-2xl">
       <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-          Account aanmaken
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-white mb-3 uppercase tracking-tight">
+          Account <span className="text-biker-yellow">Aanmaken</span>
         </h1>
-        <p className="text-gray-600 dark:text-gray-400">
+        <p className="text-biker-light text-lg">
           Word lid van Bikerfun
         </p>
       </div>
 
       <RegisterForm />
 
-      <div className="mt-6 text-center text-sm text-gray-600 dark:text-gray-400">
+      <div className="mt-6 text-center text-sm text-biker-light">
         Al een account?{' '}
         <Link
           href="/login"
-          className="font-medium text-red-600 hover:text-red-500"
+          className="font-semibold text-biker-yellow hover:text-biker-yellowHover transition-colors"
         >
           Log in
         </Link>
