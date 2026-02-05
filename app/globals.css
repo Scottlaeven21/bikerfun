@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .noise-overlay {
+    position: relative;
+  }
+  
+  .noise-overlay::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.01) 2px,
+        rgba(255, 255, 255, 0.01) 4px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent,
+        transparent 2px,
+        rgba(255, 255, 255, 0.01) 2px,
+        rgba(255, 255, 255, 0.01) 4px
+      );
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 :root {
   --background: #f6f6f6;
   --foreground: #2a2a2a;

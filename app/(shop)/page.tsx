@@ -71,7 +71,7 @@ export default function HomePage() {
       </section>
 
       {/* Occasions Carousel Section */}
-      <section className="py-20 bg-black">
+      <section className="py-20 bg-black noise-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -101,7 +101,7 @@ export default function HomePage() {
       </section>
 
       {/* Over Ons Section */}
-      <section className="py-20 bg-black text-white">
+      <section className="py-20 bg-black text-white noise-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -197,7 +197,7 @@ export default function HomePage() {
       </section>
 
       {/* Contact CTA Section */}
-      <section className="py-20 bg-black border-y-4 border-biker-yellow/30">
+      <section className="py-20 bg-black border-y-4 border-biker-yellow/30 noise-overlay">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
             Op zoek naar <span className="text-biker-yellow">iets anders</span>?
