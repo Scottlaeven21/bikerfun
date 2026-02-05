@@ -88,7 +88,7 @@ export default function HomePage() {
       </section>
 
       {/* Over Ons Section */}
-      <section className="py-20 bg-biker-black text-white">
+      <section className="py-20 bg-gradient-to-br from-biker-black via-biker-dark to-black text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
@@ -134,7 +134,7 @@ export default function HomePage() {
       </section>
 
       {/* Webshop Section */}
-      <section className="py-20 bg-white">
+      <section className="py-20 bg-gradient-to-b from-biker-light via-white to-biker-light">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-bold text-biker-black mb-4">
