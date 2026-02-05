@@ -26,13 +26,21 @@ export default function HomePage() {
         {/* Hero Content */}
         <div className="relative h-full flex items-center">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
-            <div className="max-w-3xl">
-              <h1 style={{ fontFamily: 'var(--font-playfair)' }} className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-white drop-shadow-2xl leading-tight">
-                Vrijheid begint op <span className="text-biker-yellow italic">twee wielen</span>
+            <div className="max-w-4xl">
+              <h1 
+                style={{ 
+                  fontFamily: 'var(--font-playfair)',
+                  letterSpacing: '0.15em'
+                }} 
+                className="text-5xl md:text-6xl lg:text-7xl font-light mb-8 text-white drop-shadow-2xl leading-tight uppercase"
+              >
+                Vrijheid begint op <span className="text-biker-yellow font-normal">twee wielen</span>
               </h1>
-              <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-lg font-light">
-                Ontdek jouw perfecte occasion en rijd met stijl. 
-                Bij Bikerfun vind je alles voor de ultieme rijervaring.
+              <p 
+                style={{ fontFamily: 'var(--font-montserrat)' }}
+                className="text-sm md:text-base text-white/70 mb-12 tracking-widest uppercase font-light"
+              >
+                Bikerfun
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
