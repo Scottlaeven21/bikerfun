@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 
 interface NavbarProps {
   user: { id: string; email?: string } | null;
@@ -12,6 +13,13 @@ interface NavbarProps {
 
 export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const pathname = usePathname();
+  
+  // Show cart/account icons only on webshop pages
+  const showShopIcons = pathname?.startsWith('/products') || 
+                        pathname?.startsWith('/cart') || 
+                        pathname?.startsWith('/checkout') ||
+                        pathname?.startsWith('/account');
 
   return (
     <>
@@ -33,32 +41,37 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
             {/* Desktop Navigation - Rechts */}
             <div className="flex items-center space-x-3">
-              {/* Cart Icon */}
-              <Link
-                href="/cart"
-                className="relative bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 group"
-                title="Winkelwagen"
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                {cartItemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-biker-yellow text-biker-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center group-hover:bg-biker-black group-hover:text-biker-yellow transition-all">
-                    {cartItemCount}
-                  </span>
-                )}
-              </Link>
+              {/* Cart & Account Icons - Only on Webshop Pages */}
+              {showShopIcons && (
+                <>
+                  {/* Cart Icon */}
+                  <Link
+                    href="/cart"
+                    className="relative bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 group"
+                    title="Winkelwagen"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                    </svg>
+                    {cartItemCount > 0 && (
+                      <span className="absolute -top-1 -right-1 bg-biker-yellow text-biker-black text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center group-hover:bg-biker-black group-hover:text-biker-yellow transition-all">
+                        {cartItemCount}
+                      </span>
+                    )}
+                  </Link>
 
-              {/* Account Icon */}
-              <Link
-                href={user ? "/account" : "/login"}
-                className="bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
-                title={user ? "Mijn Account" : "Inloggen"}
-              >
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </Link>
+                  {/* Account Icon */}
+                  <Link
+                    href={user ? "/account" : "/login"}
+                    className="bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    title={user ? "Mijn Account" : "Inloggen"}
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    </svg>
+                  </Link>
+                </>
+              )}
 
               {/* Aanbod Button */}
               <Link
