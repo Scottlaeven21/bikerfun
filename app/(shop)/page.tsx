@@ -27,7 +27,7 @@ export default function HomePage() {
         <div className="relative h-full flex items-center">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
             <div className="max-w-3xl">
-              <h1 className="font-['var(--font-playfair)'] text-6xl md:text-8xl lg:text-9xl font-black mb-6 text-white drop-shadow-2xl leading-tight">
+              <h1 style={{ fontFamily: 'var(--font-playfair)' }} className="text-5xl md:text-6xl lg:text-7xl font-black mb-6 text-white drop-shadow-2xl leading-tight">
                 Vrijheid begint op <span className="text-biker-yellow italic">twee wielen</span>
               </h1>
               <p className="text-xl md:text-2xl text-white/90 mb-10 max-w-2xl drop-shadow-lg font-light">
@@ -37,13 +37,15 @@ export default function HomePage() {
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
                   href="/occasions"
-                  className="font-['var(--font-montserrat)'] bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
+                  style={{ fontFamily: 'var(--font-montserrat)' }}
+                  className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl hover:shadow-xl"
                 >
                   BEKIJK AANBOD
                 </Link>
                 <Link
                   href="/contact"
-                  className="font-['var(--font-montserrat)'] bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
+                  style={{ fontFamily: 'var(--font-montserrat)' }}
+                  className="bg-biker-black hover:bg-biker-dark text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all shadow-2xl border border-white/30"
                 >
                   CONTACT
                 </Link>
