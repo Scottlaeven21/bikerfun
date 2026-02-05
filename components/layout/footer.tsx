@@ -9,15 +9,14 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-3 mb-4">
-              <div className="relative w-8 h-8">
+              <div className="relative w-24 h-8">
                 <Image
-                  src="/bikerfun-logo.png"
+                  src="/bikerfun-new-logo.png"
                   alt="Bikerfun Logo"
                   fill
                   className="object-contain"
                 />
               </div>
-              <h3 className="text-2xl font-bold">Bikerfun</h3>
             </div>
             <p className="text-biker-muted">
               Premium motor gear en lifestyle producten voor echte motorliefhebbers.

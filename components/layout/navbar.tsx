@@ -20,18 +20,15 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           <div className="flex items-center justify-between h-28">
           {/* Logo + Brand - Links */}
           <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-24 h-24 transition-transform group-hover:scale-110">
+            <div className="relative w-32 h-24 transition-transform group-hover:scale-110">
               <Image
-                src="/bikerfun-logo.png"
+                src="/bikerfun-new-logo.png"
                 alt="Bikerfun Logo"
                 fill
                 className="object-contain"
                 priority
               />
             </div>
-            <span className="text-4xl font-black text-white group-hover:text-biker-yellow transition-colors tracking-tight whitespace-nowrap" style={{ fontFamily: 'Impact, "Arial Black", sans-serif' }}>
-              BIKER FUN
-            </span>
           </Link>
 
             {/* Desktop Navigation - Rechts */}
@@ -74,9 +71,9 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
         {/* Menu Header */}
         <div className="flex items-center justify-between p-6 border-b-2 border-biker-dark">
           <div className="flex items-center space-x-3">
-            <div className="relative w-10 h-10">
+            <div className="relative w-16 h-10">
               <Image
-                src="/bikerfun-logo.png"
+                src="/bikerfun-new-logo.png"
                 alt="Bikerfun Logo"
                 fill
                 className="object-contain"
