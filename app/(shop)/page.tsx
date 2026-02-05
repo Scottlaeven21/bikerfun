@@ -103,7 +103,7 @@ export default function HomePage() {
       {/* Over Ons Section */}
       <section className="py-20 bg-black text-white noise-overlay">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.3fr] gap-8 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div>
               <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold mb-8 uppercase tracking-tight">
@@ -191,7 +191,7 @@ export default function HomePage() {
             </div>
 
             {/* Right - TikTok Videos Grid */}
-            <TikTokGrid />
+            <TikTokGrid size="large" />
           </div>
         </div>
       </section>

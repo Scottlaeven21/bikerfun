@@ -1,8 +1,16 @@
 'use client';
 
-export function TikTokGrid() {
+interface TikTokGridProps {
+  size?: 'normal' | 'large';
+}
+
+export function TikTokGrid({ size = 'normal' }: TikTokGridProps) {
+  const gridClass = size === 'large' 
+    ? 'grid grid-cols-2 lg:grid-cols-3 gap-5' 
+    : 'grid grid-cols-2 lg:grid-cols-3 gap-4';
+
   return (
-    <div className="grid grid-cols-2 gap-6">
+    <div className={gridClass}>
       {[1, 2, 3, 4, 5, 6].map((num) => (
         <div 
           key={num}
