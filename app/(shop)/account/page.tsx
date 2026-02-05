@@ -18,14 +18,16 @@ export default async function AccountPage() {
   }
 
   // Fetch profile
-  const { data: profile } = await supabase
+  const { data: profileData } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single();
 
+  const profile = profileData as { id: string; full_name?: string; email: string; is_admin?: boolean } | null;
+
   // Fetch orders
-  const { data: orders } = await supabase
+  const { data: ordersData } = await supabase
     .from('orders')
     .select(`
       *,
@@ -36,6 +38,8 @@ export default async function AccountPage() {
     `)
     .eq('user_id', user.id)
     .order('created_at', { ascending: false });
+
+  const orders = ordersData as any[] | null;
 
   return (
     <div className="min-h-screen bg-black pt-32 pb-20">
