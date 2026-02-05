@@ -140,8 +140,10 @@ export default function HomePage() {
             <h2 className="text-4xl md:text-5xl font-bold text-biker-black mb-4">
               Onze <span className="text-biker-yellow">Webshop</span>
             </h2>
-            <p className="text-xl text-biker-gray">
-              Premium motorkleding en accessoires voor elke rijder
+            <p className="text-xl text-biker-gray max-w-4xl mx-auto">
+              Bij een nieuwe occasion hoort ook een nieuwe outfit. Ontdek onze collectie premium motorkleding 
+              en accessoires - van veilige helmen tot stijlvolle handschoenen. Rijd niet alleen veilig, 
+              maar ook met stijl. Compleet je motor ervaring vandaag nog!
             </p>
           </div>
 
