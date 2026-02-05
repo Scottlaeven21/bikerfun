@@ -133,35 +133,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center p-6 rounded-lg hover:bg-biker-light transition-all">
-              <div className="text-5xl mb-4">🚚</div>
-              <h3 className="text-xl font-bold mb-2 text-biker-black">Gratis Verzending</h3>
-              <p className="text-biker-gray">
-                Bij bestellingen boven €75
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-lg hover:bg-biker-light transition-all">
-              <div className="text-5xl mb-4">🔒</div>
-              <h3 className="text-xl font-bold mb-2 text-biker-black">Veilig Betalen</h3>
-              <p className="text-biker-gray">
-                100% veilige checkout via Stripe
-              </p>
-            </div>
-            <div className="text-center p-6 rounded-lg hover:bg-biker-light transition-all">
-              <div className="text-5xl mb-4">↩️</div>
-              <h3 className="text-xl font-bold mb-2 text-biker-black">14 Dagen Retour</h3>
-              <p className="text-biker-gray">
-                Niet tevreden? Geld terug garantie
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Webshop Section */}
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
