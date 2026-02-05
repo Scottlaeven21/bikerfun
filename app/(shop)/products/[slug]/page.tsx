@@ -73,40 +73,40 @@ export default async function ProductDetailPage({
     : 0;
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-black pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-gray-600">
+          <ol className="flex items-center space-x-2 text-biker-light">
             <li>
-              <Link href="/" className="hover:text-red-600">
+              <Link href="/" className="hover:text-biker-yellow transition-colors">
                 Home
               </Link>
             </li>
-            <li>/</li>
+            <li className="text-biker-gray">/</li>
             <li>
-              <Link href="/products" className="hover:text-red-600">
+              <Link href="/products" className="hover:text-biker-yellow transition-colors">
                 Producten
               </Link>
             </li>
-            <li>/</li>
+            <li className="text-biker-gray">/</li>
             <li>
               <Link
                 href={`/products?category=${product.category.slug}`}
-                className="hover:text-red-600"
+                className="hover:text-biker-yellow transition-colors"
               >
                 {product.category.name}
               </Link>
             </li>
-            <li>/</li>
-            <li className="text-gray-900 font-medium">{product.name}</li>
+            <li className="text-biker-gray">/</li>
+            <li className="text-white font-medium">{product.name}</li>
           </ol>
         </nav>
 
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray overflow-hidden">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Product Image */}
-            <div className="relative aspect-square bg-gray-100">
+            <div className="relative aspect-square bg-biker-black">
               {product.image_url ? (
                 <Image
                   src={product.image_url}
@@ -116,20 +116,23 @@ export default async function ProductDetailPage({
                   priority
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center text-gray-400">
-                  <span className="text-9xl">📦</span>
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="text-9xl mb-4">📦</div>
+                    <p className="text-biker-light">Geen afbeelding beschikbaar</p>
+                  </div>
                 </div>
               )}
 
               {hasDiscount && (
-                <div className="absolute top-4 right-4 bg-red-600 text-white px-4 py-2 rounded-lg text-lg font-bold">
+                <div className="absolute top-6 right-6 bg-biker-yellow text-biker-black px-4 py-2 rounded-full text-base font-bold">
                   -{discountPercentage}%
                 </div>
               )}
 
               {product.stock === 0 && (
-                <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <span className="bg-white text-gray-900 px-8 py-4 rounded-lg text-xl font-bold">
+                <div className="absolute inset-0 bg-black bg-opacity-70 flex items-center justify-center">
+                  <span className="bg-biker-yellow text-biker-black px-8 py-4 rounded-full text-xl font-bold uppercase tracking-wider">
                     Uitverkocht
                   </span>
                 </div>
@@ -137,40 +140,45 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Product Info */}
-            <div className="p-8">
+            <div className="p-8 lg:p-12">
               <div className="mb-4">
                 <Link
                   href={`/products?category=${product.category.slug}`}
-                  className="text-red-600 hover:text-red-700 font-medium"
+                  className="text-biker-yellow hover:text-biker-yellowHover font-bold uppercase text-sm tracking-wider transition-colors"
                 >
                   {product.category.name}
                 </Link>
               </div>
 
-              <h1 className="text-4xl font-bold text-gray-900 mb-4">
+              <h1 
+                style={{ fontFamily: 'var(--font-inter)' }}
+                className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight"
+              >
                 {product.name}
               </h1>
 
-              <div className="flex items-baseline space-x-3 mb-6">
-                <span className="text-3xl font-bold text-gray-900">
+              <div className="flex items-baseline space-x-4 mb-8">
+                <span className="text-4xl font-bold text-biker-yellow">
                   {formatPrice(product.price)}
                 </span>
                 {hasDiscount && (
-                  <span className="text-xl text-gray-500 line-through">
+                  <span className="text-xl text-biker-muted line-through">
                     {formatPrice(product.compare_at_price!)}
                   </span>
                 )}
               </div>
 
               {product.stock > 0 && product.stock <= 10 && (
-                <p className="text-orange-600 font-medium mb-6">
-                  Nog {product.stock} op voorraad - bestel snel!
-                </p>
+                <div className="bg-biker-yellow/10 border border-biker-yellow/30 rounded-lg p-3 mb-6">
+                  <p className="text-biker-yellow font-bold text-sm">
+                    ⚡ Nog {product.stock} op voorraad - bestel snel!
+                  </p>
+                </div>
               )}
 
               {product.description && (
-                <div className="prose prose-gray max-w-none mb-8">
-                  <p className="text-gray-700 leading-relaxed">
+                <div className="mb-8">
+                  <p className="text-biker-light leading-relaxed text-lg">
                     {product.description}
                   </p>
                 </div>
@@ -182,33 +190,36 @@ export default async function ProductDetailPage({
               ) : (
                 <button
                   disabled
-                  className="w-full bg-gray-300 text-gray-500 px-8 py-4 rounded-lg text-lg font-semibold cursor-not-allowed"
+                  className="w-full bg-biker-gray text-biker-muted px-6 py-3 rounded-full text-base font-bold uppercase tracking-wider cursor-not-allowed"
                 >
                   Uitverkocht
                 </button>
               )}
 
               {/* Product Features */}
-              <div className="mt-8 pt-8 border-t border-gray-200">
-                <h3 className="font-semibold text-gray-900 mb-4">
+              <div className="mt-10 pt-8 border-t-2 border-biker-gray">
+                <h3 
+                  style={{ fontFamily: 'var(--font-inter)' }}
+                  className="font-bold text-white mb-6 text-xl uppercase tracking-tight"
+                >
                   Product Informatie
                 </h3>
-                <ul className="space-y-2 text-gray-700">
+                <ul className="space-y-3 text-biker-light">
                   <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Gratis verzending boven €75
+                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
+                    <span>Gratis verzending boven €50</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    14 dagen retourrecht
+                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
+                    <span>14 dagen retourrecht</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Veilig betalen met Stripe
+                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
+                    <span>Veilig betalen met Stripe</span>
                   </li>
                   <li className="flex items-center">
-                    <span className="mr-2">✓</span>
-                    Premium kwaliteit gegarandeerd
+                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
+                    <span>Premium kwaliteit gegarandeerd</span>
                   </li>
                 </ul>
               </div>

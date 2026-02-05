@@ -56,33 +56,36 @@ export default async function ProductsPage({
   const categories = categoriesData as Category[] | null;
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-32 pb-12">
+    <div className="min-h-screen bg-black pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="mb-12 text-center">
+          <h1 
+            style={{ fontFamily: 'var(--font-inter)' }}
+            className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight"
+          >
             {params.featured === 'true' 
-              ? 'Uitgelichte Producten'
+              ? <>Uitgelichte <span className="text-biker-yellow">Producten</span></>
               : params.category 
-              ? `${params.category.charAt(0).toUpperCase() + params.category.slice(1)}`
-              : 'Alle Producten'
+              ? <><span className="text-biker-yellow">{params.category.charAt(0).toUpperCase() + params.category.slice(1)}</span></>
+              : <>Onze <span className="text-biker-yellow">Webshop</span></>
             }
           </h1>
-          <p className="text-lg text-gray-600">
+          <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
             Ontdek onze premium motor gear en accessoires
           </p>
         </div>
 
         {/* Category Filter */}
         {categories && categories.length > 0 && (
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-2">
+          <div className="mb-12">
+            <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/products"
-                className={`px-4 py-2 rounded-lg transition-colors ${
+                className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
                   !params.category
-                    ? 'bg-red-600 text-white'
-                    : 'bg-white text-gray-700 hover:bg-gray-100'
+                    ? 'bg-biker-yellow text-biker-black'
+                    : 'bg-biker-dark border-2 border-biker-gray text-white hover:border-biker-yellow'
                 }`}
               >
                 Alle
@@ -91,10 +94,10 @@ export default async function ProductsPage({
                 <Link
                   key={category.id}
                   href={`/products?category=${category.slug}`}
-                  className={`px-4 py-2 rounded-lg transition-colors ${
+                  className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
                     params.category === category.slug
-                      ? 'bg-red-600 text-white'
-                      : 'bg-white text-gray-700 hover:bg-gray-100'
+                      ? 'bg-biker-yellow text-biker-black'
+                      : 'bg-biker-dark border-2 border-biker-gray text-white hover:border-biker-yellow'
                   }`}
                 >
                   {category.name}

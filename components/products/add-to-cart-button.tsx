@@ -37,18 +37,18 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Quantity Selector */}
       {product.stock > 0 && (
         <div className="flex items-center space-x-4">
-          <label htmlFor="quantity" className="font-semibold text-gray-900">
+          <label htmlFor="quantity" className="font-bold text-white uppercase text-sm tracking-wider">
             Aantal:
           </label>
-          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+          <div className="flex items-center border-2 border-biker-gray bg-biker-black rounded-lg overflow-hidden">
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="px-4 py-2 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
+              className="px-4 py-2 text-white hover:bg-biker-gray transition-colors font-bold"
             >
               -
             </button>
@@ -61,12 +61,12 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
               onChange={(e) =>
                 setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))
               }
-              className="w-16 text-center border-x border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
+              className="w-16 text-center border-x-2 border-biker-gray py-2 bg-biker-black text-white font-bold focus:outline-none focus:ring-2 focus:ring-biker-yellow"
             />
             <button
               type="button"
               onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-              className="px-4 py-2 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
+              className="px-4 py-2 text-white hover:bg-biker-gray transition-colors font-bold"
             >
               +
             </button>
@@ -79,16 +79,18 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0}
-          className={`flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shimmer btn-ripple btn-3d ${
-            added ? 'btn-success' : ''
+          style={{ fontFamily: 'var(--font-montserrat)' }}
+          className={`btn-secondary flex-1 bg-transparent text-white px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white disabled:opacity-50 disabled:cursor-not-allowed ${
+            added ? 'bg-biker-yellow text-biker-black border-biker-yellow' : ''
           }`}
         >
-          {added ? '✓ Toegevoegd!' : product.stock === 0 ? 'Uitverkocht' : 'Toevoegen aan winkelwagen'}
+          {added ? '✓ Toegevoegd!' : product.stock === 0 ? 'Uitverkocht' : 'Toevoegen'}
         </button>
         <button
           onClick={handleBuyNow}
           disabled={product.stock === 0}
-          className="flex-1 bg-slate-900 hover:bg-slate-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shimmer btn-glow btn-3d"
+          style={{ fontFamily: 'var(--font-montserrat)' }}
+          className="btn-primary flex-1 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Direct kopen
         </button>
