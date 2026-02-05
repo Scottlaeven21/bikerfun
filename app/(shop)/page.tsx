@@ -216,14 +216,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Webshop Section */}
-      <section className="py-20 bg-gradient-to-b from-biker-light via-white to-biker-light">
+      {/* Webshop Section - Op zoek naar iets anders? */}
+      <section className="py-20 bg-black border-t-4 border-biker-yellow">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Fun Header met emoji */}
           <div className="text-center mb-16">
-            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight">
-              Onze <span className="text-biker-yellow">Webshop</span>
+            <div className="inline-block mb-4">
+              <span className="text-6xl animate-bounce inline-block">🛍️</span>
+            </div>
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+              Op zoek naar <span className="text-biker-yellow">iets anders?</span>
             </h2>
-            <p className="text-lg md:text-xl text-biker-gray max-w-4xl mx-auto">
+            <p className="text-lg md:text-xl text-biker-light max-w-4xl mx-auto">
               Bij een nieuwe occasion hoort ook een nieuwe outfit. Ontdek onze collectie premium motorkleding 
               en accessoires - van veilige helmen tot stijlvolle handschoenen. Rijd niet alleen veilig, 
               maar ook met stijl. Compleet je motor ervaring vandaag nog!
@@ -234,9 +238,9 @@ export default function HomePage() {
             {/* Helmen */}
             <Link
               href="/products?category=helmen"
-              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-white">
+              <div className="relative aspect-square overflow-hidden bg-biker-black">
                 <Image
                   src="/helmet-black-yellow.jpg"
                   alt="Motorhelmen"
@@ -245,7 +249,7 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-black">
+              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmen
                 </h3>
@@ -255,9 +259,9 @@ export default function HomePage() {
             {/* Jassen */}
             <Link
               href="/products?category=jassen"
-              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-white">
+              <div className="relative aspect-square overflow-hidden bg-biker-black">
                 <Image
                   src="/product-jacket.jpg"
                   alt="Motorjassen"
@@ -266,7 +270,7 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-black">
+              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Jassen
                 </h3>
@@ -276,15 +280,15 @@ export default function HomePage() {
             {/* Overige */}
             <Link
               href="/products?category=overige"
-              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-biker-gray to-biker-dark flex items-center justify-center">
+              <div className="relative aspect-square overflow-hidden bg-biker-black flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-6xl mb-2">🔧</div>
-                  <div className="text-white font-bold text-sm">ACCESSOIRES</div>
+                  <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">🔧</div>
+                  <div className="text-biker-light group-hover:text-biker-yellow font-bold text-sm uppercase tracking-wider transition-colors">Accessoires</div>
                 </div>
               </div>
-              <div className="p-6 text-center bg-biker-black">
+              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Overige
                 </h3>
@@ -294,9 +298,9 @@ export default function HomePage() {
             {/* Sleutelhangers */}
             <Link
               href="/products?category=sleutelhangers"
-              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-white">
+              <div className="relative aspect-square overflow-hidden bg-biker-black">
                 <Image
                   src="/product-keychain.jpg"
                   alt="Motor Sleutelhangers"
@@ -305,7 +309,7 @@ export default function HomePage() {
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-black">
+              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Sleutelhangers
                 </h3>
@@ -315,15 +319,15 @@ export default function HomePage() {
             {/* Helmet Covers */}
             <Link
               href="/products?category=helmet-covers"
-              className="group bg-biker-light rounded-2xl overflow-hidden border-2 border-transparent hover:border-biker-yellow transition-all shadow-lg hover:shadow-2xl"
+              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-biker-gray to-biker-dark flex items-center justify-center">
+              <div className="relative aspect-square overflow-hidden bg-biker-black flex items-center justify-center">
                 <div className="text-center">
-                  <div className="text-6xl mb-2">🎨</div>
-                  <div className="text-white font-bold text-sm">FOTO VOLGT</div>
+                  <div className="text-6xl mb-2 group-hover:scale-110 transition-transform duration-300">🎨</div>
+                  <div className="text-biker-light group-hover:text-biker-yellow font-bold text-sm uppercase tracking-wider transition-colors">Foto Volgt</div>
                 </div>
               </div>
-              <div className="p-6 text-center bg-biker-black">
+              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmet Covers
                 </h3>
