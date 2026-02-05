@@ -63,6 +63,7 @@
   .btn-primary:hover {
     background-color: #000000 !important;
     color: #f5c80d;
+    border: 2px solid #f5c80d !important;
     transform: translateY(-2px);
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   }
