@@ -217,13 +217,10 @@ export default function HomePage() {
       </section>
 
       {/* Webshop Section - Op zoek naar iets anders? */}
-      <section className="py-20 bg-black border-t-4 border-biker-yellow">
+      <section className="py-20 bg-gradient-to-b from-biker-dark/80 via-biker-dark to-biker-dark/80 border-t-2 border-biker-yellow/40">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Fun Header met emoji */}
+          {/* Header */}
           <div className="text-center mb-16">
-            <div className="inline-block mb-4">
-              <span className="text-6xl animate-bounce inline-block">🛍️</span>
-            </div>
             <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
               Op zoek naar <span className="text-biker-yellow">iets anders?</span>
             </h2>
