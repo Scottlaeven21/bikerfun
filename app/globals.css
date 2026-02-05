@@ -37,33 +37,310 @@
 @layer components {
   /* Primary CTA - Gele buttons krijgen zwarte achtergrond op hover */
   .btn-primary {
-    transition: all 300ms ease;
+    position: relative;
+    overflow: hidden;
+    transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.1);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+  }
+  
+  .btn-primary:hover::before {
+    width: 300px;
+    height: 300px;
   }
   
   .btn-primary:hover {
     background-color: #000000 !important;
     color: #f5c80d;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
   }
 
   /* Secondary CTA - Transparante buttons worden wit gevuld */
   .btn-secondary {
-    transition: all 300ms ease;
+    position: relative;
+    overflow: hidden;
+    transition: all 400ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  
+  .btn-secondary::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: white;
+    transition: height 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    z-index: -1;
+  }
+  
+  .btn-secondary:hover::after {
+    height: 100%;
   }
   
   .btn-secondary:hover {
-    background-color: white !important;
     color: #000000;
     border-color: white;
+    transform: translateY(-2px);
   }
 
   /* Form Button - Micro-Press */
   .btn-form {
-    transition: all 300ms ease;
+    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    position: relative;
   }
   
   .btn-form:hover {
     background-color: #f5c80d;
     color: #000000;
+    transform: scale(1.02);
+  }
+
+  .btn-form:active {
+    transform: scale(0.98);
+  }
+
+  /* Shimmer Effect voor belangrijke buttons */
+  .btn-shimmer {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-shimmer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    transition: left 0.5s;
+  }
+
+  .btn-shimmer:hover::before {
+    left: 100%;
+  }
+
+  /* Magnetic Button Effect */
+  .btn-magnetic {
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Ripple Effect voor clicks */
+  .btn-ripple {
+    position: relative;
+    overflow: hidden;
+  }
+
+  @keyframes ripple {
+    0% {
+      transform: scale(0);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(4);
+      opacity: 0;
+    }
+  }
+
+  .btn-ripple::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 5px;
+    height: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    opacity: 0;
+    border-radius: 50%;
+    transform: scale(1) translate(-50%, -50%);
+    transform-origin: 50% 50%;
+  }
+
+  .btn-ripple:active::after {
+    animation: ripple 0.6s ease-out;
+  }
+
+  /* Glow Effect */
+  .btn-glow {
+    transition: all 0.3s ease;
+  }
+
+  .btn-glow:hover {
+    box-shadow: 
+      0 0 20px rgba(245, 200, 13, 0.5),
+      0 0 40px rgba(245, 200, 13, 0.3),
+      0 0 60px rgba(245, 200, 13, 0.1);
+  }
+
+  /* Pulse Animation voor belangrijke CTAs */
+  @keyframes pulse-soft {
+    0%, 100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(245, 200, 13, 0.7);
+    }
+    50% {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 10px rgba(245, 200, 13, 0);
+    }
+  }
+
+  .btn-pulse {
+    animation: pulse-soft 2s ease-in-out infinite;
+  }
+
+  /* Slide Up Effect */
+  .btn-slide-up {
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+  }
+
+  .btn-slide-up::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+    transition: height 0.3s ease;
+    z-index: -1;
+  }
+
+  .btn-slide-up:hover::before {
+    height: 100%;
+  }
+
+  /* Border Rotate Effect */
+  .btn-border-rotate {
+    position: relative;
+    background: transparent;
+    border: 2px solid currentColor;
+  }
+
+  .btn-border-rotate::before,
+  .btn-border-rotate::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 2px solid #f5c80d;
+    transition: all 0.3s ease;
+  }
+
+  .btn-border-rotate::before {
+    top: -2px;
+    left: -2px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .btn-border-rotate::after {
+    bottom: -2px;
+    right: -2px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .btn-border-rotate:hover::before,
+  .btn-border-rotate:hover::after {
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+  }
+
+  /* 3D Button Effect */
+  .btn-3d {
+    transform-style: preserve-3d;
+    transition: transform 0.2s ease;
+    box-shadow: 
+      0 4px 0 rgba(0, 0, 0, 0.3),
+      0 6px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .btn-3d:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 6px 0 rgba(0, 0, 0, 0.3),
+      0 8px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  .btn-3d:active {
+    transform: translateY(2px);
+    box-shadow: 
+      0 2px 0 rgba(0, 0, 0, 0.3),
+      0 3px 5px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Loading Animation */
+  @keyframes loading-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .btn-loading {
+    position: relative;
+    color: transparent !important;
+    pointer-events: none;
+  }
+
+  .btn-loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: loading-spin 0.6s linear infinite;
+  }
+
+  /* Success Checkmark Animation */
+  @keyframes checkmark {
+    0% {
+      stroke-dashoffset: 50;
+    }
+    100% {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes success-scale {
+    0%, 100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+
+  .btn-success {
+    animation: success-scale 0.3s ease;
   }
 }
 

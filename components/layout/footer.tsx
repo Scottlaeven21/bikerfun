@@ -23,13 +23,40 @@ export function Footer() {
             </p>
           </div>
 
-          {/* Shop */}
+          {/* Occasions */}
           <div>
-            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Shop</h4>
+            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Occasions</h4>
+            <ul className="space-y-2 text-biker-muted">
+              <li>
+                <Link href="/occasions" className="hover:text-biker-yellow transition-colors">
+                  Ons Aanbod
+                </Link>
+              </li>
+              <li>
+                <Link href="/motor-op-aanvraag" className="hover:text-biker-yellow transition-colors">
+                  Motor Op Aanvraag
+                </Link>
+              </li>
+              <li>
+                <Link href="/over-ons" className="hover:text-biker-yellow transition-colors">
+                  Over Ons
+                </Link>
+              </li>
+              <li>
+                <Link href="/contact" className="hover:text-biker-yellow transition-colors">
+                  Contact
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Webshop */}
+          <div>
+            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Webshop</h4>
             <ul className="space-y-2 text-biker-muted">
               <li>
                 <Link href="/products" className="hover:text-biker-yellow transition-colors">
-                  Alle producten
+                  Alle Producten
                 </Link>
               </li>
               <li>
@@ -43,53 +70,36 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=accessoires" className="hover:text-biker-yellow transition-colors">
-                  Accessoires
+                <Link href="/products?category=handschoenen" className="hover:text-biker-yellow transition-colors">
+                  Handschoenen
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Customer Service */}
+          {/* Info & Juridisch */}
           <div>
-            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Klantenservice</h4>
-            <ul className="space-y-2 text-biker-muted">
-              <li>
-                <Link href="/contact" className="hover:text-biker-yellow transition-colors">
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link href="/shipping" className="hover:text-biker-yellow transition-colors">
-                  Verzending
-                </Link>
-              </li>
-              <li>
-                <Link href="/returns" className="hover:text-biker-yellow transition-colors">
-                  Retourneren
-                </Link>
-              </li>
-              <li>
-                <Link href="/faq" className="hover:text-biker-yellow transition-colors">
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Juridisch</h4>
+            <h4 className="text-lg font-bold mb-4 text-biker-yellow">Informatie</h4>
             <ul className="space-y-2 text-biker-muted">
               <li>
                 <Link href="/privacy" className="hover:text-biker-yellow transition-colors">
-                  Privacy Policy
+                  Privacybeleid
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="hover:text-biker-yellow transition-colors">
+                <Link href="/voorwaarden" className="hover:text-biker-yellow transition-colors">
                   Algemene Voorwaarden
                 </Link>
+              </li>
+              <li>
+                <a href="tel:+31201234567" className="hover:text-biker-yellow transition-colors">
+                  020 - 123 45 67
+                </a>
+              </li>
+              <li>
+                <a href="mailto:info@bikerfun.nl" className="hover:text-biker-yellow transition-colors">
+                  info@bikerfun.nl
+                </a>
               </li>
             </ul>
           </div>

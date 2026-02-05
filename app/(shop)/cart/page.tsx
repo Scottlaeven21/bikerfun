@@ -26,7 +26,7 @@ export default function CartPage() {
             </p>
             <Link
               href="/products"
-              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer btn-3d"
             >
               Verder Shoppen
             </Link>
@@ -102,7 +102,7 @@ export default function CartPage() {
 
               <Link
                 href="/checkout"
-                className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-8 py-4 rounded-lg font-semibold transition-colors"
+                className="block w-full bg-red-600 hover:bg-red-700 text-white text-center px-8 py-4 rounded-lg font-semibold btn-shimmer btn-glow btn-pulse btn-3d"
               >
                 Afrekenen
               </Link>

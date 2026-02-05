@@ -48,10 +48,10 @@ export function CartItem({ item }: CartItemProps) {
 
         {/* Quantity Controls */}
         <div className="flex items-center gap-4">
-          <div className="flex items-center border border-gray-300 rounded-lg">
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
               onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-              className="px-3 py-1 hover:bg-gray-100 transition-colors"
+              className="px-3 py-1 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
             >
               -
             </button>
@@ -60,7 +60,7 @@ export function CartItem({ item }: CartItemProps) {
             </span>
             <button
               onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-              className="px-3 py-1 hover:bg-gray-100 transition-colors"
+              className="px-3 py-1 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
             >
               +
             </button>
@@ -74,7 +74,7 @@ export function CartItem({ item }: CartItemProps) {
           {/* Remove Button */}
           <button
             onClick={() => removeItem(item.product_id)}
-            className="text-red-600 hover:text-red-800 transition-colors"
+            className="text-red-600 hover:text-red-800 transition-all hover:scale-110 btn-ripple"
             title="Verwijderen"
           >
             <svg

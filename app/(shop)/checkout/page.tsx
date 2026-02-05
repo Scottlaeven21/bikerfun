@@ -69,7 +69,7 @@ export default function CheckoutPage() {
             </h1>
             <Link
               href="/products"
-              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+              className="inline-block bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold btn-shimmer btn-3d"
             >
               Verder Shoppen
             </Link>
@@ -217,7 +217,9 @@ export default function CheckoutPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors"
+            className={`w-full bg-red-600 hover:bg-red-700 disabled:bg-gray-400 text-white px-8 py-4 rounded-lg text-lg font-semibold btn-shimmer btn-glow btn-3d ${
+              loading ? 'btn-loading' : ''
+            }`}
           >
             {loading ? 'Bezig met laden...' : 'Doorgaan naar Betaling'}
           </button>

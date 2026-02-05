@@ -44,11 +44,11 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
           <label htmlFor="quantity" className="font-semibold text-gray-900">
             Aantal:
           </label>
-          <div className="flex items-center border border-gray-300 rounded-lg">
+          <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
             <button
               type="button"
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="px-4 py-2 hover:bg-gray-100 transition-colors"
+              className="px-4 py-2 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
             >
               -
             </button>
@@ -61,12 +61,12 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
               onChange={(e) =>
                 setQuantity(Math.max(1, Math.min(product.stock, parseInt(e.target.value) || 1)))
               }
-              className="w-16 text-center border-x border-gray-300 py-2 focus:outline-none"
+              className="w-16 text-center border-x border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-red-500 transition-all"
             />
             <button
               type="button"
               onClick={() => setQuantity(Math.min(product.stock, quantity + 1))}
-              className="px-4 py-2 hover:bg-gray-100 transition-colors"
+              className="px-4 py-2 hover:bg-gray-100 transition-all btn-ripple hover:scale-110"
             >
               +
             </button>
@@ -79,14 +79,16 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
         <button
           onClick={handleAddToCart}
           disabled={product.stock === 0}
-          className="flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
+          className={`flex-1 bg-red-600 hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shimmer btn-ripple btn-3d ${
+            added ? 'btn-success' : ''
+          }`}
         >
           {added ? '✓ Toegevoegd!' : product.stock === 0 ? 'Uitverkocht' : 'Toevoegen aan winkelwagen'}
         </button>
         <button
           onClick={handleBuyNow}
           disabled={product.stock === 0}
-          className="flex-1 bg-slate-900 hover:bg-slate-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
+          className="flex-1 bg-slate-900 hover:bg-slate-800 disabled:bg-gray-400 disabled:cursor-not-allowed text-white px-8 py-4 rounded-lg font-semibold text-lg btn-shimmer btn-glow btn-3d"
         >
           Direct kopen
         </button>
