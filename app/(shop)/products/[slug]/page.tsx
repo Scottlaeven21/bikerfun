@@ -73,7 +73,7 @@ export default async function ProductDetailPage({
     : 0;
 
   return (
-    <div className="min-h-screen bg-black pt-32 pb-12">
+    <div className="min-h-screen bg-black noise-overlay pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm">

@@ -207,7 +207,7 @@ export default function OccasionDetailPage() {
 
   if (!occasion) {
     return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+      <div className="min-h-screen bg-black noise-overlay text-white flex items-center justify-center">
         <div className="text-center">
           <div className="text-6xl mb-4">🏍️</div>
           <h1 className="text-4xl font-bold mb-4">Occasion niet gevonden</h1>
@@ -220,7 +220,7 @@ export default function OccasionDetailPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Image */}
       <section className="relative h-[70vh] bg-biker-black">
         {occasion.image ? (

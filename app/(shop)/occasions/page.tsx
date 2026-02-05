@@ -129,7 +129,7 @@ export default function OccasionsPage() {
     });
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 bg-gradient-to-b from-biker-dark to-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
