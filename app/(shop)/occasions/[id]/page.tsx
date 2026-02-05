@@ -94,7 +94,7 @@ export default function OccasionDetailPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Image */}
-      <section className="relative h-[60vh] bg-biker-black mt-28">
+      <section className="relative h-[70vh] bg-biker-black">
         {occasion.image ? (
           <Image
             src={occasion.image}
@@ -113,10 +113,10 @@ export default function OccasionDetailPage() {
             </div>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
         
         {/* Back Button */}
-        <div className="absolute top-8 left-8">
+        <div className="absolute top-32 left-8">
           <Link
             href="/occasions"
             className="bg-biker-dark/80 backdrop-blur-sm text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 flex items-center space-x-2"
