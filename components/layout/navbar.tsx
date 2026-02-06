@@ -62,7 +62,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
                   {/* Account Icon */}
                   <Link
-                    href={user ? "/account" : "/login"}
+                    href={user ? "/account" : "/login?redirect=/account"}
                     className="bg-biker-dark/50 backdrop-blur-sm text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
