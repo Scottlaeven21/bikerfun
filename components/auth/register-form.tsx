@@ -1,30 +1,33 @@
 'use client';
 
-import { useState } from 'react';
 import { signup } from '@/app/actions/auth';
+import { useFormState } from 'react-dom';
+import { useFormStatus } from 'react-dom';
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={`btn-primary w-full bg-biker-yellow text-biker-black py-4 px-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
+        pending ? 'opacity-50' : ''
+      }`}
+    >
+      {pending ? 'Account aanmaken...' : 'Registreren'}
+    </button>
+  );
+}
 
 export function RegisterForm() {
-  const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (formData: FormData) => {
-    setError(null);
-    setLoading(true);
-
-    const result = await signup(formData);
-
-    if (result?.error) {
-      setError(result.error);
-      setLoading(false);
-    }
-    // If no error, the server action will redirect
-  };
+  const [state, formAction] = useFormState(signup, null);
 
   return (
-    <form action={handleSubmit} className="space-y-6">
-      {error && (
+    <form action={formAction} className="space-y-6">
+      {state?.error && (
         <div className="bg-red-900/20 border-2 border-red-500 text-red-400 px-4 py-3 rounded-lg">
-          {error}
+          {state.error}
         </div>
       )}
 
@@ -80,15 +83,7 @@ export function RegisterForm() {
         />
       </div>
 
-      <button
-        type="submit"
-        disabled={loading}
-        className={`btn-primary w-full bg-biker-yellow text-biker-black py-4 px-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed ${
-          loading ? 'opacity-50' : ''
-        }`}
-      >
-        {loading ? 'Account aanmaken...' : 'Registreren'}
-      </button>
+      <SubmitButton />
     </form>
   );
 }
