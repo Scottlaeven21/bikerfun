@@ -195,7 +195,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               </>
             ) : (
               <Link
-                href="/login"
+                href="/login?redirect=/account"
                 className="py-3 text-2xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight flex items-center space-x-3"
                 onClick={() => setMenuOpen(false)}
               >
