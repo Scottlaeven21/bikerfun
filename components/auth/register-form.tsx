@@ -1,69 +1,27 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { createClient } from '@/lib/supabase/client';
+import { signup } from '@/app/actions/auth';
 
 export function RegisterForm() {
-  const router = useRouter();
-
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [fullName, setFullName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async (formData: FormData) => {
     setError(null);
     setLoading(true);
 
-    try {
-      const supabase = createClient();
+    const result = await signup(formData);
 
-      // Sign up the user
-      const { data: authData, error: authError } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-        },
-      });
-
-      if (authError) {
-        setError(authError.message);
-        return;
-      }
-
-      if (!authData.user) {
-        setError('Registratie mislukt. Probeer het opnieuw.');
-        return;
-      }
-
-      // Create profile
-      const { error: profileError } = await supabase.from('profiles').insert({
-        id: authData.user.id,
-        email: authData.user.email!,
-        full_name: fullName,
-      } as any);
-
-      if (profileError) {
-        console.error('Profile creation error:', profileError);
-        // Continue anyway, profile might be created by trigger
-      }
-
-      // Hard refresh to sync server-side session
-      window.location.href = '/';
-    } catch (err) {
-      setError('Er is iets misgegaan. Probeer het opnieuw.');
+    if (result?.error) {
+      setError(result.error);
       setLoading(false);
     }
+    // If no error, the server action will redirect
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form action={handleSubmit} className="space-y-6">
       {error && (
         <div className="bg-red-900/20 border-2 border-red-500 text-red-400 px-4 py-3 rounded-lg">
           {error}
@@ -79,9 +37,8 @@ export function RegisterForm() {
         </label>
         <input
           id="fullName"
+          name="fullName"
           type="text"
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
           required
           className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
           placeholder="Jan Jansen"
@@ -97,9 +54,8 @@ export function RegisterForm() {
         </label>
         <input
           id="email"
+          name="email"
           type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
           required
           className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
           placeholder="je@email.com"
@@ -115,9 +71,8 @@ export function RegisterForm() {
         </label>
         <input
           id="password"
+          name="password"
           type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
           required
           minLength={6}
           className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
