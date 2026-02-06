@@ -51,13 +51,13 @@ export function RegisterForm() {
 
       if (profileError) {
         console.error('Profile creation error:', profileError);
+        // Continue anyway, profile might be created by trigger
       }
 
-      router.push('/');
-      router.refresh();
+      // Hard refresh to sync server-side session
+      window.location.href = '/';
     } catch (err) {
       setError('Er is iets misgegaan. Probeer het opnieuw.');
-    } finally {
       setLoading(false);
     }
   };

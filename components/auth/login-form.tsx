@@ -28,14 +28,14 @@ export function LoginForm() {
 
       if (error) {
         setError(error.message);
+        setLoading(false);
         return;
       }
 
-      router.push(redirect);
-      router.refresh();
+      // Hard refresh to sync server-side session
+      window.location.href = redirect;
     } catch (err) {
       setError('Er is iets misgegaan. Probeer het opnieuw.');
-    } finally {
       setLoading(false);
     }
   };

@@ -76,6 +76,17 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
+  // Check if user is trying to access account routes
+  if (request.nextUrl.pathname.startsWith('/account')) {
+    if (!user) {
+      // Redirect to login if not authenticated
+      const url = request.nextUrl.clone();
+      url.pathname = '/login';
+      url.searchParams.set('redirect', request.nextUrl.pathname);
+      return NextResponse.redirect(url);
+    }
+  }
+
   // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
   // creating a new response object with NextResponse.next() make sure to:
   // 1. Pass the request in it, like so:
