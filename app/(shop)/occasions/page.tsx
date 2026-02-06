@@ -113,6 +113,7 @@ export default function OccasionsPage() {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 50000 });
   const [sortBy, setSortBy] = useState('newest');
+  const [showFilters, setShowFilters] = useState(false);
 
   const filteredOccasions = occasions
     .filter(occ => selectedCategory === 'all' || occ.category === selectedCategory)
@@ -170,24 +171,71 @@ export default function OccasionsPage() {
       {/* Filters & Content */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Sidebar Filters */}
-            <div className="lg:w-1/4">
-              <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray sticky top-24">
-                <h2 className="text-2xl font-bold mb-6 uppercase tracking-tight">Filters</h2>
-                
+          {/* Header met Filter/Sorteer Buttons */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+            {/* Left: Count */}
+            <div>
+              <h2 
+                style={{ fontFamily: 'var(--font-inter)' }}
+                className="text-3xl md:text-4xl font-bold uppercase tracking-tight mb-2"
+              >
+                Collectie
+              </h2>
+              <p className="text-biker-light">
+                <span className="text-biker-yellow font-bold text-xl">{filteredOccasions.length}</span> occasions op voorraad
+              </p>
+            </div>
+
+            {/* Right: Filter & Sorteer Buttons */}
+            <div className="flex items-center gap-3">
+              {/* Filteren Button */}
+              <button
+                onClick={() => setShowFilters(!showFilters)}
+                className="btn-secondary bg-transparent text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 border-2 border-white flex items-center space-x-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                <span>Filteren</span>
+              </button>
+
+              {/* Sorteren Dropdown */}
+              <div className="relative">
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                  className="appearance-none bg-biker-dark text-white pl-6 pr-12 py-3 rounded-full font-bold uppercase text-sm tracking-wider border-2 border-biker-gray focus:border-biker-yellow focus:outline-none transition-all cursor-pointer"
+                >
+                  <option value="newest">Nieuwste eerst</option>
+                  <option value="price-low">Prijs: Laag → Hoog</option>
+                  <option value="price-high">Prijs: Hoog → Laag</option>
+                  <option value="year-new">Bouwjaar: Nieuw → Oud</option>
+                  <option value="year-old">Bouwjaar: Oud → Nieuw</option>
+                  <option value="mileage-low">KM-stand: Laag → Hoog</option>
+                </select>
+                <svg className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-biker-yellow pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          {/* Filter Panel (Collapsible) */}
+          {showFilters && (
+            <div className="mb-8 bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {/* Category Filter */}
-                <div className="mb-6">
+                <div>
                   <h3 className="text-sm font-bold mb-3 uppercase tracking-wider">Categorie</h3>
-                  <div className="space-y-2">
+                  <div className="flex flex-wrap gap-2">
                     {categories.map((cat) => (
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`block w-full text-left px-4 py-2 rounded-lg transition-colors ${
+                        className={`px-4 py-2 rounded-full transition-all text-sm font-bold uppercase ${
                           selectedCategory === cat.id
-                            ? 'bg-biker-yellow text-biker-black font-bold'
-                            : 'bg-biker-black text-white hover:bg-biker-gray'
+                            ? 'bg-biker-yellow text-biker-black'
+                            : 'bg-biker-black text-white border-2 border-biker-gray hover:border-biker-yellow'
                         }`}
                       >
                         {cat.label}
@@ -197,68 +245,53 @@ export default function OccasionsPage() {
                 </div>
 
                 {/* Price Range */}
-                <div className="mb-6">
-                  <h3 className="text-sm font-bold mb-3 uppercase tracking-wider">Prijs</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="text-xs text-biker-light">Minimum</label>
-                      <select
-                        value={priceRange.min}
-                        onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
-                        className="w-full mt-1 px-3 py-2 bg-biker-black border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none"
-                      >
-                        <option value={0}>€ 0</option>
-                        <option value={5000}>€ 5.000</option>
-                        <option value={10000}>€ 10.000</option>
-                        <option value={15000}>€ 15.000</option>
-                        <option value={20000}>€ 20.000</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs text-biker-light">Maximum</label>
-                      <select
-                        value={priceRange.max}
-                        onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
-                        className="w-full mt-1 px-3 py-2 bg-biker-black border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none"
-                      >
-                        <option value={10000}>€ 10.000</option>
-                        <option value={15000}>€ 15.000</option>
-                        <option value={20000}>€ 20.000</option>
-                        <option value={30000}>€ 30.000</option>
-                        <option value={50000}>€ 50.000+</option>
-                      </select>
-                    </div>
+                <div>
+                  <h3 className="text-sm font-bold mb-3 uppercase tracking-wider">Prijsrange</h3>
+                  <div className="flex gap-3">
+                    <select
+                      value={priceRange.min}
+                      onChange={(e) => setPriceRange({ ...priceRange, min: Number(e.target.value) })}
+                      className="flex-1 px-3 py-2 bg-biker-black border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none text-sm"
+                    >
+                      <option value={0}>€ 0</option>
+                      <option value={5000}>€ 5.000</option>
+                      <option value={10000}>€ 10.000</option>
+                      <option value={15000}>€ 15.000</option>
+                      <option value={20000}>€ 20.000</option>
+                    </select>
+                    <span className="text-biker-light self-center">tot</span>
+                    <select
+                      value={priceRange.max}
+                      onChange={(e) => setPriceRange({ ...priceRange, max: Number(e.target.value) })}
+                      className="flex-1 px-3 py-2 bg-biker-black border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none text-sm"
+                    >
+                      <option value={10000}>€ 10.000</option>
+                      <option value={15000}>€ 15.000</option>
+                      <option value={20000}>€ 20.000</option>
+                      <option value={30000}>€ 30.000</option>
+                      <option value={50000}>€ 50.000+</option>
+                    </select>
                   </div>
                 </div>
 
-                {/* Sort */}
-                <div>
-                  <h3 className="text-sm font-bold mb-3 uppercase tracking-wider">Sorteer Op</h3>
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value)}
-                    className="w-full px-3 py-2 bg-biker-black border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none"
+                {/* Reset Filters */}
+                <div className="flex items-end">
+                  <button
+                    onClick={() => {
+                      setSelectedCategory('all');
+                      setPriceRange({ min: 0, max: 50000 });
+                    }}
+                    className="w-full bg-biker-black text-white px-4 py-2 rounded-lg font-bold uppercase text-sm tracking-wider border-2 border-biker-gray hover:border-biker-yellow transition-all"
                   >
-                    <option value="newest">Nieuwste eerst</option>
-                    <option value="price-low">Prijs: Laag → Hoog</option>
-                    <option value="price-high">Prijs: Hoog → Laag</option>
-                    <option value="year-new">Bouwjaar: Nieuw → Oud</option>
-                    <option value="year-old">Bouwjaar: Oud → Nieuw</option>
-                    <option value="mileage-low">KM-stand: Laag → Hoog</option>
-                  </select>
+                    Reset Filters
+                  </button>
                 </div>
               </div>
             </div>
+          )}
 
-            {/* Occasions Grid */}
-            <div className="lg:w-3/4">
-              <div className="mb-6 flex justify-between items-center">
-                <p className="text-biker-light">
-                  <span className="text-white font-bold">{filteredOccasions.length}</span> occasions gevonden
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Occasions Grid - 2 Columns */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {filteredOccasions.map((occasion) => (
                   <div
                     key={occasion.id}
@@ -346,35 +379,33 @@ export default function OccasionsPage() {
                     </div>
                   </div>
                 ))}
-              </div>
-
-              {/* No Results */}
-              {filteredOccasions.length === 0 && (
-                <div className="text-center py-20">
-                  <div className="text-6xl mb-4">🔍</div>
-                  <h3 className="text-2xl font-bold mb-4">Geen occasions gevonden</h3>
-                  <p className="text-biker-light mb-8">
-                    Probeer je filters aan te passen of{' '}
-                    <button
-                      onClick={() => {
-                        setSelectedCategory('all');
-                        setPriceRange({ min: 0, max: 50000 });
-                      }}
-                      className="text-biker-yellow hover:underline"
-                    >
-                      reset alle filters
-                    </button>
-                  </p>
-                  <Link
-                    href="/motor-op-aanvraag"
-                    className="btn-primary inline-block bg-biker-yellow text-biker-black px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    MOTOR OP AANVRAAG
-                  </Link>
-                </div>
-              )}
-            </div>
           </div>
+
+          {/* No Results */}
+          {filteredOccasions.length === 0 && (
+            <div className="text-center py-20">
+              <div className="text-6xl mb-4">🔍</div>
+              <h3 className="text-2xl font-bold mb-4">Geen occasions gevonden</h3>
+              <p className="text-biker-light mb-8">
+                Probeer je filters aan te passen of{' '}
+                <button
+                  onClick={() => {
+                    setSelectedCategory('all');
+                    setPriceRange({ min: 0, max: 50000 });
+                  }}
+                  className="text-biker-yellow hover:underline"
+                >
+                  reset alle filters
+                </button>
+              </p>
+              <Link
+                href="/motor-op-aanvraag"
+                className="btn-primary inline-block bg-biker-yellow text-biker-black px-8 py-3 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+              >
+                MOTOR OP AANVRAAG
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
