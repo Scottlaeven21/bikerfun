@@ -48,7 +48,7 @@ const occasionsData: Record<string, any> = {
     extras: ['Aftermarket uitlaatsysteem', 'Carbon tank pad', 'Geanodiseerde remhendels', 'LED achterlicht', 'Zwart gespoten velgen']
   },
   '2': {
-    id: 1,
+    id: 2,
     brand: 'Harley-Davidson',
     model: 'Street Bob 114',
     year: 2021,
@@ -79,8 +79,8 @@ const occasionsData: Record<string, any> = {
     warranty: '6 maanden dealer garantie',
     extras: ['Custom uitlaat', 'Vance & Hines slip-ons', 'Zwart uitgevoerd', 'Nieuw achterband']
   },
-  '2': {
-    id: 2,
+  '3': {
+    id: 3,
     brand: 'Yamaha',
     model: 'MT-09',
     year: 2022,
@@ -111,8 +111,8 @@ const occasionsData: Record<string, any> = {
     warranty: '12 maanden fabrieksgarantie',
     extras: ['Quickshifter', 'TFT kleurenscherm', 'LED verlichting', 'Riding modes']
   },
-  '3': {
-    id: 3,
+  '4': {
+    id: 4,
     brand: 'Ducati',
     model: 'Monster 937',
     year: 2023,
@@ -143,8 +143,8 @@ const occasionsData: Record<string, any> = {
     warranty: '18 maanden fabrieksgarantie',
     extras: ['Keyless systeem', 'TFT display', 'Cornering ABS', 'LED verlichting']
   },
-  '4': {
-    id: 4,
+  '5': {
+    id: 5,
     brand: 'BMW',
     model: 'R 1250 GS Adventure',
     year: 2022,
@@ -175,8 +175,8 @@ const occasionsData: Record<string, any> = {
     warranty: '12 maanden dealer garantie',
     extras: ['GPS navigatie', 'Dynamic ESA', 'Koffers', 'Cruise control', 'Keyless', 'Verwarmde handvaten']
   },
-  '5': {
-    id: 5,
+  '6': {
+    id: 6,
     brand: 'Kawasaki',
     model: 'Ninja H2 SX',
     year: 2023,
@@ -207,8 +207,8 @@ const occasionsData: Record<string, any> = {
     warranty: '24 maanden fabrieksgarantie',
     extras: ['Supercharger', 'Cornering ABS', 'Quick shifter', 'Koffers', 'TFT display', 'Cruise control']
   },
-  '6': {
-    id: 6,
+  '7': {
+    id: 7,
     brand: 'Triumph',
     model: 'Speed Triple 1200 RS',
     year: 2024,
