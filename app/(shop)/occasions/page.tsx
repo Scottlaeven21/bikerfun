@@ -8,6 +8,21 @@ import Link from 'next/link';
 const occasions = [
   {
     id: 1,
+    brand: 'Suzuki',
+    model: 'GSX-R 600',
+    year: 2011,
+    price: 6950,
+    mileage: 28500,
+    transmission: 'Handgeschakeld',
+    fuel: 'Benzine',
+    power: '125 pk',
+    image: '/suzuki-gsxr-1.jpg',
+    features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad'],
+    color: 'Mat Zwart',
+    category: 'sport'
+  },
+  {
+    id: 2,
     brand: 'Harley-Davidson',
     model: 'Street Bob 114',
     year: 2021,
@@ -22,7 +37,7 @@ const occasions = [
     category: 'cruiser'
   },
   {
-    id: 2,
+    id: 3,
     brand: 'Yamaha',
     model: 'MT-09',
     year: 2022,
@@ -37,7 +52,7 @@ const occasions = [
     category: 'naked'
   },
   {
-    id: 3,
+    id: 4,
     brand: 'Ducati',
     model: 'Scrambler Icon',
     year: 2020,
@@ -52,7 +67,7 @@ const occasions = [
     category: 'scrambler'
   },
   {
-    id: 4,
+    id: 5,
     brand: 'BMW',
     model: 'R1250GS',
     year: 2023,

@@ -22,6 +22,20 @@ interface Occasion {
 const occasions: Occasion[] = [
   {
     id: 1,
+    brand: 'SUZUKI',
+    model: 'GSX-R 600',
+    year: 2011,
+    price: 6950,
+    pricePerMonth: 149,
+    mileage: 28500,
+    transmission: 'Handgeschakeld',
+    fuel: 'Benzine',
+    power: '125 PK',
+    image: '/suzuki-gsxr-1.jpg',
+    features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad', 'LED Achterlicht'],
+  },
+  {
+    id: 2,
     brand: 'HARLEY-DAVIDSON',
     model: 'Street Bob 114',
     year: 2023,
@@ -35,7 +49,7 @@ const occasions: Occasion[] = [
     features: ['ABS', 'Cruise Control', 'LED Verlichting', 'Quick Shifter'],
   },
   {
-    id: 2,
+    id: 3,
     brand: 'YAMAHA',
     model: 'MT-09 SP',
     year: 2024,

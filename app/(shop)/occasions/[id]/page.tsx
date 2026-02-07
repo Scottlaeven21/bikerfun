@@ -3,10 +3,51 @@
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ImageGallery } from '@/components/image-gallery';
 
 // Mock data - later vervangen door Supabase data
 const occasionsData: Record<string, any> = {
   '1': {
+    id: 1,
+    brand: 'Suzuki',
+    model: 'GSX-R 600',
+    year: 2011,
+    price: 6950,
+    mileage: 28500,
+    transmission: 'Handgeschakeld',
+    fuel: 'Benzine',
+    power: '125 pk',
+    image: '/suzuki-gsxr-1.jpg',
+    images: [
+      '/suzuki-gsxr-1.jpg',
+      '/suzuki-gsxr-2.jpg',
+      '/suzuki-gsxr-3.jpg',
+      '/suzuki-gsxr-4.jpg',
+      '/suzuki-gsxr-5.jpg',
+      '/suzuki-gsxr-6.jpg'
+    ],
+    features: ['ABS', 'Aftermarket Uitlaat', 'Zwart Uitgevoerd', 'Carbon Tank Pad', 'Spiegels'],
+    color: 'Mat Zwart',
+    category: 'Supersport',
+    description: 'Deze Suzuki GSX-R 600 uit 2011 is een echte supersport in perfecte staat! Volledig zwart uitgevoerd met carbon accenten. De motor is technisch uitstekend onderhouden, rijdt perfect en is direct inzetbaar. Complete onderhoudshistorie aanwezig. Ideaal voor zowel de liefhebber als de serieuze rijder die op zoek is naar pure performance.',
+    specs: {
+      engine: '599cc 4-cilinder',
+      cylinders: '4',
+      cooling: 'Vloeistofgekoeld',
+      gears: '6',
+      finalDrive: 'Ketting',
+      weight: '196 kg',
+      seatHeight: '810 mm',
+      tankCapacity: '17 liter',
+      topSpeed: '260 km/u'
+    },
+    condition: 'Zeer goed',
+    owners: 2,
+    serviceHistory: 'Volledig',
+    warranty: '3 maanden dealer garantie',
+    extras: ['Aftermarket uitlaatsysteem', 'Carbon tank pad', 'Geanodiseerde remhendels', 'LED achterlicht', 'Zwart gespoten velgen']
+  },
+  '2': {
     id: 1,
     brand: 'Harley-Davidson',
     model: 'Street Bob 114',
@@ -263,6 +304,32 @@ export default function OccasionDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Info */}
             <div className="lg:col-span-2 space-y-8">
+              {/* Image Gallery */}
+              {occasion.images && occasion.images.length > 0 ? (
+                <ImageGallery 
+                  images={occasion.images} 
+                  alt={`${occasion.brand} ${occasion.model}`}
+                />
+              ) : occasion.image ? (
+                <div className="relative aspect-[4/3] bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray">
+                  <Image
+                    src={occasion.image}
+                    alt={`${occasion.brand} ${occasion.model}`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 66vw"
+                  />
+                </div>
+              ) : (
+                <div className="relative aspect-[4/3] bg-gradient-to-br from-biker-gray/50 to-biker-black rounded-2xl flex items-center justify-center border-2 border-biker-gray">
+                  <div className="text-center">
+                    <div className="text-8xl mb-6">🏍️</div>
+                    <div className="text-white font-bold text-2xl mb-2">FOTO'S VOLGEN</div>
+                    <div className="text-biker-yellow font-bold text-3xl">BINNENKORT</div>
+                  </div>
+                </div>
+              )}
+
               {/* Title & Price */}
               <div>
                 <div className="flex items-start justify-between mb-4">
