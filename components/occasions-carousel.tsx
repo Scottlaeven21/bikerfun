@@ -31,7 +31,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '125 PK',
-    image: '/suzuki-gsxr-1.jpg',
+    image: '/hoofdafbeeldingbikerfun1.jpeg',
     features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad', 'LED Achterlicht'],
   },
   {
