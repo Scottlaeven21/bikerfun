@@ -63,7 +63,7 @@ const occasions: Occasion[] = [
     features: ['Quickshifter', 'TFT Display', 'Rijmodi', 'ABS'],
   },
   {
-    id: 3,
+    id: 4,
     brand: 'DUCATI',
     model: 'Monster 937',
     year: 2023,
@@ -77,7 +77,7 @@ const occasions: Occasion[] = [
     features: ['Cornering ABS', 'Traction Control', 'Keyless', 'TFT'],
   },
   {
-    id: 4,
+    id: 5,
     brand: 'BMW',
     model: 'R 1250 GS Adventure',
     year: 2022,
@@ -91,7 +91,7 @@ const occasions: Occasion[] = [
     features: ['Dynamic ESA', 'Cruise Control', 'Keyless', 'GPS'],
   },
   {
-    id: 5,
+    id: 6,
     brand: 'KAWASAKI',
     model: 'Ninja H2 SX',
     year: 2023,
@@ -105,7 +105,7 @@ const occasions: Occasion[] = [
     features: ['Supercharged', 'Cornering ABS', 'Quick Shifter', 'TFT'],
   },
   {
-    id: 6,
+    id: 7,
     brand: 'TRIUMPH',
     model: 'Speed Triple 1200 RS',
     year: 2024,
