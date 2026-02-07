@@ -11,73 +11,74 @@ interface ImageGalleryProps {
 export function ImageGallery({ images, alt }: ImageGalleryProps) {
   const [selectedImage, setSelectedImage] = useState(0);
 
+  const nextImage = () => {
+    setSelectedImage((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setSelectedImage((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Main Image */}
-      <div className="relative aspect-[4/3] bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray group">
+    <div className="relative">
+      {/* Main Image Container */}
+      <div className="relative aspect-[16/10] bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray group">
         <Image
           src={images[selectedImage]}
           alt={`${alt} - Foto ${selectedImage + 1}`}
           fill
           className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
+          sizes="(max-width: 768px) 100vw, 66vw"
           priority={selectedImage === 0}
         />
-        
+
         {/* Navigation Arrows */}
         {images.length > 1 && (
           <>
             <button
-              onClick={() => setSelectedImage(prev => prev === 0 ? images.length - 1 : prev - 1)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-biker-black/80 text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all opacity-0 group-hover:opacity-100"
+              onClick={prevImage}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-4 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl"
               aria-label="Vorige foto"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <button
-              onClick={() => setSelectedImage(prev => prev === images.length - 1 ? 0 : prev + 1)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-biker-black/80 text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all opacity-0 group-hover:opacity-100"
+              onClick={nextImage}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-4 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl"
               aria-label="Volgende foto"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>
           </>
         )}
 
-        {/* Image Counter */}
-        <div className="absolute bottom-4 right-4 bg-biker-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-bold">
+        {/* Image Counter - Bottom Right */}
+        <div className="absolute bottom-6 right-6 bg-biker-black/90 backdrop-blur-sm text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-2xl">
           {selectedImage + 1} / {images.length}
         </div>
-      </div>
 
-      {/* Thumbnail Grid */}
-      {images.length > 1 && (
-        <div className="grid grid-cols-4 md:grid-cols-6 gap-3">
-          {images.map((image, index) => (
-            <button
-              key={index}
-              onClick={() => setSelectedImage(index)}
-              className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                selectedImage === index 
-                  ? 'border-biker-yellow ring-2 ring-biker-yellow ring-offset-2 ring-offset-biker-black' 
-                  : 'border-biker-gray hover:border-biker-yellow'
-              }`}
-            >
-              <Image
-                src={image}
-                alt={`${alt} thumbnail ${index + 1}`}
-                fill
-                className="object-cover"
-                sizes="150px"
+        {/* Dot Indicators - Bottom Center */}
+        {images.length > 1 && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center space-x-2">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => setSelectedImage(index)}
+                className={`transition-all duration-300 rounded-full ${
+                  selectedImage === index
+                    ? 'bg-biker-yellow w-8 h-2'
+                    : 'bg-white/40 hover:bg-white/60 w-2 h-2'
+                }`}
+                aria-label={`Ga naar foto ${index + 1}`}
               />
-            </button>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
