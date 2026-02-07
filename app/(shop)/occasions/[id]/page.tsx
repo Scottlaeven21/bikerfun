@@ -274,17 +274,19 @@ export default function OccasionDetailPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Image Carousel */}
-      <section className="relative h-[70vh] bg-biker-black">
+      <section className="relative h-[70vh] bg-biker-black flex items-center justify-center">
         {images.length > 0 ? (
           <>
-            <Image
-              src={images[currentImageIndex]}
-              alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
-              fill
-              className="object-cover"
-              priority
-              sizes="100vw"
-            />
+            <div className="relative w-full h-full">
+              <Image
+                src={images[currentImageIndex]}
+                alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
+                fill
+                className="object-contain"
+                priority
+                sizes="100vw"
+              />
+            </div>
             
             {/* Navigation Arrows - Always visible */}
             {images.length > 1 && (
