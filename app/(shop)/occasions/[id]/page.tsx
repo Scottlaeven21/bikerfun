@@ -3,7 +3,7 @@
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ImageGallery } from '@/components/image-gallery';
+import { useState } from 'react';
 
 // Mock data - later vervangen door Supabase data
 const occasionsData: Record<string, any> = {
@@ -245,6 +245,7 @@ export default function OccasionDetailPage() {
   const params = useParams();
   const id = params.id as string;
   const occasion = occasionsData[id];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   if (!occasion) {
     return (
@@ -260,19 +261,78 @@ export default function OccasionDetailPage() {
     );
   }
 
+  const images = occasion.images || (occasion.image ? [occasion.image] : []);
+
+  const nextImage = () => {
+    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  };
+
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Hero Image */}
+      {/* Hero Image Carousel */}
       <section className="relative h-[70vh] bg-biker-black">
-        {occasion.image ? (
-          <Image
-            src={occasion.image}
-            alt={`${occasion.brand} ${occasion.model}`}
-            fill
-            className="object-cover"
-            priority
-            sizes="100vw"
-          />
+        {images.length > 0 ? (
+          <>
+            <Image
+              src={images[currentImageIndex]}
+              alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            
+            {/* Navigation Arrows - Always visible */}
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={prevImage}
+                  className="absolute left-6 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-5 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl z-10"
+                  aria-label="Vorige foto"
+                >
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  onClick={nextImage}
+                  className="absolute right-6 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-5 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl z-10"
+                  aria-label="Volgende foto"
+                >
+                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+
+            {/* Image Counter - Bottom Right */}
+            <div className="absolute bottom-8 right-8 bg-biker-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full text-base font-bold shadow-2xl z-10">
+              {currentImageIndex + 1} / {images.length}
+            </div>
+
+            {/* Dot Indicators - Bottom Center */}
+            {images.length > 1 && (
+              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center space-x-2.5 z-10">
+                {images.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`transition-all duration-300 rounded-full ${
+                      currentImageIndex === index
+                        ? 'bg-biker-yellow w-10 h-2.5'
+                        : 'bg-white/50 hover:bg-white/80 w-2.5 h-2.5'
+                    }`}
+                    aria-label={`Ga naar foto ${index + 1}`}
+                  />
+                ))}
+              </div>
+            )}
+          </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
             <div className="text-center">
@@ -304,32 +364,6 @@ export default function OccasionDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Info */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Image Gallery */}
-              {occasion.images && occasion.images.length > 0 ? (
-                <ImageGallery 
-                  images={occasion.images} 
-                  alt={`${occasion.brand} ${occasion.model}`}
-                />
-              ) : occasion.image ? (
-                <div className="relative aspect-[4/3] bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray">
-                  <Image
-                    src={occasion.image}
-                    alt={`${occasion.brand} ${occasion.model}`}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 66vw"
-                  />
-                </div>
-              ) : (
-                <div className="relative aspect-[4/3] bg-gradient-to-br from-biker-gray/50 to-biker-black rounded-2xl flex items-center justify-center border-2 border-biker-gray">
-                  <div className="text-center">
-                    <div className="text-8xl mb-6">🏍️</div>
-                    <div className="text-white font-bold text-2xl mb-2">FOTO'S VOLGEN</div>
-                    <div className="text-biker-yellow font-bold text-3xl">BINNENKORT</div>
-                  </div>
-                </div>
-              )}
-
               {/* Title & Price */}
               <div>
                 <div className="flex items-start justify-between mb-4">
