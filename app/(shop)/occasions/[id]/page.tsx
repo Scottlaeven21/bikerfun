@@ -318,7 +318,7 @@ export default function OccasionDetailPage() {
             {/* Dot Indicators - Bottom Center */}
             {images.length > 1 && (
               <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center space-x-2.5 z-10">
-                {images.map((_, index) => (
+                {images.map((_img: string, index: number) => (
                   <button
                     key={index}
                     onClick={() => setCurrentImageIndex(index)}
