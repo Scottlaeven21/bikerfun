@@ -82,7 +82,7 @@ const occasions = [
     category: 'adventure'
   },
   {
-    id: 5,
+    id: 6,
     brand: 'Kawasaki',
     model: 'Z900',
     year: 2021,
@@ -97,7 +97,7 @@ const occasions = [
     category: 'naked'
   },
   {
-    id: 6,
+    id: 7,
     brand: 'Triumph',
     model: 'Bonneville T120',
     year: 2022,
