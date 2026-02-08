@@ -235,14 +235,14 @@ export default function HomePage() {
             {/* Helmen */}
             <Link
               href="/products?category=helmen"
-              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black">
+              <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/helmet-black-yellow.jpg"
+                  src="/product-helmet-white-bg.jpg"
                   alt="Motorhelmen"
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
@@ -256,14 +256,14 @@ export default function HomePage() {
             {/* Jassen */}
             <Link
               href="/products?category=jassen"
-              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black">
+              <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-jacket.jpg"
+                  src="/product-jacket-white-bg.jpg"
                   alt="Motorjassen"
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
@@ -277,14 +277,14 @@ export default function HomePage() {
             {/* Overige */}
             <Link
               href="/products?category=overige"
-              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black">
+              <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-accessories.jpg"
+                  src="/product-accessories-white-bg.jpg"
                   alt="Motor Accessoires"
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
@@ -298,14 +298,14 @@ export default function HomePage() {
             {/* Sleutelhangers */}
             <Link
               href="/products?category=sleutelhangers"
-              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black">
+              <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-keychain.jpg"
+                  src="/product-keychain-white-bg.jpg"
                   alt="Motor Sleutelhangers"
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
@@ -319,14 +319,14 @@ export default function HomePage() {
             {/* Helmet Covers */}
             <Link
               href="/products?category=helmet-covers"
-              className="group bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-biker-yellow/30 hover:border-biker-yellow transition-all hover:shadow-[0_0_30px_rgba(245,200,13,0.3)] hover:-translate-y-2 duration-300"
             >
-              <div className="relative aspect-square overflow-hidden bg-biker-black">
+              <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-helmet-cover.jpg"
+                  src="/product-helmet-cover-white-bg.jpg"
                   alt="Helmet Covers"
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
