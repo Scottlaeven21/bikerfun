@@ -17,7 +17,7 @@ const occasionsData: Record<string, any> = {
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '125 pk',
-    image: '/suzuki-hero-landscape.png',
+    image: '/suzuki-hero-studio.png',
     images: [
       '/suzuki-gsxr-2.jpg',
       '/suzuki-gsxr-3.jpg',
