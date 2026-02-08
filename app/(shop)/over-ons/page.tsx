@@ -83,7 +83,11 @@ export default function OverOnsPage() {
               <div className="space-y-6">
                 <div>
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-3xl">🤝</span>
+                    <div className="w-10 h-10 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
                     <h4 className="text-xl font-bold">Eerlijkheid</h4>
                   </div>
                   <p className="text-biker-light">
@@ -93,7 +97,11 @@ export default function OverOnsPage() {
 
                 <div>
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-3xl">✨</span>
+                    <div className="w-10 h-10 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                      </svg>
+                    </div>
                     <h4 className="text-xl font-bold">Kwaliteit</h4>
                   </div>
                   <p className="text-biker-light">
@@ -103,7 +111,11 @@ export default function OverOnsPage() {
 
                 <div>
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-3xl">❤️</span>
+                    <div className="w-10 h-10 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M11.645 20.91l-.007-.003-.022-.012a15.247 15.247 0 01-.383-.218 25.18 25.18 0 01-4.244-3.17C4.688 15.36 2.25 12.174 2.25 8.25 2.25 5.322 4.714 3 7.688 3A5.5 5.5 0 0112 5.052 5.5 5.5 0 0116.313 3c2.973 0 5.437 2.322 5.437 5.25 0 3.925-2.438 7.111-4.739 9.256a25.175 25.175 0 01-4.244 3.17 15.247 15.247 0 01-.383.219l-.022.012-.007.004-.003.001a.752.752 0 01-.704 0l-.003-.001z" />
+                      </svg>
+                    </div>
                     <h4 className="text-xl font-bold">Passie</h4>
                   </div>
                   <p className="text-biker-light">
@@ -113,7 +125,11 @@ export default function OverOnsPage() {
 
                 <div>
                   <div className="flex items-center space-x-3 mb-2">
-                    <span className="text-3xl">🎯</span>
+                    <div className="w-10 h-10 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </div>
                     <h4 className="text-xl font-bold">Service</h4>
                   </div>
                   <p className="text-biker-light">
@@ -152,7 +168,11 @@ export default function OverOnsPage() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Occasions */}
             <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="text-5xl mb-4">🏍️</div>
+              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
               <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Occasions</h3>
               <p className="text-biker-light mb-6">
                 Zorgvuldig geselecteerde tweedehands motoren. Van cruisers tot sportmotoren, 
@@ -168,7 +188,11 @@ export default function OverOnsPage() {
 
             {/* Motor op Aanvraag */}
             <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="text-5xl mb-4">🔍</div>
+              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Motor Op Aanvraag</h3>
               <p className="text-biker-light mb-6">
                 Zoek je iets specifieks? Wij gaan voor jou op zoek in ons uitgebreide netwerk 
@@ -184,7 +208,11 @@ export default function OverOnsPage() {
 
             {/* Webshop */}
             <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="text-5xl mb-4">👕</div>
+              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+              </div>
               <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Motorkleding</h3>
               <p className="text-biker-light mb-6">
                 Premium motorkleding en accessoires. Van helmen tot handschoenen - 
