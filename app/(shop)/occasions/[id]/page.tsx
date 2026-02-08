@@ -282,6 +282,7 @@ export default function OccasionDetailPage() {
               fill
               className="object-cover"
               priority
+              quality={100}
               sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
