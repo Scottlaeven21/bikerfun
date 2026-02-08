@@ -317,48 +317,29 @@ export default function OccasionDetailPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Info - Full Width on Mobile, 2 Cols on Desktop */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Media Gallery - Large image with thumbnails */}
+              {/* Thumbnail Gallery - Grid under hero */}
               {images.length > 1 && (
                 <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
-                  <h2 className="text-2xl font-bold mb-6 uppercase tracking-tight">Media</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                    {/* Large Main Image */}
-                    <div className="md:col-span-3 relative aspect-video rounded-lg overflow-hidden border-2 border-biker-gray">
-                      <Image
-                        src={images[currentImageIndex]}
-                        alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 75vw"
-                      />
-                      {/* Image Counter */}
-                      <div className="absolute bottom-4 right-4 bg-biker-yellow text-biker-black px-4 py-2 rounded-lg text-sm font-bold shadow-xl">
-                        {currentImageIndex + 1} / {images.length}
-                      </div>
-                    </div>
-                    
-                    {/* Thumbnails */}
-                    <div className="md:col-span-1 grid grid-cols-4 md:grid-cols-1 gap-3">
-                      {images.map((img: string, index: number) => (
-                        <button
-                          key={index}
-                          onClick={() => setCurrentImageIndex(index)}
-                          className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                            currentImageIndex === index
-                              ? 'border-biker-yellow ring-2 ring-biker-yellow/50'
-                              : 'border-biker-gray hover:border-biker-yellow/50'
-                          }`}
-                        >
-                          <Image
-                            src={img}
-                            alt={`${occasion.brand} ${occasion.model} - Thumbnail ${index + 1}`}
-                            fill
-                            className="object-cover"
-                            sizes="150px"
-                          />
-                        </button>
-                      ))}
-                    </div>
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                    {images.map((img: string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                          currentImageIndex === index
+                            ? 'border-biker-yellow ring-2 ring-biker-yellow/50'
+                            : 'border-biker-gray hover:border-biker-yellow/50'
+                        }`}
+                      >
+                        <Image
+                          src={img}
+                          alt={`${occasion.brand} ${occasion.model} - Thumbnail ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 33vw, 16vw"
+                        />
+                      </button>
+                    ))}
                   </div>
                 </div>
               )}
