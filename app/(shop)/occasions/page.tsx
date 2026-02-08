@@ -16,7 +16,7 @@ const occasions = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '125 pk',
-    image: '/hoofdafbeeldingbikerfun1.jpeg',
+    image: '/suzuki-hero.png',
     features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad'],
     color: 'Mat Zwart',
     category: 'sport'

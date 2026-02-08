@@ -31,7 +31,7 @@ const occasions: Occasion[] = [
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
     power: '125 PK',
-    image: '/hoofdafbeeldingbikerfun1.jpeg',
+    image: '/suzuki-hero.png',
     features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad', 'LED Achterlicht'],
   },
   {
