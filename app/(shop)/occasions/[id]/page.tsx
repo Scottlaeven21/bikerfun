@@ -19,7 +19,6 @@ const occasionsData: Record<string, any> = {
     power: '125 pk',
     image: '/suzuki-hero-studio.png',
     images: [
-      '/suzuki-hero-studio.png',
       '/suzuki-gsxr-2.jpg',
       '/suzuki-gsxr-3.jpg',
       '/suzuki-gsxr-4.jpg',
@@ -273,12 +272,12 @@ export default function OccasionDetailPage() {
 
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Static Hero Image - Always first image, never changes */}
+      {/* Static Hero Image - Uses main image, never changes */}
       <section className="relative h-[60vh] bg-biker-black">
-        {images.length > 0 ? (
+        {occasion.image ? (
           <>
             <Image
-              src={images[0]}
+              src={occasion.image}
               alt={`${occasion.brand} ${occasion.model}`}
               fill
               className="object-cover"
