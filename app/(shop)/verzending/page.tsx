@@ -44,7 +44,11 @@ export default function VerzendingPage() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
                 <div className="bg-biker-black rounded-lg p-6 border border-biker-gray">
-                  <div className="text-3xl mb-3">📦</div>
+                  <div className="w-12 h-12 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-3">
+                    <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-bold mb-2">Brievenbuspakket</h3>
                   <p className="text-biker-light">
                     Compacte items zoals sleutelhangers en kleine accessoires. 
@@ -54,7 +58,11 @@ export default function VerzendingPage() {
                 </div>
 
                 <div className="bg-biker-black rounded-lg p-6 border border-biker-gray">
-                  <div className="text-3xl mb-3">📮</div>
+                  <div className="w-12 h-12 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-3">
+                    <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-bold mb-2">Briefpost</h3>
                   <p className="text-biker-light">
                     Extra kleine items zoals losse sleutelhangers worden verstuurd als brief.
@@ -63,7 +71,11 @@ export default function VerzendingPage() {
                 </div>
 
                 <div className="bg-biker-black rounded-lg p-6 border border-biker-gray md:col-span-2">
-                  <div className="text-3xl mb-3">📦📦</div>
+                  <div className="w-12 h-12 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-3">
+                    <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                  </div>
                   <h3 className="text-xl font-bold mb-2">Standaard Pakket</h3>
                   <p className="text-biker-light">
                     Grotere items zoals helmen, jassen en helmet covers worden verstuurd 
@@ -131,9 +143,16 @@ export default function VerzendingPage() {
                   Deze worden duidelijk weergegeven tijdens het afrekenproces.
                 </p>
                 <div className="bg-biker-black rounded-lg p-6 border border-biker-yellow">
-                  <p className="text-xl font-bold text-biker-yellow mb-2">
-                    🎉 Gratis verzending vanaf €50,-
-                  </p>
+                  <div className="flex items-center space-x-3 mb-2">
+                    <div className="w-10 h-10 rounded-full bg-biker-yellow/20 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+                      </svg>
+                    </div>
+                    <p className="text-xl font-bold text-biker-yellow">
+                      Gratis verzending vanaf €50,-
+                    </p>
+                  </div>
                   <p className="text-biker-light">
                     Bij bestellingen boven de €50,- betaal je geen verzendkosten (alleen binnen Nederland).
                   </p>
@@ -164,7 +183,11 @@ export default function VerzendingPage() {
             {/* Belangrijke Info Helmcovers */}
             <div className="bg-gradient-to-br from-biker-yellow/10 to-biker-dark rounded-2xl p-8 lg:p-12 border-2 border-biker-yellow">
               <div className="flex items-start space-x-4 mb-6">
-                <div className="text-4xl">🪖</div>
+                <div className="w-14 h-14 rounded-full bg-biker-yellow/20 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                  <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                  </svg>
+                </div>
                 <h2 className="text-3xl font-bold uppercase tracking-tight text-biker-yellow">
                   Belangrijk: Helmcovers
                 </h2>
