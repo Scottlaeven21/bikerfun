@@ -272,48 +272,22 @@ export default function OccasionDetailPage() {
 
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Static Hero Image - Uses main image, never changes */}
-      <section className="relative h-[60vh] bg-biker-black">
-        {occasion.image ? (
-          <>
-            <Image
-              src={occasion.image}
-              alt={`${occasion.brand} ${occasion.model}`}
-              fill
-              className="object-cover"
-              priority
-              quality={100}
-              sizes="100vw"
-            />
-            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
-          </>
-        ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-8xl mb-6">🏍️</div>
-              <div className="text-white font-bold text-2xl mb-2">FOTO'S VOLGEN</div>
-              <div className="text-biker-yellow font-bold text-3xl">BINNENKORT</div>
-            </div>
-          </div>
-        )}
-        
-        {/* Back Button */}
-        <div className="absolute top-32 left-8 z-20">
-          <Link
-            href="/occasions"
-            className="bg-biker-dark/80 backdrop-blur-sm text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 flex items-center space-x-2"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>TERUG</span>
-          </Link>
-        </div>
-      </section>
-
       {/* Content */}
-      <section className="py-12">
+      <section className="pt-32 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Back Button */}
+          <div className="mb-8">
+            <Link
+              href="/occasions"
+              className="inline-flex items-center space-x-2 bg-biker-dark hover:bg-biker-gray text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 border-2 border-biker-gray hover:border-biker-yellow"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>TERUG</span>
+            </Link>
+          </div>
+
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Info - Full Width on Mobile, 2 Cols on Desktop */}
             <div className="lg:col-span-2 space-y-8">
