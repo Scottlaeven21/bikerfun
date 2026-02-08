@@ -500,7 +500,7 @@ export default function OccasionDetailPage() {
                 {/* CTA Buttons */}
                 <div className="mt-8 space-y-3">
                   <Link
-                    href="/contact"
+                    href={`/occasions/${id}/aanvraag`}
                     className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
                   >
                     PLAN BEZICHTIGING
