@@ -19,10 +19,10 @@ const occasionsData: Record<string, any> = {
     power: '125 pk',
     image: '/suzuki-hero-studio.png',
     images: [
+      '/suzuki-gsxr-5.jpg',
       '/suzuki-gsxr-2.jpg',
       '/suzuki-gsxr-3.jpg',
       '/suzuki-gsxr-4.jpg',
-      '/suzuki-gsxr-5.jpg',
       '/suzuki-gsxr-6.jpg'
     ],
     features: ['ABS', 'Aftermarket Uitlaat', 'Zwart Uitgevoerd', 'Carbon Tank Pad', 'Spiegels'],
