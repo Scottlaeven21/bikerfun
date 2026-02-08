@@ -319,11 +319,9 @@ export default function OccasionDetailPage() {
             <div className="lg:col-span-2 space-y-8">
               {/* Media Section - Large image with thumbnails below */}
               {images.length > 1 && (
-                <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
-                  <h2 className="text-xl font-bold mb-6 uppercase tracking-tight">Media</h2>
-                  
+                <div>
                   {/* Large Display Image */}
-                  <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-biker-gray mb-4">
+                  <div className="relative aspect-video rounded-xl overflow-hidden mb-4">
                     <Image
                       src={images[currentImageIndex]}
                       alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
