@@ -56,13 +56,13 @@ export default async function ProductsPage({
   const categories = categoriesData as Category[] | null;
 
   return (
-    <div className="min-h-screen bg-black noise-overlay pt-32 pb-12">
+    <div className="min-h-screen bg-white pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 
             style={{ fontFamily: 'var(--font-inter)' }}
-            className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight"
+            className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
           >
             {params.featured === 'true' 
               ? <>Uitgelichte <span className="text-biker-yellow">Producten</span></>
@@ -71,7 +71,7 @@ export default async function ProductsPage({
               : <>Onze <span className="text-biker-yellow">Webshop</span></>
             }
           </h1>
-          <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
+          <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
             Ontdek onze premium motor gear en accessoires
           </p>
         </div>
@@ -84,8 +84,8 @@ export default async function ProductsPage({
                 href="/products"
                 className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
                   !params.category
-                    ? 'bg-biker-yellow text-biker-black'
-                    : 'bg-biker-dark border-2 border-biker-gray text-white hover:border-biker-yellow'
+                    ? 'bg-biker-yellow text-biker-black hover:bg-biker-yellowHover'
+                    : 'bg-white border-2 border-gray-300 text-biker-black hover:border-biker-yellow'
                 }`}
               >
                 Alle
@@ -96,8 +96,8 @@ export default async function ProductsPage({
                   href={`/products?category=${category.slug}`}
                   className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
                     params.category === category.slug
-                      ? 'bg-biker-yellow text-biker-black'
-                      : 'bg-biker-dark border-2 border-biker-gray text-white hover:border-biker-yellow'
+                      ? 'bg-biker-yellow text-biker-black hover:bg-biker-yellowHover'
+                      : 'bg-white border-2 border-gray-300 text-biker-black hover:border-biker-yellow'
                   }`}
                 >
                   {category.name}
@@ -121,7 +121,7 @@ export default async function ProductsPage({
             </p>
             <Link
               href="/products"
-              className="text-red-600 hover:text-red-700 font-semibold"
+              className="text-biker-yellow hover:text-biker-yellowHover font-semibold"
             >
               Bekijk alle producten
             </Link>

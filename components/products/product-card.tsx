@@ -16,9 +16,9 @@ export function ProductCard({ product }: ProductCardProps) {
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group bg-biker-black rounded-lg overflow-hidden hover:ring-2 hover:ring-biker-yellow transition-all transform hover:scale-[1.02]"
+      className="group bg-white rounded-lg overflow-hidden border-2 border-gray-200 hover:border-biker-yellow hover:shadow-lg transition-all transform hover:scale-[1.02]"
     >
-      <div className="relative aspect-square overflow-hidden bg-white">
+      <div className="relative aspect-square overflow-hidden bg-gray-50">
         {product.image_url ? (
           <Image
             src={product.image_url}
@@ -39,25 +39,25 @@ export function ProductCard({ product }: ProductCardProps) {
         )}
 
         {product.stock === 0 && (
-          <div className="absolute inset-0 bg-biker-black bg-opacity-80 flex items-center justify-center">
-            <span className="bg-biker-yellow text-biker-black px-4 py-2 rounded-lg font-bold">
+          <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
+            <span className="bg-gray-800 text-white px-4 py-2 rounded-lg font-bold">
               Uitverkocht
             </span>
           </div>
         )}
       </div>
 
-      <div className="p-4 bg-biker-black">
-        <h3 className="font-bold text-white mb-2 line-clamp-2 group-hover:text-biker-yellow transition-colors">
+      <div className="p-4 bg-white">
+        <h3 className="font-bold text-biker-black mb-2 line-clamp-2 group-hover:text-biker-yellow transition-colors">
           {product.name}
         </h3>
 
         <div className="flex items-baseline space-x-2">
-          <span className="text-xl font-bold text-biker-yellow">
+          <span className="text-xl font-bold text-biker-black">
             {formatPrice(product.price)}
           </span>
           {hasDiscount && (
-            <span className="text-sm text-biker-muted line-through">
+            <span className="text-sm text-gray-400 line-through">
               {formatPrice(product.compare_at_price!)}
             </span>
           )}
