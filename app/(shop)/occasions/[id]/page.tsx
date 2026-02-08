@@ -327,6 +327,7 @@ export default function OccasionDetailPage() {
                       alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
                       fill
                       className="object-cover"
+                      quality={100}
                       sizes="(max-width: 768px) 100vw, 66vw"
                     />
                     {/* Image Counter */}
@@ -352,6 +353,7 @@ export default function OccasionDetailPage() {
                           alt={`Thumbnail ${index + 1}`}
                           fill
                           className="object-cover"
+                          quality={100}
                           sizes="150px"
                         />
                       </button>
