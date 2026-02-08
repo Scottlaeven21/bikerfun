@@ -280,7 +280,7 @@ export default function OccasionDetailPage() {
               src={occasion.image}
               alt={`${occasion.brand} ${occasion.model}`}
               fill
-              className="object-contain"
+              className="object-cover"
               priority
               quality={100}
               sizes="100vw"
