@@ -12,7 +12,7 @@ const occasionsData: Record<string, any> = {
     model: 'GSX-R 600',
     year: 2011,
     price: 6950,
-    image: '/suzuki-hero-studio.png',
+    image: '/suzuki-hero-v2.png',
   },
   '2': {
     id: 2,
