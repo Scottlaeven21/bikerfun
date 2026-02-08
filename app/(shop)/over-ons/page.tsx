@@ -167,62 +167,71 @@ export default function OverOnsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Occasions */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Occasions</h3>
-              <p className="text-biker-light mb-6">
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight text-white">Occasions</h3>
+              <p className="text-biker-light mb-6 leading-relaxed">
                 Zorgvuldig geselecteerde tweedehands motoren. Van cruisers tot sportmotoren, 
                 elke categorie is vertegenwoordigd.
               </p>
               <Link
                 href="/occasions"
-                className="text-biker-yellow hover:underline font-bold uppercase tracking-wider"
+                className="inline-flex items-center text-biker-yellow hover:text-biker-yellowHover font-bold uppercase tracking-wider text-sm transition-colors group"
               >
-                Bekijk Aanbod →
+                <span>Bekijk Aanbod</span>
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
 
             {/* Motor op Aanvraag */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Motor Op Aanvraag</h3>
-              <p className="text-biker-light mb-6">
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight text-white">Motor Op Aanvraag</h3>
+              <p className="text-biker-light mb-6 leading-relaxed">
                 Zoek je iets specifieks? Wij gaan voor jou op zoek in ons uitgebreide netwerk 
                 door heel Europa.
               </p>
               <Link
                 href="/motor-op-aanvraag"
-                className="text-biker-yellow hover:underline font-bold uppercase tracking-wider"
+                className="inline-flex items-center text-biker-yellow hover:text-biker-yellowHover font-bold uppercase tracking-wider text-sm transition-colors group"
               >
-                Meer Info →
+                <span>Meer Info</span>
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
 
             {/* Webshop */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="w-16 h-16 rounded-xl bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mb-6">
-                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
                 </svg>
               </div>
-              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Motorkleding</h3>
-              <p className="text-biker-light mb-6">
+              <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight text-white">Motorkleding</h3>
+              <p className="text-biker-light mb-6 leading-relaxed">
                 Premium motorkleding en accessoires. Van helmen tot handschoenen - 
                 compleet je motor ervaring.
               </p>
               <Link
                 href="/products"
-                className="text-biker-yellow hover:underline font-bold uppercase tracking-wider"
+                className="inline-flex items-center text-biker-yellow hover:text-biker-yellowHover font-bold uppercase tracking-wider text-sm transition-colors group"
               >
-                Shop Nu →
+                <span>Shop Nu</span>
+                <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                </svg>
               </Link>
             </div>
           </div>
