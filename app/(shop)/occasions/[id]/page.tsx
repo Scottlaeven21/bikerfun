@@ -316,16 +316,74 @@ export default function OccasionDetailPage() {
         </div>
       </section>
 
+  return (
+    <div className="min-h-screen bg-black noise-overlay text-white">
+      {/* Static Hero Image - Always first image, never changes */}
+      <section className="relative h-[60vh] bg-biker-black">
+        {images.length > 0 ? (
+          <>
+            <Image
+              src={images[0]}
+              alt={`${occasion.brand} ${occasion.model}`}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+          </>
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
+            <div className="text-center">
+              <div className="text-8xl mb-6">🏍️</div>
+              <div className="text-white font-bold text-2xl mb-2">FOTO'S VOLGEN</div>
+              <div className="text-biker-yellow font-bold text-3xl">BINNENKORT</div>
+            </div>
+          </div>
+        )}
+        
+        {/* Back Button */}
+        <div className="absolute top-32 left-8 z-20">
+          <Link
+            href="/occasions"
+            className="bg-biker-dark/80 backdrop-blur-sm text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 flex items-center space-x-2"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>TERUG</span>
+          </Link>
+        </div>
+      </section>
+
       {/* Content */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
             {/* Main Info - Full Width on Mobile, 2 Cols on Desktop */}
             <div className="lg:col-span-2 space-y-8">
-              {/* Thumbnail Gallery - Grid under hero */}
+              {/* Media Section - Large image with thumbnails below */}
               {images.length > 1 && (
                 <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
-                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                  <h2 className="text-xl font-bold mb-6 uppercase tracking-tight">Media</h2>
+                  
+                  {/* Large Display Image */}
+                  <div className="relative aspect-video rounded-xl overflow-hidden border-2 border-biker-gray mb-4">
+                    <Image
+                      src={images[currentImageIndex]}
+                      alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 66vw"
+                    />
+                    {/* Image Counter */}
+                    <div className="absolute bottom-4 right-4 bg-biker-yellow text-biker-black px-4 py-2 rounded-lg text-sm font-bold shadow-xl">
+                      {currentImageIndex + 1} / {images.length}
+                    </div>
+                  </div>
+                  
+                  {/* Thumbnails Below */}
+                  <div className="grid grid-cols-6 gap-3">
                     {images.map((img: string, index: number) => (
                       <button
                         key={index}
@@ -338,10 +396,10 @@ export default function OccasionDetailPage() {
                       >
                         <Image
                           src={img}
-                          alt={`${occasion.brand} ${occasion.model} - Thumbnail ${index + 1}`}
+                          alt={`Thumbnail ${index + 1}`}
                           fill
                           className="object-cover"
-                          sizes="(max-width: 768px) 33vw, 16vw"
+                          sizes="150px"
                         />
                       </button>
                     ))}
