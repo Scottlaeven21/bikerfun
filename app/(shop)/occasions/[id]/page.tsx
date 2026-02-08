@@ -273,67 +273,19 @@ export default function OccasionDetailPage() {
 
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Hero Image Carousel */}
-      <section className="relative h-[70vh] bg-biker-black flex items-center justify-center">
+      {/* Hero Image - Single Large Image */}
+      <section className="relative h-[60vh] bg-biker-black">
         {images.length > 0 ? (
           <>
-            <div className="relative w-full h-full">
-              <Image
-                src={images[currentImageIndex]}
-                alt={`${occasion.brand} ${occasion.model} - Foto ${currentImageIndex + 1}`}
-                fill
-                className="object-contain"
-                priority
-                sizes="100vw"
-              />
-            </div>
-            
-            {/* Navigation Arrows - Always visible */}
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prevImage}
-                  className="absolute left-6 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-5 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl z-10"
-                  aria-label="Vorige foto"
-                >
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button
-                  onClick={nextImage}
-                  className="absolute right-6 top-1/2 -translate-y-1/2 bg-biker-black/90 backdrop-blur-sm text-white p-5 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 shadow-2xl z-10"
-                  aria-label="Volgende foto"
-                >
-                  <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </>
-            )}
-
-            {/* Image Counter - Bottom Right */}
-            <div className="absolute bottom-8 right-8 bg-biker-black/90 backdrop-blur-sm text-white px-6 py-3 rounded-full text-base font-bold shadow-2xl z-10">
-              {currentImageIndex + 1} / {images.length}
-            </div>
-
-            {/* Dot Indicators - Bottom Center */}
-            {images.length > 1 && (
-              <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex items-center space-x-2.5 z-10">
-                {images.map((_img: string, index: number) => (
-                  <button
-                    key={index}
-                    onClick={() => setCurrentImageIndex(index)}
-                    className={`transition-all duration-300 rounded-full ${
-                      currentImageIndex === index
-                        ? 'bg-biker-yellow w-10 h-2.5'
-                        : 'bg-white/50 hover:bg-white/80 w-2.5 h-2.5'
-                    }`}
-                    aria-label={`Ga naar foto ${index + 1}`}
-                  />
-                ))}
-              </div>
-            )}
+            <Image
+              src={images[currentImageIndex]}
+              alt={`${occasion.brand} ${occasion.model}`}
+              fill
+              className="object-cover"
+              priority
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
           </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
@@ -344,10 +296,9 @@ export default function OccasionDetailPage() {
             </div>
           </div>
         )}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black" />
         
         {/* Back Button */}
-        <div className="absolute top-32 left-8">
+        <div className="absolute top-32 left-8 z-20">
           <Link
             href="/occasions"
             className="bg-biker-dark/80 backdrop-blur-sm text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider hover:bg-biker-yellow hover:text-biker-black transition-all duration-300 flex items-center space-x-2"
@@ -358,14 +309,48 @@ export default function OccasionDetailPage() {
             <span>TERUG</span>
           </Link>
         </div>
+
+        {/* Image Counter - Bottom Right */}
+        {images.length > 0 && (
+          <div className="absolute bottom-8 right-8 bg-biker-yellow text-biker-black px-5 py-2 rounded-lg text-sm font-bold shadow-xl z-10">
+            {currentImageIndex + 1} / {images.length}
+          </div>
+        )}
       </section>
 
       {/* Content */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Main Info */}
+            {/* Main Info - Full Width on Mobile, 2 Cols on Desktop */}
             <div className="lg:col-span-2 space-y-8">
+              {/* Thumbnail Gallery */}
+              {images.length > 1 && (
+                <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
+                  <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                    {images.map((img: string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all duration-300 ${
+                          currentImageIndex === index
+                            ? 'border-biker-yellow ring-2 ring-biker-yellow/50'
+                            : 'border-biker-gray hover:border-biker-yellow/50'
+                        }`}
+                      >
+                        <Image
+                          src={img}
+                          alt={`${occasion.brand} ${occasion.model} - Thumbnail ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 33vw, 16vw"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Title & Price */}
               <div>
                 <div className="flex items-start justify-between mb-4">
