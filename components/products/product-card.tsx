@@ -18,16 +18,16 @@ export function ProductCard({ product }: ProductCardProps) {
       href={`/products/${product.slug}`}
       className="group bg-biker-black rounded-lg overflow-hidden hover:ring-2 hover:ring-biker-yellow transition-all transform hover:scale-[1.02]"
     >
-      <div className="relative aspect-square overflow-hidden bg-biker-dark">
+      <div className="relative aspect-square overflow-hidden bg-white">
         {product.image_url ? (
           <Image
             src={product.image_url}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-biker-muted">
+          <div className="w-full h-full flex items-center justify-center text-gray-300">
             <span className="text-6xl">📦</span>
           </div>
         )}

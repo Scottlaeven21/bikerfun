@@ -106,20 +106,20 @@ export default async function ProductDetailPage({
         <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray overflow-hidden">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Product Image */}
-            <div className="relative aspect-square bg-biker-black">
+            <div className="relative aspect-square bg-white">
               {product.image_url ? (
                 <Image
                   src={product.image_url}
                   alt={product.name}
                   fill
-                  className="object-cover"
+                  className="object-contain p-8"
                   priority
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-9xl mb-4">📦</div>
-                    <p className="text-biker-light">Geen afbeelding beschikbaar</p>
+                    <p className="text-gray-400">Geen afbeelding beschikbaar</p>
                   </div>
                 </div>
               )}
