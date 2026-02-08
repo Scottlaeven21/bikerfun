@@ -73,23 +73,23 @@ export default async function ProductDetailPage({
     : 0;
 
   return (
-    <div className="min-h-screen bg-white pt-32 pb-12">
+    <div className="min-h-screen bg-black noise-overlay pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-gray-600">
+          <ol className="flex items-center space-x-2 text-biker-light">
             <li>
               <Link href="/" className="hover:text-biker-yellow transition-colors">
                 Home
               </Link>
             </li>
-            <li className="text-gray-400">/</li>
+            <li className="text-biker-gray">/</li>
             <li>
               <Link href="/products" className="hover:text-biker-yellow transition-colors">
                 Producten
               </Link>
             </li>
-            <li className="text-gray-400">/</li>
+            <li className="text-biker-gray">/</li>
             <li>
               <Link
                 href={`/products?category=${product.category.slug}`}
@@ -98,21 +98,21 @@ export default async function ProductDetailPage({
                 {product.category.name}
               </Link>
             </li>
-            <li className="text-gray-400">/</li>
-            <li className="text-biker-black font-medium">{product.name}</li>
+            <li className="text-biker-gray">/</li>
+            <li className="text-white font-medium">{product.name}</li>
           </ol>
         </nav>
 
-        <div className="bg-white rounded-2xl border-2 border-gray-200 overflow-hidden shadow-lg">
+        <div className="bg-white rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(245,200,13,0.15)] border-2 border-biker-yellow/20">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Product Image */}
-            <div className="relative aspect-square bg-gray-50">
+            <div className="relative aspect-square bg-white">
               {product.image_url ? (
                 <Image
                   src={product.image_url}
                   alt={product.name}
                   fill
-                  className="object-contain p-8"
+                  className="object-contain p-12"
                   priority
                 />
               ) : (
@@ -125,14 +125,14 @@ export default async function ProductDetailPage({
               )}
 
               {hasDiscount && (
-                <div className="absolute top-6 right-6 bg-biker-yellow text-biker-black px-4 py-2 rounded-full text-base font-bold shadow-lg">
+                <div className="absolute top-6 right-6 bg-biker-yellow text-biker-black px-5 py-2 rounded-full text-base font-bold shadow-xl">
                   -{discountPercentage}%
                 </div>
               )}
 
               {product.stock === 0 && (
-                <div className="absolute inset-0 bg-white bg-opacity-90 flex items-center justify-center">
-                  <span className="bg-gray-800 text-white px-8 py-4 rounded-full text-xl font-bold uppercase tracking-wider">
+                <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center">
+                  <span className="bg-biker-black text-white px-10 py-5 rounded-full text-xl font-bold uppercase tracking-wider shadow-2xl">
                     Uitverkocht
                   </span>
                 </div>
@@ -169,7 +169,7 @@ export default async function ProductDetailPage({
               </div>
 
               {product.stock > 0 && product.stock <= 10 && (
-                <div className="bg-biker-yellow/10 border border-biker-yellow/30 rounded-lg p-3 mb-6">
+                <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-6">
                   <p className="text-biker-yellow font-bold text-sm">
                     ⚡ Nog {product.stock} op voorraad - bestel snel!
                   </p>
@@ -178,7 +178,7 @@ export default async function ProductDetailPage({
 
               {product.description && (
                 <div className="mb-8">
-                  <p className="text-gray-600 leading-relaxed text-lg">
+                  <p className="text-gray-700 leading-relaxed text-lg">
                     {product.description}
                   </p>
                 </div>
@@ -204,7 +204,7 @@ export default async function ProductDetailPage({
                 >
                   Product Informatie
                 </h3>
-                <ul className="space-y-3 text-gray-600">
+                <ul className="space-y-3 text-gray-700">
                   <li className="flex items-center">
                     <span className="text-biker-yellow mr-3 text-xl">✓</span>
                     <span>Gratis verzending boven €50</span>
