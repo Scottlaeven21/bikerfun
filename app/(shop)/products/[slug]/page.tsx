@@ -73,23 +73,23 @@ export default async function ProductDetailPage({
     : 0;
 
   return (
-    <div className="min-h-screen bg-black noise-overlay pt-32 pb-12">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
         <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-biker-light">
+          <ol className="flex items-center space-x-2 text-gray-600">
             <li>
               <Link href="/" className="hover:text-biker-yellow transition-colors">
                 Home
               </Link>
             </li>
-            <li className="text-biker-gray">/</li>
+            <li className="text-gray-400">/</li>
             <li>
               <Link href="/products" className="hover:text-biker-yellow transition-colors">
                 Producten
               </Link>
             </li>
-            <li className="text-biker-gray">/</li>
+            <li className="text-gray-400">/</li>
             <li>
               <Link
                 href={`/products?category=${product.category.slug}`}
@@ -98,12 +98,12 @@ export default async function ProductDetailPage({
                 {product.category.name}
               </Link>
             </li>
-            <li className="text-biker-gray">/</li>
-            <li className="text-white font-medium">{product.name}</li>
+            <li className="text-gray-400">/</li>
+            <li className="text-biker-black font-medium">{product.name}</li>
           </ol>
         </nav>
 
-        <div className="bg-white rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(245,200,13,0.15)] border-2 border-biker-yellow/20">
+        <div className="bg-white rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Product Image */}
             <div className="relative aspect-square bg-white">
