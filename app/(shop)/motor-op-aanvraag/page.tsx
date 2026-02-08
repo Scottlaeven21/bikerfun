@@ -340,21 +340,33 @@ export default function AanvraagPage() {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
             <div>
-              <div className="text-4xl mb-4">🔍</div>
+              <div className="w-16 h-16 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+              </div>
               <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Groot Netwerk</h3>
               <p className="text-biker-light">
                 Toegang tot honderden dealers en particuliere aanbieders in heel Europa
               </p>
             </div>
             <div>
-              <div className="text-4xl mb-4">✅</div>
+              <div className="w-16 h-16 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
               <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Kwaliteitscheck</h3>
               <p className="text-biker-light">
                 Elke motor wordt door ons gekeurd voordat we hem aan jou voorstellen
               </p>
             </div>
             <div>
-              <div className="text-4xl mb-4">🤝</div>
+              <div className="w-16 h-16 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center mx-auto mb-4">
+                <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
               <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Zorgeloos</h3>
               <p className="text-biker-light">
                 Wij regelen transport, papierwerk en garantie - jij hoeft alleen maar te rijden!
