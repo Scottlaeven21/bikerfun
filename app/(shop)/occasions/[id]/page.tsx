@@ -273,12 +273,12 @@ export default function OccasionDetailPage() {
 
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      {/* Static Hero Image - Always shows first image */}
+      {/* Dynamic Hero Image - Changes with thumbnail clicks */}
       <section className="relative h-[60vh] bg-biker-black">
         {images.length > 0 ? (
           <>
             <Image
-              src={images[0]}
+              src={images[currentImageIndex]}
               alt={`${occasion.brand} ${occasion.model}`}
               fill
               className="object-cover"
@@ -286,6 +286,11 @@ export default function OccasionDetailPage() {
               sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-transparent to-black/80" />
+            
+            {/* Image Counter */}
+            <div className="absolute bottom-8 right-8 bg-biker-yellow text-biker-black px-5 py-2 rounded-lg text-sm font-bold shadow-xl z-10">
+              {currentImageIndex + 1} / {images.length}
+            </div>
           </>
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
