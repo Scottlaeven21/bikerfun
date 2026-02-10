@@ -237,7 +237,7 @@ export default function VoorwaardenPage() {
               </h2>
               <div className="space-y-2 text-biker-light">
                 <p><strong>Bedrijfsnaam:</strong> Bikerfun</p>
-                <p><strong>Adres:</strong> Hendrik Luijtenstraat 3, 6136 CS Sittard</p>
+                <p><strong>Adres:</strong> Rafaëlweg 23, 6114BX Susteren</p>
                 <p><strong>E-mail:</strong> bikerfun.info@gmail.com</p>
                 <p><strong>Telefoon:</strong> 06 15 45 21 08</p>
                 <p><strong>Openingstijden:</strong> Ma-Vr: 07:00 - 17:00, Za: 12:00 - 17:00</p>

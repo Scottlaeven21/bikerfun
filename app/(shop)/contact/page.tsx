@@ -165,8 +165,8 @@ export default function ContactPage() {
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Bezoekadres</h3>
                     <p className="text-biker-light">
                       Bikerfun<br />
-                      Hendrik Luijtenstraat 3<br />
-                      6136 CS Sittard
+                      Rafaëlweg 23<br />
+                      6114BX Susteren
                     </p>
                   </div>
                 </div>

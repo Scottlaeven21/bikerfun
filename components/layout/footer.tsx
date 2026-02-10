@@ -22,8 +22,8 @@ export function Footer() {
               Jouw partner voor occasions en motorkleding. Van cruisers tot sportmotoren - bij Bikerfun vind je kwaliteit en passie.
             </p>
             <div className="mt-4 text-sm text-biker-muted">
-              <p>Hendrik Luijtenstraat 3</p>
-              <p>6136 CS Sittard</p>
+              <p>Rafaëlweg 23</p>
+              <p>6114BX Susteren</p>
             </div>
           </div>
 
