@@ -3,116 +3,13 @@
 import { useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { Occasion } from '@/types';
 
-interface Occasion {
-  id: number;
-  brand: string;
-  model: string;
-  year: number;
-  price: number;
-  mileage: number;
-  transmission: 'Handgeschakeld' | 'Automaat';
-  fuel: 'Benzine' | 'Elektrisch';
-  power: string;
-  image: string;
-  features: string[];
+interface OccasionsCarouselProps {
+  occasions: Occasion[];
 }
 
-const occasions: Occasion[] = [
-  {
-    id: 1,
-    brand: 'SUZUKI',
-    model: 'GSX-R 600',
-    year: 2011,
-    price: 6950,
-    mileage: 28500,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '125 PK',
-    image: '/hoofdafbeeldingbikerfun1.jpeg',
-    features: ['ABS', 'Aftermarket Uitlaat', 'Carbon Tank Pad', 'LED Achterlicht'],
-  },
-  {
-    id: 2,
-    brand: 'HARLEY-DAVIDSON',
-    model: 'Street Bob 114',
-    year: 2023,
-    price: 21995,
-    mileage: 2500,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '94 PK',
-    image: '/harley-street-bob.jpg',
-    features: ['ABS', 'Cruise Control', 'LED Verlichting', 'Quick Shifter'],
-  },
-  {
-    id: 3,
-    brand: 'YAMAHA',
-    model: 'MT-09 SP',
-    year: 2024,
-    price: 14995,
-    mileage: 850,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '119 PK',
-    image: '/yamaha-mt09.jpg',
-    features: ['Quickshifter', 'TFT Display', 'Rijmodi', 'ABS'],
-  },
-  {
-    id: 4,
-    brand: 'DUCATI',
-    model: 'Monster 937',
-    year: 2023,
-    price: 13495,
-    mileage: 3200,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '111 PK',
-    image: '/ducati-monster.jpg',
-    features: ['Cornering ABS', 'Traction Control', 'Keyless', 'TFT'],
-  },
-  {
-    id: 5,
-    brand: 'BMW',
-    model: 'R 1250 GS Adventure',
-    year: 2022,
-    price: 19995,
-    mileage: 8500,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '136 PK',
-    image: '/bmw-r1250gs.jpg',
-    features: ['Dynamic ESA', 'Cruise Control', 'Keyless', 'GPS'],
-  },
-  {
-    id: 6,
-    brand: 'KAWASAKI',
-    model: 'Ninja H2 SX',
-    year: 2023,
-    price: 24995,
-    mileage: 1200,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '200 PK',
-    image: '',
-    features: ['Supercharged', 'Cornering ABS', 'Quick Shifter', 'TFT'],
-  },
-  {
-    id: 7,
-    brand: 'TRIUMPH',
-    model: 'Speed Triple 1200 RS',
-    year: 2024,
-    price: 18995,
-    mileage: 450,
-    transmission: 'Handgeschakeld',
-    fuel: 'Benzine',
-    power: '180 PK',
-    image: '',
-    features: ['Öhlins Suspension', 'Brembo', 'Quick Shifter', 'Rijmodi'],
-  },
-];
-
-export function OccasionsCarousel() {
+export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: 'left' | 'right') => {
@@ -158,9 +55,9 @@ export function OccasionsCarousel() {
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
-              {occasion.image ? (
+              {occasion.main_image ? (
                 <Image
-                  src={occasion.image}
+                  src={occasion.main_image}
                   alt={`${occasion.brand} ${occasion.model}`}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-500"

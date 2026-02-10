@@ -2,8 +2,21 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TikTokGrid } from '@/components/tiktok-grid';
 import { OccasionsCarousel } from '@/components/occasions-carousel';
+import { createClient } from '@/lib/supabase/server';
+import { Occasion } from '@/types';
 
-export default function HomePage() {
+export default async function HomePage() {
+  // Fetch occasions from Supabase
+  const supabase = await createClient();
+  const { data: occasions } = await supabase
+    .from('occasions')
+    .select('*')
+    .eq('is_active', true)
+    .eq('status', 'available')
+    .order('created_at', { ascending: false })
+    .limit(8);
+
+  const occasionsList = (occasions as Occasion[]) || [];
   return (
     <div>
       {/* Hero Section with Video Background */}
@@ -85,7 +98,7 @@ export default function HomePage() {
           </div>
 
           {/* Carousel */}
-          <OccasionsCarousel />
+          <OccasionsCarousel occasions={occasionsList} />
 
           {/* View All Button */}
           <div className="text-center mt-16">

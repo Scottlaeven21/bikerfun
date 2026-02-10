@@ -45,6 +45,12 @@ export default async function AdminLayout({
                 📊 Dashboard
               </Link>
               <Link
+                href="/admin/occasions"
+                className="block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+              >
+                🏍️ Occasions
+              </Link>
+              <Link
                 href="/admin/products"
                 className="block px-4 py-2 rounded-lg hover:bg-slate-800 transition-colors"
               >

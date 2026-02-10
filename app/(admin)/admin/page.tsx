@@ -17,11 +17,13 @@ export default async function AdminDashboardPage() {
     { count: totalProducts },
     { count: totalOrders },
     { count: totalCategories },
+    { count: totalOccasions },
     recentOrdersResponse,
   ] = await Promise.all([
     supabase.from('products').select('*', { count: 'exact', head: true }),
     supabase.from('orders').select('*', { count: 'exact', head: true }),
     supabase.from('categories').select('*', { count: 'exact', head: true }),
+    supabase.from('occasions').select('*', { count: 'exact', head: true }),
     supabase
       .from('orders')
       .select('*')
@@ -44,7 +46,7 @@ export default async function AdminDashboardPage() {
       <h1 className="text-3xl font-bold text-gray-900 mb-8">Admin Dashboard</h1>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
             <div>
@@ -52,6 +54,16 @@ export default async function AdminDashboardPage() {
               <p className="text-2xl font-bold text-gray-900">{formatPrice(totalRevenue)}</p>
             </div>
             <div className="text-4xl">💰</div>
+          </div>
+        </div>
+
+        <div className="bg-white rounded-lg shadow-md p-6 border-2 border-biker-yellow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1">Occasions</p>
+              <p className="text-2xl font-bold text-gray-900">{totalOccasions || 0}</p>
+            </div>
+            <div className="text-4xl">🏍️</div>
           </div>
         </div>
 
