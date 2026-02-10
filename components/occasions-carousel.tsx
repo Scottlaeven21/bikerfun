@@ -10,7 +10,6 @@ interface Occasion {
   model: string;
   year: number;
   price: number;
-  pricePerMonth: number;
   mileage: number;
   transmission: 'Handgeschakeld' | 'Automaat';
   fuel: 'Benzine' | 'Elektrisch';
@@ -26,7 +25,6 @@ const occasions: Occasion[] = [
     model: 'GSX-R 600',
     year: 2011,
     price: 6950,
-    pricePerMonth: 149,
     mileage: 28500,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -40,7 +38,6 @@ const occasions: Occasion[] = [
     model: 'Street Bob 114',
     year: 2023,
     price: 21995,
-    pricePerMonth: 399,
     mileage: 2500,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -54,7 +51,6 @@ const occasions: Occasion[] = [
     model: 'MT-09 SP',
     year: 2024,
     price: 14995,
-    pricePerMonth: 279,
     mileage: 850,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -68,7 +64,6 @@ const occasions: Occasion[] = [
     model: 'Monster 937',
     year: 2023,
     price: 13495,
-    pricePerMonth: 249,
     mileage: 3200,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -82,7 +77,6 @@ const occasions: Occasion[] = [
     model: 'R 1250 GS Adventure',
     year: 2022,
     price: 19995,
-    pricePerMonth: 369,
     mileage: 8500,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -96,7 +90,6 @@ const occasions: Occasion[] = [
     model: 'Ninja H2 SX',
     year: 2023,
     price: 24995,
-    pricePerMonth: 449,
     mileage: 1200,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -110,7 +103,6 @@ const occasions: Occasion[] = [
     model: 'Speed Triple 1200 RS',
     year: 2024,
     price: 18995,
-    pricePerMonth: 349,
     mileage: 450,
     transmission: 'Handgeschakeld',
     fuel: 'Benzine',
@@ -199,14 +191,9 @@ export function OccasionsCarousel() {
               </div>
 
               {/* Pricing */}
-              <div className="flex items-center justify-between mb-4 pb-4 border-b border-biker-gray">
-                <div>
-                  <div className="text-white font-bold text-2xl">
-                    € {occasion.price.toLocaleString('nl-NL')},-
-                  </div>
-                  <div className="text-biker-muted text-sm">
-                    of € {occasion.pricePerMonth},- p/m
-                  </div>
+              <div className="mb-4 pb-4 border-b border-biker-gray">
+                <div className="text-white font-bold text-2xl">
+                  € {occasion.price.toLocaleString('nl-NL')},-
                 </div>
               </div>
 
