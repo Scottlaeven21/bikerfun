@@ -159,17 +159,17 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
 
       if (isEdit && occasion) {
         // Update existing occasion
-        const { error: updateError } = await supabase
+        const { error: updateError } = await (supabase as any)
           .from('occasions')
-          .update(occasionData as any)
+          .update(occasionData)
           .eq('id', occasion.id);
 
         if (updateError) throw updateError;
       } else {
         // Insert new occasion
-        const { error: insertError } = await supabase
+        const { error: insertError } = await (supabase as any)
           .from('occasions')
-          .insert(occasionData as any);
+          .insert(occasionData);
 
         if (insertError) throw insertError;
       }
