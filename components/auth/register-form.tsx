@@ -26,7 +26,7 @@ export function RegisterForm() {
   return (
     <form action={formAction} className="space-y-6">
       {state?.error && (
-        <div className="bg-red-900/20 border-2 border-red-500 text-red-400 px-4 py-3 rounded-lg">
+        <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg">
           {state.error}
         </div>
       )}
@@ -34,7 +34,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="fullName"
-          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
+          className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider"
         >
           Volledige naam
         </label>
@@ -43,7 +43,7 @@ export function RegisterForm() {
           name="fullName"
           type="text"
           required
-          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+          className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black transition-all"
           placeholder="Jan Jansen"
         />
       </div>
@@ -51,7 +51,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="email"
-          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
+          className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider"
         >
           E-mailadres
         </label>
@@ -60,7 +60,7 @@ export function RegisterForm() {
           name="email"
           type="email"
           required
-          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+          className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black transition-all"
           placeholder="je@email.com"
         />
       </div>
@@ -68,7 +68,7 @@ export function RegisterForm() {
       <div>
         <label
           htmlFor="password"
-          className="block text-sm font-semibold text-biker-light mb-2 uppercase tracking-wider"
+          className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider"
         >
           Wachtwoord
         </label>
@@ -78,7 +78,7 @@ export function RegisterForm() {
           type="password"
           required
           minLength={6}
-          className="w-full px-4 py-3 bg-biker-black border-2 border-biker-gray rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-white transition-all"
+          className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black transition-all"
           placeholder="Minimaal 6 karakters"
         />
       </div>

@@ -9,19 +9,19 @@ export const metadata: Metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-8 shadow-2xl">
+    <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 shadow-2xl">
       <div className="mb-8 text-center">
-        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-white mb-3 uppercase tracking-tight">
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-biker-black mb-3 uppercase tracking-tight">
           Welkom <span className="text-biker-yellow">Terug</span>
         </h1>
-        <p className="text-biker-light text-lg">
+        <p className="text-gray-600 text-lg">
           Log in op je account
         </p>
       </div>
 
       <LoginForm />
 
-      <div className="mt-6 text-center text-sm text-biker-light">
+      <div className="mt-6 text-center text-sm text-gray-600">
         Nog geen account?{' '}
         <Link
           href="/register"

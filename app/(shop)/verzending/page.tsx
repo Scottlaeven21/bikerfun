@@ -137,24 +137,38 @@ export default function VerzendingPage() {
               <h2 className="text-3xl font-bold mb-6 uppercase tracking-tight text-biker-yellow">
                 Verzendkosten
               </h2>
-              <div className="space-y-4 text-biker-light">
-                <p className="text-lg">
-                  De verzendkosten worden berekend op basis van het gewicht en de afmetingen van je bestelling. 
-                  Deze worden duidelijk weergegeven tijdens het afrekenproces.
-                </p>
-                <div className="bg-biker-black rounded-lg p-6 border border-biker-yellow">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <div className="w-10 h-10 rounded-full bg-biker-yellow/20 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
-                      <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
+              <div className="space-y-6">
+                <div className="bg-biker-black rounded-lg p-6 border-2 border-biker-yellow">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-biker-yellow/20 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
                     </div>
-                    <p className="text-xl font-bold text-biker-yellow">
-                      Gratis verzending vanaf €50,-
+                    <p className="text-2xl font-bold text-biker-yellow">
+                      Nederland: ALTIJD Gratis Verzending
+                    </p>
+                  </div>
+                  <p className="text-biker-light text-lg">
+                    Voor alle bestellingen binnen Nederland zijn de verzendkosten <strong className="text-white">volledig gratis</strong>, 
+                    ongeacht het orderbedrag.
+                  </p>
+                </div>
+
+                <div className="bg-biker-black rounded-lg p-6 border border-biker-gray">
+                  <div className="flex items-center space-x-3 mb-3">
+                    <div className="w-12 h-12 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
+                      <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                    </div>
+                    <p className="text-xl font-bold text-white">
+                      België: Verzendkosten bij Afrekenen
                     </p>
                   </div>
                   <p className="text-biker-light">
-                    Bij bestellingen boven de €50,- betaal je geen verzendkosten (alleen binnen Nederland).
+                    Voor leveringen naar België worden de verzendkosten berekend en weergegeven tijdens het afrekenproces, 
+                    afhankelijk van het gewicht en de afmetingen van je bestelling.
                   </p>
                 </div>
               </div>

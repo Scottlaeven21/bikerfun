@@ -81,8 +81,8 @@ export default function CartPage() {
                   <span className="font-semibold">{formatPrice(subtotal)}</span>
                 </div>
                 <div className="flex justify-between text-biker-light">
-                  <span>Verzending</span>
-                  <span className="font-semibold">{shipping === 0 ? <span className="text-biker-yellow">Gratis</span> : formatPrice(shipping)}</span>
+                  <span>Verzending (NL)</span>
+                  <span className="font-semibold text-biker-yellow">Gratis</span>
                 </div>
                 <div className="flex justify-between text-biker-light">
                   <span>BTW (21%)</span>
@@ -94,17 +94,12 @@ export default function CartPage() {
                 </div>
               </div>
 
-              {shipping === 0 && subtotal >= 75 && (
-                <p className="text-sm text-biker-yellow mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
-                  ✓ Je hebt gratis verzending!
-                </p>
-              )}
-
-              {subtotal < 75 && (
-                <p className="text-sm text-biker-light mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
-                  Nog {formatPrice(75 - subtotal)} tot gratis verzending
-                </p>
-              )}
+              <p className="text-sm text-biker-yellow mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
+                ✓ Gratis verzending binnen Nederland!
+              </p>
+              <p className="text-xs text-biker-muted mb-4">
+                België: Verzendkosten worden berekend bij afrekenen
+              </p>
 
               <Link
                 href="/checkout"
