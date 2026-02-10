@@ -9,13 +9,14 @@ export const metadata: Metadata = {
   description: 'Bewerk een occasion',
 };
 
-export default async function EditOccasionPage({ params }: { params: { id: string } }) {
+export default async function EditOccasionPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   const supabase = await createClient();
 
   const { data: occasion } = await supabase
     .from('occasions')
     .select('*')
-    .eq('id', params.id)
+    .eq('id', id)
     .single();
 
   const occasionData = occasion as Occasion | null;
