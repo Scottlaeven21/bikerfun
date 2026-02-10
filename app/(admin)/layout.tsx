@@ -1,8 +1,7 @@
-import { NavbarClient } from '@/components/layout/navbar-client';
-import { Footer } from '@/components/layout/footer';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
+import { AdminHeader } from '@/components/admin/admin-header';
 
 export default async function AdminLayout({
   children,
@@ -18,23 +17,27 @@ export default async function AdminLayout({
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('is_admin')
+    .select('is_admin, full_name, email')
     .eq('id', user.id)
     .single();
 
-  const profile = profileData as { is_admin: boolean } | null;
+  const profile = profileData as { is_admin: boolean; full_name: string | null; email: string } | null;
 
   if (!profile?.is_admin) {
     redirect('/');
   }
 
   return (
-    <div className="min-h-screen flex flex-col">
-      <NavbarClient user={user} isAdmin={true} />
+    <div className="min-h-screen flex flex-col bg-gray-50">
+      {/* Admin Header */}
+      <AdminHeader 
+        userName={profile.full_name || profile.email} 
+        userEmail={profile.email}
+      />
       
       <div className="flex-1 flex">
         {/* Sidebar */}
-        <aside className="w-64 bg-slate-900 text-white">
+        <aside className="w-64 bg-slate-900 text-white min-h-full">
           <div className="p-6">
             <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
             <nav className="space-y-2">
@@ -75,8 +78,6 @@ export default async function AdminLayout({
         {/* Main Content */}
         <main className="flex-1 bg-gray-50">{children}</main>
       </div>
-
-      <Footer />
     </div>
   );
 }
