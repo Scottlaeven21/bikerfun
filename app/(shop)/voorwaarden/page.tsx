@@ -151,7 +151,7 @@ export default function VoorwaardenPage() {
               <div className="space-y-3 text-biker-light">
                 <p>
                   <strong>Occasions:</strong> Tenzij anders vermeld, wordt op gebruikte motoren 
-                  een garantie van 3 maanden op de motor (technische gebreken) gegeven. Slijtage-onderdelen 
+                  een volledige garantie van 3 maanden op de motor (technische gebreken) gegeven. Slijtage-onderdelen 
                   vallen hier niet onder. Garantie geldt alleen bij normaal gebruik.
                 </p>
                 <p>

@@ -43,7 +43,7 @@ const occasionsData: Record<string, any> = {
     condition: 'Zeer goed',
     owners: 2,
     serviceHistory: 'Volledig',
-    warranty: '3 maanden dealer garantie',
+    warranty: '3 maanden volledige garantie',
     extras: ['Aftermarket uitlaatsysteem', 'Carbon tank pad', 'Geanodiseerde remhendels', 'LED achterlicht', 'Zwart gespoten velgen']
   },
   '2': {
@@ -75,7 +75,7 @@ const occasionsData: Record<string, any> = {
     condition: 'Uitstekend',
     owners: 1,
     serviceHistory: 'Volledig',
-    warranty: '6 maanden dealer garantie',
+    warranty: '6 maanden volledige garantie',
     extras: ['Custom uitlaat', 'Vance & Hines slip-ons', 'Zwart uitgevoerd', 'Nieuw achterband']
   },
   '3': {
@@ -171,7 +171,7 @@ const occasionsData: Record<string, any> = {
     condition: 'Zeer goed',
     owners: 1,
     serviceHistory: 'Volledig bij BMW Motorrad',
-    warranty: '12 maanden dealer garantie',
+    warranty: '12 maanden volledige garantie',
     extras: ['GPS navigatie', 'Dynamic ESA', 'Koffers', 'Cruise control', 'Keyless', 'Verwarmde handvaten']
   },
   '6': {
