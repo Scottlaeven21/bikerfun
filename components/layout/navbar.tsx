@@ -137,7 +137,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
             onClick={() => setMenuOpen(false)}
           >
-            Occasion
+            Occasions
           </Link>
           <Link
             href="/over-ons"
