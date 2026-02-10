@@ -15,14 +15,14 @@ export default function CartPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-black noise-overlay pt-32 pb-20">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="text-8xl mb-6">🛒</div>
-            <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+            <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight">
               Je winkelwagen is <span className="text-biker-yellow">leeg</span>
             </h1>
-            <p className="text-lg text-biker-light mb-8">
+            <p className="text-lg text-gray-600 mb-8">
               Ontdek onze producten en voeg items toe aan je winkelwagen
             </p>
             <Link
@@ -38,17 +38,17 @@ export default function CartPage() {
   }
 
   return (
-    <div className="min-h-screen bg-black noise-overlay pt-32 pb-20">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-8 uppercase tracking-tight">
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-8 uppercase tracking-tight">
           Winkel<span className="text-biker-yellow">wagen</span>
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Cart Items */}
           <div className="lg:col-span-2">
-            <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray overflow-hidden">
-              <div className="divide-y divide-biker-gray">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg overflow-hidden">
+              <div className="divide-y divide-gray-200">
                 {items.map((item) => (
                   <CartItem key={item.product_id} item={item} />
                 ))}
@@ -70,34 +70,36 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-biker-dark rounded-2xl border-2 border-biker-gray p-6 sticky top-32">
-              <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-white mb-6 uppercase tracking-tight">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6 sticky top-32">
+              <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-biker-black mb-6 uppercase tracking-tight">
                 Overzicht
               </h2>
 
               <div className="space-y-4 mb-6">
-                <div className="flex justify-between text-biker-light">
+                <div className="flex justify-between text-gray-600">
                   <span>Subtotaal</span>
-                  <span className="font-semibold">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold text-biker-black">{formatPrice(subtotal)}</span>
                 </div>
-                <div className="flex justify-between text-biker-light">
+                <div className="flex justify-between text-gray-600">
                   <span>Verzending (NL)</span>
                   <span className="font-semibold text-biker-yellow">Gratis</span>
                 </div>
-                <div className="flex justify-between text-biker-light">
+                <div className="flex justify-between text-gray-600">
                   <span>BTW (21%)</span>
-                  <span className="font-semibold">{formatPrice(tax)}</span>
+                  <span className="font-semibold text-biker-black">{formatPrice(tax)}</span>
                 </div>
-                <div className="border-t border-biker-gray pt-4 flex justify-between text-xl font-bold text-white">
+                <div className="border-t-2 border-gray-200 pt-4 flex justify-between text-xl font-bold text-biker-black">
                   <span>Totaal</span>
                   <span className="text-biker-yellow">{formatPrice(total)}</span>
                 </div>
               </div>
 
-              <p className="text-sm text-biker-yellow mb-4 bg-biker-black/50 px-3 py-2 rounded-lg">
-                ✓ Gratis verzending binnen Nederland!
-              </p>
-              <p className="text-xs text-biker-muted mb-4">
+              <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-4">
+                <p className="text-biker-yellow font-bold text-sm">
+                  ✓ Gratis verzending binnen Nederland!
+                </p>
+              </div>
+              <p className="text-xs text-gray-500 mb-6">
                 België: Verzendkosten worden berekend bij afrekenen
               </p>
 
@@ -108,11 +110,11 @@ export default function CartPage() {
                 Afrekenen
               </Link>
 
-              <div className="mt-6 pt-6 border-t border-biker-gray">
-                <h3 className="font-semibold text-white mb-3 uppercase text-sm tracking-wider">
+              <div className="mt-6 pt-6 border-t-2 border-gray-200">
+                <h3 className="font-semibold text-biker-black mb-3 uppercase text-sm tracking-wider">
                   Veilig betalen met:
                 </h3>
-                <div className="flex items-center space-x-2 text-sm text-biker-light">
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
                   <span>🔒</span>
                   <span>Stripe - Veilige betalingen</span>
                 </div>

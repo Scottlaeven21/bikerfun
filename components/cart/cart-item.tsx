@@ -14,11 +14,11 @@ export function CartItem({ item }: CartItemProps) {
   const { updateQuantity, removeItem } = useCart();
 
   return (
-    <div className="flex gap-6 p-6">
+    <div className="flex gap-6 p-6 bg-white hover:bg-gray-50 transition-colors">
       {/* Product Image */}
       <Link
         href={`/products/${item.product_slug}`}
-        className="relative w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-white border-2 border-biker-gray hover:border-biker-yellow transition-all"
+        className="relative w-28 h-28 flex-shrink-0 rounded-xl overflow-hidden bg-gray-50 border-2 border-gray-200 hover:border-biker-yellow transition-all"
       >
         {item.product_image_url ? (
           <Image
@@ -39,7 +39,7 @@ export function CartItem({ item }: CartItemProps) {
         <div className="flex-1">
           <Link
             href={`/products/${item.product_slug}`}
-            className="font-bold text-lg text-white hover:text-biker-yellow transition-colors block mb-2"
+            className="font-bold text-lg text-biker-black hover:text-biker-yellow transition-colors block mb-2"
           >
             {item.product_name}
           </Link>
@@ -49,19 +49,19 @@ export function CartItem({ item }: CartItemProps) {
         {/* Quantity Controls & Actions */}
         <div className="flex items-center gap-6">
           {/* Quantity Controls */}
-          <div className="flex items-center bg-biker-black rounded-full border-2 border-biker-gray overflow-hidden">
+          <div className="flex items-center bg-gray-50 rounded-full border-2 border-gray-300 overflow-hidden">
             <button
               onClick={() => updateQuantity(item.product_id, item.quantity - 1)}
-              className="px-4 py-2 text-white hover:bg-biker-gray hover:text-biker-yellow transition-all font-bold text-lg"
+              className="px-4 py-2 text-biker-black hover:bg-biker-yellow hover:text-biker-black transition-all font-bold text-lg"
             >
               -
             </button>
-            <span className="px-6 py-2 text-white font-bold text-lg min-w-[3rem] text-center">
+            <span className="px-6 py-2 text-biker-black font-bold text-lg min-w-[3rem] text-center">
               {item.quantity}
             </span>
             <button
               onClick={() => updateQuantity(item.product_id, item.quantity + 1)}
-              className="px-4 py-2 text-white hover:bg-biker-gray hover:text-biker-yellow transition-all font-bold text-lg"
+              className="px-4 py-2 text-biker-black hover:bg-biker-yellow hover:text-biker-black transition-all font-bold text-lg"
             >
               +
             </button>
@@ -69,7 +69,7 @@ export function CartItem({ item }: CartItemProps) {
 
           {/* Subtotal */}
           <div className="min-w-[7rem] text-right">
-            <p className="text-white font-bold text-xl">
+            <p className="text-biker-black font-bold text-xl">
               {formatPrice(item.unit_price * item.quantity)}
             </p>
           </div>
@@ -77,7 +77,7 @@ export function CartItem({ item }: CartItemProps) {
           {/* Remove Button */}
           <button
             onClick={() => removeItem(item.product_id)}
-            className="bg-biker-dark hover:bg-red-600 text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border-2 border-biker-gray hover:border-red-600 group"
+            className="bg-gray-100 hover:bg-red-600 text-gray-600 hover:text-white p-3 rounded-full transition-all duration-300 hover:scale-110 border-2 border-gray-300 hover:border-red-600 group"
             title="Verwijderen"
           >
             <svg

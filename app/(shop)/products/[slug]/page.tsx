@@ -106,7 +106,7 @@ export default async function ProductDetailPage({
         <div className="bg-white rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             {/* Product Image */}
-            <div className="relative aspect-square bg-white">
+            <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-white border-r-2 border-gray-100">
               {product.image_url ? (
                 <Image
                   src={product.image_url}
@@ -125,14 +125,14 @@ export default async function ProductDetailPage({
               )}
 
               {hasDiscount && (
-                <div className="absolute top-6 right-6 bg-biker-yellow text-biker-black px-5 py-2 rounded-full text-base font-bold shadow-xl">
+                <div className="absolute top-6 right-6 bg-gradient-to-br from-biker-yellow to-yellow-500 text-biker-black px-6 py-3 rounded-full text-lg font-bold shadow-xl border-2 border-yellow-600 animate-pulse">
                   -{discountPercentage}%
                 </div>
               )}
 
               {product.stock === 0 && (
-                <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center">
-                  <span className="bg-biker-black text-white px-10 py-5 rounded-full text-xl font-bold uppercase tracking-wider shadow-2xl">
+                <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center backdrop-blur-sm">
+                  <span className="bg-biker-black text-white px-12 py-6 rounded-full text-2xl font-bold uppercase tracking-wider shadow-2xl">
                     Uitverkocht
                   </span>
                 </div>
@@ -140,7 +140,9 @@ export default async function ProductDetailPage({
             </div>
 
             {/* Product Info */}
-            <div className="p-8 lg:p-12 bg-white">
+            <div className="p-8 lg:p-12 bg-white relative">
+              {/* Decorative accent */}
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-biker-yellow/10 to-transparent rounded-bl-full"></div>
               <div className="mb-4">
                 <Link
                   href={`/products?category=${product.category.slug}`}
@@ -169,15 +171,16 @@ export default async function ProductDetailPage({
               </div>
 
               {product.stock > 0 && product.stock <= 10 && (
-                <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-6">
-                  <p className="text-biker-yellow font-bold text-sm">
-                    ⚡ Nog {product.stock} op voorraad - bestel snel!
+                <div className="bg-gradient-to-r from-biker-yellow/20 to-orange-100 border-2 border-biker-yellow rounded-xl p-5 mb-6 shadow-md relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-20 h-20 bg-biker-yellow/20 rounded-full -mr-10 -mt-10"></div>
+                  <p className="text-biker-yellow font-bold text-base relative z-10">
+                    ⚡ Nog slechts {product.stock} op voorraad - bestel snel!
                   </p>
                 </div>
               )}
 
               {product.description && (
-                <div className="mb-8">
+                <div className="mb-8 bg-gray-50 rounded-xl p-6 border-l-4 border-biker-yellow">
                   <p className="text-gray-700 leading-relaxed text-lg">
                     {product.description}
                   </p>
@@ -190,36 +193,45 @@ export default async function ProductDetailPage({
               ) : (
                 <button
                   disabled
-                  className="w-full bg-gray-300 text-gray-500 px-6 py-3 rounded-full text-base font-bold uppercase tracking-wider cursor-not-allowed"
+                  className="w-full bg-gray-200 text-gray-400 px-8 py-4 rounded-full text-base font-bold uppercase tracking-wider cursor-not-allowed border-2 border-gray-300"
                 >
                   Uitverkocht
                 </button>
               )}
 
               {/* Product Features */}
-              <div className="mt-10 pt-8 border-t-2 border-gray-200">
+              <div className="mt-10 pt-8 border-t-2 border-gray-100">
                 <h3 
                   style={{ fontFamily: 'var(--font-inter)' }}
-                  className="font-bold text-biker-black mb-6 text-xl uppercase tracking-tight"
+                  className="font-bold text-biker-black mb-6 text-xl uppercase tracking-tight flex items-center"
                 >
+                  <span className="w-2 h-8 bg-biker-yellow mr-3 rounded-full"></span>
                   Product Informatie
                 </h3>
-                <ul className="space-y-3 text-gray-700">
-                  <li className="flex items-center">
-                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
-                    <span>Gratis verzending boven €50</span>
+                <ul className="space-y-4">
+                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-biker-yellow text-lg font-bold">✓</span>
+                    </div>
+                    <span className="text-gray-700 font-medium">Gratis verzending binnen Nederland</span>
                   </li>
-                  <li className="flex items-center">
-                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
-                    <span>14 dagen retourrecht</span>
+                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-biker-yellow text-lg font-bold">✓</span>
+                    </div>
+                    <span className="text-gray-700 font-medium">14 dagen retourrecht</span>
                   </li>
-                  <li className="flex items-center">
-                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
-                    <span>Veilig betalen met Stripe</span>
+                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-biker-yellow text-lg font-bold">✓</span>
+                    </div>
+                    <span className="text-gray-700 font-medium">Veilig betalen met Stripe</span>
                   </li>
-                  <li className="flex items-center">
-                    <span className="text-biker-yellow mr-3 text-xl">✓</span>
-                    <span>Premium kwaliteit gegarandeerd</span>
+                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
+                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
+                      <span className="text-biker-yellow text-lg font-bold">✓</span>
+                    </div>
+                    <span className="text-gray-700 font-medium">Premium kwaliteit gegarandeerd</span>
                   </li>
                 </ul>
               </div>
