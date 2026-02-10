@@ -73,12 +73,12 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 </>
               )}
 
-              {/* Occasion Button */}
+              {/* Aanbod Button */}
               <Link
                 href="/occasions"
                 className="btn-secondary bg-transparent text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white"
               >
-                OCCASION
+                AANBOD
               </Link>
 
               {/* Menu Button */}
