@@ -273,7 +273,7 @@ export default function OccasionDetailPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section with Image */}
-      <section className="relative h-[50vh] md:h-[70vh] lg:h-[80vh] bg-biker-black">
+      <section className="relative h-[40vh] md:h-[50vh] lg:h-[55vh] bg-biker-black">
         {occasion.image ? (
           <>
             <Image
