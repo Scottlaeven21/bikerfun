@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function OverOnsPage() {
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section with Video */}
       <section className="relative h-[50vh] overflow-hidden">
         {/* Video Background */}
