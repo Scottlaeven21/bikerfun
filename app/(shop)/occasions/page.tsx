@@ -1,3 +1,4 @@
+// Page Version: 2.0.0 - Complete rebuild - 2026-02-18
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
@@ -8,6 +9,9 @@ export const metadata: Metadata = {
   title: 'Occasions | Bikerfun',
   description: 'Ontdek ons aanbod aan occasions. Van sportmotoren tot tourers - wij hebben iets voor elke rijder.',
 };
+
+// Force revalidation every request during development
+export const revalidate = 0;
 
 export default async function OccasionsPage() {
   const supabase = await createClient();

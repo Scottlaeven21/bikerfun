@@ -1,3 +1,4 @@
+// Component Version: 2.0.0 - Complete rebuild with new card layout
 'use client';
 
 import { useState } from 'react';
