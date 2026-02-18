@@ -143,7 +143,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
             {filteredOccasions.map((occasion) => (
               <div
                 key={occasion.id}
-                className="bg-[#1a1a1a] rounded-xl overflow-hidden border border-white/10 hover:border-biker-yellow/50 transition-all duration-300 group"
+                className="bg-[#1a1a1a] rounded-xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all duration-300 group"
               >
                 {/* Image Section */}
                 <div className="relative w-full h-[280px] bg-black overflow-hidden">
@@ -239,10 +239,10 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                     )}
                   </div>
 
-                  {/* CTA - yellow background, black text */}
+                  {/* CTA -zelfde animatie als overige buttons */}
                   <Link
                     href={`/occasions/${occasion.id}`}
-                    className="block w-full text-center bg-biker-yellow hover:bg-biker-yellowHover text-black font-bold py-3 rounded-lg uppercase tracking-wider transition-colors"
+                    className="btn-primary block w-full text-center bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-3 rounded-full uppercase tracking-wider transition-all duration-300"
                   >
                     BEKIJK DETAILS
                   </Link>

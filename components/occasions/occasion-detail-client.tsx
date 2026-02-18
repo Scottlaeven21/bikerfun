@@ -29,13 +29,13 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               priority
             />
             
-            {/* Back Button Overlay - Top Left Lower */}
-            <div className="absolute top-20 left-8 z-10">
+            {/* Back Button - onder navbar voor volledige klikbaarheid */}
+            <div className="absolute top-32 left-8 z-20">
               <Link
                 href="/occasions"
-                className="inline-flex items-center text-white hover:text-biker-yellow font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-black/80"
+                className="inline-flex items-center gap-2 text-white font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-biker-yellow hover:text-biker-black min-h-[48px]"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 TERUG
@@ -47,13 +47,13 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
           </div>
         ) : (
           <div className="relative h-full bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
-            {/* Back Button for no image state */}
-            <div className="absolute top-20 left-8 z-10">
+            {/* Back Button - onder navbar voor volledige klikbaarheid */}
+            <div className="absolute top-32 left-8 z-20">
               <Link
                 href="/occasions"
-                className="inline-flex items-center text-white hover:text-biker-yellow font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-black/80"
+                className="inline-flex items-center gap-2 text-white font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-biker-yellow hover:text-biker-black min-h-[48px]"
               >
-                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 TERUG

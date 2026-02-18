@@ -12,24 +12,22 @@ export default function OverOnsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[50vh] overflow-hidden">
-        {/* Video Background */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center center' }}
-        >
-          <source src="/hero-over-ons.mp4" type="video/mp4" />
-        </video>
-
-        {/* Dark Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
+      <section className="relative isolate h-[50vh] overflow-hidden">
+        <div className="absolute inset-0 w-[130%] h-[130%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: 'center center' }}
+          >
+            <source src="/hero-over-ons.mp4" type="video/mp4" />
+          </video>
+        </div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center">
+        <div className="relative z-10 h-full flex items-center">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 
               style={{ 
@@ -40,7 +38,7 @@ export default function OverOnsPage() {
             >
               Over <span className="text-biker-yellow">Bikerfun</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-lg md:text-xl text-white drop-shadow-md max-w-3xl mx-auto">
               Passie voor motoren, oog voor kwaliteit en persoonlijke service. 
               Dat is waar Bikerfun voor staat.
             </p>
@@ -143,7 +141,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Video Section */}
-      <section className="py-20 bg-biker-dark border-y-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -239,7 +237,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-t-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}

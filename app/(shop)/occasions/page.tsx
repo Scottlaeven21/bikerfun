@@ -26,10 +26,10 @@ export default async function OccasionsPage() {
   const occasionsList = (occasions as Occasion[]) || [];
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white noise-overlay">
       {/* Hero Section with Video */}
       <section className="relative isolate h-[60vh] min-h-[320px] overflow-hidden">
-        <div className="absolute inset-0 w-[120%] h-[120%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute inset-0 w-[130%] h-[130%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <video
             autoPlay
             loop
