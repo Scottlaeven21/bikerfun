@@ -12,8 +12,8 @@ export default function OverOnsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[65vh] min-h-[380px] overflow-hidden">
-        <div className="absolute inset-0 w-[165%] h-[165%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+      <section className="relative isolate h-[45vh] min-h-[280px] overflow-hidden">
+        <div className="absolute inset-0 w-[185%] h-[185%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <video
             autoPlay
             loop
@@ -46,9 +46,10 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      {/* Story Section */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* Story Section - effen achtergrond, geen lijnen */}
+      <section className="relative py-20">
+        <div className="absolute inset-0 bg-black z-0" aria-hidden="true" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 
@@ -153,9 +154,10 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      {/* What We Offer */}
-      <section className="py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      {/* What We Offer - effen achtergrond, geen lijnen */}
+      <section className="relative py-20">
+        <div className="absolute inset-0 bg-black z-0" aria-hidden="true" />
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
             className="text-4xl md:text-5xl font-bold text-center mb-16 uppercase tracking-tight"
