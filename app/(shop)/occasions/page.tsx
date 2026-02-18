@@ -28,7 +28,7 @@ export default async function OccasionsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[60vh] min-h-[320px] overflow-hidden">
+      <section className="relative isolate h-[60vh] min-h-[320px] overflow-hidden">
         <video
           autoPlay
           loop
@@ -37,7 +37,7 @@ export default async function OccasionsPage() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center top' }}
         >
-          <source src="/Adobestock 1898255189.mp4" type="video/mp4" />
+          <source src="/hero-occasions.mp4" type="video/mp4" />
         </video>
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
@@ -55,7 +55,7 @@ export default async function OccasionsPage() {
       <OccasionsList occasions={occasionsList} />
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-t-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
