@@ -28,7 +28,7 @@ export default async function OccasionsPage() {
   return (
     <div className="min-h-screen bg-black text-white noise-overlay">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[75vh] min-h-[400px] overflow-hidden">
+      <section className="relative isolate h-[62vh] min-h-[360px] overflow-hidden">
         <div className="absolute inset-0 w-[165%] h-[165%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <video
             autoPlay
