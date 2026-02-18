@@ -22,9 +22,9 @@ export default async function OccasionsPage() {
   const occasionsList = (occasions as Occasion[]) || [];
 
   return (
-    <div className="min-h-screen bg-black noise-overlay text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[60vh] overflow-hidden">
+      <section className="relative h-[60vh] overflow-hidden noise-overlay">
         <video
           autoPlay
           loop
@@ -38,27 +38,29 @@ export default async function OccasionsPage() {
         
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
         
-        <div className="relative h-full flex items-center">
+        <div className="relative h-full flex items-center z-10">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 
               style={{ fontFamily: 'var(--font-inter)' }}
-              className="text-5xl md:text-6xl font-bold mb-6 text-white uppercase tracking-tight"
+              className="text-6xl md:text-7xl font-bold mb-6 text-white uppercase tracking-tight"
             >
-              Ons <span className="text-biker-yellow">Aanbod</span>
+              ONS <span className="text-biker-yellow">AANBOD</span>
             </h1>
             <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
-              Ontdek onze collectie zorgvuldig geselecteerde occasions. 
-              Van sportmotoren tot tourers - wij hebben iets voor elke rijder.
+              Ontdek onze collectie zorgvuldig geselecteerde occasions. Van sportief tot comfort - 
+              wij hebben de motor voor jouw stijl.
             </p>
           </div>
         </div>
       </section>
 
       {/* Occasions List */}
-      <OccasionsList occasions={occasionsList} />
+      <div className="noise-overlay">
+        <OccasionsList occasions={occasionsList} />
+      </div>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-t-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark border-t-2 border-biker-gray noise-overlay">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
