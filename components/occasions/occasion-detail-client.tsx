@@ -33,9 +33,9 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             <div className="absolute top-20 left-8 z-10">
               <Link
                 href="/occasions"
-                className="inline-flex items-center text-white hover:text-biker-yellow font-semibold transition-colors uppercase tracking-wider"
+                className="inline-flex items-center text-white hover:text-biker-yellow font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-black/80"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 TERUG
@@ -51,9 +51,9 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             <div className="absolute top-20 left-8 z-10">
               <Link
                 href="/occasions"
-                className="inline-flex items-center text-white hover:text-biker-yellow font-semibold transition-colors uppercase tracking-wider"
+                className="inline-flex items-center text-white hover:text-biker-yellow font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-black/80"
               >
-                <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
                 TERUG
