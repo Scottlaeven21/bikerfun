@@ -212,76 +212,9 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             </div>
 
             {/* Right Column - Details & CTA */}
-            <div className="lg:col-span-1 space-y-6">
-              {/* Price Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl p-8 border-2 border-biker-yellow">
-                <div className="text-biker-yellow font-bold text-sm uppercase tracking-wider mb-2">
-                  {occasion.brand}
-                </div>
-                <h1 className="text-3xl font-bold text-white mb-4">
-                  {occasion.model}
-                </h1>
-                <div className="text-4xl font-bold text-biker-yellow mb-6">
-                  € {occasion.price.toLocaleString('nl-NL')},-
-                </div>
-                
-                {/* Key Specs */}
-                <div className="space-y-3 pt-6 border-t border-gray-800">
-                  <div className="flex justify-between items-center text-white">
-                    <span className="text-gray-400">Bouwjaar</span>
-                    <span className="font-bold">{occasion.year}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-white">
-                    <span className="text-gray-400">Km-stand</span>
-                    <span className="font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
-                  </div>
-                  <div className="flex justify-between items-center text-white">
-                    <span className="text-gray-400">Transmissie</span>
-                    <span className="font-bold">{occasion.transmission}</span>
-                  </div>
-                  <div className="flex justify-between items-center text-white">
-                    <span className="text-gray-400">Staat</span>
-                    <span className="text-biker-yellow font-bold">{occasion.condition || 'Zeer goed'}</span>
-                  </div>
-                  {occasion.color && (
-                    <div className="flex justify-between items-center text-white">
-                      <span className="text-gray-400">Kleur</span>
-                      <span className="font-bold">{occasion.color}</span>
-                    </div>
-                  )}
-                  <div className="flex justify-between items-center text-white">
-                    <span className="text-gray-400">Garantie</span>
-                    <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
-                  </div>
-                </div>
-
-                {/* CTA Buttons */}
-                <div className="space-y-3 mt-8">
-                  <Link
-                    href={`/occasions/${occasion.id}/aanvraag`}
-                    className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Plan Bezichtiging
-                  </Link>
-                  <Link
-                    href="/contact"
-                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Stel Een Vraag
-                  </Link>
-                </div>
-
-                {/* Contact Info */}
-                <div className="mt-6 pt-6 border-t border-gray-800 text-center">
-                  <p className="text-gray-400 text-sm mb-2">Of bel direct:</p>
-                  <a href="tel:0615452108" className="text-biker-yellow font-bold text-xl hover:text-biker-yellowHover transition-colors">
-                    06 15 45 21 08
-                  </a>
-                </div>
-              </div>
-
+            <div className="lg:col-span-1">
               {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl p-8">
+              <div className="bg-[#1a1a1a] rounded-2xl p-8 sticky top-24">
                 {/* Header */}
                 <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
 
