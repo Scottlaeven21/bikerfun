@@ -25,40 +25,71 @@ export default async function AdminOccasionsPage() {
       {/* Header */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Occasions Beheer</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2 font-['Inter']">Occasions Beheer</h1>
           <p className="text-gray-600">Beheer alle occasions op de website</p>
         </div>
         <Link
           href="/admin/occasions/new"
-          className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-md hover:shadow-lg"
+          className="flex items-center space-x-2 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
         >
-          + Nieuwe Occasion
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Nieuwe Occasion</span>
         </Link>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
-          <p className="text-sm text-gray-600">Beschikbaar</p>
-          <p className="text-2xl font-bold text-gray-900">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6 border border-green-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm text-gray-600 font-medium">Beschikbaar</p>
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-gray-900">
             {occasionsList?.filter(o => o.status === 'available').length || 0}
           </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
-          <p className="text-sm text-gray-600">Gereserveerd</p>
-          <p className="text-2xl font-bold text-gray-900">
+        <div className="bg-gradient-to-br from-yellow-50 to-white rounded-xl shadow-lg p-6 border border-yellow-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm text-gray-600 font-medium">Gereserveerd</p>
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-yellow-400 to-yellow-600 flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-gray-900">
             {occasionsList?.filter(o => o.status === 'reserved').length || 0}
           </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-4 border-l-4 border-red-500">
-          <p className="text-sm text-gray-600">Verkocht</p>
-          <p className="text-2xl font-bold text-gray-900">
+        <div className="bg-gradient-to-br from-red-50 to-white rounded-xl shadow-lg p-6 border border-red-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm text-gray-600 font-medium">Verkocht</p>
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-red-400 to-red-600 flex items-center justify-center">
+              <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-gray-900">
             {occasionsList?.filter(o => o.status === 'sold').length || 0}
           </p>
         </div>
-        <div className="bg-white rounded-lg shadow p-4 border-l-4 border-biker-yellow">
-          <p className="text-sm text-gray-600">Totaal</p>
-          <p className="text-2xl font-bold text-gray-900">
+        <div className="bg-gradient-to-br from-biker-yellow/10 to-white rounded-xl shadow-lg p-6 border-2 border-biker-yellow hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-sm text-gray-600 font-medium">Totaal</p>
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-biker-yellow to-yellow-600 flex items-center justify-center">
+              <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+          </div>
+          <p className="text-3xl font-bold text-gray-900">
             {occasionsList?.length || 0}
           </p>
         </div>
@@ -105,8 +136,10 @@ export default async function AdminOccasionsPage() {
                               className="object-cover"
                             />
                           ) : (
-                            <div className="w-full h-full flex items-center justify-center text-2xl">
-                              🏍️
+                            <div className="w-full h-full flex items-center justify-center bg-biker-yellow/10">
+                              <svg className="w-8 h-8 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                              </svg>
                             </div>
                           )}
                         </div>
@@ -151,17 +184,22 @@ export default async function AdminOccasionsPage() {
                         <Link
                           href={`/occasions/${occasion.id}`}
                           target="_blank"
-                          className="text-blue-600 hover:text-blue-800 font-semibold text-sm"
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-all group"
                           title="Bekijk op website"
                         >
-                          👁️
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
                         </Link>
                         <Link
                           href={`/admin/occasions/${occasion.id}/edit`}
-                          className="text-biker-yellow hover:text-biker-yellowHover font-semibold text-sm"
+                          className="p-2 text-biker-yellow hover:bg-biker-yellow/10 rounded-lg transition-all group"
                           title="Bewerken"
                         >
-                          ✏️
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                          </svg>
                         </Link>
                       </div>
                     </td>
@@ -172,13 +210,20 @@ export default async function AdminOccasionsPage() {
           </div>
         ) : (
           <div className="p-12 text-center">
-            <div className="text-6xl mb-4">🏍️</div>
-            <p className="text-gray-600 mb-6">Nog geen occasions toegevoegd</p>
+            <div className="w-20 h-20 rounded-full bg-biker-yellow/10 flex items-center justify-center mx-auto mb-4">
+              <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <p className="text-gray-600 mb-6 font-medium">Nog geen occasions toegevoegd</p>
             <Link
               href="/admin/occasions/new"
-              className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300"
+              className="inline-flex items-center space-x-2 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              Voeg eerste occasion toe
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+              </svg>
+              <span>Voeg eerste occasion toe</span>
             </Link>
           </div>
         )}
