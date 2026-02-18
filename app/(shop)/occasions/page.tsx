@@ -26,9 +26,9 @@ export default async function OccasionsPage() {
   const occasionsList = (occasions as Occasion[]) || [];
 
   return (
-    <div className="min-h-screen bg-black noise-overlay text-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[60vh] overflow-hidden">
+      <section className="relative h-[60vh] min-h-[320px] overflow-hidden">
         <video
           autoPlay
           loop
@@ -39,20 +39,13 @@ export default async function OccasionsPage() {
         >
           <source src="/Adobestock 1898255189.mp4" type="video/mp4" />
         </video>
-        
-        <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
-        
-        <div className="relative h-full flex items-center">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
-            <h1 
-              style={{ fontFamily: 'var(--font-inter)' }}
-              className="text-5xl md:text-6xl font-bold mb-6 text-white uppercase tracking-tight"
-            >
+        <div className="relative z-10 h-full flex items-center justify-center">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tight drop-shadow-lg">
               ONS <span className="text-biker-yellow">AANBOD</span>
             </h1>
-            <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
-              Ontdek onze collectie zorgvuldig geselecteerde occasions. Van sportief tot comfort - 
-              wij hebben de motor voor jouw stijl.
+            <p className="text-lg md:text-xl text-white drop-shadow-md max-w-3xl mx-auto">
+              Ontdek onze collectie zorgvuldig geselecteerde occasions. Van sportief tot comfort - wij hebben de motor voor jouw stijl.
             </p>
           </div>
         </div>
