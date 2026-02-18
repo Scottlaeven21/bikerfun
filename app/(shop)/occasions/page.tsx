@@ -44,11 +44,11 @@ export default async function OccasionsPage() {
               style={{ fontFamily: 'var(--font-inter)' }}
               className="text-5xl md:text-6xl font-bold mb-6 text-white uppercase tracking-tight"
             >
-              Ons <span className="text-biker-yellow">Aanbod</span>
+              ONS <span className="text-biker-yellow">AANBOD</span>
             </h1>
             <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
-              Ontdek onze collectie zorgvuldig geselecteerde occasions. 
-              Van sportmotoren tot tourers - wij hebben iets voor elke rijder.
+              Ontdek onze collectie zorgvuldig geselecteerde occasions. Van sportief tot comfort - 
+              wij hebben de motor voor jouw stijl.
             </p>
           </div>
         </div>
