@@ -29,16 +29,18 @@ export default async function OccasionsPage() {
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
       <section className="relative isolate h-[60vh] min-h-[320px] overflow-hidden">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center top' }}
-        >
-          <source src="/hero-occasions.mp4" type="video/mp4" />
-        </video>
+        <div className="absolute inset-0 w-[120%] h-[120%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectPosition: 'center center' }}
+          >
+            <source src="/hero-occasions.mp4" type="video/mp4" />
+          </video>
+        </div>
         <div className="relative z-10 h-full flex items-center justify-center">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tight drop-shadow-lg">
