@@ -73,107 +73,131 @@ http://admin.bikerfun.nl
 
 ## 🔄 FASE 2: WordPress Verplaatsen naar Subdomein
 
+### 💡 Waarom All-in-One WP Migration?
+
+We gebruiken de **"All-in-One WP Migration"** plugin omdat:
+- ✅ **Makkelijk:** Alles in 3 klikken (export, import, klaar)
+- ✅ **Veilig:** Automatische backup voordat je begint
+- ✅ **Compleet:** Verplaatst alles (database, bestanden, instellingen)
+- ✅ **Automatisch:** Past alle URL's automatisch aan
+- ✅ **Geen technische kennis nodig:** Geen FTP, geen database exports
+
+**Alternatieve methoden** (handmatig via FTP/database) zijn lastiger en foutgevoeliger.
+
+---
+
 ### ⚠️ BELANGRIJK: Maak eerst een backup!
 
 1. Log in op je huidige WordPress: `bikerfun.nl/wp-admin`
-2. Installeer de plugin **"UpdraftPlus"** (gratis backup plugin)
-3. Ga naar **Tools → UpdraftPlus Backups**
-4. Klik op **"Back Up Now"**
-5. Wacht tot backup compleet is
-6. Download de backup naar je computer (voor de zekerheid)
+2. Installeer de plugin **"All-in-One WP Migration"** (gratis)
+3. Ga naar **All-in-One WP Migration → Backup**
+4. Klik op **"Backup"** en wacht tot het klaar is
+5. Download de backup naar je computer (voor de zekerheid)
+
+**⚠️ Let op: Bestandsgrootte Limiet (Gratis Versie)**
+
+De **gratis** versie van All-in-One WP Migration heeft een upload limiet van **512 MB**.
+
+**Is je backup groter dan 512 MB?**
+- **Optie 1:** Upgrade naar Premium versie ($69, eenmalig) voor ongelimiteerd
+- **Optie 2:** Gebruik "Duplicator" plugin (gratis alternatief, geen limiet)
+- **Optie 3:** Vraag je developer om handmatige migratie
+
+**Voor de meeste websites** is 512 MB meer dan genoeg. Controleer de bestandsgrootte na het downloaden.
 
 ---
 
-### Stap 4: WordPress URL Aanpassen
+### Stap 4: Nieuwe WordPress Installeren op Subdomein
 
-**Let op:** Deze stap zorgt ervoor dat WordPress weet dat het op een nieuw adres draait.
-
-1. Log in op WordPress admin: `bikerfun.nl/wp-admin`
-2. Ga naar **Instellingen → Algemeen** (Settings → General)
-3. Je ziet twee velden:
-
-**Pas BEIDE aan naar het nieuwe subdomein:**
-
-```
-WordPress-adres (URL):
-OUD: https://bikerfun.nl
-NIEUW: https://admin.bikerfun.nl
-
-Websiteadres (URL):
-OUD: https://bikerfun.nl
-NIEUW: https://admin.bikerfun.nl
-```
-
-4. Scroll naar beneden en klik op **"Wijzigingen opslaan"**
-
-**⚠️ Wat gebeurt er nu:**
-- Je wordt UITGELOGD
-- WordPress is tijdelijk niet bereikbaar op `bikerfun.nl`
-- Dit is normaal! Ga verder met de volgende stap.
-
----
-
-### Stap 5: Bestanden en Database Verplaatsen
-
-#### Optie A: Via Strato File Manager (Makkelijkst voor Beginners)
-
-**Als je WordPress al op je huidige hosting draait:**
+**Via Strato 1-Click Installer:**
 
 1. Log in bij Strato Control Panel
-2. Ga naar **"File Manager"** of **"Webspace"**
-3. Je ziet waarschijnlijk deze mapstructuur:
+2. Ga naar **"Applicaties"** of **"Apps"** of **"Software Installer"**
+3. Zoek naar **"WordPress"**
+4. Klik op **"Installeren"**
+5. **Kies als installatie-locatie:** `admin.bikerfun.nl` (het subdomein dat je in stap 2 hebt aangemaakt)
+6. Vul admin gegevens in:
    ```
-   /
-   ├── public_html/  (of httpdocs/ of www/)
-   │   ├── wp-admin/
-   │   ├── wp-content/
-   │   ├── wp-includes/
-   │   └── wp-config.php
+   Admin gebruikersnaam: [jouw keuze]
+   Admin wachtwoord: [sterk wachtwoord]
+   Admin email: [jouw email]
    ```
+7. Klik op **"Installeren"** en wacht 5-10 minuten
 
-**Wat je moet doen:**
-- Als er een `/admin` map is die je eerder hebt aangemaakt:
-  - Kopieer ALLE WordPress bestanden naar deze map
-- WordPress blijft ook gewoon in de hoofdmap staan voorlopig
+**⏱️ Verwachte tijd:** 5-10 minuten voor installatie
 
-**Let op:** Deze methode werkt als Strato automatisch subdomeinen naar submappen wijst.
-
-#### Optie B: Via DNS A-Record (Voor gevorderden)
-
-Als optie A niet werkt of je wilt een schonere oplossing:
-
-1. Ga in Strato naar **"DNS Beheer"** of **"DNS Instellingen"**
-2. Zoek naar je domein `bikerfun.nl`
-3. Voeg een nieuw **A-record** toe:
-
-```
-Type:     A
-Name:     admin
-Value:    [Hetzelfde IP-adres als je hoofddomein]
-TTL:      3600
-```
-
-*Het IP-adres vind je bij je huidige domein instellingen of via `ping bikerfun.nl` in command prompt*
-
-4. Sla op en wacht 15-30 minuten voor DNS propagatie
+**Als Strato GEEN 1-click installer heeft:**
+- Download WordPress van https://wordpress.org/download/
+- Upload via FTP naar de subdomein map (zie oude instructies)
 
 ---
 
-### Stap 6: Test de Nieuwe URL
+### Stap 5: Website Migreren met Plugin (MAKKELIJKSTE METHODE!)
 
-1. Open een browser (eventueel in incognito/privé modus)
-2. Ga naar: `https://admin.bikerfun.nl/wp-admin`
-3. Log in met je WordPress gegevens
+**Dit is de snelste en veiligste manier:**
 
-**✅ Als het werkt:**
-- Je ziet je WordPress dashboard
-- Ga naar **WooCommerce → Products**
-- Controleer of al je producten zichtbaar zijn
+1. Log in op je **NIEUWE** WordPress: `admin.bikerfun.nl/wp-admin`
+   - Gebruik de admin gegevens die je bij installatie hebt ingevuld
+2. Installeer de plugin **"All-in-One WP Migration"**
+   - Ga naar **Plugins → Nieuwe plugin**
+   - Zoek **"All-in-One WP Migration"**
+   - Klik **"Nu installeren"** en **"Activeren"**
 
-**❌ Als het NIET werkt:**
-- Wacht nog 15-30 minuten (DNS propagatie)
-- Check of je de URL's correct hebt aangepast in stap 4
-- Controleer of `admin.bikerfun.nl` naar de juiste map wijst
+3. **Importeer je oude website:**
+   - Ga naar **All-in-One WP Migration → Import**
+   - Sleep het backup bestand dat je in stap 4 hebt gedownload naar het scherm
+   - Of klik op **"Import From → File"** en selecteer het bestand
+   
+4. **Wacht tot import compleet is** (kan 5-15 minuten duren)
+   - Je ziet een voortgangsbalk
+   - **NIET** de pagina sluiten tijdens het importeren!
+
+5. **Herlog in na import:**
+   - Je wordt automatisch uitgelogd
+   - Log weer in op `admin.bikerfun.nl/wp-admin`
+   - Gebruik je **OUDE** WordPress login gegevens (van bikerfun.nl)
+
+**✅ Klaar!** Je WordPress site staat nu op `admin.bikerfun.nl` met:
+- Alle producten
+- Alle pagina's
+- Alle instellingen
+- Alle WooCommerce data
+
+---
+
+### Stap 6: URL's Controleren
+
+De plugin heeft automatisch alle URL's aangepast, maar check voor de zekerheid:
+
+1. Ga naar **Instellingen → Algemeen** (Settings → General)
+2. Controleer of beide URL's correct zijn:
+
+```
+WordPress-adres (URL): https://admin.bikerfun.nl
+Websiteadres (URL):    https://admin.bikerfun.nl
+```
+
+3. Als ze nog `bikerfun.nl` vermelden, pas ze aan naar `admin.bikerfun.nl`
+4. Klik **"Wijzigingen opslaan"**
+
+---
+
+### Stap 7: Test de Nieuwe Website
+
+1. Ga naar: `https://admin.bikerfun.nl/wp-admin`
+2. Log in met je **oude** WordPress gegevens (van bikerfun.nl)
+
+**✅ Controleer of alles werkt:**
+- [ ] WordPress dashboard is toegankelijk
+- [ ] Ga naar **WooCommerce → Products** en check of alle producten er zijn
+- [ ] Ga naar **WooCommerce → Orders** en check bestellingen
+- [ ] Ga naar **Pagina's** en check of alle content er is
+- [ ] Test een product pagina op de frontend (bijv. `admin.bikerfun.nl/product/...`)
+
+**❌ Als iets niet klopt:**
+- Check console/error logs in WordPress
+- Mogelijk moet je permalinks opnieuw opslaan: **Instellingen → Permalinks → Wijzigingen opslaan**
+- Check of alle plugins geactiveerd zijn
 
 ---
 

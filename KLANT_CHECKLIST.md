@@ -17,32 +17,34 @@
 ---
 
 ### FASE 2: WordPress Verplaatsen (20 min)
-4. [ ] Pas WordPress URL aan naar `admin.bikerfun.nl` (Instellingen → Algemeen)
-5. [ ] Verplaats/wijs bestanden naar subdomein (via File Manager of DNS)
-6. [ ] Test inloggen op `admin.bikerfun.nl/wp-admin`
-7. [ ] Controleer of producten zichtbaar zijn
+4. [ ] Maak backup met "All-in-One WP Migration" plugin
+5. [ ] Installeer nieuwe WordPress op `admin.bikerfun.nl` (via Strato 1-click)
+6. [ ] Installeer "All-in-One WP Migration" op NIEUWE WordPress
+7. [ ] Importeer backup bestand in nieuwe WordPress
+8. [ ] Test inloggen op `admin.bikerfun.nl/wp-admin` (met oude gegevens)
+9. [ ] Controleer of alle producten zichtbaar zijn in WooCommerce
 
 ---
 
 ### FASE 3: Frontend Blokkeren (10 min)
-8. [ ] Installeer "Headless Mode" plugin OF
-9. [ ] Voeg code toe aan `functions.php` (zie instructies)
-10. [ ] Test: `admin.bikerfun.nl` moet geblokkeerd zijn voor bezoekers
+10. [ ] Installeer "Headless Mode" plugin OF
+11. [ ] Voeg code toe aan `functions.php` (zie instructies)
+12. [ ] Test: `admin.bikerfun.nl` moet geblokkeerd zijn voor bezoekers
 
 ---
 
 ### FASE 4: API Keys Aanmaken (5 min)
-11. [ ] Ga naar WooCommerce → Instellingen → Geavanceerd → REST API
-12. [ ] Klik "Sleutel toevoegen"
-13. [ ] Vul in: Beschrijving, Gebruiker, Rechten (Lezen/Schrijven)
-14. [ ] Klik "API-sleutel genereren"
-15. [ ] **KOPIEER EN BEWAAR** Consumer Key en Consumer Secret
+13. [ ] Ga naar WooCommerce → Instellingen → Geavanceerd → REST API
+14. [ ] Klik "Sleutel toevoegen"
+15. [ ] Vul in: Beschrijving, Gebruiker, Rechten (Lezen/Schrijven)
+16. [ ] Klik "API-sleutel genereren"
+17. [ ] **KOPIEER EN BEWAAR** Consumer Key en Consumer Secret
 
 ---
 
 ### FASE 5: Keys Doorgeven (5 min)
-16. [ ] Sla beide keys op in tekstbestand of password manager
-17. [ ] Stuur keys **BEVEILIGD** naar developer:
+18. [ ] Sla beide keys op in tekstbestand of password manager
+19. [ ] Stuur keys **BEVEILIGD** naar developer:
    ```
    WooCommerce URL: admin.bikerfun.nl
    Consumer Key: ck_...
