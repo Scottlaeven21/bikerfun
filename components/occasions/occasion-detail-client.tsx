@@ -16,39 +16,49 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
 
   return (
     <div className="min-h-screen bg-black noise-overlay">
-      {/* Back Button */}
-      <div className="bg-biker-dark">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link
-            href="/occasions"
-            className="inline-flex items-center text-biker-yellow hover:text-biker-yellowHover font-semibold transition-colors"
-          >
-            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            Terug naar overzicht
-          </Link>
-        </div>
-      </div>
-
-      {/* Hero Image - Static Full Width */}
-      <section className="relative bg-biker-black overflow-hidden">
+      {/* Hero Image - Static with Back Button Overlay */}
+      <section className="relative bg-biker-black overflow-hidden h-[60vh]">
         {occasion.main_image ? (
-          <div className="relative w-full">
+          <div className="relative w-full h-full">
             <Image
               src={occasion.main_image}
               alt={`${occasion.brand} ${occasion.model}`}
-              width={1920}
-              height={1080}
-              className="w-full h-auto"
+              fill
+              className="object-cover"
               quality={100}
               priority
             />
+            
+            {/* Back Button Overlay - Top Left */}
+            <div className="absolute top-6 left-6 z-10">
+              <Link
+                href="/occasions"
+                className="inline-flex items-center text-white hover:text-biker-yellow font-semibold transition-colors bg-black/50 backdrop-blur-sm px-4 py-2 rounded-lg"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                TERUG
+              </Link>
+            </div>
+            
             {/* Gradient Overlay at bottom */}
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
           </div>
         ) : (
-          <div className="relative h-[50vh] bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
+          <div className="relative h-full bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
+            {/* Back Button for no image state */}
+            <div className="absolute top-6 left-6 z-10">
+              <Link
+                href="/occasions"
+                className="inline-flex items-center text-white hover:text-biker-yellow font-semibold transition-colors bg-black/50 backdrop-blur-sm px-4 py-2 rounded-lg"
+              >
+                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                </svg>
+                TERUG
+              </Link>
+            </div>
             <div className="text-center">
               <div className="text-8xl mb-4">🏍️</div>
               <div className="text-white font-bold text-2xl">FOTO'S VOLGEN BINNENKORT</div>
