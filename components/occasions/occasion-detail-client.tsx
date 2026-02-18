@@ -31,28 +31,30 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
         </div>
       </div>
 
-      {/* Hero Image - Static */}
-      <section className="relative h-[50vh] bg-biker-black overflow-hidden">
+      {/* Hero Image - Static Full Width */}
+      <section className="relative bg-biker-black overflow-hidden">
         {occasion.main_image ? (
-          <Image
-            src={occasion.main_image}
-            alt={`${occasion.brand} ${occasion.model}`}
-            fill
-            className="object-contain"
-            quality={100}
-            priority
-          />
+          <div className="relative w-full">
+            <Image
+              src={occasion.main_image}
+              alt={`${occasion.brand} ${occasion.model}`}
+              width={1920}
+              height={1080}
+              className="w-full h-auto"
+              quality={100}
+              priority
+            />
+            {/* Gradient Overlay at bottom */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
+          </div>
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
+          <div className="relative h-[50vh] bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
             <div className="text-center">
               <div className="text-8xl mb-4">🏍️</div>
               <div className="text-white font-bold text-2xl">FOTO'S VOLGEN BINNENKORT</div>
             </div>
           </div>
         )}
-        
-        {/* Gradient Overlay at bottom */}
-        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
       </section>
 
       {/* Main Content */}
