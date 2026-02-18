@@ -114,7 +114,6 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                             </svg>
                           </div>
                           <div className="text-white font-bold text-lg">FOTO'S VOLGEN</div>
-                          <div className="text-biker-yellow text-sm">BINNENKORT</div>
                         </div>
                       </div>
                     )}
