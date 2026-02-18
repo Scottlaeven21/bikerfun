@@ -214,7 +214,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             {/* Right Column - Details & CTA */}
             <div className="lg:col-span-1">
               {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl p-8 sticky top-24">
+              <div className="bg-[#1a1a1a] rounded-2xl p-8 border-2 border-biker-gray sticky top-24">
                 {/* Header */}
                 <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
 
