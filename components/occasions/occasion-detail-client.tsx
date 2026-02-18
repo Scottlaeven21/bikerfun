@@ -214,73 +214,159 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             </div>
 
             {/* Right Column - Details & CTA */}
-            <div className="lg:col-span-1">
-              <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-yellow sticky top-24">
-                {/* Title & Price */}
-                <div className="mb-8">
-                  <div className="text-biker-yellow font-bold text-sm uppercase tracking-wider mb-2">
-                    {occasion.brand}
-                  </div>
-                  <h1 className="text-3xl font-bold text-white mb-4">
-                    {occasion.model}
-                  </h1>
-                  <div className="text-4xl font-bold text-biker-yellow">
-                    € {occasion.price.toLocaleString('nl-NL')},-
-                  </div>
+            <div className="lg:col-span-1 space-y-6">
+              {/* Price Card */}
+              <div className="bg-[#1a1a1a] rounded-2xl p-8 border-2 border-biker-yellow">
+                <div className="text-biker-yellow font-bold text-sm uppercase tracking-wider mb-2">
+                  {occasion.brand}
                 </div>
-
-                {/* Quick Stats */}
-                <div className="space-y-4 pb-8 mb-8 border-b border-biker-gray">
-                  <div className="flex justify-between items-center">
-                    <span className="text-biker-muted">Bouwjaar</span>
-                    <span className="text-white font-semibold">{occasion.year}</span>
+                <h1 className="text-3xl font-bold text-white mb-4">
+                  {occasion.model}
+                </h1>
+                <div className="text-4xl font-bold text-biker-yellow mb-6">
+                  € {occasion.price.toLocaleString('nl-NL')},-
+                </div>
+                
+                {/* Key Specs */}
+                <div className="space-y-3 pt-6 border-t border-gray-800">
+                  <div className="flex justify-between items-center text-white">
+                    <span className="text-gray-400">Bouwjaar</span>
+                    <span className="font-bold">{occasion.year}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-biker-muted">Km-stand</span>
-                    <span className="text-white font-semibold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                  <div className="flex justify-between items-center text-white">
+                    <span className="text-gray-400">Km-stand</span>
+                    <span className="font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-biker-muted">Transmissie</span>
-                    <span className="text-white font-semibold">{occasion.transmission}</span>
+                  <div className="flex justify-between items-center text-white">
+                    <span className="text-gray-400">Transmissie</span>
+                    <span className="font-bold">{occasion.transmission}</span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-biker-muted">Staat</span>
-                    <span className="text-white font-semibold">{occasion.condition || 'Zeer goed'}</span>
+                  <div className="flex justify-between items-center text-white">
+                    <span className="text-gray-400">Staat</span>
+                    <span className="text-biker-yellow font-bold">{occasion.condition || 'Zeer goed'}</span>
                   </div>
                   {occasion.color && (
-                    <div className="flex justify-between items-center">
-                      <span className="text-biker-muted">Kleur</span>
-                      <span className="text-white font-semibold">{occasion.color}</span>
+                    <div className="flex justify-between items-center text-white">
+                      <span className="text-gray-400">Kleur</span>
+                      <span className="font-bold">{occasion.color}</span>
                     </div>
                   )}
-                  <div className="flex justify-between items-center">
-                    <span className="text-biker-muted">Garantie</span>
-                    <span className="text-white font-semibold">{occasion.warranty}</span>
+                  <div className="flex justify-between items-center text-white">
+                    <span className="text-gray-400">Garantie</span>
+                    <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
                   </div>
                 </div>
 
                 {/* CTA Buttons */}
-                <div className="space-y-4">
+                <div className="space-y-3 mt-8">
                   <Link
                     href={`/occasions/${occasion.id}/aanvraag`}
-                    className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                    className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
                   >
                     Plan Bezichtiging
                   </Link>
                   <Link
                     href="/contact"
-                    className="btn-secondary block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-biker-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
                   >
-                    Stel een vraag
+                    Stel Een Vraag
                   </Link>
                 </div>
 
                 {/* Contact Info */}
-                <div className="mt-8 pt-8 border-t border-biker-gray text-center">
-                  <p className="text-biker-muted text-sm mb-2">Of bel direct:</p>
-                  <a href="tel:0615452108" className="text-biker-yellow font-bold text-lg hover:text-biker-yellowHover">
+                <div className="mt-6 pt-6 border-t border-gray-800 text-center">
+                  <p className="text-gray-400 text-sm mb-2">Of bel direct:</p>
+                  <a href="tel:0615452108" className="text-biker-yellow font-bold text-xl hover:text-biker-yellowHover transition-colors">
                     06 15 45 21 08
                   </a>
+                </div>
+              </div>
+
+              {/* Info Card */}
+              <div className="bg-[#1a1a1a] rounded-2xl p-8">
+                {/* Header */}
+                <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
+
+                {/* Info List */}
+                <div className="space-y-0 mb-8">
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">KM-stand</span>
+                    <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">Bouwjaar</span>
+                    <span className="text-white font-bold">{occasion.year}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">Categorie</span>
+                    <span className="text-white font-bold">{occasion.category || 'Supersport'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">Staat</span>
+                    <span className="text-biker-yellow font-bold">{occasion.condition || 'Zeer goed'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">Eigenaren</span>
+                    <span className="text-white font-bold">{occasion.owners || '2'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                    <span className="text-white">Onderhoudshistorie</span>
+                    <span className="text-white font-bold">{occasion.service_history || 'Volledig'}</span>
+                  </div>
+                  <div className="flex justify-between items-center py-4">
+                    <span className="text-white">Garantie</span>
+                    <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="space-y-3 mb-8">
+                  <Link
+                    href={`/occasions/${occasion.id}/aanvraag`}
+                    className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                  >
+                    Plan Bezichtiging
+                  </Link>
+                  <a
+                    href="tel:0615452108"
+                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                  >
+                    Bel Ons
+                  </a>
+                  <Link
+                    href="/contact"
+                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                  >
+                    Mail Ons
+                  </Link>
+                </div>
+
+                {/* Features Checklist */}
+                <div className="space-y-3 pt-6 border-t border-gray-800">
+                  <div className="flex items-center space-x-3 text-white">
+                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Proefrit mogelijk</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-white">
+                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Inruil mogelijk</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-white">
+                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Financiering beschikbaar</span>
+                  </div>
+                  <div className="flex items-center space-x-3 text-white">
+                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>Altijd gestald</span>
+                  </div>
                 </div>
               </div>
             </div>
