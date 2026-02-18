@@ -23,8 +23,8 @@ export function AdminHeader({ userName, userEmail }: AdminHeaderProps) {
   };
 
   return (
-    <header className="bg-gradient-to-r from-black to-gray-900 border-b-2 border-biker-yellow sticky top-0 z-50 shadow-lg">
-      <div className="px-6 py-4 flex items-center justify-between">
+    <header className="bg-black border-b-2 border-biker-yellow sticky top-0 z-50 shadow-lg noise-overlay">
+      <div className="px-6 py-4 flex items-center justify-between relative z-10">
         {/* Left: Logo/Brand */}
         <div className="flex items-center space-x-4">
           <Link href="/admin" className="flex items-center space-x-3 group">
