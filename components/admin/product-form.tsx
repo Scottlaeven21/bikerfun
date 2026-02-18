@@ -3,7 +3,11 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Product, Category } from '@/types';
+import type { Database } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
+
+type ProductUpdate = Database['public']['Tables']['products']['Update'];
+type ProductInsert = Database['public']['Tables']['products']['Insert'];
 
 interface ProductFormProps {
   product?: Product | null;
@@ -44,29 +48,8 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
     try {
       const supabase = createClient();
       const slugValue = slug.trim() || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
-      const payload = {
-        name: name.trim(),
-        slug: slugValue,
-        description: description.trim() || null,
-        price: Number(price),
-        compare_at_price: compareAtPrice ? Number(compareAtPrice) : null,
-        stock: Number(stock) || 0,
-        category_id: categoryId || null,
-        image_url: imageUrl.trim() || null,
-        is_featured: isFeatured,
-        is_active: isActive,
-        updated_at: new Date().toISOString(),
-      };
       if (isEdit && product?.id) {
-        const { error: updateError } = await supabase
-          .from('products')
-          .update(payload)
-          .eq('id', product.id);
-        if (updateError) throw updateError;
-        router.push('/admin/products');
-        router.refresh();
-      } else {
-        const { error: insertError } = await supabase.from('products').insert({
+        const payload: ProductUpdate = {
           name: name.trim(),
           slug: slugValue,
           description: description.trim() || null,
@@ -77,7 +60,33 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
           image_url: imageUrl.trim() || null,
           is_featured: isFeatured,
           is_active: isActive,
-        });
+          updated_at: new Date().toISOString(),
+        };
+        const { error: updateError } = await supabase
+          .from('products')
+          // @ts-ignore - Supabase client can infer never for this table
+          .update(payload)
+          .eq('id', product.id);
+        if (updateError) throw updateError;
+        router.push('/admin/products');
+        router.refresh();
+      } else {
+        const insertData: ProductInsert = {
+          name: name.trim(),
+          slug: slugValue,
+          description: description.trim() || null,
+          price: Number(price),
+          compare_at_price: compareAtPrice ? Number(compareAtPrice) : null,
+          stock: Number(stock) || 0,
+          category_id: categoryId || null,
+          image_url: imageUrl.trim() || null,
+          is_featured: isFeatured,
+          is_active: isActive,
+        };
+        const { error: insertError } = await supabase
+          .from('products')
+          // @ts-ignore - Supabase client can infer never for this table
+          .insert(insertData);
         if (insertError) throw insertError;
         router.push('/admin/products');
         router.refresh();
@@ -133,7 +142,7 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
             step="0.01"
             min="0"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => setPrice(Number(e.target.value) || 0)}
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500"
             required
           />

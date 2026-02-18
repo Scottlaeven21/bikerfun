@@ -3,7 +3,10 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Category } from '@/types';
+import type { Database } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
+
+type CategoryUpdate = Database['public']['Tables']['categories']['Update'];
 
 interface CategoryFormProps {
   category?: Category | null;
@@ -27,15 +30,17 @@ export function CategoryForm({ category, isEdit = false }: CategoryFormProps) {
       const supabase = createClient();
       const slugValue = slug.trim() || name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
       if (isEdit && category?.id) {
+        const updateData: CategoryUpdate = {
+          name: name.trim(),
+          slug: slugValue,
+          description: description.trim() || null,
+          image_url: imageUrl.trim() || null,
+          updated_at: new Date().toISOString(),
+        };
         const { error: updateError } = await supabase
           .from('categories')
-          .update({
-            name: name.trim(),
-            slug: slugValue,
-            description: description.trim() || null,
-            image_url: imageUrl.trim() || null,
-            updated_at: new Date().toISOString(),
-          })
+          // @ts-ignore - Supabase client can infer never for this table
+          .update(updateData)
           .eq('id', category.id);
         if (updateError) throw updateError;
         router.push('/admin/categories');
@@ -43,6 +48,7 @@ export function CategoryForm({ category, isEdit = false }: CategoryFormProps) {
       } else {
         const { error: insertError } = await supabase
           .from('categories')
+          // @ts-ignore - Supabase client can infer never for this table
           .insert({
             name: name.trim(),
             slug: slugValue,
