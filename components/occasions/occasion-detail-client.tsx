@@ -76,8 +76,6 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               {/* Media Section */}
               {allImages.length > 0 && (
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">Media</h3>
-                  
                   {/* Large Current Image */}
                   <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray">
                     <Image
