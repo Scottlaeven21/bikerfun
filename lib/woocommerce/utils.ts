@@ -1,26 +1,12 @@
 // WooCommerce utility functions
 
 import type { WooCommerceProduct } from '@/types/woocommerce';
-import type { Product } from '@/types/database';
 
 /**
- * Convert WooCommerce product to our internal Product type
+ * Note: We don't convert WooCommerce products to Supabase Product type
+ * because they are fetched directly from WooCommerce API and displayed.
+ * WooCommerce is the source of truth for shop products.
  */
-export function wooToProduct(wooProduct: WooCommerceProduct): Product {
-  return {
-    id: wooProduct.id,
-    name: wooProduct.name,
-    slug: wooProduct.slug,
-    description: wooProduct.description || wooProduct.short_description || '',
-    price: parseFloat(wooProduct.price) || 0,
-    category_id: wooProduct.categories.length > 0 ? wooProduct.categories[0].id : 0,
-    image_url: wooProduct.images.length > 0 ? wooProduct.images[0].src : null,
-    is_active: wooProduct.status === 'publish',
-    stock: wooProduct.stock_quantity || 0,
-    created_at: wooProduct.date_created,
-    updated_at: wooProduct.date_modified,
-  };
-}
 
 /**
  * Format price in Dutch currency format
