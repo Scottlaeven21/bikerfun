@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { MotorAanvraagForm } from '@/components/forms/motor-aanvraag-form';
+import { Occasion } from '@/types';
 
 export const metadata: Metadata = {
   title: 'Plan Bezichtiging | Bikerfun',
@@ -24,17 +25,20 @@ export default async function OccasionAanvraagPage({ params }: PageProps) {
     const supabase = await createClient();
 
     // Fetch occasion from Supabase
-    const { data: occasion, error } = await supabase
+    const { data, error } = await supabase
       .from('occasions')
       .select('*')
       .eq('id', occasionId)
       .eq('is_active', true)
       .single();
 
-    if (error || !occasion) {
+    if (error || !data) {
       console.error('Occasion not found:', error);
       notFound();
     }
+
+    // Type assertion for Supabase data
+    const occasion = data as Occasion;
 
     const occasionUrl = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/occasions/${occasionId}`;
 
