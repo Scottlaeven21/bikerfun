@@ -20,25 +20,41 @@ export function MotorAanvraagForm({ motorDetails }: MotorAanvraagFormProps) {
   async function handleSubmit(formData: FormData) {
     setMessage(null);
 
-    const data = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      phone: formData.get('phone') as string || undefined,
-      message: formData.get('message') as string,
-      motorDetails,
-    };
+    try {
+      const name = formData.get('name');
+      const email = formData.get('email');
+      const phone = formData.get('phone');
+      const message = formData.get('message');
 
-    startTransition(async () => {
-      const result = await sendMotorAanvraagEmail(data);
-
-      if (result.success) {
-        setMessage({ type: 'success', text: result.message || 'Aanvraag verzonden!' });
-        // Reset form
-        (document.getElementById('motor-aanvraag-form') as HTMLFormElement)?.reset();
-      } else {
-        setMessage({ type: 'error', text: result.error || 'Er ging iets mis.' });
+      // Validation
+      if (!name || !email || !message) {
+        setMessage({ type: 'error', text: 'Vul alle verplichte velden in.' });
+        return;
       }
-    });
+
+      const data = {
+        name: name as string,
+        email: email as string,
+        phone: phone ? (phone as string) : undefined,
+        message: message as string,
+        motorDetails: motorDetails || undefined,
+      };
+
+      startTransition(async () => {
+        const result = await sendMotorAanvraagEmail(data);
+
+        if (result.success) {
+          setMessage({ type: 'success', text: result.message || 'Aanvraag verzonden!' });
+          // Reset form
+          (document.getElementById('motor-aanvraag-form') as HTMLFormElement)?.reset();
+        } else {
+          setMessage({ type: 'error', text: result.error || 'Er ging iets mis.' });
+        }
+      });
+    } catch (error) {
+      console.error('Form submission error:', error);
+      setMessage({ type: 'error', text: 'Er is een onverwachte fout opgetreden.' });
+    }
   }
 
   return (

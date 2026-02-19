@@ -109,11 +109,13 @@ export async function sendMotorAanvraagEmail({
   };
 }) {
   try {
+    console.log('Motor aanvraag received:', { name, email, hasMotorDetails: !!motorDetails });
+
     if (!isEmailConfigured()) {
       console.error('Email not configured');
       return {
         success: false,
-        error: 'Email service is momenteel niet beschikbaar. Probeer het later opnieuw of bel ons direct.',
+        error: 'Email service is momenteel niet beschikbaar. Probeer het later opnieuw of bel ons direct: 06 16 29 86 84',
       };
     }
 
@@ -140,8 +142,10 @@ export async function sendMotorAanvraagEmail({
       email,
       phone,
       message,
-      motorDetails,
+      motorDetails: motorDetails || undefined,
     });
+
+    console.log('Sending email to:', getToEmail());
 
     // Send to business
     const result = await sendEmail({
@@ -151,19 +155,28 @@ export async function sendMotorAanvraagEmail({
     });
 
     if (!result.success) {
+      console.error('Failed to send email:', result.error);
       return {
         success: false,
-        error: 'Er is iets misgegaan bij het versturen. Probeer het opnieuw.',
+        error: 'Er is iets misgegaan bij het versturen. Probeer het opnieuw of bel ons: 06 16 29 86 84',
       };
     }
 
+    console.log('Email sent successfully, sending auto-reply...');
+
     // Send auto-reply to customer
-    const autoReply = contactAutoReplyEmail(name);
-    await sendEmail({
-      to: email,
-      subject: autoReply.subject,
-      html: autoReply.html,
-    });
+    try {
+      const autoReply = contactAutoReplyEmail(name);
+      await sendEmail({
+        to: email,
+        subject: autoReply.subject,
+        html: autoReply.html,
+      });
+      console.log('Auto-reply sent successfully');
+    } catch (autoReplyError) {
+      console.error('Auto-reply failed (non-critical):', autoReplyError);
+      // Don't fail the whole request if auto-reply fails
+    }
 
     return {
       success: true,
@@ -173,7 +186,7 @@ export async function sendMotorAanvraagEmail({
     console.error('Motor aanvraag error:', error);
     return {
       success: false,
-      error: 'Er is een onverwachte fout opgetreden. Probeer het later opnieuw.',
+      error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 16 29 86 84',
     };
   }
 }
