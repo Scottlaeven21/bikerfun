@@ -42,6 +42,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/faq" className="hover:text-biker-yellow transition-colors">
+                  Veelgestelde Vragen
+                </Link>
+              </li>
+              <li>
                 <Link href="/over-ons" className="hover:text-biker-yellow transition-colors">
                   Over Ons
                 </Link>
@@ -101,7 +106,7 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="hover:text-biker-yellow transition-colors">
+                <Link href="/privacy-policy" className="hover:text-biker-yellow transition-colors">
                   Privacybeleid
                 </Link>
               </li>
