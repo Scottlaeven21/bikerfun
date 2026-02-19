@@ -1,4 +1,4 @@
-import { Occasion } from '@/types/occasion';
+import { Occasion } from '@/types';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 
