@@ -43,17 +43,25 @@ function emailLayout(content: string): string {
           <!-- Footer -->
           <tr>
             <td style="background-color: #f9f9f9; padding: 30px; text-align: center; border-top: 3px solid ${BIKER_YELLOW};">
-              <p style="margin: 0 0 10px; color: #666; font-size: 14px; font-weight: bold;">
+              <p style="margin: 0 0 15px; color: #666; font-size: 14px; font-weight: bold;">
                 BIKERFUN
               </p>
               <p style="margin: 0 0 5px; color: #666; font-size: 13px;">
                 Rafaëlweg 23, 6114BX Susteren
               </p>
               <p style="margin: 0 0 5px; color: #666; font-size: 13px;">
-                Tel: 06 16 29 86 84
+                <a href="tel:+31616298684" style="color: ${BIKER_YELLOW}; text-decoration: none;">Tel: 06 16 29 86 84</a>
               </p>
-              <p style="margin: 0; color: #666; font-size: 13px;">
-                Email: info@bikerfun.nl
+              <p style="margin: 0 0 5px; color: #666; font-size: 13px;">
+                <a href="mailto:info@bikerfun.nl" style="color: ${BIKER_YELLOW}; text-decoration: none;">Email: info@bikerfun.nl</a>
+              </p>
+              <p style="margin: 15px 0 0; color: #666; font-size: 13px;">
+                <a href="https://wa.me/31616298684" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 12px; margin-top: 10px;">
+                  💬 WhatsApp Ons
+                </a>
+              </p>
+              <p style="margin: 15px 0 0; color: #999; font-size: 11px;">
+                © ${new Date().getFullYear()} Bikerfun. Alle rechten voorbehouden.
               </p>
             </td>
           </tr>

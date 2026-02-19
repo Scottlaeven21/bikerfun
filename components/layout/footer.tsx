@@ -117,12 +117,22 @@ export function Footer() {
               </li>
               <li>
                 <a href="tel:+31615452108" className="hover:text-biker-yellow transition-colors">
-                  06 15 45 21 08
+                  📞 06 15 45 21 08
                 </a>
               </li>
               <li>
                 <a href="mailto:bikerfun.info@gmail.com" className="hover:text-biker-yellow transition-colors">
-                  bikerfun.info@gmail.com
+                  ✉️ bikerfun.info@gmail.com
+                </a>
+              </li>
+              <li>
+                <a 
+                  href="https://wa.me/31616298684?text=Hoi%20Bikerfun%2C%20ik%20heb%20een%20vraag..." 
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-biker-yellow transition-colors"
+                >
+                  💬 WhatsApp: 06 16 29 86 84
                 </a>
               </li>
               <li className="text-sm">

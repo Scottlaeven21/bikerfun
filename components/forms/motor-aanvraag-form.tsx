@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { sendMotorAanvraagEmail } from '@/app/actions/email';
+import { LoadingButton } from '@/components/loading/spinner';
 
 interface MotorAanvraagFormProps {
   motorDetails?: {
@@ -157,13 +158,14 @@ export function MotorAanvraagForm({ motorDetails }: MotorAanvraagFormProps) {
           />
         </div>
 
-        <button
+        <LoadingButton
           type="submit"
-          disabled={isPending}
-          className="btn-primary w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          loading={isPending}
+          loadingText="VERSTUREN..."
+          className="btn-primary w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
         >
-          {isPending ? 'VERSTUREN...' : 'VERSTUUR AANVRAAG'}
-        </button>
+          VERSTUUR AANVRAAG
+        </LoadingButton>
 
         <p className="text-xs text-biker-light">
           * Verplichte velden. We behandelen je gegevens vertrouwelijk volgens ons{' '}
