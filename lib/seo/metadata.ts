@@ -113,7 +113,7 @@ export function getOccasionMetadata(occasion: Occasion): Metadata {
       'motor occasion',
       'tweedehands motor',
       occasion.category,
-      occasion.fuel_type,
+      occasion.fuel,
     ],
     openGraph: {
       title,

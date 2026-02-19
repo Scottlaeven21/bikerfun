@@ -70,7 +70,7 @@ export function getOccasionSchema(occasion: Occasion) {
       value: occasion.mileage,
       unitCode: 'KMT',
     },
-    fuelType: occasion.fuel_type,
+    fuelType: occasion.fuel,
     offers: {
       '@type': 'Offer',
       price: occasion.price,

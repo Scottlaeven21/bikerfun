@@ -36,7 +36,7 @@ export function OccasionStructuredData({ occasion }: OccasionStructuredDataProps
     vehicleEngine: {
       '@type': 'EngineSpecification',
       enginePower: occasion.power ? `${occasion.power} PK` : undefined,
-      fuelType: occasion.fuel_type,
+      fuelType: occasion.fuel,
     },
     mileageFromOdometer: {
       '@type': 'QuantitativeValue',
