@@ -56,9 +56,9 @@ export function CookieConsent() {
                 <div>
                   <h3
                     style={{ fontFamily: 'var(--font-inter)' }}
-                    className="text-xl font-bold text-white mb-2"
+                    className="text-xl font-bold text-white mb-2 uppercase tracking-tight"
                   >
-                    🍪 Cookie Instellingen
+                    Cookie Instellingen
                   </h3>
                   <p className="text-biker-light text-sm leading-relaxed">
                     We gebruiken cookies om je ervaring op onze website te verbeteren. 
