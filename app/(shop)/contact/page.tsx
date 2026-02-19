@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { ContactForm } from '@/components/forms/contact-form';
 
 export const metadata: Metadata = {
   title: 'Contact | Bikerfun',
@@ -51,104 +52,7 @@ export default function ContactPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Contact Form */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
-              <h2 
-                style={{ fontFamily: 'var(--font-inter)' }}
-                className="text-3xl font-bold mb-6 uppercase tracking-tight"
-              >
-                Stuur een bericht
-              </h2>
-              <form className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Naam *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    required
-                    className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors"
-                    placeholder="Je volledige naam"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="email" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    E-mail *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    required
-                    className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors"
-                    placeholder="je@email.nl"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="phone" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Telefoon
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    name="phone"
-                    className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors"
-                    placeholder="06 12345678"
-                  />
-                </div>
-
-                <div>
-                  <label htmlFor="subject" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Onderwerp *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    required
-                    className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors"
-                  >
-                    <option value="">Selecteer een onderwerp</option>
-                    <option value="occasion">Vraag over een occasion</option>
-                    <option value="aanvraag">Motor op aanvraag</option>
-                    <option value="webshop">Motorkleding & accessoires</option>
-                    <option value="service">Service & onderhoud</option>
-                    <option value="anders">Anders</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label htmlFor="message" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Bericht *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    required
-                    rows={6}
-                    className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors resize-none"
-                    placeholder="Vertel ons waar we je mee kunnen helpen..."
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="btn-primary w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                >
-                  VERSTUUR BERICHT
-                </button>
-
-                <p className="text-xs text-biker-light">
-                  * Verplichte velden. We behandelen je gegevens vertrouwelijk volgens ons{' '}
-                  <Link href="/privacy" className="text-biker-yellow hover:underline">
-                    privacybeleid
-                  </Link>
-                  .
-                </p>
-              </form>
-            </div>
+            <ContactForm />
 
             {/* Contact Info */}
             <div className="space-y-8">
