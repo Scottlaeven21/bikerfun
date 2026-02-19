@@ -57,7 +57,7 @@ function emailLayout(content: string): string {
               </p>
               <p style="margin: 15px 0 0; color: #666; font-size: 13px;">
                 <a href="https://wa.me/31616298684" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 12px; margin-top: 10px;">
-                  💬 WhatsApp Ons
+                  WhatsApp Ons
                 </a>
               </p>
               <p style="margin: 15px 0 0; color: #999; font-size: 11px;">
