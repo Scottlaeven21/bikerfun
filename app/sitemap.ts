@@ -1,5 +1,6 @@
 import { MetadataRoute } from 'next';
 import { createClient } from '@/lib/supabase/server';
+import { Occasion } from '@/types';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
@@ -11,6 +12,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     .select('id, updated_at')
     .eq('status', 'available')
     .order('updated_at', { ascending: false });
+
+  const occasionsData = (occasions as Pick<Occasion, 'id' | 'updated_at'>[]) || [];
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -47,12 +50,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   // Dynamic occasion pages
-  const occasionPages: MetadataRoute.Sitemap = occasions?.map((occasion) => ({
+  const occasionPages: MetadataRoute.Sitemap = occasionsData.map((occasion) => ({
     url: `${baseUrl}/occasions/${occasion.id}`,
     lastModified: new Date(occasion.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
     priority: 0.8,
-  })) || [];
+  }));
 
   return [...staticPages, ...occasionPages];
 }
