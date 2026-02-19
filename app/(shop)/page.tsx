@@ -4,6 +4,12 @@ import { TikTokGrid } from '@/components/tiktok-grid';
 import { OccasionsCarousel } from '@/components/occasions-carousel';
 import { createClient } from '@/lib/supabase/server';
 import { Occasion } from '@/types';
+import { BusinessStructuredData } from '@/components/seo/business-structured-data';
+import { getHomeMetadata } from '@/lib/seo/metadata';
+import { StructuredData } from '@/components/seo/structured-data';
+import { getWebsiteSchema } from '@/lib/seo/structured-data';
+
+export const metadata = getHomeMetadata();
 
 export default async function HomePage() {
   // Fetch occasions from Supabase
@@ -18,7 +24,10 @@ export default async function HomePage() {
 
   const occasionsList = (occasions as Occasion[]) || [];
   return (
-    <div>
+    <>
+      <BusinessStructuredData />
+      <StructuredData data={getWebsiteSchema()} />
+      <div>
       {/* Hero Section with Video Background */}
       <section className="relative h-screen overflow-hidden">
         {/* Video Background - Positioned Higher */}
@@ -514,5 +523,6 @@ export default async function HomePage() {
         </div>
       </section>
     </div>
+    </>
   );
 }

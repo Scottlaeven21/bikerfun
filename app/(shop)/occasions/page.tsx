@@ -1,14 +1,13 @@
 // Page Version: 2.0.0 - Complete rebuild - 2026-02-18
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Occasion } from '@/types';
 import { OccasionsList } from '@/components/occasions/occasions-list';
+import { getOccasionsMetadata } from '@/lib/seo/metadata';
+import { StructuredData } from '@/components/seo/structured-data';
+import { getItemListSchema, getBreadcrumbSchema } from '@/lib/seo/structured-data';
 
-export const metadata: Metadata = {
-  title: 'Occasions | Bikerfun',
-  description: 'Ontdek ons aanbod aan occasions. Van sportmotoren tot tourers - wij hebben iets voor elke rijder.',
-};
+export const metadata = getOccasionsMetadata();
 
 // Force revalidation every request during development
 export const revalidate = 0;
@@ -26,7 +25,19 @@ export default async function OccasionsPage() {
   const occasionsList = (occasions as Occasion[]) || [];
 
   return (
-    <div className="min-h-screen bg-black text-white noise-overlay">
+    <>
+      {/* Structured Data - Breadcrumb */}
+      <StructuredData 
+        data={getBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Occasions', url: '/occasions' },
+        ])} 
+      />
+      
+      {/* Structured Data - ItemList */}
+      <StructuredData data={getItemListSchema(occasionsList)} />
+      
+      <div className="min-h-screen bg-black text-white noise-overlay">
       {/* Hero Section with Video */}
       <section className="relative isolate h-[48vh] min-h-[280px] overflow-hidden">
         <div className="absolute inset-0 w-full h-full">
