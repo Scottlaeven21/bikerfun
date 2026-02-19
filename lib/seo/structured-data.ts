@@ -119,3 +119,29 @@ export function getWebsiteSchema() {
     },
   };
 }
+
+// ItemList Schema (for occasions overview)
+export function getItemListSchema(occasions: Occasion[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: occasions.map((occasion, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      item: {
+        '@type': 'Vehicle',
+        name: `${occasion.brand} ${occasion.model}`,
+        url: `${baseUrl}/occasions/${occasion.id}`,
+        image: occasion.main_image,
+        offers: {
+          '@type': 'Offer',
+          price: occasion.price,
+          priceCurrency: 'EUR',
+          availability: occasion.status === 'available' 
+            ? 'https://schema.org/InStock' 
+            : 'https://schema.org/OutOfStock',
+        },
+      },
+    })),
+  };
+}
