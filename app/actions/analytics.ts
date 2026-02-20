@@ -136,12 +136,11 @@ export async function getAnalyticsData() {
       .eq('event_name', 'motor_aanvraag_submit')
       .gte('created_at', lastMonth.toISOString());
 
-    // Most viewed occasions
+    // Most viewed occasions (fetch all from last month)
     const { data: topOccasions } = await supabase
       .from('occasion_views')
       .select('occasion_id, occasions(brand, model, main_image)')
-      .gte('created_at', lastMonth.toISOString())
-      .limit(5);
+      .gte('created_at', lastMonth.toISOString());
 
     // Count views per occasion
     const occasionViewCounts: Record<string, number> = {};
@@ -150,10 +149,9 @@ export async function getAnalyticsData() {
       occasionViewCounts[id] = (occasionViewCounts[id] || 0) + 1;
     });
 
-    // Sort by view count
+    // Sort by view count and return ALL occasions (no limit)
     const topOccasionsWithCounts = Object.entries(occasionViewCounts)
       .sort(([, a], [, b]) => b - a)
-      .slice(0, 5)
       .map(([occasionId, viewCount]) => {
         const occasion = topOccasions?.find((v: any) => v.occasion_id === occasionId);
         return {

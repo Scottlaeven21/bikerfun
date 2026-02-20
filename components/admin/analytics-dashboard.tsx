@@ -190,14 +190,14 @@ export function AnalyticsDashboard() {
         </div>
 
         {/* Top Occasions */}
-        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray">
+        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray flex flex-col">
           <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
             <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
             Populairste Occasions
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-3 overflow-y-auto max-h-[400px] pr-2 scrollbar-thin scrollbar-thumb-biker-yellow scrollbar-track-biker-gray/30">
             {data.topOccasions.length > 0 ? (
               data.topOccasions.map((occasion, index) => (
                 <div key={occasion.occasion_id} className="flex items-center space-x-3 p-3 bg-biker-black/50 rounded-lg hover:bg-biker-black/70 transition-all">
@@ -205,7 +205,7 @@ export function AnalyticsDashboard() {
                     {index + 1}
                   </div>
                   {occasion.main_image && (
-                    <div className="relative w-12 h-12 rounded overflow-hidden">
+                    <div className="relative w-12 h-12 rounded overflow-hidden flex-shrink-0">
                       <Image 
                         src={occasion.main_image} 
                         alt={`${occasion.brand} ${occasion.model}`}
