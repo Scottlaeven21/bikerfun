@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Occasion } from '@/types';
+import { useOccasionView } from '@/hooks/use-analytics';
 
 interface OccasionDetailClientProps {
   occasion: Occasion;
@@ -11,6 +12,9 @@ interface OccasionDetailClientProps {
 
 export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  
+  // Track occasion view
+  useOccasionView(occasion.id);
 
   const allImages = occasion.images.length > 0 ? occasion.images : [];
 

@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { sendMotorAanvraagEmail } from '@/app/actions/email';
 import { LoadingButton } from '@/components/loading/spinner';
+import { trackEvent } from '@/app/actions/analytics';
 
 interface MotorAanvraagFormProps {
   motorDetails?: {
@@ -46,6 +47,10 @@ export function MotorAanvraagForm({ motorDetails }: MotorAanvraagFormProps) {
 
         if (result.success) {
           setMessage({ type: 'success', text: result.message || 'Aanvraag verzonden!' });
+          // Track successful motor aanvraag
+          await trackEvent('motor_aanvraag_submit', {
+            motor: motorDetails ? `${motorDetails.brand} ${motorDetails.model}` : 'Algemene aanvraag',
+          });
           // Reset form
           (document.getElementById('motor-aanvraag-form') as HTMLFormElement)?.reset();
         } else {

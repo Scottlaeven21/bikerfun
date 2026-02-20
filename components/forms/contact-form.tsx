@@ -4,6 +4,7 @@ import { useState, useTransition } from 'react';
 import Link from 'next/link';
 import { sendContactEmail } from '@/app/actions/email';
 import { LoadingButton } from '@/components/loading/spinner';
+import { trackEvent } from '@/app/actions/analytics';
 
 export function ContactForm() {
   const [isPending, startTransition] = useTransition();
@@ -24,6 +25,10 @@ export function ContactForm() {
 
       if (result.success) {
         setMessage({ type: 'success', text: result.message || 'Bericht verzonden!' });
+        // Track successful form submission
+        await trackEvent('contact_form_submit', {
+          subject: formData.get('subject') as string,
+        });
         // Reset form
         (document.getElementById('contact-form') as HTMLFormElement)?.reset();
       } else {
