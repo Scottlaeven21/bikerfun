@@ -56,14 +56,27 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
               {occasion.main_image ? (
-                <Image
-                  src={occasion.main_image}
-                  alt={`${occasion.brand} ${occasion.model}`}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                  quality={100}
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
-                />
+                <>
+                  <Image
+                    src={occasion.main_image}
+                    alt={`${occasion.brand} ${occasion.model}`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    quality={100}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
+                  />
+                  
+                  {/* Verkocht Sticker */}
+                  {occasion.status === 'sold' && (
+                    <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
+                      <div className="bg-red-600 text-white px-8 py-4 rounded-lg transform -rotate-12 shadow-2xl border-4 border-white">
+                        <div className="text-2xl font-black uppercase tracking-wider">
+                          VERKOCHT
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
                   <div className="text-center">

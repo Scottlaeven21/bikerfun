@@ -19,7 +19,6 @@ export default async function OccasionsPage() {
     .from('occasions')
     .select('*')
     .eq('is_active', true)
-    .eq('status', 'available')
     .order('created_at', { ascending: false });
 
   const occasionsList = (occasions as Occasion[]) || [];

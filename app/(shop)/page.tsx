@@ -18,7 +18,6 @@ export default async function HomePage() {
     .from('occasions')
     .select('*')
     .eq('is_active', true)
-    .eq('status', 'available')
     .order('created_at', { ascending: false })
     .limit(8);
 
