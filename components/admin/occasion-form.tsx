@@ -184,6 +184,37 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
     }
   };
 
+  const handleDelete = async () => {
+    if (!isEdit || !occasion) return;
+    
+    const confirmed = confirm(
+      `Weet je zeker dat je "${occasion.brand} ${occasion.model}" wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt.`
+    );
+    
+    if (!confirmed) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      
+      const { error: deleteError } = await (supabase as any)
+        .from('occasions')
+        .delete()
+        .eq('id', occasion.id);
+
+      if (deleteError) throw deleteError;
+
+      router.push('/admin/occasions');
+      router.refresh();
+    } catch (err) {
+      console.error('Error deleting occasion:', err);
+      setError(err instanceof Error ? err.message : 'Er is een fout opgetreden bij het verwijderen');
+      setLoading(false);
+    }
+  };
+
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
@@ -291,22 +322,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Status *
-            </label>
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value as 'available' | 'reserved' | 'sold')}
-              className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black"
-            >
-              <option value="available">Beschikbaar</option>
-              <option value="reserved">Gereserveerd</option>
-              <option value="sold">Verkocht</option>
-            </select>
-          </div>
-
-          <div className="flex items-center">
+          <div className="md:col-span-2 flex items-center gap-8 pt-2">
             <label className="flex items-center cursor-pointer">
               <input
                 type="checkbox"
@@ -316,6 +332,18 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
               />
               <span className="ml-3 text-sm font-semibold text-gray-700">
                 Actief op website
+              </span>
+            </label>
+
+            <label className="flex items-center cursor-pointer">
+              <input
+                type="checkbox"
+                checked={status === 'sold'}
+                onChange={(e) => setStatus(e.target.checked ? 'sold' : 'available')}
+                className="w-5 h-5 text-red-600 focus:ring-red-500 border-gray-300 rounded"
+              />
+              <span className="ml-3 text-sm font-semibold text-gray-700">
+                Verkocht
               </span>
             </label>
           </div>
@@ -772,13 +800,26 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
 
       {/* Actions */}
       <div className="flex justify-between items-center">
-        <button
-          type="button"
-          onClick={() => router.back()}
-          className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold uppercase text-sm tracking-wider hover:bg-gray-50 transition-colors"
-        >
-          Annuleren
-        </button>
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => router.back()}
+            className="px-8 py-3 border-2 border-gray-300 text-gray-700 rounded-lg font-bold uppercase text-sm tracking-wider hover:bg-gray-50 transition-colors"
+          >
+            Annuleren
+          </button>
+          
+          {isEdit && occasion && (
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={loading}
+              className="px-8 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {loading ? 'Verwijderen...' : 'Verwijderen'}
+            </button>
+          )}
+        </div>
         
         <button
           type="submit"

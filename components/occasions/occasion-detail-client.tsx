@@ -33,6 +33,17 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               priority
             />
             
+            {/* Verkocht Overlay */}
+            {occasion.status === 'sold' && (
+              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
+                <div className="bg-red-600 text-white px-16 py-10 rounded-2xl transform -rotate-6 shadow-2xl border-8 border-white">
+                  <div className="text-6xl font-black uppercase tracking-wider text-center">
+                    VERKOCHT
+                  </div>
+                </div>
+              </div>
+            )}
+            
             {/* Back Button - onder navbar voor volledige klikbaarheid */}
             <div className="absolute top-32 left-8 z-20">
               <Link
@@ -254,27 +265,63 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                   </div>
                 </div>
 
-                {/* CTA Buttons */}
-                <div className="space-y-3 mb-8">
-                  <Link
-                    href={`/occasions/${occasion.id}/aanvraag`}
-                    className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Plan Bezichtiging
-                  </Link>
-                  <a
-                    href="tel:0615452108"
-                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Bel Ons
-                  </a>
-                  <Link
-                    href="/contact"
-                    className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                  >
-                    Mail Ons
-                  </Link>
-                </div>
+                {/* CTA Buttons - Conditional based on sold status */}
+                {occasion.status === 'sold' ? (
+                  <div className="mb-8">
+                    <div className="bg-red-600/10 border-2 border-red-600 rounded-2xl p-6 mb-6">
+                      <div className="flex items-center gap-3 mb-4">
+                        <svg className="w-8 h-8 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                        </svg>
+                        <div>
+                          <h4 className="text-red-600 font-black text-xl uppercase">Deze motor is verkocht</h4>
+                        </div>
+                      </div>
+                      <p className="text-white/90 leading-relaxed mb-4">
+                        Deze occasion is helaas al verkocht, maar geen zorgen!
+                      </p>
+                      <p className="text-biker-yellow font-bold">
+                        Op zoek naar een soortgelijke motor? Neem contact met ons op en we gaan voor je op zoek!
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-3">
+                      <a
+                        href="tel:0615452108"
+                        className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                      >
+                        Bel Ons
+                      </a>
+                      <Link
+                        href="/contact"
+                        className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                      >
+                        Mail Ons
+                      </Link>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3 mb-8">
+                    <Link
+                      href={`/occasions/${occasion.id}/aanvraag`}
+                      className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                    >
+                      Plan Bezichtiging
+                    </Link>
+                    <a
+                      href="tel:0615452108"
+                      className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                    >
+                      Bel Ons
+                    </a>
+                    <Link
+                      href="/contact"
+                      className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                    >
+                      Mail Ons
+                    </Link>
+                  </div>
+                )}
 
                 {/* Features Checklist */}
                 <div className="space-y-3 pt-6 border-t border-gray-800">

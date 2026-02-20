@@ -148,13 +148,26 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                 {/* Image Section */}
                 <div className="relative w-full h-[280px] bg-black overflow-hidden">
                   {occasion.main_image ? (
-                    <Image
-                      src={occasion.main_image}
-                      alt={`${occasion.brand} ${occasion.model}`}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-500"
-                      quality={100}
-                    />
+                    <>
+                      <Image
+                        src={occasion.main_image}
+                        alt={`${occasion.brand} ${occasion.model}`}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                        quality={100}
+                      />
+                      
+                      {/* Verkocht Sticker */}
+                      {occasion.status === 'sold' && (
+                        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
+                          <div className="bg-red-600 text-white px-12 py-6 rounded-lg transform -rotate-12 shadow-2xl border-4 border-white">
+                            <div className="text-4xl font-black uppercase tracking-wider">
+                              VERKOCHT
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </>
                   ) : (
                     <div className="absolute inset-0 bg-[#1a1a1a] flex items-center justify-center">
                       <div className="text-center">
