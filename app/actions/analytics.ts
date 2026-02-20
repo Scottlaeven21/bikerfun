@@ -172,9 +172,9 @@ export async function getAnalyticsData() {
       .gte('created_at', lastMonth.toISOString());
 
     const deviceBreakdown = {
-      mobile: deviceData?.filter(d => d.device_type === 'mobile').length || 0,
-      desktop: deviceData?.filter(d => d.device_type === 'desktop').length || 0,
-      tablet: deviceData?.filter(d => d.device_type === 'tablet').length || 0,
+      mobile: deviceData?.filter((d: any) => d.device_type === 'mobile').length || 0,
+      desktop: deviceData?.filter((d: any) => d.device_type === 'desktop').length || 0,
+      tablet: deviceData?.filter((d: any) => d.device_type === 'tablet').length || 0,
     };
 
     return {
