@@ -286,9 +286,15 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     </div>
                     
                     <div className="space-y-3">
+                      <Link
+                        href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
+                        className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                      >
+                        Motor Op Aanvraag
+                      </Link>
                       <a
                         href="tel:0615452108"
-                        className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                        className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
                       >
                         Bel Ons
                       </a>
