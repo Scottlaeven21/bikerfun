@@ -35,7 +35,7 @@ CREATE INDEX IF NOT EXISTS idx_analytics_events_event_name ON analytics_events(e
 -- Occasion Views (specific tracking)
 CREATE TABLE IF NOT EXISTS occasion_views (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  occasion_id TEXT NOT NULL,
+  occasion_id UUID NOT NULL,
   user_agent TEXT,
   ip_address TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
