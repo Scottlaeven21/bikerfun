@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from 'next/font/google';
+import { GoogleAnalytics } from '@/components/analytics/google-analytics';
 import "./globals.css";
 
 const inter = Inter({ 
@@ -44,7 +45,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="nl" className={`${inter.variable} ${montserrat.variable}`}>
+      <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="antialiased">
+        <GoogleAnalytics />
         {children}
       </body>
     </html>
