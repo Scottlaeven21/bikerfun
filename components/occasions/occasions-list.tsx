@@ -32,6 +32,11 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
     .filter(occ => selectedCategory === 'all' || occ.category === selectedCategory)
     .filter(occ => occ.price >= priceRange.min && occ.price <= priceRange.max)
     .sort((a, b) => {
+      // Eerst sorteren op status: verkocht komt onderaan
+      if (a.status === 'sold' && b.status !== 'sold') return 1;
+      if (a.status !== 'sold' && b.status === 'sold') return -1;
+      
+      // Dan pas sorteren op gekozen criteria
       switch (sortBy) {
         case 'price-low': return a.price - b.price;
         case 'price-high': return b.price - a.price;
