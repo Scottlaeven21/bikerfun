@@ -322,6 +322,93 @@ export interface Database {
           updated_by?: string | null;
         };
       };
+      page_views: {
+        Row: {
+          id: string;
+          page_path: string;
+          page_title: string | null;
+          referrer: string | null;
+          user_agent: string | null;
+          ip_address: string | null;
+          country: string | null;
+          device_type: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          page_path: string;
+          page_title?: string | null;
+          referrer?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          country?: string | null;
+          device_type?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          page_path?: string;
+          page_title?: string | null;
+          referrer?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          country?: string | null;
+          device_type?: string | null;
+          created_at?: string;
+        };
+      };
+      analytics_events: {
+        Row: {
+          id: string;
+          event_name: string;
+          event_data: Record<string, any> | null;
+          page_path: string | null;
+          user_agent: string | null;
+          ip_address: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          event_name: string;
+          event_data?: Record<string, any> | null;
+          page_path?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          event_name?: string;
+          event_data?: Record<string, any> | null;
+          page_path?: string | null;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+      };
+      occasion_views: {
+        Row: {
+          id: string;
+          occasion_id: string;
+          user_agent: string | null;
+          ip_address: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          occasion_id: string;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          occasion_id?: string;
+          user_agent?: string | null;
+          ip_address?: string | null;
+          created_at?: string;
+        };
+      };
     };
   };
 }
@@ -334,3 +421,6 @@ export type OrderItem = Database['public']['Tables']['order_items']['Row'];
 export type Occasion = Database['public']['Tables']['occasions']['Row'];
 export type OccasionInsert = Database['public']['Tables']['occasions']['Insert'];
 export type OccasionUpdate = Database['public']['Tables']['occasions']['Update'];
+export type PageView = Database['public']['Tables']['page_views']['Row'];
+export type AnalyticsEvent = Database['public']['Tables']['analytics_events']['Row'];
+export type OccasionView = Database['public']['Tables']['occasion_views']['Row'];
