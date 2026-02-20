@@ -16,7 +16,8 @@ export async function trackPageView(pagePath: string, pageTitle?: string) {
     const deviceType = /mobile/i.test(userAgent) ? 'mobile' : 
                       /tablet/i.test(userAgent) ? 'tablet' : 'desktop';
 
-    await supabase.from('page_views').insert({
+    // Cast to any to avoid TypeScript errors before migration is run
+    await (supabase as any).from('page_views').insert({
       page_path: pagePath,
       page_title: pageTitle,
       referrer,
@@ -39,7 +40,8 @@ export async function trackEvent(eventName: string, eventData?: Record<string, a
     
     const userAgent = headersList.get('user-agent') || '';
 
-    await supabase.from('analytics_events').insert({
+    // Cast to any to avoid TypeScript errors before migration is run
+    await (supabase as any).from('analytics_events').insert({
       event_name: eventName,
       event_data: eventData || {},
       user_agent: userAgent,
@@ -60,7 +62,8 @@ export async function trackOccasionView(occasionId: string) {
     
     const userAgent = headersList.get('user-agent') || '';
 
-    await supabase.from('occasion_views').insert({
+    // Cast to any to avoid TypeScript errors before migration is run
+    await (supabase as any).from('occasion_views').insert({
       occasion_id: occasionId,
       user_agent: userAgent,
     });
@@ -75,7 +78,9 @@ export async function trackOccasionView(occasionId: string) {
 // Get analytics data for admin dashboard
 export async function getAnalyticsData() {
   try {
-    const supabase = await createClient();
+    const supabaseClient = await createClient();
+    // Cast to any to avoid TypeScript errors before migration is run
+    const supabase = supabaseClient as any;
     
     // Get date ranges
     const now = new Date();
