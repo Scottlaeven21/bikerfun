@@ -280,31 +280,17 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       <p className="text-white/90 leading-relaxed mb-4">
                         Deze occasion is helaas al verkocht, maar geen zorgen!
                       </p>
-                      <p className="text-biker-yellow font-bold">
-                        Op zoek naar een soortgelijke motor? Neem contact met ons op en we gaan voor je op zoek!
+                      <p className="text-biker-yellow font-bold leading-relaxed">
+                        Op zoek naar een soortgelijke motor? Vraag deze aan via onderstaande knop en wij gaan voor u op zoek naar een vergelijkbare motor.
                       </p>
                     </div>
                     
-                    <div className="space-y-3">
-                      <Link
-                        href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
-                        className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                      >
-                        Motor Op Aanvraag
-                      </Link>
-                      <a
-                        href="tel:0615452108"
-                        className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                      >
-                        Bel Ons
-                      </a>
-                      <Link
-                        href="/contact"
-                        className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                      >
-                        Mail Ons
-                      </Link>
-                    </div>
+                    <Link
+                      href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
+                      className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
+                    >
+                      Vraag Soortgelijke Motor Aan
+                    </Link>
                   </div>
                 ) : (
                   <div className="space-y-3 mb-8">
