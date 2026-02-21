@@ -12,7 +12,7 @@ export default function AanvraagPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[50vh] overflow-hidden">
+      <section className="relative h-[50vh] overflow-hidden pt-20">
         {/* Video Background */}
         <video
           autoPlay
@@ -103,7 +103,7 @@ export default function AanvraagPage() {
           <div className="bg-biker-dark rounded-2xl p-8 lg:p-12 border-2 border-biker-gray">
             <h2 
               style={{ fontFamily: 'var(--font-inter)' }}
-              className="text-3xl md:text-4xl font-bold mb-8 uppercase tracking-tight text-center"
+              className="text-2xl md:text-3xl font-bold mb-8 uppercase tracking-tight text-center"
             >
               Aanvraagformulier
             </h2>
