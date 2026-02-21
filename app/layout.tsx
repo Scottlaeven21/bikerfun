@@ -23,6 +23,16 @@ export const metadata: Metadata = {
   description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
   keywords: ["motor", "biker", "motorkleding", "motorgear", "lifestyle"],
   authors: [{ name: "Bikerfun" }],
+  themeColor: "#000000",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    viewportFit: "cover",
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+  },
   openGraph: {
     type: "website",
     locale: "nl_NL",
@@ -44,7 +54,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className={`${inter.variable} ${montserrat.variable} overflow-x-hidden`}>
+    <html lang="nl" className={`${inter.variable} ${montserrat.variable} overflow-x-hidden bg-black`}>
       <head>
         <link
           rel="preconnect"
@@ -55,8 +65,9 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <meta name="theme-color" content="#000000" />
       </head>
-      <body className="antialiased overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden bg-black">
         <GoogleAnalytics />
         {children}
       </body>

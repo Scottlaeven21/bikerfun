@@ -358,8 +358,12 @@
 
 body {
   color: var(--foreground);
-  background: var(--background);
+  background: #000000;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+html {
+  background: #000000;
 }
 
 @layer utilities {
