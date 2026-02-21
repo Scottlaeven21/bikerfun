@@ -40,7 +40,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           </Link>
 
             {/* Desktop Navigation - Rechts */}
-            <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2 md:space-x-3">
               {/* Cart & Account Icons - Only on Webshop Pages */}
               {showShopIcons && (
                 <>
@@ -73,10 +73,12 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 </>
               )}
 
-              {/* Aanbod Button */}
+              {/* Aanbod Button - Hidden on mobile when shop icons are shown */}
               <Link
                 href="/occasions"
-                className="btn-secondary bg-transparent text-white px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white"
+                className={`btn-secondary bg-transparent text-white px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white ${
+                  showShopIcons ? 'hidden md:inline-block' : ''
+                }`}
               >
                 AANBOD
               </Link>
@@ -84,7 +86,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
+                className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
               >
                 <span>MENU</span>
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>

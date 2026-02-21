@@ -79,7 +79,29 @@ export default async function ProductsPage({
         {/* Category Filter */}
         {categories && categories.length > 0 && (
           <div className="mb-12">
-            <div className="flex flex-wrap gap-3 justify-center">
+            {/* Mobile: Dropdown */}
+            <div className="md:hidden">
+              <select
+                value={params.category || ''}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (typeof window !== 'undefined') {
+                    window.location.href = value ? `/products?category=${value}` : '/products';
+                  }
+                }}
+                className="w-full px-4 py-3 rounded-lg bg-white border-2 border-gray-300 text-biker-black font-bold uppercase text-sm tracking-wider focus:border-biker-yellow focus:outline-none shadow-sm"
+              >
+                <option value="">Alle Categorieën</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.slug}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Desktop: Buttons */}
+            <div className="hidden md:flex flex-wrap gap-3 justify-center">
               <Link
                 href="/products"
                 className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
@@ -109,7 +131,7 @@ export default async function ProductsPage({
 
         {/* Products Grid */}
         {products && products.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((product) => (
               <ProductCard key={product.id} product={product} />
             ))}
