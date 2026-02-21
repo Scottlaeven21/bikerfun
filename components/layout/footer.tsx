@@ -5,9 +5,9 @@ export function Footer() {
   return (
     <footer className="bg-biker-black text-white mt-auto border-t-2 border-biker-dark">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
           {/* Brand */}
-          <div>
+          <div className="col-span-2 md:col-span-1">
             <div className="flex items-center space-x-3 mb-4">
               <div className="relative w-24 h-8">
                 <Image
