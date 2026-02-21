@@ -1,8 +1,18 @@
 import Link from 'next/link';
+import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { ProductCard } from '@/components/products/product-card';
 import { CategoryFilterMobile } from '@/components/products/category-filter-mobile';
 import { Product, Category } from '@/types';
+
+export const metadata: Metadata = {
+  title: 'Webshop | Bikerfun',
+  description: 'Ontdek onze premium motor gear en accessoires',
+  themeColor: '#ffffff',
+  appleWebApp: {
+    statusBarStyle: 'default',
+  },
+};
 
 type ProductWithCategory = Product & {
   category: Category;
