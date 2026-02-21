@@ -12,7 +12,7 @@ export default function AanvraagPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[50vh] overflow-hidden">
+      <section className="relative h-[calc(50vh+5rem)] md:h-[50vh] overflow-hidden -mt-20 md:mt-0">
         {/* Video Background */}
         <video
           autoPlay
@@ -29,7 +29,7 @@ export default function AanvraagPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center pt-20 md:pt-20">
+        <div className="relative h-full flex items-center pt-20">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 
               style={{ 

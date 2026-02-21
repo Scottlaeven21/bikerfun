@@ -38,7 +38,7 @@ export default async function OccasionsPage() {
       
       <div className="min-h-screen bg-black text-white noise-overlay">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[48vh] min-h-[280px] overflow-hidden">
+      <section className="relative isolate h-[calc(48vh+5rem)] md:h-[48vh] min-h-[360px] md:min-h-[280px] overflow-hidden -mt-20 md:mt-0">
         <div className="absolute inset-0 w-full h-full">
           <video
             autoPlay
@@ -51,7 +51,7 @@ export default async function OccasionsPage() {
             <source src="/hero-occasions.mp4" type="video/mp4" />
           </video>
         </div>
-        <div className="relative z-10 h-full flex items-end justify-center pb-12 md:pb-16">
+        <div className="relative z-10 h-full flex items-end justify-center pb-12 md:pb-16 pt-20">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tight drop-shadow-lg">
               ONS <span className="text-biker-yellow">AANBOD</span>
