@@ -44,7 +44,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nl" className={`${inter.variable} ${montserrat.variable}`}>
+    <html lang="nl" className={`${inter.variable} ${montserrat.variable} overflow-x-hidden`}>
       <head>
         <link
           rel="preconnect"
@@ -56,7 +56,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden">
         <GoogleAnalytics />
         {children}
       </body>

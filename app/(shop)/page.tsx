@@ -26,7 +26,7 @@ export default async function HomePage() {
     <>
       <BusinessStructuredData />
       <StructuredData data={getWebsiteSchema()} />
-      <div>
+      <div className="overflow-x-hidden">
       {/* Hero Section with Video Background */}
       <section className="relative h-screen overflow-hidden">
         {/* Video Background - Positioned Higher */}
@@ -92,7 +92,7 @@ export default async function HomePage() {
       </section>
 
       {/* Occasions Carousel Section */}
-      <section className="py-20 bg-black noise-overlay">
+      <section className="py-20 bg-black noise-overlay overflow-hidden">
         <div className="max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-16">
@@ -219,7 +219,7 @@ export default async function HomePage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {/* Helmen */}
             <Link
               href="/products?category=helmen"
@@ -230,12 +230,12 @@ export default async function HomePage() {
                   src="/product-helmet-white-bg.jpg"
                   alt="Motorhelmen"
                   fill
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmen
                 </h3>
               </div>
@@ -251,12 +251,12 @@ export default async function HomePage() {
                   src="/product-jacket-white-bg.jpg"
                   alt="Motorjassen"
                   fill
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Jassen
                 </h3>
               </div>
@@ -272,12 +272,12 @@ export default async function HomePage() {
                   src="/product-accessories-white-bg.jpg"
                   alt="Motor Accessoires"
                   fill
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Overige
                 </h3>
               </div>
@@ -293,12 +293,12 @@ export default async function HomePage() {
                   src="/product-keychain-white-bg.jpg"
                   alt="Motor Sleutelhangers"
                   fill
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Sleutelhangers
                 </h3>
               </div>
@@ -314,12 +314,12 @@ export default async function HomePage() {
                   src="/product-helmet-cover-white-bg.jpg"
                   alt="Helmet Covers"
                   fill
-                  className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
                 />
               </div>
-              <div className="p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Helmet Covers
                 </h3>
               </div>
