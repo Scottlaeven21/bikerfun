@@ -131,7 +131,7 @@ export function AnalyticsDashboard() {
       {/* Device Breakdown & Top Occasions */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Device Breakdown */}
-        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray flex flex-col h-[500px]">
+        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray flex flex-col">
           <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center flex-shrink-0">
             <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -190,14 +190,14 @@ export function AnalyticsDashboard() {
         </div>
 
         {/* Top Occasions */}
-        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray flex flex-col h-[500px]">
+        <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray flex flex-col">
           <h3 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center flex-shrink-0">
             <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
             </svg>
             Populairste Occasions
           </h3>
-          <div className="space-y-3 overflow-y-auto flex-1 pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#F7D917 rgba(55, 55, 55, 0.3)' }}>
+          <div className="space-y-3 overflow-y-auto pr-2 max-h-[252px]" style={{ scrollbarWidth: 'thin', scrollbarColor: '#F7D917 rgba(55, 55, 55, 0.3)' }}>
             {data.topOccasions.length > 0 ? (
               data.topOccasions.map((occasion, index) => (
                 <div key={occasion.occasion_id} className="flex items-center space-x-3 p-3 bg-biker-black/50 rounded-lg hover:bg-biker-black/70 transition-all">
