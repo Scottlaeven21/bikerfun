@@ -146,10 +146,10 @@ export default function GlobalError({
               <p style={{ fontSize: '14px', color: '#999999' }}>
                 Bel ons:{' '}
                 <a 
-                  href="tel:0616298684" 
+                  href="tel:0615452108" 
                   style={{ color: '#f5c80d', textDecoration: 'none', fontWeight: '500' }}
                 >
-                  06 16 29 86 84
+                  06 15 45 21 08
                 </a>
               </p>
             </div>

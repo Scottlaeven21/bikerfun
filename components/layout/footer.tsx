@@ -116,8 +116,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <a href="tel:+31616298684" className="hover:text-biker-yellow transition-colors">
-                  Tel: 06 16 29 86 84
+                <a href="tel:+31615452108" className="hover:text-biker-yellow transition-colors">
+                  Tel: 06 15 45 21 08
                 </a>
               </li>
               <li>
@@ -132,7 +132,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="hover:text-biker-yellow transition-colors"
                 >
-                  WhatsApp: 06 16 29 86 84
+                  WhatsApp: 06 15 45 21 08
                 </a>
               </li>
               <li className="text-sm">

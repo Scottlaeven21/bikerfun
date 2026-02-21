@@ -91,10 +91,10 @@ export default function NotFound() {
           <p className="text-sm text-biker-muted">
             Hulp nodig? Bel ons op{' '}
             <a 
-              href="tel:0616298684" 
+              href="tel:0615452108" 
               className="text-biker-yellow hover:text-biker-yellowHover transition-colors font-medium"
             >
-              06 16 29 86 84
+              06 15 45 21 08
             </a>
           </p>
         </div>

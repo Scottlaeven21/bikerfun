@@ -56,7 +56,7 @@ export default function PrivacyPolicyPage() {
               <p className="text-biker-light mb-2"><strong>Bikerfun</strong></p>
               <p className="text-biker-light mb-2">Rafaëlweg 23</p>
               <p className="text-biker-light mb-2">6114BX Susteren</p>
-              <p className="text-biker-light mb-2">Telefoon: 06 16 29 86 84</p>
+              <p className="text-biker-light mb-2">Telefoon: 06 15 45 21 08</p>
               <p className="text-biker-light">Email: info@bikerfun.nl</p>
             </div>
 

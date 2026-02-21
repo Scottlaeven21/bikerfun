@@ -138,7 +138,7 @@ export default function ContactPage() {
                         rel="noopener noreferrer"
                         className="hover:text-biker-yellow transition-colors"
                       >
-                        06 16 29 86 84
+                        06 15 45 21 08
                       </a>
                     </p>
                     <p className="text-sm text-biker-muted mt-1">

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 const faqData = [
   {
     question: 'Kan ik een occasion komen bezichtigen?',
-    answer: 'Ja, natuurlijk! We werken graag op afspraak om ervoor te zorgen dat we voldoende tijd voor je hebben. Bel ons op 06 16 29 86 84 of gebruik het contactformulier om een afspraak te maken.',
+    answer: 'Ja, natuurlijk! We werken graag op afspraak om ervoor te zorgen dat we voldoende tijd voor je hebben. Bel ons op 06 15 45 21 08 of gebruik het contactformulier om een afspraak te maken.',
   },
   {
     question: 'Bieden jullie garantie op occasions?',
@@ -188,10 +188,10 @@ export default function FAQPage() {
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a
-              href="tel:0616298684"
+              href="tel:0615452108"
               className="btn-primary inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
             >
-              BEL: 06 16 29 86 84
+              BEL: 06 15 45 21 08
             </a>
             <Link
               href="/contact"
