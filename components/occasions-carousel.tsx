@@ -24,7 +24,22 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
 
   return (
     <div className="relative">
-      {/* Scroll Buttons */}
+      {/* Swipe Indicator - Mobile Only */}
+      <div className="flex items-center justify-center gap-2 mb-6 text-biker-yellow lg:hidden">
+        <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        <span className="text-sm font-bold uppercase tracking-wider">Swipe om te bladeren</span>
+        <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg>
+      </div>
+
+      {/* Fade Edges */}
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent pointer-events-none z-10 lg:hidden"></div>
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black to-transparent pointer-events-none z-10 lg:hidden"></div>
+
+      {/* Scroll Buttons - Desktop Only */}
       <button
         onClick={() => scroll('left')}
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all -translate-x-24 hidden lg:block"
@@ -45,13 +60,13 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-8 pb-4 snap-x snap-mandatory scrollbar-hide"
+        className="flex overflow-x-auto gap-6 md:gap-8 pb-4 snap-x snap-mandatory scrollbar-hide px-4 md:px-0"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
-            className="flex-none w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start flex flex-col"
+            className="flex-none w-[300px] md:w-[350px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col"
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
