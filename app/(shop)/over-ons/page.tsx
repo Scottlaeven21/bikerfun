@@ -13,7 +13,7 @@ export default function OverOnsPage() {
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
       <section className="relative isolate overflow-hidden" style={{ height: 'calc(45vh + env(safe-area-inset-top))', minHeight: 'calc(280px + env(safe-area-inset-top))', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}>
-        <div className="absolute inset-0 w-[185%] h-[185%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+        <div className="absolute inset-0 w-full h-full md:w-full md:h-full">
           <video
             autoPlay
             loop
