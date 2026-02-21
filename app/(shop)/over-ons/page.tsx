@@ -46,9 +46,8 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      {/* Story Section - effen achtergrond, geen lijnen */}
-      <section className="relative py-20">
-        <div className="absolute inset-0 bg-black z-0" aria-hidden="true" />
+      {/* Story Section */}
+      <section className="relative py-20 noise-overlay border-t border-biker-gray/20">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -142,7 +141,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Video Section */}
-      <section className="py-20 bg-biker-dark">
+      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -154,9 +153,8 @@ export default function OverOnsPage() {
         </div>
       </section>
 
-      {/* What We Offer - effen achtergrond, geen lijnen */}
-      <section className="relative py-20">
-        <div className="absolute inset-0 bg-black z-0" aria-hidden="true" />
+      {/* What We Offer */}
+      <section className="relative py-20 noise-overlay border-t border-biker-gray/20">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -167,7 +165,7 @@ export default function OverOnsPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {/* Occasions */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+            <div className="bg-biker-dark rounded-2xl p-8 hover:bg-biker-dark/80 transition-all group">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -190,7 +188,7 @@ export default function OverOnsPage() {
             </div>
 
             {/* Motor op Aanvraag */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+            <div className="bg-biker-dark rounded-2xl p-8 hover:bg-biker-dark/80 transition-all group">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -213,7 +211,7 @@ export default function OverOnsPage() {
             </div>
 
             {/* Webshop */}
-            <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow transition-all group">
+            <div className="bg-biker-dark rounded-2xl p-8 hover:bg-biker-dark/80 transition-all group">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-biker-yellow/20 to-biker-yellow/5 border-2 border-biker-yellow flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                 <svg className="w-10 h-10 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
@@ -239,7 +237,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark">
+      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}

@@ -49,7 +49,7 @@ export default function AanvraagPage() {
       </section>
 
       {/* How It Works */}
-      <section className="py-20 bg-biker-dark border-y-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -98,9 +98,9 @@ export default function AanvraagPage() {
       </section>
 
       {/* Request Form */}
-      <section className="py-20">
+      <section className="py-20 noise-overlay border-t border-biker-gray/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-biker-dark rounded-2xl p-8 lg:p-12 border-2 border-biker-gray">
+          <div className="bg-biker-dark rounded-2xl p-8 lg:p-12">
             <h2 
               style={{ fontFamily: 'var(--font-inter)' }}
               className="text-2xl md:text-3xl font-bold mb-8 uppercase tracking-tight text-center"
@@ -116,7 +116,7 @@ export default function AanvraagPage() {
       </section>
 
       {/* Trust Section */}
-      <section className="py-20 bg-biker-dark border-t-2 border-biker-gray">
+      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
