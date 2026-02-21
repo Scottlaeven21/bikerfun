@@ -38,7 +38,7 @@ export default async function OccasionsPage() {
       
       <div className="min-h-screen bg-black text-white noise-overlay">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[calc(48vh+7rem)] md:h-[48vh] min-h-[400px] md:min-h-[280px] overflow-hidden -mt-28 md:mt-0">
+      <section className="relative isolate overflow-hidden" style={{ height: 'calc(48vh + env(safe-area-inset-top))', minHeight: 'calc(280px + env(safe-area-inset-top))', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}>
         <div className="absolute inset-0 w-full h-full">
           <video
             autoPlay
@@ -51,7 +51,7 @@ export default async function OccasionsPage() {
             <source src="/hero-occasions.mp4" type="video/mp4" />
           </video>
         </div>
-        <div className="relative z-10 h-full flex items-end justify-center pb-12 md:pb-16 pt-28 md:pt-0">
+        <div className="relative z-10 h-full flex items-end justify-center pb-12 md:pb-16" style={{ paddingTop: 'calc(7rem + env(safe-area-inset-top))' }}>
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white uppercase tracking-tight drop-shadow-lg">
               ONS <span className="text-biker-yellow">AANBOD</span>

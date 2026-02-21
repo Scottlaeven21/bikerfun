@@ -12,7 +12,7 @@ export default function OverOnsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[calc(45vh+7rem)] md:h-[45vh] min-h-[400px] md:min-h-[280px] overflow-hidden -mt-28 md:mt-0">
+      <section className="relative isolate overflow-hidden" style={{ height: 'calc(45vh + env(safe-area-inset-top))', minHeight: 'calc(280px + env(safe-area-inset-top))', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}>
         <div className="absolute inset-0 w-[185%] h-[185%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <video
             autoPlay
@@ -27,7 +27,7 @@ export default function OverOnsPage() {
         </div>
 
         {/* Hero Content */}
-        <div className="relative z-10 h-full flex items-center pt-28 md:pt-0">
+        <div className="relative z-10 h-full flex items-center" style={{ paddingTop: 'calc(7rem + env(safe-area-inset-top))' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 
               style={{ 

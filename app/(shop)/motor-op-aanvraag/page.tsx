@@ -12,7 +12,7 @@ export default function AanvraagPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
       {/* Hero Section with Video */}
-      <section className="relative h-[calc(50vh+7rem)] md:h-[50vh] min-h-[400px] overflow-hidden -mt-28 md:mt-0">
+      <section className="relative overflow-hidden" style={{ height: 'calc(50vh + env(safe-area-inset-top))', minHeight: 'calc(300px + env(safe-area-inset-top))', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}>
         {/* Video Background */}
         <video
           autoPlay
@@ -29,7 +29,7 @@ export default function AanvraagPage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center pt-28 md:pt-0">
+        <div className="relative h-full flex items-center" style={{ paddingTop: 'calc(7rem + env(safe-area-inset-top))' }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1 
               style={{ 
