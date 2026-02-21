@@ -48,7 +48,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
     });
 
   return (
-    <div className="py-12 md:py-16 bg-black">
+    <div className="py-12 md:py-16 bg-black noise-overlay">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header: COLLECTIE left, Filter + Sort right */}
         <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">

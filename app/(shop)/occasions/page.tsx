@@ -36,7 +36,7 @@ export default async function OccasionsPage() {
       {/* Structured Data - ItemList */}
       <StructuredData data={getItemListSchema(occasionsList)} />
       
-      <div className="min-h-screen bg-black text-white noise-overlay">
+      <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
       <section className="relative isolate overflow-hidden" style={{ height: 'calc(48vh + env(safe-area-inset-top))', minHeight: 'calc(280px + env(safe-area-inset-top))', marginTop: 'calc(-1 * env(safe-area-inset-top))' }}>
         <div className="absolute inset-0 w-full h-full">
