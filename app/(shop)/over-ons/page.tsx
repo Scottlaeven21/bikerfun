@@ -12,7 +12,7 @@ export default function OverOnsPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section with Video */}
-      <section className="relative isolate h-[45vh] min-h-[280px] overflow-hidden">
+      <section className="relative isolate h-[45vh] min-h-[280px] overflow-hidden pt-20">
         <div className="absolute inset-0 w-[185%] h-[185%] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <video
             autoPlay
