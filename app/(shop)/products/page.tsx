@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { ProductCard } from '@/components/products/product-card';
+import { CategoryFilterMobile } from '@/components/products/category-filter-mobile';
 import { Product, Category } from '@/types';
 
 type ProductWithCategory = Product & {
@@ -81,23 +82,10 @@ export default async function ProductsPage({
           <div className="mb-12">
             {/* Mobile: Dropdown */}
             <div className="md:hidden">
-              <select
-                value={params.category || ''}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  if (typeof window !== 'undefined') {
-                    window.location.href = value ? `/products?category=${value}` : '/products';
-                  }
-                }}
-                className="w-full px-4 py-3 rounded-lg bg-white border-2 border-gray-300 text-biker-black font-bold uppercase text-sm tracking-wider focus:border-biker-yellow focus:outline-none shadow-sm"
-              >
-                <option value="">Alle Categorieën</option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.slug}>
-                    {category.name}
-                  </option>
-                ))}
-              </select>
+              <CategoryFilterMobile 
+                categories={categories} 
+                currentCategory={params.category}
+              />
             </div>
 
             {/* Desktop: Buttons */}
