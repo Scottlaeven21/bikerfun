@@ -141,7 +141,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Video Section */}
-      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
+      <section className="py-20 bg-biker-dark border-y border-biker-gray/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -237,7 +237,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-t border-biker-gray/20">
+      <section className="py-20 bg-biker-dark border-y border-biker-gray/20">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}

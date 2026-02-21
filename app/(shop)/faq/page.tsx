@@ -148,7 +148,7 @@ export default function FAQPage() {
       </section>
 
       {/* FAQ - Webshop */}
-      <section className="py-16 bg-biker-dark/30">
+      <section className="py-16 bg-biker-dark/30 border-y border-biker-gray/20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2
             style={{ fontFamily: 'var(--font-inter)' }}
