@@ -47,7 +47,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Story Section */}
-      <section className="relative py-20 noise-overlay border-t border-biker-gray/20">
+      <section className="relative py-20 noise-overlay border-t border-biker-gray/30">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
@@ -141,7 +141,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* Video Section */}
-      <section className="py-20 bg-biker-dark border-y border-biker-gray/20">
+      <section className="py-20 bg-biker-dark border-y border-biker-gray/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -154,7 +154,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* What We Offer */}
-      <section className="relative py-20 noise-overlay border-t border-biker-gray/20">
+      <section className="relative py-20 noise-overlay border-t border-biker-gray/30">
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
@@ -237,7 +237,7 @@ export default function OverOnsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-y border-biker-gray/20">
+      <section className="py-20 bg-biker-dark border-y border-biker-gray/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}

@@ -171,7 +171,7 @@ export default function ContactPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 bg-biker-dark border-y border-biker-gray/20">
+      <section className="py-20 bg-biker-dark border-y border-biker-gray/30">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 
             style={{ fontFamily: 'var(--font-inter)' }}
