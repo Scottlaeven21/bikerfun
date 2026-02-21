@@ -60,30 +60,30 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
               {filteredOccasions.length} occasions op voorraad
             </p>
           </div>
-          <div className="flex flex-nowrap items-center gap-3">
+          <div className="flex flex-nowrap items-center gap-2 sm:gap-3">
             <button
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 bg-biker-gray border border-white text-white px-5 py-2.5 rounded-full font-bold uppercase tracking-wider text-sm hover:bg-white/10 transition-colors shrink-0"
+              className="flex items-center gap-2 bg-biker-gray border border-white text-white px-4 sm:px-5 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs sm:text-sm hover:bg-white/10 transition-colors shrink-0"
             >
               <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
               </svg>
               FILTEREN
             </button>
-            <div className="relative shrink-0">
+            <div className="relative flex-1 sm:flex-initial sm:shrink-0 max-w-[180px] sm:max-w-none">
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="appearance-none bg-biker-gray border border-white text-white pl-5 pr-10 py-2.5 rounded-full font-bold uppercase tracking-wider text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-biker-yellow min-w-[200px]"
+                className="appearance-none w-full bg-biker-gray border border-white text-white pl-3 sm:pl-5 pr-8 sm:pr-10 py-2.5 rounded-full font-bold uppercase tracking-wider text-xs sm:text-sm cursor-pointer focus:outline-none focus:ring-2 focus:ring-biker-yellow sm:min-w-[200px]"
               >
-                <option value="newest">NIEUWSTE EERST</option>
-                <option value="price-low">PRIJS: LAAG - HOOG</option>
-                <option value="price-high">PRIJS: HOOG - LAAG</option>
-                <option value="year-new">BOUWJAAR: NIEUW - OUD</option>
-                <option value="year-old">BOUWJAAR: OUD - NIEUW</option>
-                <option value="mileage-low">KM-STAND: LAAG - HOOG</option>
+                <option value="newest">NIEUWSTE</option>
+                <option value="price-low">PRIJS ↑</option>
+                <option value="price-high">PRIJS ↓</option>
+                <option value="year-new">JAAR ↓</option>
+                <option value="year-old">JAAR ↑</option>
+                <option value="mileage-low">KM ↑</option>
               </select>
-              <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-biker-yellow">
+              <span className="pointer-events-none absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 text-biker-yellow">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                 </svg>
