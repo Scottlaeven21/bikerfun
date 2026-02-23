@@ -46,8 +46,17 @@ export default async function OccasionsPage() {
             muted
             playsInline
             preload="auto"
+            disablePictureInPicture
+            disableRemotePlayback
             className="absolute inset-0 w-full h-full object-cover"
-            style={{ objectPosition: 'center center' }}
+            style={{ 
+              objectPosition: 'center center',
+              imageRendering: 'crisp-edges',
+              WebkitBackfaceVisibility: 'hidden',
+              backfaceVisibility: 'hidden',
+              transform: 'translateZ(0)',
+              willChange: 'transform'
+            }}
           >
             <source src="/hero-occasions.mp4" type="video/mp4" />
           </video>

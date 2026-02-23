@@ -36,8 +36,17 @@ export default async function HomePage() {
           muted
           playsInline
           preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
           className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center top' }}
+          style={{ 
+            objectPosition: 'center top',
+            imageRendering: 'crisp-edges',
+            WebkitBackfaceVisibility: 'hidden',
+            backfaceVisibility: 'hidden',
+            transform: 'translateZ(0)',
+            willChange: 'transform'
+          }}
         >
           <source src="/hero-video.mp4" type="video/mp4" />
         </video>
