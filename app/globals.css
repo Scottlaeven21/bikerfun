@@ -19,18 +19,40 @@
         0deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.025) 2px,
-        rgba(255, 255, 255, 0.025) 4px
+        rgba(255, 255, 255, 0.015) 2px,
+        rgba(255, 255, 255, 0.015) 4px
       ),
       repeating-linear-gradient(
         90deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.025) 2px,
-        rgba(255, 255, 255, 0.025) 4px
+        rgba(255, 255, 255, 0.015) 2px,
+        rgba(255, 255, 255, 0.015) 4px
       );
-    opacity: 0.7;
+    opacity: 0.6;
     pointer-events: none;
+  }
+
+  /* Sterkere overlay voor high-DPI/retina displays */
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .noise-overlay::before {
+      background-image: 
+        repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.02) 2px,
+          rgba(255, 255, 255, 0.02) 4px
+        ),
+        repeating-linear-gradient(
+          90deg,
+          transparent,
+          transparent 2px,
+          rgba(255, 255, 255, 0.02) 2px,
+          rgba(255, 255, 255, 0.02) 4px
+        );
+      opacity: 0.65;
+    }
   }
 }
 
