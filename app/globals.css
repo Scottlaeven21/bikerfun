@@ -19,21 +19,21 @@
         0deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.015) 2px,
-        rgba(255, 255, 255, 0.015) 4px
+        rgba(255, 255, 255, 0.012) 2px,
+        rgba(255, 255, 255, 0.012) 4px
       ),
       repeating-linear-gradient(
         90deg,
         transparent,
         transparent 2px,
-        rgba(255, 255, 255, 0.015) 2px,
-        rgba(255, 255, 255, 0.015) 4px
+        rgba(255, 255, 255, 0.012) 2px,
+        rgba(255, 255, 255, 0.012) 4px
       );
-    opacity: 0.6;
+    opacity: 0.55;
     pointer-events: none;
   }
 
-  /* Sterkere overlay voor high-DPI/retina displays */
+  /* Iets sterkere overlay voor high-DPI/retina displays */
   @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
     .noise-overlay::before {
       background-image: 
@@ -41,17 +41,17 @@
           0deg,
           transparent,
           transparent 2px,
-          rgba(255, 255, 255, 0.02) 2px,
-          rgba(255, 255, 255, 0.02) 4px
+          rgba(255, 255, 255, 0.018) 2px,
+          rgba(255, 255, 255, 0.018) 4px
         ),
         repeating-linear-gradient(
           90deg,
           transparent,
           transparent 2px,
-          rgba(255, 255, 255, 0.02) 2px,
-          rgba(255, 255, 255, 0.02) 4px
+          rgba(255, 255, 255, 0.018) 2px,
+          rgba(255, 255, 255, 0.018) 4px
         );
-      opacity: 0.65;
+      opacity: 0.6;
     }
   }
 }
