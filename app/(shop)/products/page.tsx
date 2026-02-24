@@ -46,13 +46,12 @@ export default async function ProductsPage({
     slug: cat.slug,
   }));
   
-  // Fetch products - ALLEEN per specifieke categorie ivm PHP memory crisis
+  // Fetch products - SLIMME strategie om PHP memory te omzeilen
   try {
     if (params.featured === 'true') {
-      // Featured products crashen ook - skip
-      products = [];
+      products = await getCachedFeaturedProducts({ per_page: 5 });
     } else if (params.category) {
-      // Fetch by category slug - DIT WERKT WEL
+      // Fetch by category slug
       const categoryData = allCategories.find(c => c.slug === params.category);
       if (categoryData) {
         products = await getCachedProducts({ 
@@ -61,10 +60,32 @@ export default async function ProductsPage({
         });
       }
     } else {
-      // Voor "Alle" pagina: GEEN producten ophalen ivm extreme PHP memory problemen
-      // Gebruikers MOETEN een categorie kiezen
-      products = [];
-      console.log('Alle pagina: geen producten geladen (gebruiker moet categorie kiezen)');
+      // Voor "Alle" pagina: Fetch producten PER CATEGORIE en combineer
+      // ZEER kleine batches ivm extreme PHP memory limit (128MB!)
+      const allProducts: WooCommerceProduct[] = [];
+      
+      // Limiteer aantal categorieën dat we doorlopen (max 8)
+      const categoriesToFetch = categories.slice(0, 8);
+      
+      for (const category of categoriesToFetch) {
+        try {
+          // Kleine batch: 6 producten per categorie
+          const categoryProducts = await getCachedProducts({
+            per_page: 6,
+            category: category.id.toString()
+          });
+          allProducts.push(...categoryProducts);
+          
+          // Stop als we al 40+ producten hebben (voorkomt overload)
+          if (allProducts.length >= 40) break;
+        } catch (error) {
+          console.error(`Failed to fetch products for category ${category.name}:`, error);
+          // Continue met volgende categorie bij error
+          continue;
+        }
+      }
+      
+      products = allProducts;
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
@@ -153,22 +174,17 @@ export default async function ProductsPage({
         ) : (
           <div className="text-center py-16 px-4">
             {!params.category ? (
-              // "Alle" pagina - uitleg over categorieën
+              // "Alle" pagina - vriendelijke boodschap
               <div className="max-w-2xl mx-auto">
-                <div className="mb-6">
-                  <svg className="w-20 h-20 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                  </svg>
-                </div>
                 <h2 className="text-2xl font-bold text-biker-black mb-4">
-                  Kies een categorie om producten te bekijken
+                  Kies een categorie
                 </h2>
                 <p className="text-lg text-gray-600 mb-6">
-                  Gebruik de categorieknoppen hierboven om de producten te ontdekken die je zoekt.
+                  Gebruik de categorieknoppen hierboven om onze producten te bekijken.
                 </p>
-                <div className="bg-yellow-50 border-2 border-yellow-200 rounded-lg p-4 text-left">
+                <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4">
                   <p className="text-sm text-gray-700">
-                    <strong>💡 Tip:</strong> Klik op een categorie zoals <strong>Helmcovers</strong>, <strong>Sleutelhangers</strong> of <strong>Rugzakken</strong> om onze producten te zien.
+                    💡 <strong>Tip:</strong> Elke categorie toont alle beschikbare producten!
                   </p>
                 </div>
               </div>
