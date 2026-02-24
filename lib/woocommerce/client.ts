@@ -92,6 +92,7 @@ class WooCommerceClient {
     };
 
     // For POST/PUT/DELETE: body data separate from OAuth params
+    // For GET: query params are part of OAuth signature
     const isWriteRequest = method !== 'GET';
     const signatureParams = isWriteRequest ? oauthParams : { ...oauthParams, ...params };
     
@@ -105,9 +106,18 @@ class WooCommerceClient {
     // Add signature to oauth params
     oauthParams.oauth_signature = signature;
 
-    // Build URL with OAuth params only
-    const queryString = new URLSearchParams(oauthParams).toString();
-    const finalUrl = `${url}?${queryString}`;
+    // Build URL
+    let finalUrl: string;
+    if (isWriteRequest) {
+      // POST/PUT/DELETE: Only OAuth params in URL
+      const queryString = new URLSearchParams(oauthParams).toString();
+      finalUrl = `${url}?${queryString}`;
+    } else {
+      // GET: OAuth params + query params in URL
+      const allParams = { ...oauthParams, ...params };
+      const queryString = new URLSearchParams(allParams).toString();
+      finalUrl = `${url}?${queryString}`;
+    }
 
     // Build fetch options
     const fetchOptions: RequestInit = {
