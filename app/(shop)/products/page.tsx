@@ -25,15 +25,12 @@ export default async function ProductsPage({
   
   try {
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 5 });
+      products = await getCachedFeaturedProducts({ per_page: 50 });
     } else if (params.category) {
-      products = await getCachedProductsByCategory(params.category, { per_page: 5 });
+      products = await getCachedProductsByCategory(params.category, { per_page: 50 });
     } else {
       // Fetch all products with status 'publish' (alleen echte webshop items)
-      // Excludeert occasions die als 'private' staan
-      // Limited to 5 items due to WooCommerce server PHP memory constraint (128MB)
-      // ICT'er moet PHP memory_limit verhogen naar 256M in wp-config.php
-      products = await getCachedProducts({ per_page: 5, status: 'publish' });
+      products = await getCachedProducts({ per_page: 50, status: 'publish' });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
@@ -41,22 +38,41 @@ export default async function ProductsPage({
     products = [];
   }
   
-  // Filter out occasions (producten met 'Occasions' category)
-  // Occasions zijn niet bedoeld voor online verkoop via WooCommerce
+  // Filter out occasions (motoren) - meerdere checks voor zekerheid
   if (products) {
-    products = products.filter(product => 
-      !product.categories.some(cat => 
+    products = products.filter(product => {
+      // Check 1: Categorie naam bevat 'occasion'
+      const hasOccasionCategory = product.categories.some(cat => 
         cat.name.toLowerCase().includes('occasion') || 
         cat.slug.toLowerCase().includes('occasion')
-      )
-    );
+      );
+      
+      // Check 2: Prijs is hoger dan €500 (occasions zijn duur, accessoires niet)
+      const price = parseFloat(product.price || '0');
+      const isExpensive = price > 500;
+      
+      // Check 3: Product naam bevat motor merken
+      const productName = product.name.toLowerCase();
+      const hasMotorBrand = [
+        'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
+        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx'
+      ].some(brand => productName.includes(brand));
+      
+      // Alleen tonen als het GEEN occasion is
+      // (geen occasion category EN (goedkoop OF geen motor merk))
+      return !hasOccasionCategory && (!isExpensive || !hasMotorBrand);
+    });
   }
 
-  // Extract unique categories from products
+  // Extract unique categories from products (exclusief "Alles"/"Alle")
   const categoriesMap = new Map<string, WooCommerceCategory>();
   products.forEach(product => {
     product.categories.forEach(cat => {
-      if (!categoriesMap.has(cat.slug)) {
+      // Filter "Alles" en "Alle" categorieën uit (we hebben al een "Alle" knop)
+      const isAllCategory = ['alle', 'alles', 'all'].includes(cat.slug.toLowerCase()) ||
+                           ['alle', 'alles', 'all'].includes(cat.name.toLowerCase());
+      
+      if (!categoriesMap.has(cat.slug) && !isAllCategory) {
         categoriesMap.set(cat.slug, cat);
       }
     });
