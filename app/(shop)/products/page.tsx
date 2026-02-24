@@ -1,7 +1,8 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { WooCommerceProductCard } from '@/components/products/woocommerce-product-card';
-import { getCachedProducts, getCachedProductsByCategory, getCachedFeaturedProducts } from '@/lib/woocommerce/products';
+import { getCachedProducts, getCachedFeaturedProducts } from '@/lib/woocommerce/products';
+import { wooCommerce } from '@/lib/woocommerce/client';
 import type { WooCommerceProduct, WooCommerceCategory } from '@/types/woocommerce';
 
 export const metadata: Metadata = {
@@ -20,98 +21,77 @@ export default async function ProductsPage({
 }) {
   const params = await searchParams;
   
-  // Fetch products from WooCommerce
   let products: WooCommerceProduct[] = [];
+  let allCategories: any[] = [];
   
-  // Fetch products - gebruik 'any' status om alle producten te zien (ook draft/private)
-  // Later: verander naar 'publish' als alle producten gepubliceerd zijn in WooCommerce
+  // Fetch categories first (veel lichter dan producten!)
+  try {
+    const cats = await wooCommerce.getCategories({ per_page: 50, hide_empty: true });
+    allCategories = cats;
+  } catch (error) {
+    console.error('Failed to fetch categories:', error);
+  }
+  
+  // Fetch products - kleinere batches
   try {
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 100 });
+      products = await getCachedFeaturedProducts({ per_page: 15 });
     } else if (params.category) {
-      // Fetch by category
-      products = await getCachedProducts({ 
-        per_page: 100, 
-        status: 'any', 
-        category: params.category 
-      });
+      // Fetch by category slug
+      const categoryData = allCategories.find(c => c.slug === params.category);
+      if (categoryData) {
+        products = await getCachedProducts({ 
+          per_page: 50, 
+          category: categoryData.id.toString()
+        });
+      }
     } else {
-      // Fetch all products
-      products = await getCachedProducts({ per_page: 100, status: 'any' });
+      // Fetch all products (limited)
+      products = await getCachedProducts({ per_page: 15 });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
-    // If memory error, try smaller batch
-    try {
-      products = await getCachedProducts({ per_page: 15, status: 'any' });
-    } catch (fallbackError) {
-      console.error('Fallback fetch also failed:', fallbackError);
-      products = [];
-    }
+    products = [];
   }
   
-  // Filter out occasions/motoren - strikte filtering
+  // Filter occasions uit producten
   if (products) {
     products = products.filter(product => {
-      // Check categorieën voor occasion/motor gerelateerde namen
-      const hasExcludedCategory = product.categories.some(cat => {
-        const catName = cat.name.toLowerCase();
-        const catSlug = cat.slug.toLowerCase();
-        
-        // Lijst van uitgesloten categorie namen
-        const excludedCategories = [
-          'occasion', 'occasions', 
-          'motor', 'motoren', 'motors',
-          'bike', 'bikes', 'motorcycle', 'motorcycles'
-        ];
-        
-        return excludedCategories.some(excluded => 
-          catName.includes(excluded) || catSlug.includes(excluded)
-        );
-      });
-      
-      // Als het een uitgesloten categorie heeft, check de naam ook
-      if (hasExcludedCategory) {
-        const productName = product.name.toLowerCase();
-        const hasMotorBrand = [
-          'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
-          'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx',
-          'fireblade', 'ninja', 'monster'
-        ].some(brand => productName.includes(brand));
-        
-        // Alleen uitfilteren als het echt een motor is (heeft merk in naam)
-        return !hasMotorBrand;
-      }
-      
-      return true; // Behoud alle andere producten
-    });
-  }
-
-  // Extract unique categories from products
-  const categoriesMap = new Map<string, WooCommerceCategory>();
-  products.forEach(product => {
-    product.categories.forEach(cat => {
-      const catName = cat.name.toLowerCase();
-      const catSlug = cat.slug.toLowerCase();
-      
-      // Filter ongewenste categorieën
-      const excludedCategories = [
-        'alle', 'alles', 'all', // Dubbele "alle" knop
-        'occasion', 'occasions', 'motor', 'motoren', 'motors', // Occasions
-        'bike', 'bikes', 'motorcycle', 'motorcycles',
-        'uncategorized', 'ongecategoriseerd' // Standaard WooCommerce
-      ];
-      
-      const isExcluded = excludedCategories.some(excluded => 
-        catName.includes(excluded) || catSlug.includes(excluded)
+      const hasOccasionCategory = product.categories.some(cat => 
+        cat.name.toLowerCase().includes('occasion') || 
+        cat.slug.toLowerCase().includes('occasion') ||
+        cat.name.toLowerCase().includes('motor')
       );
       
-      if (!categoriesMap.has(cat.slug) && !isExcluded) {
-        categoriesMap.set(cat.slug, cat);
-      }
+      const productName = product.name.toLowerCase();
+      const hasMotorBrand = [
+        'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
+        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx'
+      ].some(brand => productName.includes(brand));
+      
+      return !hasOccasionCategory && !hasMotorBrand;
     });
-  });
-  const categories = Array.from(categoriesMap.values());
+  }
+  
+  // Filter categories (gebruik de direct opgehaalde categorieën!)
+  const excludedCategoryNames = [
+    'alle', 'alles', 'all',
+    'occasion', 'occasions', 'motor', 'motoren', 'motors',
+    'bike', 'bikes', 'motorcycle', 'motorcycles',
+    'uncategorized', 'ongecategoriseerd'
+  ];
+  
+  const categories = allCategories.filter(cat => {
+    const catName = cat.name.toLowerCase();
+    const catSlug = cat.slug.toLowerCase();
+    return !excludedCategoryNames.some(excluded => 
+      catName.includes(excluded) || catSlug.includes(excluded)
+    );
+  }).map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    slug: cat.slug,
+  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">

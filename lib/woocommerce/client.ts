@@ -198,6 +198,16 @@ class WooCommerceClient {
   }
 
   /**
+   * Get product categories
+   */
+  async getCategories(params?: { per_page?: number; hide_empty?: boolean }): Promise<any[]> {
+    return this.makeRequest<any[]>('products/categories', {
+      per_page: params?.per_page || 100,
+      hide_empty: params?.hide_empty !== false,
+    });
+  }
+
+  /**
    * Get products on sale
    */
   async getSaleProducts(params?: WooCommerceListParams): Promise<WooCommerceProduct[]> {
