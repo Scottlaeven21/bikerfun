@@ -23,60 +23,31 @@ export default async function ProductsPage({
   // Fetch products from WooCommerce
   let products: WooCommerceProduct[] = [];
   
+  // Fetch products - gebruik 'any' status om alle producten te zien (ook draft/private)
+  // Later: verander naar 'publish' als alle producten gepubliceerd zijn in WooCommerce
   try {
-    // Fetch in batches to avoid memory issues (WooCommerce PHP limit 128MB)
-    const batchSize = 20;
-    const batches = [1, 2, 3]; // Fetch 3 batches = max 60 products
-    
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: batchSize });
+      products = await getCachedFeaturedProducts({ per_page: 100 });
     } else if (params.category) {
-      // Fetch products by category - multiple pages
-      const allProducts: WooCommerceProduct[] = [];
-      for (const page of batches) {
-        try {
-          const batch = await getCachedProducts({ 
-            per_page: batchSize, 
-            page,
-            status: 'publish', 
-            category: params.category 
-          });
-          if (batch.length > 0) {
-            allProducts.push(...batch);
-          } else {
-            break; // No more products
-          }
-        } catch (err) {
-          console.error(`Failed to fetch page ${page}:`, err);
-          break; // Stop on error
-        }
-      }
-      products = allProducts;
+      // Fetch by category
+      products = await getCachedProducts({ 
+        per_page: 100, 
+        status: 'any', 
+        category: params.category 
+      });
     } else {
-      // Fetch all products - multiple pages
-      const allProducts: WooCommerceProduct[] = [];
-      for (const page of batches) {
-        try {
-          const batch = await getCachedProducts({ 
-            per_page: batchSize, 
-            page,
-            status: 'publish'
-          });
-          if (batch.length > 0) {
-            allProducts.push(...batch);
-          } else {
-            break; // No more products
-          }
-        } catch (err) {
-          console.error(`Failed to fetch page ${page}:`, err);
-          break; // Stop on error
-        }
-      }
-      products = allProducts;
+      // Fetch all products
+      products = await getCachedProducts({ per_page: 100, status: 'any' });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
-    products = [];
+    // If memory error, try smaller batch
+    try {
+      products = await getCachedProducts({ per_page: 15, status: 'any' });
+    } catch (fallbackError) {
+      console.error('Fallback fetch also failed:', fallbackError);
+      products = [];
+    }
   }
   
   // Filter out occasions/motoren - strikte filtering
