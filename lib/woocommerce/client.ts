@@ -190,6 +190,27 @@ class WooCommerceClient {
   }
 
   /**
+   * Create a new order
+   */
+  async createOrder(orderData: any): Promise<any> {
+    return this.makeRequest('orders', orderData, 'POST');
+  }
+
+  /**
+   * Get order by ID
+   */
+  async getOrder(orderId: number): Promise<any> {
+    return this.makeRequest(`orders/${orderId}`);
+  }
+
+  /**
+   * Update order status
+   */
+  async updateOrderStatus(orderId: number, status: string): Promise<any> {
+    return this.makeRequest(`orders/${orderId}`, { status }, 'PUT');
+  }
+
+  /**
    * Get checkout URL for redirect
    */
   getCheckoutUrl(): string {

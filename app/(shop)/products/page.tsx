@@ -25,16 +25,27 @@ export default async function ProductsPage({
   
   try {
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 10 });
+      products = await getCachedFeaturedProducts({ per_page: 50 });
     } else if (params.category) {
-      products = await getCachedProductsByCategory(params.category, { per_page: 10 });
+      products = await getCachedProductsByCategory(params.category, { per_page: 50 });
     } else {
-      // Fetch all products regardless of status (publish, private, draft)
-      // Limited to 10 due to WooCommerce server memory constraints (128MB PHP limit)
-      products = await getCachedProducts({ per_page: 10, status: 'any' });
+      // Fetch all products with status 'publish' (alleen echte webshop items)
+      // Excludeert occasions die als 'private' staan
+      products = await getCachedProducts({ per_page: 50, status: 'publish' });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
+  }
+  
+  // Filter out occasions (producten met 'Occasions' category)
+  // Occasions zijn niet bedoeld voor online verkoop via WooCommerce
+  if (products) {
+    products = products.filter(product => 
+      !product.categories.some(cat => 
+        cat.name.toLowerCase().includes('occasion') || 
+        cat.slug.toLowerCase().includes('occasion')
+      )
+    );
   }
 
   // Extract unique categories from products

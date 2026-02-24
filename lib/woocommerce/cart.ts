@@ -110,6 +110,7 @@ export function getCartItemCount(): number {
 
 /**
  * Build WooCommerce cart URL with products
+ * Note: WooCommerce standard URLs for adding products
  */
 export function buildWooCommerceCartUrl(baseUrl: string): string {
   const cart = getCart();
@@ -118,18 +119,42 @@ export function buildWooCommerceCartUrl(baseUrl: string): string {
     return `${baseUrl}/cart`;
   }
   
-  // Build URL with product IDs and quantities
-  const params = cart.map(item => 
-    `add-to-cart=${item.product.id}&quantity=${item.quantity}`
-  ).join('&');
+  // For single item, use standard WooCommerce add-to-cart URL
+  if (cart.length === 1) {
+    const item = cart[0];
+    return `${baseUrl}/?add-to-cart=${item.product.id}&quantity=${item.quantity}`;
+  }
   
-  return `${baseUrl}/?${params}`;
+  // For multiple items, redirect to cart page
+  // User will need to add items manually or we open multiple tabs
+  return `${baseUrl}/cart`;
 }
 
 /**
- * Redirect to WooCommerce checkout with cart items
+ * Redirect to WooCommerce with cart items
+ * Opens product pages in new tabs so user can add to WooCommerce cart
  */
 export function redirectToCheckout(baseUrl: string): void {
-  const url = buildWooCommerceCartUrl(baseUrl);
-  window.location.href = url;
+  const cart = getCart();
+  
+  if (cart.length === 0) {
+    alert('Je winkelwagen is leeg');
+    return;
+  }
+  
+  // Strategy: Open each product page in WooCommerce
+  // This allows user to add items to WooCommerce cart properly
+  if (cart.length === 1) {
+    // Single item: Add directly to cart
+    const item = cart[0];
+    window.location.href = `${baseUrl}/?add-to-cart=${item.product.id}&quantity=${item.quantity}`;
+  } else {
+    // Multiple items: Open first product page and show instructions
+    const message = `Je hebt ${cart.length} items in je winkelwagen.\n\nJe wordt nu doorgestuurd naar de webshop.\nKlik daar op "Toevoegen" voor elk product.`;
+    
+    if (confirm(message)) {
+      // Open WooCommerce shop page
+      window.location.href = `${baseUrl}/shop`;
+    }
+  }
 }

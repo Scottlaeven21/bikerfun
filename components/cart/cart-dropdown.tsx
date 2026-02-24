@@ -29,8 +29,13 @@ export function CartDropdown() {
   }, [isOpen]);
 
   const handleCheckout = () => {
-    const baseUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || '';
-    redirectToCheckout(baseUrl);
+    if (cart.length === 0) {
+      alert('Je winkelwagen is leeg');
+      return;
+    }
+    
+    // Redirect to our checkout page
+    window.location.href = '/checkout';
   };
 
   return (
