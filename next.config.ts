@@ -11,7 +11,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "admin.bikerfun.nl",
       },
+      {
+        protocol: "https",
+        hostname: "**.bikerfun.nl",
+      },
+      {
+        protocol: "http",
+        hostname: "admin.bikerfun.nl",
+      },
     ],
+    unoptimized: true,
   },
   experimental: {
     serverActions: {

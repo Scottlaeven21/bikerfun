@@ -12,6 +12,7 @@ interface WooCommerceProductCardProps {
 export function WooCommerceProductCard({ product }: WooCommerceProductCardProps) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const hasDiscount = product.on_sale && product.sale_price && product.regular_price;
   const discountPercentage = hasDiscount
     ? Math.round(((parseFloat(product.regular_price) - parseFloat(product.sale_price)) / parseFloat(product.regular_price)) * 100)
@@ -24,6 +25,8 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
   const imageUrl = product.images && product.images.length > 0 
     ? product.images[0].src 
     : null;
+  
+  const showPlaceholder = !imageUrl || imageError;
 
   const handleViewProduct = () => {
     // Redirect to WooCommerce product page
@@ -41,18 +44,25 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
     <div
       className="group bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-biker-yellow shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
     >
-      <div className="relative aspect-square overflow-hidden bg-white">
-        {imageUrl ? (
-          <Image
-            src={imageUrl}
-            alt={product.name}
-            fill
-            className="object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-          />
-        ) : (
+      <div className="relative aspect-square overflow-hidden bg-gray-50">
+        {showPlaceholder ? (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <span className="text-6xl">📦</span>
           </div>
+        ) : (
+          <Image
+            src={imageUrl!}
+            alt={product.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className="object-contain p-6 group-hover:scale-105 transition-transform duration-300"
+            loading="lazy"
+            unoptimized={true}
+            onError={() => {
+              console.error('Failed to load image:', imageUrl);
+              setImageError(true);
+            }}
+          />
         )}
         
         {hasDiscount && (
