@@ -91,25 +91,26 @@ class WooCommerceClient {
       oauth_version: '1.0',
     };
 
-    // Merge query params for signature (without signature itself)
-    const allParams = { ...oauthParams, ...params };
+    // For POST/PUT/DELETE: body data separate from OAuth params
+    const isWriteRequest = method !== 'GET';
+    const signatureParams = isWriteRequest ? oauthParams : { ...oauthParams, ...params };
     
     // Generate signature
     const signature = this.generateOAuthSignature(
       method,
       url,
-      allParams
+      signatureParams
     );
 
     // Add signature to oauth params
     oauthParams.oauth_signature = signature;
 
-    // Build final URL with all params including signature
-    const finalParams = { ...oauthParams, ...params };
-    const queryString = new URLSearchParams(finalParams).toString();
+    // Build URL with OAuth params only
+    const queryString = new URLSearchParams(oauthParams).toString();
     const finalUrl = `${url}?${queryString}`;
 
-    const response = await fetch(finalUrl, {
+    // Build fetch options
+    const fetchOptions: RequestInit = {
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -117,7 +118,14 @@ class WooCommerceClient {
       next: {
         revalidate: 300, // Cache for 5 minutes
       },
-    });
+    };
+
+    // Add body for POST/PUT/DELETE requests
+    if (isWriteRequest && Object.keys(params).length > 0) {
+      fetchOptions.body = JSON.stringify(params);
+    }
+
+    const response = await fetch(finalUrl, fetchOptions);
 
     if (!response.ok) {
       const error = await response.text();
