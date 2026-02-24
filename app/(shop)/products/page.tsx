@@ -79,38 +79,63 @@ export default async function ProductsPage({
     products = [];
   }
   
-  // Filter out occasions (motoren) - ALLEEN op categorie naam
+  // Filter out occasions/motoren - strikte filtering
   if (products) {
     products = products.filter(product => {
-      // Check 1: Categorie naam bevat 'occasion'
-      const hasOccasionCategory = product.categories.some(cat => 
-        cat.name.toLowerCase().includes('occasion') || 
-        cat.slug.toLowerCase().includes('occasion')
-      );
+      // Check categorieën voor occasion/motor gerelateerde namen
+      const hasExcludedCategory = product.categories.some(cat => {
+        const catName = cat.name.toLowerCase();
+        const catSlug = cat.slug.toLowerCase();
+        
+        // Lijst van uitgesloten categorie namen
+        const excludedCategories = [
+          'occasion', 'occasions', 
+          'motor', 'motoren', 'motors',
+          'bike', 'bikes', 'motorcycle', 'motorcycles'
+        ];
+        
+        return excludedCategories.some(excluded => 
+          catName.includes(excluded) || catSlug.includes(excluded)
+        );
+      });
       
-      // Check 2: Product naam bevat motor merken (alleen als extra zekerheid)
-      const productName = product.name.toLowerCase();
-      const hasMotorBrand = [
-        'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
-        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx',
-        'fireblade', 'ninja', 'monster'
-      ].some(brand => productName.includes(brand));
+      // Als het een uitgesloten categorie heeft, check de naam ook
+      if (hasExcludedCategory) {
+        const productName = product.name.toLowerCase();
+        const hasMotorBrand = [
+          'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
+          'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx',
+          'fireblade', 'ninja', 'monster'
+        ].some(brand => productName.includes(brand));
+        
+        // Alleen uitfilteren als het echt een motor is (heeft merk in naam)
+        return !hasMotorBrand;
+      }
       
-      // Alleen tonen als het GEEN occasion is
-      // (geen occasion category OF geen motor merk)
-      return !hasOccasionCategory || !hasMotorBrand;
+      return true; // Behoud alle andere producten
     });
   }
 
-  // Extract unique categories from products (exclusief "Alles"/"Alle")
+  // Extract unique categories from products
   const categoriesMap = new Map<string, WooCommerceCategory>();
   products.forEach(product => {
     product.categories.forEach(cat => {
-      // Filter "Alles" en "Alle" categorieën uit (we hebben al een "Alle" knop)
-      const isAllCategory = ['alle', 'alles', 'all'].includes(cat.slug.toLowerCase()) ||
-                           ['alle', 'alles', 'all'].includes(cat.name.toLowerCase());
+      const catName = cat.name.toLowerCase();
+      const catSlug = cat.slug.toLowerCase();
       
-      if (!categoriesMap.has(cat.slug) && !isAllCategory) {
+      // Filter ongewenste categorieën
+      const excludedCategories = [
+        'alle', 'alles', 'all', // Dubbele "alle" knop
+        'occasion', 'occasions', 'motor', 'motoren', 'motors', // Occasions
+        'bike', 'bikes', 'motorcycle', 'motorcycles',
+        'uncategorized', 'ongecategoriseerd' // Standaard WooCommerce
+      ];
+      
+      const isExcluded = excludedCategories.some(excluded => 
+        catName.includes(excluded) || catSlug.includes(excluded)
+      );
+      
+      if (!categoriesMap.has(cat.slug) && !isExcluded) {
         categoriesMap.set(cat.slug, cat);
       }
     });
