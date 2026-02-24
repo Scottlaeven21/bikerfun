@@ -91,18 +91,22 @@ class WooCommerceClient {
       oauth_version: '1.0',
     };
 
-    // Merge query params for signature
+    // Merge query params for signature (without signature itself)
     const allParams = { ...oauthParams, ...params };
     
     // Generate signature
-    oauthParams.oauth_signature = this.generateOAuthSignature(
+    const signature = this.generateOAuthSignature(
       method,
       url,
       allParams
     );
 
-    // Build final URL with query params
-    const queryString = new URLSearchParams(allParams).toString();
+    // Add signature to oauth params
+    oauthParams.oauth_signature = signature;
+
+    // Build final URL with all params including signature
+    const finalParams = { ...oauthParams, ...params };
+    const queryString = new URLSearchParams(finalParams).toString();
     const finalUrl = `${url}?${queryString}`;
 
     const response = await fetch(finalUrl, {
