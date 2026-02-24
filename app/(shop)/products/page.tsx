@@ -41,18 +41,27 @@ export default async function ProductsPage({
       }
     } else {
       // Voor "Alle" pagina: Fetch producten PER CATEGORIE en combineer
-      // Dit omzeilt het PHP memory probleem!
+      // ZEER kleine batches ivm extreme PHP memory limit (128MB!)
       const allProducts: WooCommerceProduct[] = [];
       
-      for (const category of categories) {
+      // Limiteer aantal categorieën dat we doorlopen (max 10)
+      const categoriesToFetch = categories.slice(0, 10);
+      
+      for (const category of categoriesToFetch) {
         try {
+          // Nog kleinere batch: 8 producten per categorie
           const categoryProducts = await getCachedProducts({
-            per_page: 20,
+            per_page: 8,
             category: category.id.toString()
           });
           allProducts.push(...categoryProducts);
+          
+          // Stop als we al 50+ producten hebben (voorkomt overload)
+          if (allProducts.length >= 50) break;
         } catch (error) {
           console.error(`Failed to fetch products for category ${category.name}:`, error);
+          // Continue met volgende categorie bij error
+          continue;
         }
       }
       
