@@ -24,23 +24,62 @@ export default async function ProductsPage({
   let products: WooCommerceProduct[] = [];
   
   try {
+    // Fetch in batches to avoid memory issues (WooCommerce PHP limit 128MB)
+    const batchSize = 20;
+    const batches = [1, 2, 3]; // Fetch 3 batches = max 60 products
+    
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 10 });
+      products = await getCachedFeaturedProducts({ per_page: batchSize });
     } else if (params.category) {
-      products = await getCachedProductsByCategory(params.category, { per_page: 10 });
+      // Fetch products by category - multiple pages
+      const allProducts: WooCommerceProduct[] = [];
+      for (const page of batches) {
+        try {
+          const batch = await getCachedProducts({ 
+            per_page: batchSize, 
+            page,
+            status: 'publish', 
+            category: params.category 
+          });
+          if (batch.length > 0) {
+            allProducts.push(...batch);
+          } else {
+            break; // No more products
+          }
+        } catch (err) {
+          console.error(`Failed to fetch page ${page}:`, err);
+          break; // Stop on error
+        }
+      }
+      products = allProducts;
     } else {
-      // Fetch all products with status 'publish' (alleen echte webshop items)
-      // Limited to 10 due to WooCommerce PHP memory limit (128MB)
-      // Voor meer producten: ICT'er moet PHP memory verhogen (zie WOOCOMMERCE_PHP_MEMORY_FIX.md)
-      products = await getCachedProducts({ per_page: 10, status: 'publish' });
+      // Fetch all products - multiple pages
+      const allProducts: WooCommerceProduct[] = [];
+      for (const page of batches) {
+        try {
+          const batch = await getCachedProducts({ 
+            per_page: batchSize, 
+            page,
+            status: 'publish'
+          });
+          if (batch.length > 0) {
+            allProducts.push(...batch);
+          } else {
+            break; // No more products
+          }
+        } catch (err) {
+          console.error(`Failed to fetch page ${page}:`, err);
+          break; // Stop on error
+        }
+      }
+      products = allProducts;
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
-    // Fallback to empty array if WooCommerce API fails
     products = [];
   }
   
-  // Filter out occasions (motoren) - meerdere checks voor zekerheid
+  // Filter out occasions (motoren) - ALLEEN op categorie naam
   if (products) {
     products = products.filter(product => {
       // Check 1: Categorie naam bevat 'occasion'
@@ -49,20 +88,17 @@ export default async function ProductsPage({
         cat.slug.toLowerCase().includes('occasion')
       );
       
-      // Check 2: Prijs is hoger dan €500 (occasions zijn duur, accessoires niet)
-      const price = parseFloat(product.price || '0');
-      const isExpensive = price > 500;
-      
-      // Check 3: Product naam bevat motor merken
+      // Check 2: Product naam bevat motor merken (alleen als extra zekerheid)
       const productName = product.name.toLowerCase();
       const hasMotorBrand = [
         'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
-        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx'
+        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx',
+        'fireblade', 'ninja', 'monster'
       ].some(brand => productName.includes(brand));
       
       // Alleen tonen als het GEEN occasion is
-      // (geen occasion category EN (goedkoop OF geen motor merk))
-      return !hasOccasionCategory && (!isExpensive || !hasMotorBrand);
+      // (geen occasion category OF geen motor merk)
+      return !hasOccasionCategory || !hasMotorBrand;
     });
   }
 
