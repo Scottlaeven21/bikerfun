@@ -1,14 +1,25 @@
-# WooCommerce PHP Memory Fix
+# 🚨 URGENT: WooCommerce PHP Memory Fix
+
+## ⚠️ KRITIEK PROBLEEM - ACTIE VEREIST
+
+De webshop van bikerfun.nl toont momenteel **SLECHTS 5-10 producten** in plaats van alle 100+ producten!
+
+Dit moet **ZO SNEL MOGELIJK** opgelost worden door de ICT.
 
 ## Probleem
 
-WooCommerce API geeft `500 Internal Server Error` bij het ophalen van producten:
+WooCommerce API geeft constant `500 Internal Server Error`:
 
 ```
 Allowed memory size of 134217728 bytes exhausted (tried to allocate 20480 bytes)
 ```
 
-Het huidige PHP memory limit is **128MB**, wat te laag is voor WooCommerce.
+**Oorzaak:** PHP memory limit is **128MB** - dit is **veel te laag** voor WooCommerce met 100+ producten.
+
+**Gevolg:** 
+- Klanten zien maar 5-10 producten
+- Categorieën werken niet volledig
+- Webshop is NIET functioneel
 
 ## Oplossing (Voor ICT'er)
 
@@ -56,9 +67,22 @@ Na de wijziging, test of het werkt:
 
 ## Impact
 
-- **Huidige situatie**: Max 5-10 producten per API call
-- **Na fix**: 50-100+ producten per API call
-- **Resultaat**: Betere performance en meer producten zichtbaar op bikerfun.nl
+### 🔴 Huidige Situatie (128MB memory)
+- Max **5 producten** op "Alle producten" pagina
+- Max **10 producten** per categorie
+- Klanten kunnen **niet alle producten zien**
+- Webshop is **ONBRUIKBAAR**
+- Omzet wordt **GEMIST**
+
+### ✅ Na Fix (512MB memory)
+- **50-100+ producten** per pagina
+- Alle categorieën tonen **volledige inventaris**
+- **Snellere** API calls
+- **Volledige** webshop functionaliteit
+- **Hogere omzet**
+
+### ⏱️ Urgentie
+**HOOG** - Webshop is momenteel niet volledig functioneel!
 
 ## Referenties
 
