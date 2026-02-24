@@ -26,6 +26,11 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
     ? product.images[0].src 
     : null;
   
+  // Debug: Log products without images
+  if (!imageUrl) {
+    console.warn(`Product "${product.name}" (ID: ${product.id}) has no image`);
+  }
+  
   const showPlaceholder = !imageUrl || imageError;
 
   const handleViewProduct = () => {
