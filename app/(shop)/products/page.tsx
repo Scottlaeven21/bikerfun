@@ -23,22 +23,43 @@ export default async function ProductsPage({
   let products: WooCommerceProduct[] = [];
   let allCategories: any[] = [];
   
-  // HARDCODED CATEGORIES - geen API call meer ivm extreme traagheid/crashes
-  // Deze categorieën zijn ALTIJD beschikbaar en laden instant
-  // BELANGRIJK: Als categorie niet werkt, update het ID via WooCommerce admin:
-  // admin.bikerfun.nl/wp-admin → Products → Categories → hover over categorie → zie ID in URL
-  allCategories = [
-    { id: 16, name: 'Helmcovers', slug: 'helmcovers' },
-    { id: 17, name: 'Sleutelhangers', slug: 'sleutelhangers' },
-    { id: 18, name: 'Rugzakken', slug: 'rugzakken' },
-    { id: 19, name: 'Kentekenplaathouders', slug: 'kentekenplaathouders' },
-    { id: 20, name: 'Knipperlichten', slug: 'knipperlichten' },
+  // PROBEER EERST ECHTE CATEGORIES OP TE HALEN
+  // Fallback naar hardcoded als het faalt
+  try {
+    const fetchedCategories = await getCachedCategories({ per_page: 50, hide_empty: false });
+    if (fetchedCategories && fetchedCategories.length > 0) {
+      allCategories = fetchedCategories;
+      console.log(`Fetched ${fetchedCategories.length} categories from WooCommerce API`);
+    } else {
+      throw new Error('No categories returned');
+    }
+  } catch (error) {
+    console.warn('Failed to fetch categories, using fallback:', error);
+    // Fallback - deze IDs zijn mogelijk verkeerd!
+    allCategories = [
+      { id: 16, name: 'Helmcovers', slug: 'helmcovers' },
+      { id: 17, name: 'Sleutelhangers', slug: 'sleutelhangers' },
+      { id: 18, name: 'Rugzakken', slug: 'rugzakken' },
+      { id: 19, name: 'Kentekenplaathouders', slug: 'kentekenplaathouders' },
+      { id: 20, name: 'Knipperlichten', slug: 'knipperlichten' },
+    ];
+  }
+  
+  // Filter ongewenste categorieën
+  const excludedCategoryNames = [
+    'alle', 'alles', 'all',
+    'occasion', 'occasions', 'motor', 'motoren', 'motors',
+    'bike', 'bikes', 'motorcycle', 'motorcycles',
+    'uncategorized', 'ongecategoriseerd'
   ];
   
-  console.log('Using hardcoded categories (instant load)');
-  
-  // Geen filtering nodig - hardcoded categories zijn al schoon
-  const categories = allCategories;
+  const categories = allCategories.filter(cat => {
+    const catName = cat.name?.toLowerCase() || '';
+    const catSlug = cat.slug?.toLowerCase() || '';
+    return !excludedCategoryNames.some(excluded => 
+      catName.includes(excluded) || catSlug.includes(excluded)
+    );
+  });
   
   // Fetch products - ULTRA SIMPEL ivm PHP memory crisis
   if (params.category) {
