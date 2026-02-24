@@ -26,6 +26,26 @@ export default async function ProductsPage({
   // Fetch categories first (veel lichter dan producten!)
   allCategories = await getCachedCategories({ per_page: 50, hide_empty: true });
   
+  // Filter categories EERST (voor gebruik in product fetching)
+  const excludedCategoryNames = [
+    'alle', 'alles', 'all',
+    'occasion', 'occasions', 'motor', 'motoren', 'motors',
+    'bike', 'bikes', 'motorcycle', 'motorcycles',
+    'uncategorized', 'ongecategoriseerd'
+  ];
+  
+  const categories = allCategories.filter(cat => {
+    const catName = cat.name.toLowerCase();
+    const catSlug = cat.slug.toLowerCase();
+    return !excludedCategoryNames.some(excluded => 
+      catName.includes(excluded) || catSlug.includes(excluded)
+    );
+  }).map(cat => ({
+    id: cat.id,
+    name: cat.name,
+    slug: cat.slug,
+  }));
+  
   // Fetch products - SLIMME strategie om PHP memory te omzeilen
   try {
     if (params.featured === 'true') {
@@ -90,26 +110,6 @@ export default async function ProductsPage({
       return !hasOccasionCategory && !hasMotorBrand;
     });
   }
-  
-  // Filter categories (gebruik de direct opgehaalde categorieën!)
-  const excludedCategoryNames = [
-    'alle', 'alles', 'all',
-    'occasion', 'occasions', 'motor', 'motoren', 'motors',
-    'bike', 'bikes', 'motorcycle', 'motorcycles',
-    'uncategorized', 'ongecategoriseerd'
-  ];
-  
-  const categories = allCategories.filter(cat => {
-    const catName = cat.name.toLowerCase();
-    const catSlug = cat.slug.toLowerCase();
-    return !excludedCategoryNames.some(excluded => 
-      catName.includes(excluded) || catSlug.includes(excluded)
-    );
-  }).map(cat => ({
-    id: cat.id,
-    name: cat.name,
-    slug: cat.slug,
-  }));
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
