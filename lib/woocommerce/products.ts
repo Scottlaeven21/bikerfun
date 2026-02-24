@@ -171,26 +171,23 @@ export const searchCachedProducts = unstable_cache(
 
 /**
  * Get categories with caching
+ * Returns empty array on any error (never throws)
  */
-export const getCachedCategories = unstable_cache(
-  async (params?: { per_page?: number; hide_empty?: boolean }) => {
-    try {
-      if (!wooCommerce.isConfigured()) {
-        console.warn('WooCommerce is not configured');
-        return [];
-      }
-      return await wooCommerce.getCategories(params);
-    } catch (error) {
-      console.error('Failed to fetch categories:', error);
+export const getCachedCategories = async (params?: { per_page?: number; hide_empty?: boolean }) => {
+  try {
+    if (!wooCommerce.isConfigured()) {
+      console.warn('WooCommerce is not configured');
       return [];
     }
-  },
-  ['woocommerce-categories'],
-  {
-    revalidate: CACHE_DURATION,
-    tags: ['woocommerce', 'categories'],
+    
+    const categories = await wooCommerce.getCategories(params);
+    return categories || [];
+  } catch (error) {
+    console.error('Failed to fetch categories from WooCommerce:', error);
+    // Retourneer altijd lege array, gooi NOOIT error
+    return [];
   }
-);
+};
 
 /**
  * Helper: Check if WooCommerce is available

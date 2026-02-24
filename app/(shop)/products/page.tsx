@@ -23,22 +23,30 @@ export default async function ProductsPage({
   let products: WooCommerceProduct[] = [];
   let allCategories: any[] = [];
   
-  // Fetch categories first (veel lichter dan producten!)
+  // HARDCODED FALLBACK CATEGORIES - altijd gebruiken ivm extreme PHP memory problemen
+  // Als WooCommerce PHP memory is verhoogd, kan deze fallback verwijderd worden
+  const fallbackCategories = [
+    { id: 16, name: 'Helmcovers', slug: 'helmcovers' },
+    { id: 17, name: 'Sleutelhangers', slug: 'sleutelhangers' },
+    { id: 18, name: 'Rugzakken', slug: 'rugzakken' },
+    { id: 19, name: 'Kentekenplaathouders', slug: 'kentekenplaathouders' },
+    { id: 20, name: 'Knipperlichten', slug: 'knipperlichten' },
+  ];
+  
+  // Probeer categories op te halen, maar gebruik altijd fallback bij falen
   try {
-    // Probeer met hide_empty: false voor minder memory gebruik
     allCategories = await getCachedCategories({ per_page: 50, hide_empty: false });
     console.log(`Fetched ${allCategories.length} categories from WooCommerce`);
+    
+    // Als de API een lege array returned, gebruik fallback
+    if (!allCategories || allCategories.length === 0) {
+      console.warn('No categories returned from API, using fallback');
+      allCategories = fallbackCategories;
+    }
   } catch (error) {
     console.error('Failed to fetch categories:', error);
-    // Als categories API faalt, gebruik fallback lijst
-    allCategories = [
-      { id: 1, name: 'Helmcovers', slug: 'helmcovers' },
-      { id: 2, name: 'Sleutelhangers', slug: 'sleutelhangers' },
-      { id: 3, name: 'Rugzakken', slug: 'rugzakken' },
-      { id: 4, name: 'Kentekenplaathouders', slug: 'kentekenplaathouders' },
-      { id: 5, name: 'Knipperlichten', slug: 'knipperlichten' },
-    ];
-    console.log('Using fallback categories');
+    console.log('Using fallback categories due to API error');
+    allCategories = fallbackCategories;
   }
   
   // Filter categories EERST (voor gebruik in product fetching)
