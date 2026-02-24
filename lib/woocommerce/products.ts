@@ -170,6 +170,29 @@ export const searchCachedProducts = unstable_cache(
 );
 
 /**
+ * Get categories with caching
+ */
+export const getCachedCategories = unstable_cache(
+  async (params?: { per_page?: number; hide_empty?: boolean }) => {
+    try {
+      if (!wooCommerce.isConfigured()) {
+        console.warn('WooCommerce is not configured');
+        return [];
+      }
+      return await wooCommerce.getCategories(params);
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+      return [];
+    }
+  },
+  ['woocommerce-categories'],
+  {
+    revalidate: CACHE_DURATION,
+    tags: ['woocommerce', 'categories'],
+  }
+);
+
+/**
  * Helper: Check if WooCommerce is available
  */
 export function isWooCommerceAvailable(): boolean {

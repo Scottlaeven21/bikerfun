@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { WooCommerceProductCard } from '@/components/products/woocommerce-product-card';
-import { getCachedProducts, getCachedFeaturedProducts } from '@/lib/woocommerce/products';
-import { wooCommerce } from '@/lib/woocommerce/client';
+import { getCachedProducts, getCachedFeaturedProducts, getCachedCategories } from '@/lib/woocommerce/products';
 import type { WooCommerceProduct, WooCommerceCategory } from '@/types/woocommerce';
 
 export const metadata: Metadata = {
@@ -25,12 +24,7 @@ export default async function ProductsPage({
   let allCategories: any[] = [];
   
   // Fetch categories first (veel lichter dan producten!)
-  try {
-    const cats = await wooCommerce.getCategories({ per_page: 50, hide_empty: true });
-    allCategories = cats;
-  } catch (error) {
-    console.error('Failed to fetch categories:', error);
-  }
+  allCategories = await getCachedCategories({ per_page: 50, hide_empty: true });
   
   // Fetch products - kleinere batches
   try {
