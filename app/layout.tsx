@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from 'next/font/google';
 import { GoogleAnalytics } from '@/components/analytics/google-analytics';
+import { CartProvider } from '@/contexts/cart-context';
 import "./globals.css";
 
 const inter = Inter({ 
@@ -69,7 +70,9 @@ export default function RootLayout({
       </head>
       <body className="antialiased overflow-x-hidden bg-black">
         <GoogleAnalytics />
-        {children}
+        <CartProvider>
+          {children}
+        </CartProvider>
       </body>
     </html>
   );

@@ -1,9 +1,8 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
-import { createClient } from '@/lib/supabase/server';
-import { ProductCard } from '@/components/products/product-card';
-import { CategoryFilterMobile } from '@/components/products/category-filter-mobile';
-import { Product, Category } from '@/types';
+import { WooCommerceProductCard } from '@/components/products/woocommerce-product-card';
+import { getCachedProducts, getCachedProductsByCategory, getCachedFeaturedProducts } from '@/lib/woocommerce/products';
+import type { WooCommerceProduct, WooCommerceCategory } from '@/types/woocommerce';
 
 export const metadata: Metadata = {
   title: 'Webshop | Bikerfun',
@@ -14,57 +13,38 @@ export const metadata: Metadata = {
   },
 };
 
-type ProductWithCategory = Product & {
-  category: Category;
-};
-
 export default async function ProductsPage({
   searchParams,
 }: {
   searchParams: Promise<{ category?: string; featured?: string }>;
 }) {
   const params = await searchParams;
-  const supabase = await createClient();
-
-  // Build query
-  let query = supabase
-    .from('products')
-    .select(`
-      *,
-      category:categories(*)
-    `)
-    .eq('is_active', true)
-    .order('created_at', { ascending: false });
-
-  // Filter by category if provided
-  if (params.category) {
-    const { data: categoryData } = await supabase
-      .from('categories')
-      .select('id')
-      .ilike('name', params.category)
-      .single();
-
-    const category = categoryData as { id: string } | null;
-    if (category) {
-      query = query.eq('category_id', category.id);
+  
+  // Fetch products from WooCommerce
+  let products: WooCommerceProduct[] = [];
+  
+  try {
+    if (params.featured === 'true') {
+      products = await getCachedFeaturedProducts({ per_page: 100 });
+    } else if (params.category) {
+      products = await getCachedProductsByCategory(params.category, { per_page: 100 });
+    } else {
+      products = await getCachedProducts({ per_page: 100, status: 'publish' });
     }
+  } catch (error) {
+    console.error('Failed to fetch products:', error);
   }
 
-  // Filter by featured if provided
-  if (params.featured === 'true') {
-    query = query.eq('is_featured', true);
-  }
-
-  const { data: productsData } = await query;
-  const products = productsData as ProductWithCategory[] | null;
-
-  // Fetch all categories for filter
-  const { data: categoriesData } = await supabase
-    .from('categories')
-    .select('*')
-    .order('name');
-
-  const categories = categoriesData as Category[] | null;
+  // Extract unique categories from products
+  const categoriesMap = new Map<string, WooCommerceCategory>();
+  products.forEach(product => {
+    product.categories.forEach(cat => {
+      if (!categoriesMap.has(cat.slug)) {
+        categoriesMap.set(cat.slug, cat);
+      }
+    });
+  });
+  const categories = Array.from(categoriesMap.values());
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
@@ -90,16 +70,8 @@ export default async function ProductsPage({
         {/* Category Filter */}
         {categories && categories.length > 0 && (
           <div className="mb-12">
-            {/* Mobile: Dropdown */}
-            <div className="md:hidden">
-              <CategoryFilterMobile 
-                categories={categories} 
-                currentCategory={params.category}
-              />
-            </div>
-
             {/* Desktop: Buttons */}
-            <div className="hidden md:flex flex-wrap gap-3 justify-center">
+            <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/products"
                 className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
@@ -131,20 +103,25 @@ export default async function ProductsPage({
         {products && products.length > 0 ? (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
             {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <WooCommerceProductCard key={product.id} product={product} />
             ))}
           </div>
         ) : (
           <div className="text-center py-16">
             <p className="text-xl text-gray-600 mb-4">
-              Geen producten gevonden
+              {params.category 
+                ? `Geen producten gevonden in categorie "${params.category}"`
+                : 'Geen producten gevonden'
+              }
             </p>
-            <Link
-              href="/products"
-              className="text-biker-yellow hover:text-biker-yellowHover font-semibold underline"
-            >
-              Bekijk alle producten
-            </Link>
+            {params.category && (
+              <Link
+                href="/products"
+                className="text-biker-yellow hover:text-biker-yellowHover font-semibold underline"
+              >
+                Bekijk alle producten
+              </Link>
+            )}
           </div>
         )}
       </div>
