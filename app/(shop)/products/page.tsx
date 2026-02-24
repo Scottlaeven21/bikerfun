@@ -25,16 +25,20 @@ export default async function ProductsPage({
   
   try {
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 50 });
+      products = await getCachedFeaturedProducts({ per_page: 5 });
     } else if (params.category) {
-      products = await getCachedProductsByCategory(params.category, { per_page: 50 });
+      products = await getCachedProductsByCategory(params.category, { per_page: 5 });
     } else {
       // Fetch all products with status 'publish' (alleen echte webshop items)
       // Excludeert occasions die als 'private' staan
-      products = await getCachedProducts({ per_page: 50, status: 'publish' });
+      // Limited to 5 items due to WooCommerce server PHP memory constraint (128MB)
+      // ICT'er moet PHP memory_limit verhogen naar 256M in wp-config.php
+      products = await getCachedProducts({ per_page: 5, status: 'publish' });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
+    // Fallback to empty array if WooCommerce API fails
+    products = [];
   }
   
   // Filter out occasions (producten met 'Occasions' category)
