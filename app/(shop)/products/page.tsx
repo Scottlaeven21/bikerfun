@@ -24,7 +24,22 @@ export default async function ProductsPage({
   let allCategories: any[] = [];
   
   // Fetch categories first (veel lichter dan producten!)
-  allCategories = await getCachedCategories({ per_page: 50, hide_empty: true });
+  try {
+    // Probeer met hide_empty: false voor minder memory gebruik
+    allCategories = await getCachedCategories({ per_page: 50, hide_empty: false });
+    console.log(`Fetched ${allCategories.length} categories from WooCommerce`);
+  } catch (error) {
+    console.error('Failed to fetch categories:', error);
+    // Als categories API faalt, gebruik fallback lijst
+    allCategories = [
+      { id: 1, name: 'Helmcovers', slug: 'helmcovers' },
+      { id: 2, name: 'Sleutelhangers', slug: 'sleutelhangers' },
+      { id: 3, name: 'Rugzakken', slug: 'rugzakken' },
+      { id: 4, name: 'Kentekenplaathouders', slug: 'kentekenplaathouders' },
+      { id: 5, name: 'Knipperlichten', slug: 'knipperlichten' },
+    ];
+    console.log('Using fallback categories');
+  }
   
   // Filter categories EERST (voor gebruik in product fetching)
   const excludedCategoryNames = [
@@ -45,6 +60,8 @@ export default async function ProductsPage({
     name: cat.name,
     slug: cat.slug,
   }));
+  
+  console.log(`After filtering: ${categories.length} categories available`);
   
   // Fetch products - SLIMME strategie om PHP memory te omzeilen
   try {
@@ -133,9 +150,8 @@ export default async function ProductsPage({
         </div>
 
         {/* Category Filter */}
-        {categories && categories.length > 0 && (
-          <div className="mb-12">
-            {/* Desktop: Buttons */}
+        <div className="mb-12">
+          {categories && categories.length > 0 ? (
             <div className="flex flex-wrap gap-3 justify-center">
               <Link
                 href="/products"
@@ -161,8 +177,12 @@ export default async function ProductsPage({
                 </Link>
               ))}
             </div>
-          </div>
-        )}
+          ) : (
+            <div className="text-center">
+              <p className="text-gray-500 text-sm">Categorieën laden...</p>
+            </div>
+          )}
+        </div>
 
         {/* Products Grid */}
         {products && products.length > 0 ? (
