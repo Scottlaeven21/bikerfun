@@ -13,6 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Get return URLs for after payment
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const returnUrl = `${baseUrl}/payment-return`;
+    
     // Create order in WooCommerce
     const orderData = {
       payment_method: customer.paymentMethod || 'bacs',
@@ -41,17 +45,26 @@ export async function POST(request: NextRequest) {
         quantity: item.quantity,
       })),
       customer_note: customer.orderNotes || '',
+      meta_data: [
+        {
+          key: '_wc_order_return_url',
+          value: returnUrl,
+        },
+      ],
     };
 
     const order = await wooCommerce.createOrder(orderData);
+
+    // Get payment URL from WooCommerce
+    // WooCommerce will use configured payment gateway (Mollie/etc)
+    const paymentUrl = order.payment_url || `${process.env.NEXT_PUBLIC_WOOCOMMERCE_URL}/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
 
     return NextResponse.json({
       success: true,
       orderId: order.id,
       orderNumber: order.number,
       total: order.total,
-      // For now, no payment URL - we'll add Mollie/Stripe later
-      paymentUrl: null,
+      paymentUrl: paymentUrl,
     });
   } catch (error: any) {
     console.error('Order creation error:', error);
