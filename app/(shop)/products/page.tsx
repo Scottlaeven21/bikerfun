@@ -25,12 +25,14 @@ export default async function ProductsPage({
   
   try {
     if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 50 });
+      products = await getCachedFeaturedProducts({ per_page: 10 });
     } else if (params.category) {
-      products = await getCachedProductsByCategory(params.category, { per_page: 50 });
+      products = await getCachedProductsByCategory(params.category, { per_page: 10 });
     } else {
       // Fetch all products with status 'publish' (alleen echte webshop items)
-      products = await getCachedProducts({ per_page: 50, status: 'publish' });
+      // Limited to 10 due to WooCommerce PHP memory limit (128MB)
+      // Voor meer producten: ICT'er moet PHP memory verhogen (zie WOOCOMMERCE_PHP_MEMORY_FIX.md)
+      products = await getCachedProducts({ per_page: 10, status: 'publish' });
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
