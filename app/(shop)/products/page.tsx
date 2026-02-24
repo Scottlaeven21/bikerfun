@@ -64,20 +64,27 @@ export default async function ProductsPage({
       // ZEER kleine batches ivm extreme PHP memory limit (128MB!)
       const allProducts: WooCommerceProduct[] = [];
       
-      // Limiteer aantal categorieën dat we doorlopen (max 10)
-      const categoriesToFetch = categories.slice(0, 10);
+      // Limiteer aantal categorieën dat we doorlopen (max 5)
+      const categoriesToFetch = categories.slice(0, 5);
+      
+      console.log(`Fetching products from ${categoriesToFetch.length} categories`);
       
       for (const category of categoriesToFetch) {
         try {
-          // Nog kleinere batch: 8 producten per categorie
+          // Nog kleinere batch: 5 producten per categorie
+          console.log(`Fetching 5 products from category: ${category.name}`);
           const categoryProducts = await getCachedProducts({
-            per_page: 8,
+            per_page: 5,
             category: category.id.toString()
           });
+          console.log(`Got ${categoryProducts.length} products from ${category.name}`);
           allProducts.push(...categoryProducts);
           
-          // Stop als we al 50+ producten hebben (voorkomt overload)
-          if (allProducts.length >= 50) break;
+          // Stop als we al 25+ producten hebben (voorkomt overload)
+          if (allProducts.length >= 25) {
+            console.log(`Reached 25 products, stopping`);
+            break;
+          }
         } catch (error) {
           console.error(`Failed to fetch products for category ${category.name}:`, error);
           // Continue met volgende categorie bij error
@@ -85,11 +92,30 @@ export default async function ProductsPage({
         }
       }
       
+      console.log(`Total products fetched: ${allProducts.length}`);
       products = allProducts;
+      
+      // ULTIEME FALLBACK: Als we nog steeds geen producten hebben, probeer featured
+      if (products.length === 0) {
+        console.log('No products from categories, trying featured products as fallback');
+        try {
+          products = await getCachedFeaturedProducts({ per_page: 5 });
+          console.log(`Fallback: Got ${products.length} featured products`);
+        } catch (fallbackError) {
+          console.error('Featured products fallback also failed:', fallbackError);
+        }
+      }
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
-    products = [];
+    // LAATSTE FALLBACK: Probeer featured products
+    try {
+      console.log('Main fetch failed, trying featured products');
+      products = await getCachedFeaturedProducts({ per_page: 5 });
+    } catch (fallbackError) {
+      console.error('All fallbacks failed:', fallbackError);
+      products = [];
+    }
   }
   
   // Filter occasions uit producten
