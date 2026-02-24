@@ -26,7 +26,7 @@ export default async function ProductsPage({
   // Fetch categories first (veel lichter dan producten!)
   allCategories = await getCachedCategories({ per_page: 50, hide_empty: true });
   
-  // Fetch products - ZEER kleine batches ivm PHP memory limit
+  // Fetch products - SLIMME strategie om PHP memory te omzeilen
   try {
     if (params.featured === 'true') {
       products = await getCachedFeaturedProducts({ per_page: 5 });
@@ -35,13 +35,28 @@ export default async function ProductsPage({
       const categoryData = allCategories.find(c => c.slug === params.category);
       if (categoryData) {
         products = await getCachedProducts({ 
-          per_page: 10, 
+          per_page: 100,
           category: categoryData.id.toString()
         });
       }
     } else {
-      // Fetch all products (ZEER beperkt ivm WooCommerce PHP memory 128MB)
-      products = await getCachedProducts({ per_page: 5 });
+      // Voor "Alle" pagina: Fetch producten PER CATEGORIE en combineer
+      // Dit omzeilt het PHP memory probleem!
+      const allProducts: WooCommerceProduct[] = [];
+      
+      for (const category of categories) {
+        try {
+          const categoryProducts = await getCachedProducts({
+            per_page: 20,
+            category: category.id.toString()
+          });
+          allProducts.push(...categoryProducts);
+        } catch (error) {
+          console.error(`Failed to fetch products for category ${category.name}:`, error);
+        }
+      }
+      
+      products = allProducts;
     }
   } catch (error) {
     console.error('Failed to fetch products:', error);
@@ -142,23 +157,11 @@ export default async function ProductsPage({
 
         {/* Products Grid */}
         {products && products.length > 0 ? (
-          <>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
-              {products.map((product) => (
-                <WooCommerceProductCard key={product.id} product={product} />
-              ))}
-            </div>
-            
-            {/* Tijdelijke melding ivm PHP memory limit */}
-            {!params.category && (
-              <div className="mt-8 text-center p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-                <p className="text-sm text-gray-700">
-                  ⚠️ <strong>Let op:</strong> Door technische beperkingen worden momenteel slechts enkele producten getoond. 
-                  Gebruik de categorieën hierboven om specifieke producten te bekijken.
-                </p>
-              </div>
-            )}
-          </>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+            {products.map((product) => (
+              <WooCommerceProductCard key={product.id} product={product} />
+            ))}
+          </div>
         ) : (
           <div className="text-center py-16">
             <p className="text-xl text-gray-600 mb-4">
