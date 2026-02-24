@@ -5,8 +5,8 @@ import { unstable_cache } from 'next/cache';
 import { wooCommerce } from './client';
 import type { WooCommerceProduct, WooCommerceListParams } from '@/types/woocommerce';
 
-// Cache duration in seconds (5 minutes)
-const CACHE_DURATION = 300;
+// Cache duration in seconds (30 minutes voor snellere loads)
+const CACHE_DURATION = 1800;
 
 /**
  * Get all products with caching

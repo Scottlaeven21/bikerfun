@@ -23,9 +23,11 @@ export default async function ProductsPage({
   let products: WooCommerceProduct[] = [];
   let allCategories: any[] = [];
   
-  // HARDCODED FALLBACK CATEGORIES - altijd gebruiken ivm extreme PHP memory problemen
-  // Als WooCommerce PHP memory is verhoogd, kan deze fallback verwijderd worden
-  const fallbackCategories = [
+  // HARDCODED CATEGORIES - geen API call meer ivm extreme traagheid/crashes
+  // Deze categorieën zijn ALTIJD beschikbaar en laden instant
+  // BELANGRIJK: Als categorie niet werkt, update het ID via WooCommerce admin:
+  // admin.bikerfun.nl/wp-admin → Products → Categories → hover over categorie → zie ID in URL
+  allCategories = [
     { id: 16, name: 'Helmcovers', slug: 'helmcovers' },
     { id: 17, name: 'Sleutelhangers', slug: 'sleutelhangers' },
     { id: 18, name: 'Rugzakken', slug: 'rugzakken' },
@@ -33,43 +35,10 @@ export default async function ProductsPage({
     { id: 20, name: 'Knipperlichten', slug: 'knipperlichten' },
   ];
   
-  // Probeer categories op te halen, maar gebruik altijd fallback bij falen
-  try {
-    allCategories = await getCachedCategories({ per_page: 50, hide_empty: false });
-    console.log(`Fetched ${allCategories.length} categories from WooCommerce`);
-    
-    // Als de API een lege array returned, gebruik fallback
-    if (!allCategories || allCategories.length === 0) {
-      console.warn('No categories returned from API, using fallback');
-      allCategories = fallbackCategories;
-    }
-  } catch (error) {
-    console.error('Failed to fetch categories:', error);
-    console.log('Using fallback categories due to API error');
-    allCategories = fallbackCategories;
-  }
+  console.log('Using hardcoded categories (instant load)');
   
-  // Filter categories EERST (voor gebruik in product fetching)
-  const excludedCategoryNames = [
-    'alle', 'alles', 'all',
-    'occasion', 'occasions', 'motor', 'motoren', 'motors',
-    'bike', 'bikes', 'motorcycle', 'motorcycles',
-    'uncategorized', 'ongecategoriseerd'
-  ];
-  
-  const categories = allCategories.filter(cat => {
-    const catName = cat.name.toLowerCase();
-    const catSlug = cat.slug.toLowerCase();
-    return !excludedCategoryNames.some(excluded => 
-      catName.includes(excluded) || catSlug.includes(excluded)
-    );
-  }).map(cat => ({
-    id: cat.id,
-    name: cat.name,
-    slug: cat.slug,
-  }));
-  
-  console.log(`After filtering: ${categories.length} categories available`);
+  // Geen filtering nodig - hardcoded categories zijn al schoon
+  const categories = allCategories;
   
   // Fetch products - ULTRA SIMPEL ivm PHP memory crisis
   if (params.category) {
