@@ -71,69 +71,52 @@ export default async function ProductsPage({
   
   console.log(`After filtering: ${categories.length} categories available`);
   
-  // Fetch products - SLIMME strategie om PHP memory te omzeilen
-  try {
-    if (params.featured === 'true') {
-      products = await getCachedFeaturedProducts({ per_page: 5 });
-    } else if (params.category) {
-      // Fetch by category slug
+  // Fetch products - ULTRA SIMPEL ivm PHP memory crisis
+  if (params.category) {
+    // ALLEEN per specifieke categorie - DIT WERKT
+    console.log(`Fetching products for category: ${params.category}`);
+    try {
       const categoryData = allCategories.find(c => c.slug === params.category);
       if (categoryData) {
         products = await getCachedProducts({ 
           per_page: 100,
           category: categoryData.id.toString()
         });
+        console.log(`Fetched ${products.length} products for ${params.category}`);
       }
-    } else {
-      // Voor "Alle" pagina: Fetch producten PER CATEGORIE en combineer
-      // ZEER kleine batches ivm extreme PHP memory limit (128MB!)
-      const allProducts: WooCommerceProduct[] = [];
-      
-      // Limiteer aantal categorieën dat we doorlopen (max 8)
-      const categoriesToFetch = categories.slice(0, 8);
-      
-      for (const category of categoriesToFetch) {
-        try {
-          // Kleine batch: 6 producten per categorie
-          const categoryProducts = await getCachedProducts({
-            per_page: 6,
-            category: category.id.toString()
-          });
-          allProducts.push(...categoryProducts);
-          
-          // Stop als we al 40+ producten hebben (voorkomt overload)
-          if (allProducts.length >= 40) break;
-        } catch (error) {
-          console.error(`Failed to fetch products for category ${category.name}:`, error);
-          // Continue met volgende categorie bij error
-          continue;
-        }
-      }
-      
-      products = allProducts;
+    } catch (error) {
+      console.error(`Failed to fetch products for ${params.category}:`, error);
+      products = [];
     }
-  } catch (error) {
-    console.error('Failed to fetch products:', error);
+  } else {
+    // "Alle" pagina: GEEN producten ophalen (crasht altijd)
+    console.log('Alle pagina: Geen producten geladen (gebruiker moet categorie kiezen)');
     products = [];
   }
   
-  // Filter occasions uit producten
-  if (products) {
-    products = products.filter(product => {
-      const hasOccasionCategory = product.categories.some(cat => 
-        cat.name.toLowerCase().includes('occasion') || 
-        cat.slug.toLowerCase().includes('occasion') ||
-        cat.name.toLowerCase().includes('motor')
-      );
-      
-      const productName = product.name.toLowerCase();
-      const hasMotorBrand = [
-        'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
-        'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx'
-      ].some(brand => productName.includes(brand));
-      
-      return !hasOccasionCategory && !hasMotorBrand;
-    });
+  // Filter occasions uit producten (alleen als we producten hebben)
+  if (products && products.length > 0) {
+    try {
+      products = products.filter(product => {
+        const hasOccasionCategory = product.categories?.some(cat => 
+          cat.name?.toLowerCase().includes('occasion') || 
+          cat.slug?.toLowerCase().includes('occasion') ||
+          cat.name?.toLowerCase().includes('motor')
+        ) || false;
+        
+        const productName = product.name?.toLowerCase() || '';
+        const hasMotorBrand = [
+          'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati', 
+          'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx'
+        ].some(brand => productName.includes(brand));
+        
+        return !hasOccasionCategory && !hasMotorBrand;
+      });
+      console.log(`After filtering: ${products.length} products`);
+    } catch (filterError) {
+      console.error('Error filtering products:', filterError);
+      // Bij filter error, behoud producten zoals ze zijn
+    }
   }
 
   return (
