@@ -2,32 +2,31 @@
 
 import { useState } from 'react';
 import { useCart } from '@/contexts/cart-context';
+import { SupabaseProduct } from '@/lib/supabase/products';
 
 interface AddToCartButtonProps {
-  product: {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-  };
+  product: SupabaseProduct;
   disabled?: boolean;
 }
 
 export function AddToCartButton({ product, disabled = false }: AddToCartButtonProps) {
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   const handleAddToCart = async () => {
     setIsAdding(true);
     
-    addItem({
-      id: product.id,
+    // Convert Supabase product to WooCommerce format for cart
+    const wooProduct = {
+      id: product.woo_product_id || 0,
       name: product.name,
-      price: product.price,
-      quantity,
-      image: product.image,
-    });
+      price: product.price.toString(),
+      images: product.images,
+      stock_status: product.stock_status,
+    };
+    
+    addToCart(wooProduct, quantity);
 
     setTimeout(() => {
       setIsAdding(false);
