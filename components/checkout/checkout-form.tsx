@@ -50,22 +50,42 @@ export function CheckoutForm() {
     setError(null);
 
     try {
-      // Create order via API
-      const response = await fetch('/api/checkout/create-order', {
+      // Create order and Mollie payment via API
+      const response = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          customer: formData,
-          items: cart.map(item => ({
-            product_id: item.product.id,
-            quantity: item.quantity,
-          })),
-          total,
+          cartItems: cart,
+          customer: {
+            email: formData.email,
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            phone: formData.phone,
+          },
+          billing: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            street: formData.address.split(' ')[0],
+            houseNumber: formData.address.split(' ').slice(1).join(' ') || '',
+            postalCode: formData.postcode,
+            city: formData.city,
+            country: formData.country,
+          },
+          shipping: {
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            street: formData.address.split(' ')[0],
+            houseNumber: formData.address.split(' ').slice(1).join(' ') || '',
+            postalCode: formData.postcode,
+            city: formData.city,
+            country: formData.country,
+          },
         }),
       });
 
       if (!response.ok) {
-        throw new Error('Failed to create order');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Fout bij aanmaken bestelling');
       }
 
       const { orderId, paymentUrl } = await response.json();
@@ -73,7 +93,7 @@ export function CheckoutForm() {
       // Clear cart
       clearCart();
 
-      // Redirect to payment or confirmation
+      // Redirect to Mollie payment
       if (paymentUrl) {
         window.location.href = paymentUrl;
       } else {

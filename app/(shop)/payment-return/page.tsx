@@ -9,22 +9,47 @@ export default function PaymentReturnPage() {
   const searchParams = useSearchParams();
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>('loading');
   const [orderId, setOrderId] = useState<string | null>(null);
+  const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   useEffect(() => {
-    // Get order info from URL params
-    const orderIdParam = searchParams.get('order_id') || searchParams.get('order');
-    const keyParam = searchParams.get('key');
-    
-    if (orderIdParam) {
+    const checkPaymentStatus = async () => {
+      const orderIdParam = searchParams.get('order');
+      
+      if (!orderIdParam) {
+        setStatus('failed');
+        return;
+      }
+
       setOrderId(orderIdParam);
-      // Simulate checking payment status
-      // In reality, WooCommerce webhooks update order status
-      setTimeout(() => {
-        setStatus('success');
-      }, 1500);
-    } else {
-      setStatus('failed');
-    }
+
+      try {
+        // Fetch order status from Supabase
+        const response = await fetch(`/api/orders/${orderIdParam}`);
+        
+        if (!response.ok) {
+          setStatus('failed');
+          return;
+        }
+
+        const { order } = await response.json();
+        setOrderNumber(order.order_number);
+
+        // Check payment status
+        if (order.payment_status === 'paid') {
+          setStatus('success');
+        } else if (order.payment_status === 'failed' || order.payment_status === 'canceled' || order.payment_status === 'expired') {
+          setStatus('failed');
+        } else {
+          // Still pending, check again in 2 seconds
+          setTimeout(checkPaymentStatus, 2000);
+        }
+      } catch (error) {
+        console.error('Error checking payment status:', error);
+        setStatus('failed');
+      }
+    };
+
+    checkPaymentStatus();
   }, [searchParams]);
 
   if (status === 'loading') {
