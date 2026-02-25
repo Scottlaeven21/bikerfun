@@ -130,7 +130,14 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               {/* Description */}
               <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray mb-8">
                 <h3 className="text-2xl font-bold text-white mb-4">Beschrijving</h3>
-                <p className="text-biker-light leading-relaxed">{occasion.description}</p>
+                <div className="text-biker-light leading-relaxed whitespace-pre-line">
+                  {occasion.description
+                    ?.replace(/\\n/g, '\n') // Convert \n to actual line breaks
+                    .replace(/<[^>]*>/g, '') // Strip HTML tags
+                    .replace(/&amp;/g, '&')
+                    .replace(/&nbsp;/g, ' ')
+                    .trim()}
+                </div>
               </div>
 
               {/* Technical Specifications */}

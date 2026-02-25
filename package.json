@@ -11,6 +11,7 @@
     "import:occasions": "tsx scripts/import-occasions.ts",
     "check:occasions": "tsx scripts/check-occasions.ts",
     "clean:occasions": "tsx scripts/clean-occasions.ts",
+    "clean:descriptions": "tsx scripts/clean-occasion-descriptions.ts",
     "migrations": "tsx scripts/run-migrations.ts"
   },
   "dependencies": {
