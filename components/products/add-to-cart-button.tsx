@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useCart } from '@/contexts/cart-context';
 import { SupabaseProduct } from '@/lib/supabase/products';
+import { WooCommerceProduct } from '@/types/woocommerce';
 
 interface AddToCartButtonProps {
   product: SupabaseProduct;
@@ -18,12 +19,70 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
     setIsAdding(true);
     
     // Convert Supabase product to WooCommerce format for cart
-    const wooProduct = {
+    const wooProduct: WooCommerceProduct = {
       id: product.woo_product_id || 0,
       name: product.name,
+      slug: product.slug || '',
+      permalink: `/products/${product.slug}`,
+      type: 'simple',
+      status: product.status as 'publish' | 'draft' | 'pending' | 'private',
+      featured: product.featured,
+      description: product.description || '',
+      short_description: product.short_description || '',
+      sku: product.sku || '',
       price: product.price.toString(),
-      images: product.images,
+      regular_price: product.regular_price.toString(),
+      sale_price: product.sale_price?.toString() || '',
+      on_sale: product.on_sale,
+      purchasable: true,
+      total_sales: 0,
+      virtual: false,
+      downloadable: false,
+      downloads: [],
+      download_limit: -1,
+      download_expiry: -1,
+      external_url: '',
+      button_text: '',
+      tax_status: 'taxable',
+      tax_class: '',
+      manage_stock: product.manage_stock,
+      stock_quantity: product.stock_quantity,
       stock_status: product.stock_status,
+      backorders: 'no',
+      backorders_allowed: false,
+      backordered: false,
+      sold_individually: false,
+      weight: '',
+      dimensions: { length: '', width: '', height: '' },
+      shipping_required: true,
+      shipping_taxable: true,
+      shipping_class: '',
+      shipping_class_id: 0,
+      reviews_allowed: true,
+      average_rating: '0',
+      rating_count: 0,
+      related_ids: [],
+      upsell_ids: [],
+      cross_sell_ids: [],
+      parent_id: 0,
+      categories: product.categories.map(cat => ({ id: 0, name: cat, slug: cat })),
+      tags: product.tags.map(tag => ({ id: 0, name: tag, slug: tag })),
+      images: product.images.map((img, idx) => ({
+        id: idx,
+        src: img.src,
+        name: img.alt,
+        alt: img.alt
+      })),
+      attributes: [],
+      default_attributes: [],
+      variations: [],
+      grouped_products: [],
+      menu_order: 0,
+      meta_data: [],
+      date_created: product.created_at,
+      date_created_gmt: product.created_at,
+      date_modified: product.updated_at,
+      date_modified_gmt: product.updated_at,
     };
     
     addToCart(wooProduct, quantity);
