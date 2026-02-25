@@ -139,25 +139,6 @@ export async function getFeaturedProducts(limit: number = 8): Promise<SupabasePr
 }
 
 /**
- * Get product by slug
- */
-export async function getProductBySlug(slug: string): Promise<SupabaseProduct | null> {
-  const { data, error } = await supabase
-    .from('webshop_products')
-    .select('*')
-    .eq('slug', slug)
-    .eq('status', 'publish')
-    .single();
-  
-  if (error) {
-    console.error('Error fetching product by slug:', error);
-    return null;
-  }
-  
-  return data;
-}
-
-/**
  * Get all unique categories from products
  */
 export async function getCategories(): Promise<string[]> {
