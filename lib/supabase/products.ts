@@ -50,11 +50,20 @@ export async function getAllProducts(limit: number = 100): Promise<SupabaseProdu
     return [];
   }
   
-  return data || [];
+  // Filter out occasions/motors (high price products)
+  const filtered = data?.filter(product => {
+    const isOccasion = product.price > 1000;
+    const hasMotorCategory = product.categories?.some((cat: string) => 
+      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
+    );
+    return !isOccasion && !hasMotorCategory;
+  }) || [];
+  
+  return filtered;
 }
 
 /**
- * Get products by category
+ * Get products by category (excluding occasions/motors)
  */
 export async function getProductsByCategory(category: string, limit: number = 100): Promise<SupabaseProduct[]> {
   const { data, error } = await supabase
@@ -70,11 +79,20 @@ export async function getProductsByCategory(category: string, limit: number = 10
     return [];
   }
   
-  return data || [];
+  // Filter out occasions/motors
+  const filtered = data?.filter(product => {
+    const isOccasion = product.price > 1000;
+    const hasMotorCategory = product.categories?.some((cat: string) => 
+      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
+    );
+    return !isOccasion && !hasMotorCategory;
+  }) || [];
+  
+  return filtered;
 }
 
 /**
- * Get featured products
+ * Get featured products (excluding occasions/motors)
  */
 export async function getFeaturedProducts(limit: number = 8): Promise<SupabaseProduct[]> {
   const { data, error } = await supabase
@@ -90,7 +108,16 @@ export async function getFeaturedProducts(limit: number = 8): Promise<SupabasePr
     return [];
   }
   
-  return data || [];
+  // Filter out occasions/motors
+  const filtered = data?.filter(product => {
+    const isOccasion = product.price > 1000;
+    const hasMotorCategory = product.categories?.some((cat: string) => 
+      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
+    );
+    return !isOccasion && !hasMotorCategory;
+  }) || [];
+  
+  return filtered;
 }
 
 /**
@@ -126,11 +153,13 @@ export async function getCategories(): Promise<string[]> {
     return [];
   }
   
-  // Extract unique categories
+  // Extract unique categories (filter out occasions/motors)
+  const excludedCategories = ['Alles', 'All', 'Motoren', 'Motors', 'Occasions', 'Bikes'];
   const allCategories = new Set<string>();
+  
   data?.forEach(product => {
     product.categories?.forEach((cat: string) => {
-      if (cat && cat !== 'Alles' && cat !== 'All') {
+      if (cat && !excludedCategories.includes(cat)) {
         allCategories.add(cat);
       }
     });

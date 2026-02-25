@@ -118,7 +118,25 @@ function shouldImportProduct(record: any): boolean {
     return false;
   }
   
-  return true;
+  // Skip motors/occasions (we handle those separately)
+  const name = record['Naam']?.toLowerCase() || '';
+  const categories = record['Categorieën']?.toLowerCase() || '';
+  
+  const motorBrands = [
+    'yamaha', 'honda', 'suzuki', 'kawasaki', 'ducati',
+    'bmw', 'ktm', 'triumph', 'harley', 'r6', 'cbr', 'gsx', 'zx',
+    'fireblade', 'ninja', 'monster'
+  ];
+  
+  const hasMotorBrand = motorBrands.some(brand => name.includes(brand));
+  const hasMotorCategory = categories.includes('motor') || 
+                          categories.includes('occasion') || 
+                          categories.includes('bike');
+  const isHighPrice = price > 1000;
+  
+  const isMotor = hasMotorBrand || hasMotorCategory || isHighPrice;
+  
+  return !isMotor;
 }
 
 /**
