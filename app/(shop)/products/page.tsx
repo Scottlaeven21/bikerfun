@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Metadata } from 'next';
 import { SupabaseProductCard } from '@/components/products/supabase-product-card';
-import { getAllProducts, getProductsByCategory, getCategories, getFeaturedProducts } from '@/lib/supabase/products';
+import { getAllProducts, getProductsByCategory, getCategories } from '@/lib/supabase/products';
 
 export const metadata: Metadata = {
   title: 'Webshop | Bikerfun',
@@ -17,7 +17,7 @@ export const revalidate = 300; // Cache for 5 minutes
 export default async function ProductsPage({
   searchParams,
 }: {
-  searchParams: Promise<{ category?: string; featured?: string }>;
+  searchParams: Promise<{ category?: string }>;
 }) {
   const params = await searchParams;
   
@@ -27,9 +27,7 @@ export default async function ProductsPage({
   // Fetch products based on filters
   let products = [];
   
-  if (params.featured === 'true') {
-    products = await getFeaturedProducts(20);
-  } else if (params.category) {
+  if (params.category) {
     products = await getProductsByCategory(params.category, 100);
   } else {
     // All products page - load all products (no PHP memory limit!)
@@ -47,9 +45,7 @@ export default async function ProductsPage({
             style={{ fontFamily: 'var(--font-inter)' }}
             className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
           >
-            {params.featured === 'true' 
-              ? <>Uitgelichte <span className="text-biker-yellow">Producten</span></>
-              : params.category 
+            {params.category 
               ? <><span className="text-biker-yellow">{params.category}</span></>
               : <>Onze <span className="text-biker-yellow">Webshop</span></>
             }
@@ -65,7 +61,7 @@ export default async function ProductsPage({
             <Link
               href="/products"
               className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
-                !params.category && params.featured !== 'true'
+                !params.category
                   ? 'bg-biker-yellow text-biker-black hover:bg-biker-yellowHover shadow-md'
                   : 'bg-white border-2 border-gray-300 text-biker-black hover:border-biker-yellow shadow-sm'
               }`}
@@ -86,17 +82,6 @@ export default async function ProductsPage({
                 {category}
               </Link>
             ))}
-            
-            <Link
-              href="/products?featured=true"
-              className={`px-6 py-2 rounded-full transition-all font-bold uppercase text-sm tracking-wider ${
-                params.featured === 'true'
-                  ? 'bg-biker-yellow text-biker-black hover:bg-biker-yellowHover shadow-md'
-                  : 'bg-white border-2 border-gray-300 text-biker-black hover:border-biker-yellow shadow-sm'
-              }`}
-            >
-              ⭐ Uitgelicht
-            </Link>
           </div>
         </div>
 
