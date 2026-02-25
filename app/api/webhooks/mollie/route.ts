@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMolliePayment } from '@/lib/mollie/client';
 import { createClient } from '@supabase/supabase-js';
+import { syncOrderToWooCommerce, checkOrderExists } from '@/lib/woocommerce/sync';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -61,9 +62,52 @@ export async function POST(request: NextRequest) {
 
     console.log(`Order ${orderId} updated to status: ${orderStatus}`);
 
-    // TODO: Trigger WooCommerce order sync here (Step 3)
+    // Sync to WooCommerce if payment is successful
     if (payment.status === 'paid') {
-      console.log(`🎉 Payment successful for order ${orderId}! WooCommerce sync pending...`);
+      console.log(`🎉 Payment successful for order ${orderId}! Starting WooCommerce sync...`);
+      
+      try {
+        // Check if already synced
+        const existingWooOrderId = await checkOrderExists(orderId);
+        
+        if (existingWooOrderId) {
+          console.log(`Order already synced to WooCommerce (ID: ${existingWooOrderId})`);
+          
+          // Update Supabase with WooCommerce order ID
+          await supabase
+            .from('webshop_orders')
+            .update({ woo_order_id: existingWooOrderId })
+            .eq('id', orderId);
+            
+        } else {
+          // Fetch full order details with items
+          const { data: fullOrder } = await supabase
+            .from('webshop_orders')
+            .select(`
+              *,
+              items:webshop_order_items(*)
+            `)
+            .eq('id', orderId)
+            .single();
+
+          if (fullOrder) {
+            // Sync to WooCommerce
+            const wooOrderId = await syncOrderToWooCommerce(fullOrder);
+            
+            // Update Supabase with WooCommerce order ID
+            await supabase
+              .from('webshop_orders')
+              .update({ woo_order_id: wooOrderId })
+              .eq('id', orderId);
+            
+            console.log(`✅ Order synced! WooCommerce will now send emails and handle shipping.`);
+          }
+        }
+      } catch (syncError) {
+        console.error('WooCommerce sync error:', syncError);
+        // Don't fail the webhook - order is already paid
+        // We can retry sync manually later if needed
+      }
     }
 
     return NextResponse.json({ success: true });

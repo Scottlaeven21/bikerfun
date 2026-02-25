@@ -37,30 +37,30 @@
 
 ---
 
-### **STAP 2: Mollie Checkout Implementatie** 🔥 (Hoogste prioriteit)
-**Status:** Nog niet gestart  
+### **STAP 2: Mollie Checkout Implementatie** 🔥
+**Status:** ✅ COMPLEET  
 **Wat:** Klanten kunnen betalen voor webshop producten  
 **Includes:**
-- [ ] Mollie payment flow setup
-- [ ] Checkout pagina met Mollie
-- [ ] Payment redirect handling
-- [ ] Webhook handler voor betaalbevestiging
-- [ ] Order opslaan in Supabase
+- ✅ Mollie payment flow setup
+- ✅ Checkout pagina met Mollie
+- ✅ Payment redirect handling
+- ✅ Webhook handler voor betaalbevestiging
+- ✅ Order opslaan in Supabase
 
-**Impact:** **Website kan verkopen genereren**
+**Impact:** **Website kan verkopen genereren** ✅
 
 ---
 
 ### **STAP 3: WooCommerce Order Sync** 📧
-**Status:** Nog niet gestart  
+**Status:** ✅ COMPLEET  
 **Wat:** Orders synchroniseren naar WooCommerce voor emails en shipping  
 **Includes:**
-- [ ] Auto-create order in WooCommerce na Mollie betaling
-- [ ] Bestaande email systeem blijft werken
-- [ ] Bestaande shipping plugins blijven werken
-- [ ] PDF invoices blijven werken
+- ✅ Auto-create order in WooCommerce na Mollie betaling
+- ✅ Bestaande email systeem blijft werken
+- ✅ Bestaande shipping plugins blijven werken
+- ✅ PDF invoices blijven werken
 
-**Impact:** Automatische emails, verzendlabels, track & trace
+**Impact:** Automatische emails, verzendlabels, track & trace ✅
 
 ---
 
@@ -130,10 +130,10 @@
 - ✅ Admin dashboard (occasions beheer, producten overzicht, analytics)
 - ✅ Super snelle performance (geen WooCommerce crashes meer)
 
-### **Wat NIET werkt (moet stap 2-3):**
-- ❌ Checkout/betalen (Mollie nog niet geïmplementeerd)
-- ❌ Order bevestiging emails (WooCommerce sync nog niet actief)
-- ❌ Verzendlabels (WooCommerce sync nog niet actief)
+### **Wat RECENT is toegevoegd:**
+- ✅ Checkout/betalen (Mollie checkout compleet)
+- ✅ Order bevestiging emails (WooCommerce sync actief)
+- ✅ Verzendlabels (WooCommerce sync actief)
 
 ---
 

@@ -1,7 +1,5 @@
 import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
-import { formatPrice, formatDate } from '@/lib/utils/format';
-import { Order } from '@/types';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -9,32 +7,55 @@ export const metadata: Metadata = {
   description: 'Beheer bestellingen',
 };
 
+interface WebshopOrder {
+  id: string;
+  order_number: string;
+  customer_email: string;
+  customer_name: string;
+  total: number;
+  status: string;
+  payment_status: string;
+  woo_order_id: number | null;
+  created_at: string;
+}
+
 export default async function AdminOrdersPage() {
   const supabase = await createClient();
 
   const { data, error } = await supabase
-    .from('orders')
+    .from('webshop_orders')
     .select('*')
     .order('created_at', { ascending: false });
 
-  const orders = data as Order[] | null;
+  const orders = data as WebshopOrder[] | null;
 
   const statusTranslations: Record<string, string> = {
-    paid: 'Betaald',
     pending: 'In behandeling',
+    processing: 'Wordt verwerkt',
+    completed: 'Voltooid',
     failed: 'Mislukt',
-    refunded: 'Terugbetaald',
-    unfulfilled: 'Nog te verzenden',
-    fulfilled: 'Klaar voor verzending',
-    shipped: 'Verzonden',
-    delivered: 'Afgeleverd',
     cancelled: 'Geannuleerd',
+    refunded: 'Terugbetaald',
+  };
+
+  const paymentStatusTranslations: Record<string, string> = {
+    open: 'Open',
+    pending: 'Wacht op betaling',
+    paid: 'Betaald',
+    failed: 'Mislukt',
+    canceled: 'Geannuleerd',
+    expired: 'Verlopen',
   };
 
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Bestellingen</h1>
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Webshop Bestellingen</h1>
+          <p className="text-gray-600 mt-2">
+            {orders?.length || 0} bestellingen via Mollie checkout
+          </p>
+        </div>
       </div>
 
       {error && (
@@ -50,7 +71,7 @@ export default async function AdminOrdersPage() {
               <thead className="bg-gray-50">
                 <tr className="border-b border-gray-200">
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
-                    Order ID
+                    Bestelnr
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                     Datum
@@ -65,7 +86,7 @@ export default async function AdminOrdersPage() {
                     Betaling
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
-                    Verzending
+                    WooCommerce
                   </th>
                   <th className="px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase">
                     Acties
@@ -76,52 +97,58 @@ export default async function AdminOrdersPage() {
                 {orders.map((order) => (
                   <tr key={order.id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 text-sm font-medium text-gray-900">
-                      #{order.id.slice(0, 8)}
+                      #{order.order_number}
                     </td>
                     <td className="px-6 py-4 text-sm text-gray-600">
-                      {formatDate(order.created_at)}
+                      {new Date(order.created_at).toLocaleDateString('nl-NL', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      <div className="font-medium text-gray-900">{order.full_name}</div>
-                      <div className="text-gray-500">{order.email}</div>
+                      <div className="font-medium text-gray-900">{order.customer_name}</div>
+                      <div className="text-gray-500">{order.customer_email}</div>
                     </td>
                     <td className="px-6 py-4 text-sm font-semibold text-gray-900">
-                      {formatPrice(order.total)}
+                      €{order.total.toFixed(2)}
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-semibold ${
                           order.payment_status === 'paid'
                             ? 'bg-green-100 text-green-800'
-                            : order.payment_status === 'pending'
+                            : order.payment_status === 'pending' || order.payment_status === 'open'
                             ? 'bg-yellow-100 text-yellow-800'
                             : 'bg-red-100 text-red-800'
                         }`}
                       >
-                        {statusTranslations[order.payment_status]}
+                        {paymentStatusTranslations[order.payment_status] || order.payment_status}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-sm">
-                      <span
-                        className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                          order.fulfillment_status === 'delivered'
-                            ? 'bg-green-100 text-green-800'
-                            : order.fulfillment_status === 'shipped'
-                            ? 'bg-blue-100 text-blue-800'
-                            : order.fulfillment_status === 'fulfilled'
-                            ? 'bg-indigo-100 text-indigo-800'
-                            : 'bg-gray-100 text-gray-800'
-                        }`}
-                      >
-                        {statusTranslations[order.fulfillment_status]}
-                      </span>
+                      {order.woo_order_id ? (
+                        <a
+                          href={`${process.env.NEXT_PUBLIC_WOOCOMMERCE_URL}/wp-admin/post.php?post=${order.woo_order_id}&action=edit`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:text-blue-800 font-semibold"
+                        >
+                          #{order.woo_order_id} →
+                        </a>
+                      ) : (
+                        <span className="text-gray-400 text-xs">Niet gesynchroniseerd</span>
+                      )}
                     </td>
                     <td className="px-6 py-4 text-sm">
                       <Link
-                        href={`/admin/orders/${order.id}`}
-                        className="text-red-600 hover:text-red-800 font-semibold"
+                        href={`/order-confirmation/${order.id}`}
+                        target="_blank"
+                        className="text-biker-yellow hover:text-biker-yellowHover font-semibold"
                       >
-                        Details
+                        Bekijken
                       </Link>
                     </td>
                   </tr>
