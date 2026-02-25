@@ -27,7 +27,6 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
   const [stock, setStock] = useState(product?.stock ?? 0);
   const [categoryId, setCategoryId] = useState(product?.category_id || '');
   const [imageUrl, setImageUrl] = useState(product?.image_url || '');
-  const [isFeatured, setIsFeatured] = useState(product?.is_featured ?? false);
   const [isActive, setIsActive] = useState(product?.is_active ?? true);
   const [categoriesList, setCategoriesList] = useState<Category[]>(categories);
 
@@ -58,7 +57,6 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
           stock: Number(stock) || 0,
           category_id: categoryId || null,
           image_url: imageUrl.trim() || null,
-          is_featured: isFeatured,
           is_active: isActive,
           updated_at: new Date().toISOString(),
         };
@@ -80,7 +78,6 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
           stock: Number(stock) || 0,
           category_id: categoryId || null,
           image_url: imageUrl.trim() || null,
-          is_featured: isFeatured,
           is_active: isActive,
         };
         const { error: insertError } = await supabase
@@ -194,15 +191,6 @@ export function ProductForm({ product, categories = [], isEdit = false }: Produc
         />
       </div>
       <div className="flex gap-6">
-        <label className="flex items-center gap-2">
-          <input
-            type="checkbox"
-            checked={isFeatured}
-            onChange={(e) => setIsFeatured(e.target.checked)}
-            className="rounded border-gray-300 text-red-600 focus:ring-red-500"
-          />
-          <span className="text-sm font-medium text-gray-700">Uitgelicht</span>
-        </label>
         <label className="flex items-center gap-2">
           <input
             type="checkbox"
