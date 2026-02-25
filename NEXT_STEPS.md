@@ -25,7 +25,26 @@
 
 ## 🎯 **VOLGENDE STAPPEN (Prioriteit volgorde):**
 
-### **STAP 1: Supabase Storage Setup** ⚠️ (Vereist!)
+### **STAP 1: Website Live Zetten op bikerfun.nl** 🚀 (HOOGSTE PRIORITEIT!)
+**Status:** Klaar voor deployment  
+**Tijd:** ~45 minuten (waarvan 30 min wachten op DNS)  
+**Handleidingen:**
+- 📖 **Complete guide:** `DEPLOY_LIVE_GUIDE.md` (uitgebreid met screenshots)
+- ⚡ **Quick start:** `QUICK_START_DEPLOY.md` (5 min overzicht)
+- 🔄 **Flow diagram:** `DEPLOYMENT_FLOW.md` (visueel overzicht)
+
+**Wat je moet doen:**
+1. Domain toevoegen in Vercel (`bikerfun.nl`)
+2. DNS configureren bij domain provider
+3. Environment variable updaten (`NEXT_PUBLIC_APP_URL`)
+4. Mollie webhook URL instellen
+5. Complete checkout test
+
+**Impact:** **Website is LIVE en kan orders ontvangen!** 🎉
+
+---
+
+### **STAP 2: Supabase Storage Setup** ⚠️ (Optioneel)
 **Status:** SQL klaar, moet uitgevoerd worden  
 **Tijd:** 5 minuten  
 **Actie:**
@@ -33,45 +52,36 @@
 2. Voer SQL uit in Supabase Dashboard
 3. Test afbeelding upload in admin panel
 
-**Waarom:** Nodig voor afbeelding uploads van computer
+**Waarom:** Nodig voor afbeelding uploads van computer (occasions)
 
 ---
 
-### **STAP 2: Mollie Checkout Implementatie** 🔥
-**Status:** ✅ COMPLEET  
-**Wat:** Klanten kunnen betalen voor webshop producten  
-**Includes:**
+### **✅ COMPLEET: Core Webshop Functionaliteit**
+
+#### **Mollie Checkout** 🔥
 - ✅ Mollie payment flow setup
 - ✅ Checkout pagina met Mollie
 - ✅ Payment redirect handling
 - ✅ Webhook handler voor betaalbevestiging
 - ✅ Order opslaan in Supabase
 
-**Impact:** **Website kan verkopen genereren** ✅
-
----
-
-### **STAP 3: WooCommerce Order Sync** 📧
-**Status:** ✅ COMPLEET  
-**Wat:** Orders synchroniseren naar WooCommerce voor emails en shipping  
-**Includes:**
+#### **WooCommerce Order Sync** 📧
 - ✅ Auto-create order in WooCommerce na Mollie betaling
 - ✅ Bestaande email systeem blijft werken
 - ✅ Bestaande shipping plugins blijven werken
 - ✅ PDF invoices blijven werken
 
-**Impact:** Automatische emails, verzendlabels, track & trace ✅
-
 ---
 
-### **STAP 4: Testen & Optimalisatie** ✅
-**Status:** Nog niet gestart  
-**Wat:** Complete checkout flow testen  
+### **STAP 3: Testen & Monitoring** ✅
+**Status:** Na live gaan  
+**Wat:** Complete checkout flow testen op productie  
 **Includes:**
 - [ ] Test checkout flow (product → cart → betaling → bevestiging)
 - [ ] Test WooCommerce emails ontvangst
 - [ ] Test shipping workflow
 - [ ] Performance check (Lighthouse, Core Web Vitals)
+- [ ] Monitor eerste echte orders
 
 **Impact:** Betrouwbare webshop, goede customer experience
 
