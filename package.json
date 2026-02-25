@@ -6,12 +6,15 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import:products": "tsx scripts/import-products.ts",
+    "migrations": "tsx scripts/run-migrations.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^4.8.0",
     "@supabase/ssr": "^0.5.2",
     "@supabase/supabase-js": "^2.45.7",
+    "csv-parse": "^6.1.0",
     "next": "^15.5.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -24,10 +27,12 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "autoprefixer": "^10.4.24",
+    "dotenv": "^17.3.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.6",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }
