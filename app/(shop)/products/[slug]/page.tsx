@@ -172,12 +172,7 @@ export default async function ProductPage({
             {/* Add to Cart */}
             <div className="pt-4">
               <AddToCartButton
-                product={{
-                  id: product.woo_product_id || Number(product.id),
-                  name: product.name,
-                  price: product.price,
-                  image: mainImage.src,
-                }}
+                product={product}
                 disabled={product.stock_status !== 'instock'}
               />
             </div>
