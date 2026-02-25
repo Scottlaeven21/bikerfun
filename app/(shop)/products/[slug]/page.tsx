@@ -1,242 +1,234 @@
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
-import { createClient } from '@/lib/supabase/server';
-import { formatPrice } from '@/lib/utils/format';
+import { getProductBySlug } from '@/lib/supabase/products';
 import { AddToCartButton } from '@/components/products/add-to-cart-button';
-import { Product, Category } from '@/types';
-
-type ProductWithCategory = Product & {
-  category: Category;
-};
 
 export async function generateMetadata({
   params,
 }: {
   params: Promise<{ slug: string }>;
-}) {
+}): Promise<Metadata> {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data } = await supabase
-    .from('products')
-    .select('name, description, image_url')
-    .eq('slug', slug)
-    .single();
-
-  const product = data as { name: string; description: string | null; image_url: string | null } | null;
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return {
-      title: 'Product niet gevonden',
+      title: 'Product niet gevonden | Bikerfun',
     };
   }
 
   return {
-    title: `${product.name} | Bikerfun`,
-    description: product.description || `Koop ${product.name} bij Bikerfun`,
+    title: `${product.name} | Bikerfun Webshop`,
+    description: product.short_description || product.description || `Koop ${product.name} bij Bikerfun`,
     openGraph: {
       title: product.name,
-      description: product.description || undefined,
-      images: product.image_url ? [product.image_url] : [],
+      description: product.short_description || product.description || '',
+      images: product.images.length > 0 ? [product.images[0].src] : [],
     },
   };
 }
 
-export default async function ProductDetailPage({
+export default async function ProductPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data } = await supabase
-    .from('products')
-    .select(`
-      *,
-      category:categories(*)
-    `)
-    .eq('slug', slug)
-    .eq('is_active', true)
-    .single();
-
-  const product = data as ProductWithCategory | null;
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const hasDiscount = product.compare_at_price && product.compare_at_price > product.price;
-  const discountPercentage = hasDiscount
-    ? Math.round(((product.compare_at_price! - product.price) / product.compare_at_price!) * 100)
-    : 0;
+  const mainImage = product.images[0] || { src: '/placeholder-product.png', alt: product.name };
+  const formattedPrice = new Intl.NumberFormat('nl-NL', {
+    style: 'currency',
+    currency: 'EUR',
+  }).format(product.price);
+
+  const formattedRegularPrice = product.on_sale && product.regular_price
+    ? new Intl.NumberFormat('nl-NL', {
+        style: 'currency',
+        currency: 'EUR',
+      }).format(product.regular_price)
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Breadcrumb */}
-        <nav className="mb-8 text-sm">
-          <ol className="flex items-center space-x-2 text-gray-600">
-            <li>
-              <Link href="/" className="hover:text-biker-yellow transition-colors">
-                Home
-              </Link>
-            </li>
-            <li className="text-gray-400">/</li>
-            <li>
-              <Link href="/products" className="hover:text-biker-yellow transition-colors">
-                Producten
-              </Link>
-            </li>
-            <li className="text-gray-400">/</li>
-            <li>
-              <Link
-                href={`/products?category=${product.category.slug}`}
-                className="hover:text-biker-yellow transition-colors"
-              >
-                {product.category.name}
-              </Link>
-            </li>
-            <li className="text-gray-400">/</li>
-            <li className="text-biker-black font-medium">{product.name}</li>
-          </ol>
+        <nav className="flex items-center gap-2 text-sm text-gray-600 mb-8">
+          <Link href="/" className="hover:text-biker-yellow transition-colors">
+            Home
+          </Link>
+          <span>/</span>
+          <Link href="/products" className="hover:text-biker-yellow transition-colors">
+            Webshop
+          </Link>
+          <span>/</span>
+          <span className="text-biker-black font-medium">{product.name}</span>
         </nav>
 
-        <div className="bg-white rounded-2xl overflow-hidden shadow-2xl border-2 border-gray-200">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            {/* Product Image */}
-            <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-white border-r-2 border-gray-100">
-              {product.image_url ? (
-                <Image
-                  src={product.image_url}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-12"
-                  priority
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-9xl mb-4">📦</div>
-                    <p className="text-gray-400">Geen afbeelding beschikbaar</p>
-                  </div>
+        <div className="grid md:grid-cols-2 gap-12">
+          {/* Product Images */}
+          <div className="space-y-4">
+            <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-lg">
+              <Image
+                src={mainImage.src}
+                alt={mainImage.alt || product.name}
+                fill
+                className="object-contain p-8"
+                priority
+              />
+              {product.on_sale && (
+                <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  SALE
                 </div>
               )}
-
-              {hasDiscount && (
-                <div className="absolute top-6 right-6 bg-gradient-to-br from-biker-yellow to-yellow-500 text-biker-black px-6 py-3 rounded-full text-lg font-bold shadow-xl border-2 border-yellow-600 animate-pulse">
-                  -{discountPercentage}%
-                </div>
-              )}
-
-              {product.stock === 0 && (
-                <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center backdrop-blur-sm">
-                  <span className="bg-biker-black text-white px-12 py-6 rounded-full text-2xl font-bold uppercase tracking-wider shadow-2xl">
-                    Uitverkocht
-                  </span>
+              {product.stock_status === 'outofstock' && (
+                <div className="absolute top-4 right-4 bg-gray-800 text-white px-3 py-1 rounded-full text-sm font-bold">
+                  UITVERKOCHT
                 </div>
               )}
             </div>
 
-            {/* Product Info */}
-            <div className="p-8 lg:p-12 bg-white relative">
-              {/* Decorative accent */}
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-biker-yellow/10 to-transparent rounded-bl-full"></div>
-              <div className="mb-4">
-                <Link
-                  href={`/products?category=${product.category.slug}`}
-                  className="text-biker-yellow hover:text-biker-yellowHover font-bold uppercase text-sm tracking-wider transition-colors"
-                >
-                  {product.category.name}
-                </Link>
+            {/* Thumbnail Gallery */}
+            {product.images.length > 1 && (
+              <div className="grid grid-cols-4 gap-2">
+                {product.images.slice(0, 4).map((image, index) => (
+                  <div
+                    key={index}
+                    className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.alt || `${product.name} ${index + 1}`}
+                      fill
+                      className="object-contain p-2"
+                    />
+                  </div>
+                ))}
               </div>
+            )}
+          </div>
 
-              <h1 
-                style={{ fontFamily: 'var(--font-inter)' }}
-                className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
-              >
+          {/* Product Info */}
+          <div className="space-y-6">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold text-biker-black mb-2">
                 {product.name}
               </h1>
+              
+              {/* Categories */}
+              {product.categories.length > 0 && (
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {product.categories.map((category) => (
+                    <Link
+                      key={category}
+                      href={`/products?category=${category}`}
+                      className="text-sm text-gray-600 hover:text-biker-yellow transition-colors"
+                    >
+                      #{category}
+                    </Link>
+                  ))}
+                </div>
+              )}
 
-              <div className="flex items-baseline space-x-4 mb-8">
+              {/* Price */}
+              <div className="flex items-baseline gap-3 mb-6">
                 <span className="text-4xl font-bold text-biker-black">
-                  {formatPrice(product.price)}
+                  {formattedPrice}
                 </span>
-                {hasDiscount && (
-                  <span className="text-xl text-gray-400 line-through">
-                    {formatPrice(product.compare_at_price!)}
+                {formattedRegularPrice && (
+                  <span className="text-2xl text-gray-400 line-through">
+                    {formattedRegularPrice}
                   </span>
                 )}
               </div>
+            </div>
 
-              {product.stock > 0 && product.stock <= 10 && (
-                <div className="bg-gradient-to-r from-biker-yellow/20 to-orange-100 border-2 border-biker-yellow rounded-xl p-5 mb-6 shadow-md relative overflow-hidden">
-                  <div className="absolute top-0 right-0 w-20 h-20 bg-biker-yellow/20 rounded-full -mr-10 -mt-10"></div>
-                  <p className="text-biker-yellow font-bold text-base relative z-10">
-                    ⚡ Nog slechts {product.stock} op voorraad - bestel snel!
-                  </p>
-                </div>
-              )}
-
-              {product.description && (
-                <div className="mb-8 bg-gray-50 rounded-xl p-6 border-l-4 border-biker-yellow">
-                  <p className="text-gray-700 leading-relaxed text-lg">
-                    {product.description}
-                  </p>
-                </div>
-              )}
-
-              {/* Add to Cart */}
-              {product.stock > 0 ? (
-                <AddToCartButton product={product} />
-              ) : (
-                <button
-                  disabled
-                  className="w-full bg-gray-200 text-gray-400 px-8 py-4 rounded-full text-base font-bold uppercase tracking-wider cursor-not-allowed border-2 border-gray-300"
-                >
-                  Uitverkocht
-                </button>
-              )}
-
-              {/* Product Features */}
-              <div className="mt-10 pt-8 border-t-2 border-gray-100">
-                <h3 
-                  style={{ fontFamily: 'var(--font-inter)' }}
-                  className="font-bold text-biker-black mb-6 text-xl uppercase tracking-tight flex items-center"
-                >
-                  <span className="w-2 h-8 bg-biker-yellow mr-3 rounded-full"></span>
-                  Product Informatie
-                </h3>
-                <ul className="space-y-4">
-                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
-                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
-                      <span className="text-biker-yellow text-lg font-bold">✓</span>
-                    </div>
-                    <span className="text-gray-700 font-medium">Gratis verzending binnen Nederland</span>
-                  </li>
-                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
-                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
-                      <span className="text-biker-yellow text-lg font-bold">✓</span>
-                    </div>
-                    <span className="text-gray-700 font-medium">14 dagen retourrecht</span>
-                  </li>
-                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
-                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
-                      <span className="text-biker-yellow text-lg font-bold">✓</span>
-                    </div>
-                    <span className="text-gray-700 font-medium">Veilig betalen met Stripe</span>
-                  </li>
-                  <li className="flex items-center p-3 bg-gradient-to-r from-gray-50 to-transparent rounded-lg hover:from-biker-yellow/5 transition-all">
-                    <div className="w-8 h-8 rounded-full bg-biker-yellow/20 flex items-center justify-center mr-4 flex-shrink-0">
-                      <span className="text-biker-yellow text-lg font-bold">✓</span>
-                    </div>
-                    <span className="text-gray-700 font-medium">Premium kwaliteit gegarandeerd</span>
-                  </li>
-                </ul>
+            {/* Short Description */}
+            {product.short_description && (
+              <div className="text-gray-700 text-lg leading-relaxed">
+                <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
               </div>
+            )}
+
+            {/* Stock Status */}
+            <div className="flex items-center gap-2">
+              <div className={`w-3 h-3 rounded-full ${
+                product.stock_status === 'instock' ? 'bg-green-500' : 'bg-red-500'
+              }`} />
+              <span className="text-sm font-medium">
+                {product.stock_status === 'instock' ? 'Op voorraad' : 'Niet op voorraad'}
+                {product.manage_stock && product.stock_quantity > 0 && (
+                  <span className="text-gray-600"> ({product.stock_quantity} stuks)</span>
+                )}
+              </span>
+            </div>
+
+            {/* Add to Cart */}
+            <div className="pt-4">
+              <AddToCartButton
+                product={{
+                  id: product.woo_product_id || Number(product.id),
+                  name: product.name,
+                  price: product.price,
+                  image: mainImage.src,
+                }}
+                disabled={product.stock_status !== 'instock'}
+              />
+            </div>
+
+            {/* SKU */}
+            {product.sku && (
+              <div className="text-sm text-gray-600">
+                SKU: <span className="font-mono">{product.sku}</span>
+              </div>
+            )}
+
+            {/* Tags */}
+            {product.tags.length > 0 && (
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200">
+                <span className="text-sm text-gray-600">Tags:</span>
+                {product.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Full Description */}
+        {product.description && (
+          <div className="mt-16 max-w-4xl">
+            <h2 className="text-2xl font-bold text-biker-black mb-6">
+              Productinformatie
+            </h2>
+            <div className="prose prose-lg max-w-none text-gray-700">
+              <div dangerouslySetInnerHTML={{ __html: product.description }} />
             </div>
           </div>
+        )}
+
+        {/* Back to Shop */}
+        <div className="mt-12 text-center">
+          <Link
+            href="/products"
+            className="inline-flex items-center gap-2 text-biker-yellow hover:text-biker-yellowHover font-bold transition-colors"
+          >
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Terug naar webshop
+          </Link>
         </div>
       </div>
     </div>

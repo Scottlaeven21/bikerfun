@@ -9,6 +9,8 @@
     "lint": "next lint",
     "import:products": "tsx scripts/import-products.ts",
     "import:occasions": "tsx scripts/import-occasions.ts",
+    "check:occasions": "tsx scripts/check-occasions.ts",
+    "clean:occasions": "tsx scripts/clean-occasions.ts",
     "migrations": "tsx scripts/run-migrations.ts"
   },
   "dependencies": {

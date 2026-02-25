@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { SupabaseProduct } from '@/lib/supabase/products';
 import { useCart } from '@/contexts/cart-context';
 
@@ -52,11 +53,11 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
     setTimeout(() => setIsAdding(false), 1000);
   };
 
+  const productSlug = product.slug || product.name.toLowerCase().replace(/\s+/g, '-');
+
   return (
-    <div
-      className="group bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-biker-yellow shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
-    >
-      <div className="relative aspect-square overflow-hidden bg-gray-50">
+    <div className="group bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-biker-yellow shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col">
+      <Link href={`/products/${productSlug}`} className="relative aspect-square overflow-hidden bg-gray-50 block">
         {showPlaceholder ? (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <span className="text-6xl">📦</span>
@@ -90,13 +91,15 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
             </span>
           </div>
         )}
-      </div>
+      </Link>
 
       <div className="p-5 bg-white border-t-2 border-gray-100 flex flex-col flex-1">
         <div className="flex-1">
-          <h3 className="font-bold text-biker-black mb-3 line-clamp-2 text-base">
-            {product.name}
-          </h3>
+          <Link href={`/products/${productSlug}`}>
+            <h3 className="font-bold text-biker-black mb-3 line-clamp-2 text-base hover:text-biker-yellow transition-colors cursor-pointer">
+              {product.name}
+            </h3>
+          </Link>
 
           <div className="flex items-baseline space-x-2 mb-3">
             <span className="text-2xl font-bold text-biker-black">

@@ -63,6 +63,24 @@ export async function getAllProducts(limit: number = 100): Promise<SupabaseProdu
 }
 
 /**
+ * Get a single product by slug
+ */
+export async function getProductBySlug(slug: string): Promise<SupabaseProduct | null> {
+  const { data, error } = await supabase
+    .from('webshop_products')
+    .select('*')
+    .eq('slug', slug)
+    .eq('status', 'publish')
+    .single();
+  
+  if (error) {
+    console.error('Error fetching product by slug:', error);
+    return null;
+  }
+  return data;
+}
+
+/**
  * Get products by category (excluding occasions/motors)
  */
 export async function getProductsByCategory(category: string, limit: number = 100): Promise<SupabaseProduct[]> {
