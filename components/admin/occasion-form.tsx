@@ -62,6 +62,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
   const [mainImage, setMainImage] = useState(occasion?.main_image || '');
   const [images, setImages] = useState<string[]>(occasion?.images || []);
   const [imageInput, setImageInput] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   // Helper function to generate slug
   const generateSlug = () => {
@@ -102,6 +103,70 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
 
   const removeImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
+  };
+
+  const uploadMainImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `occasions/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      setMainImage(publicUrl);
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError(err instanceof Error ? err.message : 'Fout bij uploaden afbeelding');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const uploadExtraImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setUploading(true);
+    setError(null);
+
+    try {
+      const supabase = createClient();
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+      const filePath = `occasions/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('images')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('images')
+        .getPublicUrl(filePath);
+
+      setImages([...images, publicUrl]);
+    } catch (err) {
+      console.error('Upload error:', err);
+      setError(err instanceof Error ? err.message : 'Fout bij uploaden afbeelding');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -728,14 +793,35 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         
         <div className="mb-6">
           <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Hoofdafbeelding URL
+            Hoofdafbeelding
           </label>
+          
+          <div className="flex gap-3 mb-3">
+            <label className="flex-1">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={uploadMainImage}
+                disabled={uploading}
+                className="hidden"
+              />
+              <div className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-center cursor-pointer transition-colors disabled:opacity-50">
+                {uploading ? 'Uploaden...' : '📁 Upload van computer'}
+              </div>
+            </label>
+          </div>
+
+          <div className="relative">
+            <span className="absolute left-0 top-1/2 -translate-y-1/2 px-3 text-gray-400 text-sm">OF</span>
+            <div className="border-t border-gray-300 my-4"></div>
+          </div>
+
           <input
             type="text"
             value={mainImage}
             onChange={(e) => setMainImage(e.target.value)}
             className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black"
-            placeholder="/suzuki-hero-v2.png"
+            placeholder="Of plak URL: /suzuki-hero-v2.png"
           />
           {mainImage && (
             <div className="mt-4 relative w-full h-48 rounded-lg overflow-hidden bg-gray-100">
@@ -753,6 +839,27 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Extra afbeeldingen
           </label>
+          
+          <div className="flex gap-3 mb-3">
+            <label className="flex-1">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={uploadExtraImage}
+                disabled={uploading}
+                className="hidden"
+              />
+              <div className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-bold text-center cursor-pointer transition-colors disabled:opacity-50">
+                {uploading ? 'Uploaden...' : '📁 Upload van computer'}
+              </div>
+            </label>
+          </div>
+
+          <div className="relative mb-4">
+            <span className="absolute left-0 top-1/2 -translate-y-1/2 px-3 text-gray-400 text-sm">OF</span>
+            <div className="border-t border-gray-300 my-4"></div>
+          </div>
+
           <div className="flex gap-2 mb-4">
             <input
               type="text"
@@ -760,7 +867,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
               onChange={(e) => setImageInput(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && (e.preventDefault(), addImage())}
               className="flex-1 px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black"
-              placeholder="/suzuki-gsxr-1.jpg"
+              placeholder="Of plak URL: /suzuki-gsxr-1.jpg"
             />
             <button
               type="button"
