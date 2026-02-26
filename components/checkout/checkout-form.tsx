@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useCart } from '@/contexts/cart-context';
@@ -30,9 +31,10 @@ export function CheckoutForm() {
   const { cart, total: subtotal, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [shippingCost, setShippingCost] = useState<number>(6.95); // Default fallback
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(50); // Default
+  const [loadingShipping, setLoadingShipping] = useState(false);
   
-  // Calculate shipping cost (same logic as API)
-  const shippingCost = subtotal >= 50 ? 0 : 6.95;
   const totalWithShipping = subtotal + shippingCost;
   
   const [formData, setFormData] = useState<CheckoutFormData>({
@@ -111,11 +113,48 @@ export function CheckoutForm() {
     }
   };
 
+  // Fetch shipping cost from WooCommerce when subtotal or country changes
+  const fetchShippingCost = async (country: string) => {
+    if (subtotal === 0) return;
+    
+    setLoadingShipping(true);
+    try {
+      const response = await fetch('/api/shipping/calculate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subtotal, country }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setShippingCost(data.shipping_cost);
+        setFreeShippingThreshold(data.free_shipping_threshold || 50);
+      }
+    } catch (error) {
+      console.error('Failed to fetch shipping cost:', error);
+      // Keep fallback value
+    } finally {
+      setLoadingShipping(false);
+    }
+  };
+
+  // Fetch shipping on mount and when subtotal changes
+  React.useEffect(() => {
+    fetchShippingCost(formData.country);
+  }, [subtotal]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    
     setFormData(prev => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Refetch shipping when country changes
+    if (name === 'country') {
+      fetchShippingCost(value);
+    }
   };
 
   if (cart.length === 0) {
@@ -342,16 +381,18 @@ export function CheckoutForm() {
             <div className="flex justify-between text-gray-700">
               <span>Verzendkosten:</span>
               <span className="font-semibold">
-                {shippingCost === 0 ? (
+                {loadingShipping ? (
+                  <span className="text-gray-400">Berekenen...</span>
+                ) : shippingCost === 0 ? (
                   <span className="text-green-600">Gratis</span>
                 ) : (
                   `€ ${shippingCost.toFixed(2)}`
                 )}
               </span>
             </div>
-            {subtotal < 50 && (
+            {subtotal < freeShippingThreshold && shippingCost > 0 && (
               <div className="text-xs text-gray-500 -mt-2">
-                Nog €{(50 - subtotal).toFixed(2)} tot gratis verzending
+                Nog €{(freeShippingThreshold - subtotal).toFixed(2)} tot gratis verzending
               </div>
             )}
             <div className="h-px bg-gray-300 my-3"></div>

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createMolliePayment } from '@/lib/mollie/client';
 import { createClient } from '@supabase/supabase-js';
+import { calculateShipping } from '@/lib/woocommerce/shipping';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -17,12 +18,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Calculate totals
+    // Calculate subtotal
     const subtotal = cartItems.reduce((sum: number, item: any) => {
       return sum + (parseFloat(item.product.price) * item.quantity);
     }, 0);
     
-    const shippingCost = subtotal >= 50 ? 0 : 6.95; // Free shipping above €50
+    // Get shipping cost from WooCommerce
+    const shippingCost = await calculateShipping(subtotal, billing?.country || 'NL');
     const total = subtotal + shippingCost;
 
     // Create order in Supabase
