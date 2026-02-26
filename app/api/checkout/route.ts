@@ -90,8 +90,8 @@ export async function POST(request: NextRequest) {
       
       return {
         order_id: order.id,
-        product_id: item.product.id || null,
-        woo_product_id: item.product.woo_product_id || null,
+        product_id: null, // We don't have Supabase product UUID in cart, only WooCommerce ID
+        woo_product_id: item.product.id, // This is the WooCommerce product ID (number)
         product_name: item.product.name,
         product_sku: item.product.sku || null,
         product_image: item.product.images?.[0]?.src || null,
@@ -108,8 +108,9 @@ export async function POST(request: NextRequest) {
 
     if (itemsError) {
       console.error('Error creating order items:', itemsError);
+      console.error('Order items data:', JSON.stringify(orderItems, null, 2));
       return NextResponse.json(
-        { error: 'Fout bij aanmaken orderitems' },
+        { error: 'Fout bij aanmaken orderitems', details: itemsError.message },
         { status: 500 }
       );
     }
