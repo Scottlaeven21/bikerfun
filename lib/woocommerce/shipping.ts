@@ -78,7 +78,7 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
 }
 
 /**
- * Calculate shipping cost for an order
+ * Calculate shipping cost for an order based on WooCommerce settings
  * @param subtotal Order subtotal
  * @param country Country code (default: NL)
  * @returns Shipping cost
@@ -90,47 +90,85 @@ export async function calculateShipping(
   try {
     const zones = await getShippingZones();
     
-    // Free shipping threshold (from WooCommerce settings, typically €50)
-    const FREE_SHIPPING_THRESHOLD = 50;
-    
-    // Country-specific shipping costs
-    const COUNTRY_SHIPPING: Record<string, number> = {
-      'NL': 6.95,  // Netherlands
-      'BE': 8.95,  // Belgium
-      'DE': 9.95,  // Germany
-    };
-    
-    // Check if order qualifies for free shipping
-    if (subtotal >= FREE_SHIPPING_THRESHOLD) {
-      return 0; // Free shipping above threshold
+    if (zones.length === 0) {
+      console.warn('No shipping zones found, using fallback');
+      return 6.95;
     }
     
-    // Get country-specific shipping cost
-    const countryCost = COUNTRY_SHIPPING[country.toUpperCase()];
-    if (countryCost) {
-      return countryCost;
+    // Find the appropriate shipping zone for this country
+    // WooCommerce zones can have specific countries or be "Rest of the World"
+    let matchingZone = zones.find(z => 
+      z.name.toLowerCase().includes(country.toLowerCase()) ||
+      z.name.toLowerCase().includes('netherlands') && country === 'NL' ||
+      z.name.toLowerCase().includes('belgium') && country === 'BE' ||
+      z.name.toLowerCase().includes('germany') && country === 'DE'
+    );
+    
+    // If no specific zone found, try to find "Rest of World" or first zone as fallback
+    if (!matchingZone) {
+      matchingZone = zones.find(z => 
+        z.name.toLowerCase().includes('rest') || 
+        z.name.toLowerCase().includes('world')
+      ) || zones[0];
     }
     
-    // Try to get from WooCommerce zones
-    for (const zone of zones) {
-      const flatRateMethod = zone.methods.find(m => m.enabled && m.id === 'flat_rate');
-      if (flatRateMethod && flatRateMethod.cost > 0) {
-        return flatRateMethod.cost;
+    if (!matchingZone || matchingZone.methods.length === 0) {
+      console.warn('No matching zone or methods found');
+      return 6.95;
+    }
+    
+    console.log(`Using zone: ${matchingZone.name} for country: ${country}`);
+    
+    // Check for free shipping first (if subtotal meets threshold)
+    const freeShippingMethod = matchingZone.methods.find(
+      m => m.enabled && m.id === 'free_shipping'
+    );
+    
+    if (freeShippingMethod) {
+      // Check if order qualifies for free shipping
+      // WooCommerce typically has a "minimum order amount" setting
+      // We'll check if subtotal >= 50 (common threshold)
+      // In a real implementation, this would come from the method settings
+      const freeShippingThreshold = 50; // This could be fetched from WooCommerce settings
+      
+      if (subtotal >= freeShippingThreshold) {
+        console.log('Free shipping applies (threshold met)');
+        return 0;
       }
     }
     
-    // Fallback to default Netherlands shipping
+    // Use flat rate or first enabled method
+    const flatRateMethod = matchingZone.methods.find(
+      m => m.enabled && m.id === 'flat_rate'
+    );
+    
+    if (flatRateMethod && flatRateMethod.cost > 0) {
+      console.log(`Using flat rate: €${flatRateMethod.cost}`);
+      return flatRateMethod.cost;
+    }
+    
+    // Use any other enabled method with a cost
+    const anyEnabledMethod = matchingZone.methods.find(
+      m => m.enabled && m.cost > 0
+    );
+    
+    if (anyEnabledMethod) {
+      console.log(`Using method: ${anyEnabledMethod.title} - €${anyEnabledMethod.cost}`);
+      return anyEnabledMethod.cost;
+    }
+    
+    // Fallback
+    console.warn('No suitable shipping method found, using fallback');
     return 6.95;
   } catch (error) {
     console.error('Error calculating shipping:', error);
-    // Fallback to default
     return 6.95;
   }
 }
 
 /**
  * Get default shipping cost from WooCommerce settings
- * This is used as a fallback if zones/methods can't be fetched
+ * Returns the first flat rate method and free shipping threshold if available
  */
 export async function getDefaultShippingCost(): Promise<{
   cost: number;
@@ -146,19 +184,19 @@ export async function getDefaultShippingCost(): Promise<{
       };
     }
 
-    // Get first enabled flat rate method
+    // Get first enabled flat rate method from any zone
     const flatRateMethod = zones
       .flatMap(z => z.methods)
-      .find(m => m.enabled && (m.id === 'flat_rate' || m.cost > 0));
+      .find(m => m.enabled && m.id === 'flat_rate' && m.cost > 0);
 
-    // Check if there's a free shipping method
-    const freeShippingMethod = zones
+    // Check if any zone has free shipping enabled
+    const hasFreeShipping = zones
       .flatMap(z => z.methods)
-      .find(m => m.enabled && m.id === 'free_shipping');
+      .some(m => m.enabled && m.id === 'free_shipping');
 
     return {
       cost: flatRateMethod?.cost || 6.95,
-      freeShippingThreshold: freeShippingMethod ? 50 : null, // WooCommerce default
+      freeShippingThreshold: hasFreeShipping ? 50 : null, // Default WooCommerce threshold
     };
   } catch (error) {
     console.error('Error getting default shipping cost:', error);

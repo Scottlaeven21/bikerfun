@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateShipping } from '@/lib/woocommerce/shipping';
+import { calculateShipping, getDefaultShippingCost } from '@/lib/woocommerce/shipping';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -22,7 +22,8 @@ export async function POST(request: NextRequest) {
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: 50, // This could also be fetched from WooCommerce
+      free_shipping_threshold: 50, // From WooCommerce settings
+      country,
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
