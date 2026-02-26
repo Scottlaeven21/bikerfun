@@ -31,11 +31,12 @@ export function CheckoutForm() {
   const { cart, total: subtotal, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [shippingCost, setShippingCost] = useState<number>(6.95); // Default fallback
+  const [shippingCost, setShippingCost] = useState<number | null>(null); // null = not loaded yet
   const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(50); // Default
-  const [loadingShipping, setLoadingShipping] = useState(false);
+  const [loadingShipping, setLoadingShipping] = useState(true); // Start as loading
   
-  const totalWithShipping = subtotal + shippingCost;
+  // If shipping not loaded yet, show only subtotal. Otherwise include shipping
+  const totalWithShipping = shippingCost !== null ? subtotal + shippingCost : subtotal;
   
   const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: '',
@@ -381,7 +382,7 @@ export function CheckoutForm() {
             <div className="flex justify-between text-gray-700">
               <span>Verzendkosten:</span>
               <span className="font-semibold">
-                {loadingShipping ? (
+                {loadingShipping || shippingCost === null ? (
                   <span className="text-gray-400">Berekenen...</span>
                 ) : shippingCost === 0 ? (
                   <span className="text-green-600">Gratis</span>
@@ -390,7 +391,7 @@ export function CheckoutForm() {
                 )}
               </span>
             </div>
-            {subtotal < freeShippingThreshold && shippingCost > 0 && (
+            {!loadingShipping && shippingCost !== null && shippingCost > 0 && subtotal < freeShippingThreshold && (
               <div className="text-xs text-gray-500 -mt-2">
                 Nog €{(freeShippingThreshold - subtotal).toFixed(2)} tot gratis verzending
               </div>

@@ -90,27 +90,36 @@ export async function calculateShipping(
   try {
     const zones = await getShippingZones();
     
-    // Find the shipping zone for the country
-    // For now, use the first enabled method from the first zone
-    // This can be enhanced to match based on country/postal code
+    // Free shipping threshold (from WooCommerce settings, typically €50)
+    const FREE_SHIPPING_THRESHOLD = 50;
     
+    // Country-specific shipping costs
+    const COUNTRY_SHIPPING: Record<string, number> = {
+      'NL': 6.95,  // Netherlands
+      'BE': 8.95,  // Belgium
+      'DE': 9.95,  // Germany
+    };
+    
+    // Check if order qualifies for free shipping
+    if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+      return 0; // Free shipping above threshold
+    }
+    
+    // Get country-specific shipping cost
+    const countryCost = COUNTRY_SHIPPING[country.toUpperCase()];
+    if (countryCost) {
+      return countryCost;
+    }
+    
+    // Try to get from WooCommerce zones
     for (const zone of zones) {
-      const enabledMethod = zone.methods.find(m => m.enabled);
-      if (enabledMethod) {
-        // Check for free shipping threshold
-        // Most WooCommerce setups have: free shipping above €50, flat rate below
-        const cost = enabledMethod.cost;
-        
-        // If method is "free_shipping" or cost is 0, check if threshold is met
-        if (enabledMethod.id === 'free_shipping' || cost === 0) {
-          return 0;
-        }
-        
-        return cost;
+      const flatRateMethod = zone.methods.find(m => m.enabled && m.id === 'flat_rate');
+      if (flatRateMethod && flatRateMethod.cost > 0) {
+        return flatRateMethod.cost;
       }
     }
     
-    // Fallback to default shipping cost
+    // Fallback to default Netherlands shipping
     return 6.95;
   } catch (error) {
     console.error('Error calculating shipping:', error);
