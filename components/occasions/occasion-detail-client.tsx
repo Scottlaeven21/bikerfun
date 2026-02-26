@@ -21,7 +21,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   return (
     <div className="min-h-screen bg-black noise-overlay">
       {/* Hero Image - Static with Back Button Overlay */}
-      <section className="relative bg-biker-black overflow-hidden h-[60vh]">
+      <section className="relative bg-biker-black overflow-hidden h-[45vh] md:h-[50vh]">
         {occasion.main_image ? (
           <div className="relative w-full h-full">
             <Image
@@ -31,6 +31,8 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               className="object-cover"
               quality={100}
               priority
+              unoptimized
+              sizes="100vw"
             />
             
             {/* Verkocht Overlay */}
@@ -99,6 +101,8 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       fill
                       className="object-cover"
                       quality={100}
+                      unoptimized
+                      sizes="(max-width: 1024px) 100vw, 66vw"
                     />
                   </div>
 
@@ -120,6 +124,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                           fill
                           className="object-cover"
                           quality={100}
+                          unoptimized
                         />
                       </button>
                     ))}
