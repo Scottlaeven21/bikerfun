@@ -27,9 +27,13 @@ interface CheckoutFormData {
 
 export function CheckoutForm() {
   const router = useRouter();
-  const { cart, total, clearCart } = useCart();
+  const { cart, total: subtotal, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Calculate shipping cost (same logic as API)
+  const shippingCost = subtotal >= 50 ? 0 : 6.95;
+  const totalWithShipping = subtotal + shippingCost;
   
   const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: '',
@@ -333,16 +337,27 @@ export function CheckoutForm() {
           <div className="space-y-3 mb-6">
             <div className="flex justify-between text-gray-700">
               <span>Subtotaal:</span>
-              <span className="font-semibold">€ {total.toFixed(2)}</span>
+              <span className="font-semibold">€ {subtotal.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-gray-700">
               <span>Verzendkosten:</span>
-              <span className="font-semibold">Gratis</span>
+              <span className="font-semibold">
+                {shippingCost === 0 ? (
+                  <span className="text-green-600">Gratis</span>
+                ) : (
+                  `€ ${shippingCost.toFixed(2)}`
+                )}
+              </span>
             </div>
+            {subtotal < 50 && (
+              <div className="text-xs text-gray-500 -mt-2">
+                Nog €{(50 - subtotal).toFixed(2)} tot gratis verzending
+              </div>
+            )}
             <div className="h-px bg-gray-300 my-3"></div>
             <div className="flex justify-between text-xl font-bold text-biker-black">
               <span>Totaal:</span>
-              <span className="text-biker-yellow">€ {total.toFixed(2)}</span>
+              <span className="text-biker-yellow">€ {totalWithShipping.toFixed(2)}</span>
             </div>
           </div>
 
