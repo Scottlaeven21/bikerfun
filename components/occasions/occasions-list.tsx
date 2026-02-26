@@ -152,14 +152,15 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
               >
                 {/* Image Section */}
                 <div className="relative w-full h-[280px] bg-black overflow-hidden">
-                  {occasion.main_image ? (
+                  {occasion.images.length > 0 ? (
                     <>
                       <Image
-                        src={occasion.main_image}
+                        src={occasion.images[0]}
                         alt={`${occasion.brand} ${occasion.model}`}
                         fill
                         className="object-cover group-hover:scale-105 transition-transform duration-500"
                         quality={100}
+                        unoptimized
                       />
                       
                       {/* Verkocht Sticker */}

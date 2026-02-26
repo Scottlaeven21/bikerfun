@@ -66,14 +66,15 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
           >
             {/* Image */}
             <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
-              {occasion.main_image ? (
+              {occasion.images.length > 0 ? (
                 <>
                   <Image
-                    src={occasion.main_image}
+                    src={occasion.images[0]}
                     alt={`${occasion.brand} ${occasion.model}`}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     quality={100}
+                    unoptimized
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
                   />
                   
