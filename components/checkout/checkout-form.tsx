@@ -391,7 +391,12 @@ export function CheckoutForm() {
                 )}
               </span>
             </div>
-            {!loadingShipping && shippingCost !== null && shippingCost > 0 && subtotal < freeShippingThreshold && (
+            {/* Only show "free shipping threshold" message for countries with threshold (not NL) */}
+            {!loadingShipping && 
+             shippingCost !== null && 
+             shippingCost > 0 && 
+             formData.country !== 'NL' && 
+             subtotal < freeShippingThreshold && (
               <div className="text-xs text-gray-500 -mt-2">
                 Nog €{(freeShippingThreshold - subtotal).toFixed(2)} tot gratis verzending
               </div>

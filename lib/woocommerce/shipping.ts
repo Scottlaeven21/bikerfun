@@ -79,6 +79,9 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
 
 /**
  * Calculate shipping cost for an order based on WooCommerce settings
+ * Netherlands: Always free
+ * Belgium/Germany: Standard flat rate from WooCommerce
+ * 
  * @param subtotal Order subtotal
  * @param country Country code (default: NL)
  * @returns Shipping cost
@@ -88,81 +91,81 @@ export async function calculateShipping(
   country: string = 'NL'
 ): Promise<number> {
   try {
+    const countryUpper = country.toUpperCase();
+    
+    // Netherlands: ALWAYS free shipping (per WooCommerce settings)
+    if (countryUpper === 'NL') {
+      console.log('Netherlands: Free shipping (always)');
+      return 0;
+    }
+    
+    // For other countries, try to get from WooCommerce zones
     const zones = await getShippingZones();
     
-    if (zones.length === 0) {
-      console.warn('No shipping zones found, using fallback');
-      return 6.95;
-    }
-    
-    // Find the appropriate shipping zone for this country
-    // WooCommerce zones can have specific countries or be "Rest of the World"
-    let matchingZone = zones.find(z => 
-      z.name.toLowerCase().includes(country.toLowerCase()) ||
-      z.name.toLowerCase().includes('netherlands') && country === 'NL' ||
-      z.name.toLowerCase().includes('belgium') && country === 'BE' ||
-      z.name.toLowerCase().includes('germany') && country === 'DE'
-    );
-    
-    // If no specific zone found, try to find "Rest of World" or first zone as fallback
-    if (!matchingZone) {
-      matchingZone = zones.find(z => 
-        z.name.toLowerCase().includes('rest') || 
-        z.name.toLowerCase().includes('world')
-      ) || zones[0];
-    }
-    
-    if (!matchingZone || matchingZone.methods.length === 0) {
-      console.warn('No matching zone or methods found');
-      return 6.95;
-    }
-    
-    console.log(`Using zone: ${matchingZone.name} for country: ${country}`);
-    
-    // Check for free shipping first (if subtotal meets threshold)
-    const freeShippingMethod = matchingZone.methods.find(
-      m => m.enabled && m.id === 'free_shipping'
-    );
-    
-    if (freeShippingMethod) {
-      // Check if order qualifies for free shipping
-      // WooCommerce typically has a "minimum order amount" setting
-      // We'll check if subtotal >= 50 (common threshold)
-      // In a real implementation, this would come from the method settings
-      const freeShippingThreshold = 50; // This could be fetched from WooCommerce settings
+    if (zones.length > 0) {
+      // Find the appropriate shipping zone for this country
+      let matchingZone = zones.find(z => {
+        const zoneName = z.name.toLowerCase();
+        return (
+          zoneName.includes(country.toLowerCase()) ||
+          (zoneName.includes('belgium') && countryUpper === 'BE') ||
+          (zoneName.includes('germany') && countryUpper === 'DE') ||
+          (zoneName.includes('duitsland') && countryUpper === 'DE')
+        );
+      });
       
-      if (subtotal >= freeShippingThreshold) {
-        console.log('Free shipping applies (threshold met)');
-        return 0;
+      // If no specific zone found, try "Rest of World"
+      if (!matchingZone) {
+        matchingZone = zones.find(z => {
+          const zoneName = z.name.toLowerCase();
+          return zoneName.includes('rest') || zoneName.includes('world');
+        });
+      }
+      
+      if (matchingZone && matchingZone.methods.length > 0) {
+        console.log(`Using zone: ${matchingZone.name} for country: ${country}`);
+        
+        // Get flat rate method
+        const flatRateMethod = matchingZone.methods.find(
+          m => m.enabled && m.id === 'flat_rate' && m.cost > 0
+        );
+        
+        if (flatRateMethod) {
+          console.log(`Using flat rate: €${flatRateMethod.cost}`);
+          return flatRateMethod.cost;
+        }
+        
+        // Use any enabled method with a cost
+        const anyEnabledMethod = matchingZone.methods.find(
+          m => m.enabled && m.cost > 0
+        );
+        
+        if (anyEnabledMethod) {
+          console.log(`Using method: ${anyEnabledMethod.title} - €${anyEnabledMethod.cost}`);
+          return anyEnabledMethod.cost;
+        }
       }
     }
     
-    // Use flat rate or first enabled method
-    const flatRateMethod = matchingZone.methods.find(
-      m => m.enabled && m.id === 'flat_rate'
-    );
+    // Fallback rates per country
+    const FALLBACK_RATES: Record<string, number> = {
+      'BE': 8.95,  // Belgium
+      'DE': 9.95,  // Germany
+    };
     
-    if (flatRateMethod && flatRateMethod.cost > 0) {
-      console.log(`Using flat rate: €${flatRateMethod.cost}`);
-      return flatRateMethod.cost;
+    const fallbackRate = FALLBACK_RATES[countryUpper];
+    if (fallbackRate) {
+      console.log(`Using fallback rate for ${country}: €${fallbackRate}`);
+      return fallbackRate;
     }
     
-    // Use any other enabled method with a cost
-    const anyEnabledMethod = matchingZone.methods.find(
-      m => m.enabled && m.cost > 0
-    );
-    
-    if (anyEnabledMethod) {
-      console.log(`Using method: ${anyEnabledMethod.title} - €${anyEnabledMethod.cost}`);
-      return anyEnabledMethod.cost;
-    }
-    
-    // Fallback
-    console.warn('No suitable shipping method found, using fallback');
-    return 6.95;
+    // Default fallback
+    console.warn(`No shipping rate found for ${country}, using default`);
+    return 9.95;
   } catch (error) {
     console.error('Error calculating shipping:', error);
-    return 6.95;
+    // Default fallback
+    return countryUpper === 'NL' ? 0 : 9.95;
   }
 }
 

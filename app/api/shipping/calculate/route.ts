@@ -18,12 +18,16 @@ export async function POST(request: NextRequest) {
 
     const shippingCost = await calculateShipping(subtotal, country);
 
+    // Netherlands always has free shipping, others may have thresholds
+    const isFreeShippingCountry = country.toUpperCase() === 'NL';
+
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: 50, // From WooCommerce settings
+      free_shipping_threshold: isFreeShippingCountry ? null : 50,
       country,
+      is_always_free: isFreeShippingCountry,
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
@@ -49,12 +53,15 @@ export async function GET(request: NextRequest) {
 
   try {
     const shippingCost = await calculateShipping(subtotal, country);
+    const isFreeShippingCountry = country.toUpperCase() === 'NL';
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: 50,
+      free_shipping_threshold: isFreeShippingCountry ? null : 50,
+      country,
+      is_always_free: isFreeShippingCountry,
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
