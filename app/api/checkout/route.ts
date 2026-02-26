@@ -28,26 +28,47 @@ export async function POST(request: NextRequest) {
     // Create order in Supabase
     const supabase = createClient(supabaseUrl, supabaseKey);
     
+    // Generate order number
+    const { data: orderNumberResult } = await supabase.rpc('generate_order_number');
+    const orderNumber = orderNumberResult || `BF-${Date.now()}`;
+    
+    // Use shipping address if provided, otherwise use billing
+    const shippingAddr = shipping || billing;
+    
     const { data: order, error: orderError } = await supabase
       .from('webshop_orders')
       .insert({
+        order_number: orderNumber,
         customer_email: customer.email,
-        customer_name: `${customer.firstName} ${customer.lastName}`,
         customer_phone: customer.phone || null,
-        billing_address: {
-          firstName: billing.firstName,
-          lastName: billing.lastName,
-          street: billing.street,
-          houseNumber: billing.houseNumber,
-          postalCode: billing.postalCode,
-          city: billing.city,
-          country: billing.country || 'NL',
-        },
-        shipping_address: shipping || billing,
+        
+        // Billing address (separate columns)
+        billing_first_name: billing.firstName,
+        billing_last_name: billing.lastName,
+        billing_company: billing.company || null,
+        billing_address_1: `${billing.street} ${billing.houseNumber}`,
+        billing_address_2: billing.addition || null,
+        billing_city: billing.city,
+        billing_postcode: billing.postalCode,
+        billing_country: billing.country || 'NL',
+        
+        // Shipping address (separate columns)
+        shipping_first_name: shippingAddr.firstName,
+        shipping_last_name: shippingAddr.lastName,
+        shipping_company: shippingAddr.company || null,
+        shipping_address_1: `${shippingAddr.street} ${shippingAddr.houseNumber}`,
+        shipping_address_2: shippingAddr.addition || null,
+        shipping_city: shippingAddr.city,
+        shipping_postcode: shippingAddr.postalCode,
+        shipping_country: shippingAddr.country || 'NL',
+        
+        // Totals
         subtotal: subtotal,
-        shipping_cost: shippingCost,
-        tax: 0,
+        shipping_total: shippingCost,
+        tax_total: 0,
         total: total,
+        
+        // Status
         status: 'pending',
         payment_method: 'mollie',
       })
@@ -63,15 +84,23 @@ export async function POST(request: NextRequest) {
     }
 
     // Create order items
-    const orderItems = cartItems.map((item: any) => ({
-      order_id: order.id,
-      product_id: item.product.woo_product_id || null,
-      product_name: item.product.name,
-      product_image: item.product.images?.[0]?.src || null,
-      quantity: item.quantity,
-      price: parseFloat(item.product.price),
-      subtotal: parseFloat(item.product.price) * item.quantity,
-    }));
+    const orderItems = cartItems.map((item: any) => {
+      const itemPrice = parseFloat(item.product.price);
+      const itemSubtotal = itemPrice * item.quantity;
+      
+      return {
+        order_id: order.id,
+        product_id: item.product.id || null,
+        woo_product_id: item.product.woo_product_id || null,
+        product_name: item.product.name,
+        product_sku: item.product.sku || null,
+        product_image: item.product.images?.[0]?.src || null,
+        quantity: item.quantity,
+        price: itemPrice,
+        subtotal: itemSubtotal,
+        total: itemSubtotal, // Total is same as subtotal (no item-level discounts)
+      };
+    });
 
     const { error: itemsError } = await supabase
       .from('webshop_order_items')
