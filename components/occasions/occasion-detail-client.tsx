@@ -24,15 +24,12 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
       <section className="relative bg-biker-black overflow-hidden h-[45vh] md:h-[50vh]">
         {occasion.main_image ? (
           <div className="relative w-full h-full">
-            <Image
+            <img
               src={occasion.main_image}
               alt={`${occasion.brand} ${occasion.model}`}
-              fill
-              className="object-cover"
-              quality={100}
-              priority
-              unoptimized
-              sizes="100vw"
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="eager"
+              decoding="sync"
             />
             
             {/* Verkocht Overlay */}
