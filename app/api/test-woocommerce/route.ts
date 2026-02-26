@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { wooClient } from '@/lib/woocommerce/client';
+import { wooCommerce } from '@/lib/woocommerce/client';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -36,7 +36,7 @@ export async function GET() {
 
     // Test API by fetching products
     console.log('📦 Fetching products from WooCommerce...');
-    const products = await wooClient.getProducts({
+    const products = await wooCommerce.getProducts({
       per_page: 5,
       status: 'publish',
     });

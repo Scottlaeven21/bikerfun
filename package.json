@@ -12,7 +12,10 @@
     "check:occasions": "tsx scripts/check-occasions.ts",
     "clean:occasions": "tsx scripts/clean-occasions.ts",
     "clean:descriptions": "tsx scripts/clean-occasion-descriptions.ts",
-    "migrations": "tsx scripts/run-migrations.ts"
+    "migrations": "tsx scripts/run-migrations.ts",
+    "check:images": "tsx scripts/check-image-urls.ts",
+    "update:image-urls": "tsx scripts/update-image-urls.ts",
+    "migrate:images": "tsx scripts/migrate-images-to-supabase.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^4.8.0",
