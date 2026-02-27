@@ -134,10 +134,13 @@ export async function POST(request: NextRequest) {
             // Sync to WooCommerce
             const wooOrderId = await syncOrderToWooCommerce(orderData);
             
-            // Update Supabase with WooCommerce order ID
+            // Update Supabase with WooCommerce order ID and synced flag
             await supabase
               .from('webshop_orders')
-              .update({ woo_order_id: wooOrderId })
+              .update({ 
+                woo_order_id: wooOrderId,
+                synced_to_woo: true 
+              })
               .eq('id', orderId);
             
             console.log(`✅ Order synced! WooCommerce Order ID: ${wooOrderId}`);
