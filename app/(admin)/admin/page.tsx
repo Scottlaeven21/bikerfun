@@ -21,12 +21,12 @@ export default async function AdminDashboardPage() {
     { count: totalOccasions },
     recentOrdersResponse,
   ] = await Promise.all([
-    supabase.from('products').select('*', { count: 'exact', head: true }),
-    supabase.from('orders').select('*', { count: 'exact', head: true }),
+    supabase.from('webshop_products').select('*', { count: 'exact', head: true }),
+    supabase.from('webshop_orders').select('*', { count: 'exact', head: true }),
     supabase.from('categories').select('*', { count: 'exact', head: true }),
     supabase.from('occasions').select('*', { count: 'exact', head: true }),
     supabase
-      .from('orders')
+      .from('webshop_orders')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(5),
@@ -34,9 +34,9 @@ export default async function AdminDashboardPage() {
 
   const recentOrders = recentOrdersResponse.data as Order[] | null;
 
-  // Calculate total revenue
+  // Calculate total revenue from webshop orders
   const { data: paidOrders } = await supabase
-    .from('orders')
+    .from('webshop_orders')
     .select('total')
     .eq('payment_status', 'paid');
 

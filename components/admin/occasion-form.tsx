@@ -21,7 +21,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
   const [model, setModel] = useState(occasion?.model || '');
   const [year, setYear] = useState(occasion?.year || new Date().getFullYear());
   const [price, setPrice] = useState(occasion?.price || 0);
-  const [status, setStatus] = useState<'available' | 'reserved' | 'sold'>(occasion?.status || 'available');
+  const [status, setStatus] = useState<'available' | 'sold'>(occasion?.status === 'sold' ? 'sold' : 'available');
   const [isActive, setIsActive] = useState(occasion?.is_active ?? true);
 
   // Technical Details
