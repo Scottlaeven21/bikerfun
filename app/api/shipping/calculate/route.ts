@@ -18,16 +18,22 @@ export async function POST(request: NextRequest) {
 
     const shippingCost = await calculateShipping(subtotal, country);
 
-    // Netherlands always has free shipping, others may have thresholds
-    const isFreeShippingCountry = country.toUpperCase() === 'NL';
+    // Free shipping thresholds per country (from WooCommerce)
+    const countryUpper = country.toUpperCase();
+    let freeShippingThreshold = null;
+    
+    if (countryUpper === 'NL') {
+      freeShippingThreshold = 40; // NL: Free from €40
+    } else if (countryUpper === 'BE' || countryUpper === 'DE') {
+      freeShippingThreshold = 60; // BE/DE: Free from €60
+    }
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: isFreeShippingCountry ? null : 50,
+      free_shipping_threshold: freeShippingThreshold,
       country,
-      is_always_free: isFreeShippingCountry,
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
@@ -53,15 +59,22 @@ export async function GET(request: NextRequest) {
 
   try {
     const shippingCost = await calculateShipping(subtotal, country);
-    const isFreeShippingCountry = country.toUpperCase() === 'NL';
+    
+    const countryUpper = country.toUpperCase();
+    let freeShippingThreshold = null;
+    
+    if (countryUpper === 'NL') {
+      freeShippingThreshold = 40;
+    } else if (countryUpper === 'BE' || countryUpper === 'DE') {
+      freeShippingThreshold = 60;
+    }
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: isFreeShippingCountry ? null : 50,
+      free_shipping_threshold: freeShippingThreshold,
       country,
-      is_always_free: isFreeShippingCountry,
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
