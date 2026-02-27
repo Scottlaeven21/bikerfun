@@ -29,7 +29,14 @@ export async function GET(
       );
     }
 
-    return NextResponse.json({ order });
+    // Transform order data for frontend compatibility
+    const transformedOrder = {
+      ...order,
+      shipping_cost: parseFloat(order.shipping_total || '0'),
+      customer_name: `${order.billing_first_name} ${order.billing_last_name}`,
+    };
+
+    return NextResponse.json({ order: transformedOrder });
 
   } catch (error) {
     console.error('Error fetching order:', error);
