@@ -118,15 +118,15 @@ export async function POST(request: NextRequest) {
     }
 
     // Update product stock quantities
-    for (const item of items) {
+    for (const cartItem of cartItems) {
       const product = await supabase
         .from('webshop_products')
         .select('stock_quantity, manage_stock')
-        .eq('id', item.id)
+        .eq('id', cartItem.product.id)
         .single();
 
       if (product.data && product.data.manage_stock && product.data.stock_quantity !== null) {
-        const newStock = Math.max(0, product.data.stock_quantity - item.quantity);
+        const newStock = Math.max(0, product.data.stock_quantity - cartItem.quantity);
         
         await supabase
           .from('webshop_products')
@@ -134,9 +134,9 @@ export async function POST(request: NextRequest) {
             stock_quantity: newStock,
             stock_status: newStock > 0 ? 'instock' : 'outofstock'
           })
-          .eq('id', item.id);
+          .eq('id', cartItem.product.id);
         
-        console.log(`✅ Updated stock for product ${item.id}: ${product.data.stock_quantity} → ${newStock}`);
+        console.log(`✅ Updated stock for product ${cartItem.product.id}: ${product.data.stock_quantity} → ${newStock}`);
       }
     }
 
