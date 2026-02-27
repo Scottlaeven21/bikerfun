@@ -31,12 +31,12 @@ export function CheckoutForm() {
   const { cart, total: subtotal, clearCart } = useCart();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [shippingCost, setShippingCost] = useState<number | null>(null); // null = not loaded yet
-  const [freeShippingThreshold, setFreeShippingThreshold] = useState<number>(50); // Default
+  const [shippingCost, setShippingCost] = useState<number>(0); // Default to 0
+  const [freeShippingThreshold, setFreeShippingThreshold] = useState<number | null>(null); // null = no threshold
   const [loadingShipping, setLoadingShipping] = useState(true); // Start as loading
   
-  // If shipping not loaded yet, show only subtotal. Otherwise include shipping
-  const totalWithShipping = shippingCost !== null ? subtotal + shippingCost : subtotal;
+  // Calculate total with shipping
+  const totalWithShipping = subtotal + shippingCost;
   
   const [formData, setFormData] = useState<CheckoutFormData>({
     firstName: '',
@@ -382,7 +382,7 @@ export function CheckoutForm() {
             <div className="flex justify-between text-gray-700">
               <span>Verzendkosten:</span>
               <span className="font-semibold">
-                {loadingShipping || shippingCost === null ? (
+                {loadingShipping ? (
                   <span className="text-gray-400">Berekenen...</span>
                 ) : shippingCost === 0 ? (
                   <span className="text-green-600">Gratis</span>
@@ -391,11 +391,10 @@ export function CheckoutForm() {
                 )}
               </span>
             </div>
-            {/* Only show "free shipping threshold" message for countries with threshold (not NL) */}
+            {/* Only show "free shipping threshold" message if threshold exists and not met */}
             {!loadingShipping && 
-             shippingCost !== null && 
+             freeShippingThreshold !== null && 
              shippingCost > 0 && 
-             formData.country !== 'NL' && 
              subtotal < freeShippingThreshold && (
               <div className="text-xs text-gray-500 -mt-2">
                 Nog €{(freeShippingThreshold - subtotal).toFixed(2)} tot gratis verzending
