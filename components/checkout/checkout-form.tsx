@@ -366,10 +366,10 @@ export function CheckoutForm() {
                     {item.product.name}
                   </h4>
                   <p className="text-sm text-gray-600">
-                    {item.quantity}x € {parseFloat(item.product.price).toFixed(2)}
+                    {item.quantity}x € {(parseFloat(item.product.price) || 0).toFixed(2)}
                   </p>
                   <p className="text-sm font-bold text-biker-yellow">
-                    € {(parseFloat(item.product.price) * item.quantity).toFixed(2)}
+                    € {((parseFloat(item.product.price) || 0) * item.quantity).toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -380,7 +380,7 @@ export function CheckoutForm() {
           <div className="space-y-3 mb-6">
             <div className="flex justify-between text-gray-700">
               <span>Subtotaal:</span>
-              <span className="font-semibold">€ {subtotal.toFixed(2)}</span>
+              <span className="font-semibold">€ {(subtotal || 0).toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-gray-700">
               <span>Verzendkosten:</span>
@@ -390,7 +390,7 @@ export function CheckoutForm() {
                 ) : shippingCost === 0 ? (
                   <span className="text-green-600">Gratis</span>
                 ) : (
-                  `€ ${shippingCost.toFixed(2)}`
+                  `€ ${(shippingCost || 0).toFixed(2)}`
                 )}
               </span>
             </div>
@@ -400,13 +400,13 @@ export function CheckoutForm() {
              shippingCost > 0 && 
              subtotal < freeShippingThreshold && (
               <div className="text-xs text-gray-500 -mt-2">
-                Nog €{(freeShippingThreshold - subtotal).toFixed(2)} tot gratis verzending
+                Nog €{((freeShippingThreshold || 0) - (subtotal || 0)).toFixed(2)} tot gratis verzending
               </div>
             )}
             <div className="h-px bg-gray-300 my-3"></div>
             <div className="flex justify-between text-xl font-bold text-biker-black">
               <span>Totaal:</span>
-              <span className="text-biker-yellow">€ {totalWithShipping.toFixed(2)}</span>
+              <span className="text-biker-yellow">€ {(totalWithShipping || 0).toFixed(2)}</span>
             </div>
           </div>
 
