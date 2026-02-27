@@ -91,6 +91,7 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
       payment_method: 'mollie',
       payment_method_title: 'Mollie',
       set_paid: true, // Mark as paid since Mollie payment succeeded
+      prices_include_tax: true, // NL standard - prices already include 21% VAT
       transaction_id: order.mollie_payment_id,
       meta_data: [
         {
@@ -104,6 +105,10 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
         {
           key: '_mollie_payment_id',
           value: order.mollie_payment_id,
+        },
+        {
+          key: '_send_order_email',
+          value: 'true', // Trigger confirmation email
         },
       ],
     };

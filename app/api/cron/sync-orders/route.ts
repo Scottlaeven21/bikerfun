@@ -59,6 +59,7 @@ export async function GET(request: NextRequest) {
           status: 'processing',
           set_paid: true,
           customer_id: 0,
+          prices_include_tax: true, // NL standard - prices already include 21% VAT
           billing: {
             first_name: order.billing_first_name,
             last_name: order.billing_last_name,
@@ -104,6 +105,10 @@ export async function GET(request: NextRequest) {
             {
               key: '_mollie_payment_id',
               value: order.mollie_payment_id,
+            },
+            {
+              key: '_send_order_email',
+              value: 'true', // Trigger confirmation email
             },
           ],
         };
