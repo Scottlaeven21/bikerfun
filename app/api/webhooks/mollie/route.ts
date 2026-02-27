@@ -91,8 +91,47 @@ export async function POST(request: NextRequest) {
             .single();
 
           if (fullOrder) {
+            // Transform order data to match sync function expected format
+            const orderData = {
+              id: fullOrder.id,
+              order_number: fullOrder.order_number,
+              customer_email: fullOrder.customer_email,
+              customer_name: `${fullOrder.billing_first_name} ${fullOrder.billing_last_name}`,
+              customer_phone: fullOrder.customer_phone,
+              billing_address: {
+                firstName: fullOrder.billing_first_name,
+                lastName: fullOrder.billing_last_name,
+                street: fullOrder.billing_address_1?.split(' ')[0] || '',
+                houseNumber: fullOrder.billing_address_1?.split(' ').slice(1).join(' ') || '',
+                city: fullOrder.billing_city,
+                postalCode: fullOrder.billing_postcode,
+                country: fullOrder.billing_country || 'NL',
+              },
+              shipping_address: {
+                firstName: fullOrder.shipping_first_name || fullOrder.billing_first_name,
+                lastName: fullOrder.shipping_last_name || fullOrder.billing_last_name,
+                street: fullOrder.shipping_address_1?.split(' ')[0] || fullOrder.billing_address_1?.split(' ')[0] || '',
+                houseNumber: fullOrder.shipping_address_1?.split(' ').slice(1).join(' ') || fullOrder.billing_address_1?.split(' ').slice(1).join(' ') || '',
+                city: fullOrder.shipping_city || fullOrder.billing_city,
+                postalCode: fullOrder.shipping_postcode || fullOrder.billing_postcode,
+                country: fullOrder.shipping_country || fullOrder.billing_country || 'NL',
+              },
+              subtotal: parseFloat(fullOrder.subtotal),
+              shipping_cost: parseFloat(fullOrder.shipping_total || '0'),
+              tax: parseFloat(fullOrder.tax_total || '0'),
+              total: parseFloat(fullOrder.total),
+              items: fullOrder.items.map((item: any) => ({
+                product_id: item.woo_product_id,
+                product_name: item.product_name,
+                quantity: item.quantity,
+                price: parseFloat(item.price),
+                subtotal: parseFloat(item.subtotal),
+              })),
+              mollie_payment_id: paymentId,
+            };
+            
             // Sync to WooCommerce
-            const wooOrderId = await syncOrderToWooCommerce(fullOrder);
+            const wooOrderId = await syncOrderToWooCommerce(orderData);
             
             // Update Supabase with WooCommerce order ID
             await supabase

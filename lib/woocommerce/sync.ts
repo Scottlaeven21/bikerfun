@@ -40,28 +40,28 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
 
     // Prepare billing address
     const billing = {
-      first_name: order.billing_address.firstName || '',
-      last_name: order.billing_address.lastName || '',
-      address_1: `${order.billing_address.street || ''} ${order.billing_address.houseNumber || ''}`.trim(),
+      first_name: order.billing_address?.firstName || '',
+      last_name: order.billing_address?.lastName || '',
+      address_1: `${order.billing_address?.street || ''} ${order.billing_address?.houseNumber || ''}`.trim() || 'N/A',
       address_2: '',
-      city: order.billing_address.city || '',
+      city: order.billing_address?.city || '',
       state: '',
-      postcode: order.billing_address.postalCode || '',
-      country: order.billing_address.country || 'NL',
-      email: order.customer_email,
+      postcode: order.billing_address?.postalCode || '',
+      country: order.billing_address?.country || 'NL',
+      email: order.customer_email || '',
       phone: order.customer_phone || '',
     };
 
-    // Prepare shipping address
+    // Prepare shipping address (fallback to billing if not provided)
     const shipping = {
-      first_name: order.shipping_address.firstName || '',
-      last_name: order.shipping_address.lastName || '',
-      address_1: `${order.shipping_address.street || ''} ${order.shipping_address.houseNumber || ''}`.trim(),
+      first_name: order.shipping_address?.firstName || order.billing_address?.firstName || '',
+      last_name: order.shipping_address?.lastName || order.billing_address?.lastName || '',
+      address_1: `${order.shipping_address?.street || order.billing_address?.street || ''} ${order.shipping_address?.houseNumber || order.billing_address?.houseNumber || ''}`.trim() || 'N/A',
       address_2: '',
-      city: order.shipping_address.city || '',
+      city: order.shipping_address?.city || order.billing_address?.city || '',
       state: '',
-      postcode: order.shipping_address.postalCode || '',
-      country: order.shipping_address.country || 'NL',
+      postcode: order.shipping_address?.postalCode || order.billing_address?.postalCode || '',
+      country: order.shipping_address?.country || order.billing_address?.country || 'NL',
     };
 
     // Prepare line items
