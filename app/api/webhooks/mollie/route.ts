@@ -67,19 +67,20 @@ export async function POST(request: NextRequest) {
       console.log(`🎉 Payment successful for order ${orderId}! Starting WooCommerce sync...`);
       
       try {
-        // Check if already synced
-        const existingWooOrderId = await checkOrderExists(orderId);
+        // First check in Supabase if already synced (more reliable than WooCommerce API)
+        const { data: existingOrder } = await supabase
+          .from('webshop_orders')
+          .select('woo_order_id')
+          .eq('id', orderId)
+          .single();
         
-        if (existingWooOrderId) {
-          console.log(`Order already synced to WooCommerce (ID: ${existingWooOrderId})`);
-          
-          // Update Supabase with WooCommerce order ID
-          await supabase
-            .from('webshop_orders')
-            .update({ woo_order_id: existingWooOrderId })
-            .eq('id', orderId);
-            
-        } else {
+        if (existingOrder?.woo_order_id) {
+          console.log(`✅ Order already synced to WooCommerce (ID: ${existingOrder.woo_order_id})`);
+          // Already synced, skip
+          return NextResponse.json({ success: true, message: 'Order already synced' });
+        }
+        
+        console.log('📤 Order not yet synced, creating in WooCommerce...');
           // Fetch full order details with items
           const { data: fullOrder } = await supabase
             .from('webshop_orders')
@@ -139,9 +140,9 @@ export async function POST(request: NextRequest) {
               .update({ woo_order_id: wooOrderId })
               .eq('id', orderId);
             
-            console.log(`✅ Order synced! WooCommerce will now send emails and handle shipping.`);
+            console.log(`✅ Order synced! WooCommerce Order ID: ${wooOrderId}`);
+            console.log(`✅ WooCommerce will now send emails and handle shipping.`);
           }
-        }
       } catch (syncError) {
         console.error('WooCommerce sync error:', syncError);
         // Don't fail the webhook - order is already paid
