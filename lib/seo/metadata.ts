@@ -150,7 +150,7 @@ export function getWebshopMetadata(): Metadata {
     openGraph: {
       title: 'Webshop | Motoraccessoires & Onderdelen | Bikerfun',
       description: 'Shop motoraccessoires, helmen, kleding en onderdelen. Alles voor de motorrijder.',
-      url: `${baseUrl}/webshop`,
+      url: `${baseUrl}/products`,
       siteName,
       images: [
         {

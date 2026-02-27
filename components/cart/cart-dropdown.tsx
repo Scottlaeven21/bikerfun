@@ -156,7 +156,7 @@ export function CartDropdown() {
                 <div className="flex justify-between items-center mb-4">
                   <span className="font-bold text-biker-black">Totaal:</span>
                   <span className="font-bold text-xl text-biker-yellow">
-                    € {total.toFixed(2)}
+                    € {(total || 0).toFixed(2)}
                   </span>
                 </div>
                 <button
@@ -166,7 +166,7 @@ export function CartDropdown() {
                   Naar Checkout
                 </button>
                 <p className="text-xs text-gray-500 text-center mt-2">
-                  Je wordt doorgestuurd naar onze webshop
+                  Verzendkosten worden berekend bij checkout
                 </p>
               </div>
             </>

@@ -95,7 +95,7 @@ export default function Error({
             <Link href="/occasions" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
               Occasions
             </Link>
-            <Link href="/webshop" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
+            <Link href="/products" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
               Webshop
             </Link>
             <Link href="/contact" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">

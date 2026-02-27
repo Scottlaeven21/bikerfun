@@ -74,7 +74,7 @@ export default function NotFound() {
             <Link href="/contact" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
               Contact
             </Link>
-            <Link href="/webshop" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
+            <Link href="/products" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
               Webshop
             </Link>
             <Link href="/occasions" className="text-biker-yellow hover:text-biker-yellowHover transition-colors">
