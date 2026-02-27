@@ -8,12 +8,14 @@ export interface ShippingMethod {
   title: string;
   cost: number;
   enabled: boolean;
+  minAmount?: number; // Free shipping minimum amount
 }
 
 export interface ShippingZone {
   id: number;
   name: string;
   methods: ShippingMethod[];
+  countries: string[]; // List of country codes for this zone
 }
 
 /**
@@ -42,9 +44,10 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
 
     const zones = await zonesResponse.json();
     
-    // Fetch methods for each zone
+    // Fetch methods AND locations for each zone
     const zonesWithMethods = await Promise.all(
       zones.map(async (zone: any) => {
+        // Fetch methods
         const methodsResponse = await fetch(
           `${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/methods`,
           {
@@ -57,14 +60,32 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
 
         const methods = methodsResponse.ok ? await methodsResponse.json() : [];
 
+        // Fetch locations (countries for this zone)
+        const locationsResponse = await fetch(
+          `${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/locations`,
+          {
+            headers: {
+              'Authorization': `Basic ${auth}`,
+              'Content-Type': 'application/json',
+            },
+          }
+        );
+
+        const locations = locationsResponse.ok ? await locationsResponse.json() : [];
+        const countries = locations
+          .filter((l: any) => l.type === 'country')
+          .map((l: any) => l.code);
+
         return {
           id: zone.id,
           name: zone.name,
+          countries,
           methods: methods.map((m: any) => ({
-            id: m.id,
-            title: m.title,
+            id: m.method_id,
+            title: m.method_title,
             cost: parseFloat(m.settings?.cost?.value || '0'),
             enabled: m.enabled,
+            minAmount: m.settings?.min_amount?.value ? parseFloat(m.settings.min_amount.value) : undefined,
           })),
         };
       })
@@ -78,11 +99,8 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
 }
 
 /**
- * Calculate shipping cost EXACTLY as configured in WooCommerce
- * 
- * WooCommerce Settings:
- * - NL: Free shipping from €40
- * - BE/DE: €4.95 flat rate, free from €60
+ * Calculate shipping cost dynamically from WooCommerce zones/methods
+ * Automatically syncs with WooCommerce shipping settings!
  * 
  * @param subtotal Order subtotal
  * @param country Country code (default: NL)
@@ -92,74 +110,112 @@ export async function calculateShipping(
   subtotal: number,
   country: string = 'NL'
 ): Promise<number> {
+  const countryUpper = country.toUpperCase();
+  
   try {
-    const countryUpper = country.toUpperCase();
-    
-    // Netherlands: Free shipping from €40 (WooCommerce Zone 1)
-    if (countryUpper === 'NL') {
-      if (subtotal >= 40) {
-        console.log('Netherlands: Free shipping (≥€40)');
-        return 0;
-      } else {
-        // No flat rate configured for NL in WooCommerce
-        // Options: return 0 (always free) or a default rate
-        // Since WC only has free shipping for NL, we'll make it free
-        console.log('Netherlands: Free shipping (WC only has free shipping method)');
-        return 0;
-      }
-    }
-    
-    // Belgium & Germany: €4.95, free from €60 (WooCommerce Zone 2)
-    if (countryUpper === 'BE' || countryUpper === 'DE') {
-      if (subtotal >= 60) {
-        console.log(`${country}: Free shipping (≥€60)`);
-        return 0;
-      } else {
-        console.log(`${country}: Flat rate €4.95`);
-        return 4.95;
-      }
-    }
-    
-    // Try to get from WooCommerce for other countries
+    // Try to get real-time rates from WooCommerce
     const zones = await getShippingZones();
     
-    if (zones.length > 0) {
-      let matchingZone = zones.find(z => {
+    if (zones.length === 0) {
+      console.warn('⚠️  No zones found, using fallback rates');
+      return getFallbackShippingCost(subtotal, countryUpper);
+    }
+    
+    // Find zone that includes this country
+    let matchingZone = zones.find(z => 
+      z.countries.includes(countryUpper) || 
+      z.countries.includes(country.toLowerCase())
+    );
+    
+    // If no match by country code, try zone name matching
+    if (!matchingZone) {
+      matchingZone = zones.find(z => {
         const zoneName = z.name.toLowerCase();
-        return zoneName.includes(country.toLowerCase());
-      });
-      
-      if (!matchingZone) {
-        matchingZone = zones.find(z => {
-          const zoneName = z.name.toLowerCase();
-          return zoneName.includes('rest') || zoneName.includes('world');
-        });
-      }
-      
-      if (matchingZone && matchingZone.methods.length > 0) {
-        console.log(`Using zone: ${matchingZone.name} for country: ${country}`);
-        
-        const flatRateMethod = matchingZone.methods.find(
-          m => m.enabled && m.id === 'flat_rate' && m.cost > 0
+        return (
+          (zoneName.includes('nederland') && countryUpper === 'NL') ||
+          (zoneName.includes('netherlands') && countryUpper === 'NL') ||
+          (zoneName.includes('belgie') && countryUpper === 'BE') ||
+          (zoneName.includes('belgium') && countryUpper === 'BE') ||
+          (zoneName.includes('duitsland') && countryUpper === 'DE') ||
+          (zoneName.includes('germany') && countryUpper === 'DE')
         );
-        
-        if (flatRateMethod) {
-          console.log(`Using flat rate: €${flatRateMethod.cost}`);
-          return flatRateMethod.cost;
-        }
+      });
+    }
+    
+    // Fallback to "Rest of World" zone or first zone
+    if (!matchingZone) {
+      matchingZone = zones.find(z => 
+        z.name.toLowerCase().includes('rest') || 
+        z.name.toLowerCase().includes('world')
+      ) || zones[0];
+    }
+    
+    if (!matchingZone || matchingZone.methods.length === 0) {
+      console.warn('⚠️  No matching zone found, using fallback');
+      return getFallbackShippingCost(subtotal, countryUpper);
+    }
+    
+    console.log(`✅ Using zone: "${matchingZone.name}" for ${country}`);
+    
+    // 1. Check for free shipping method first
+    const freeShippingMethod = matchingZone.methods.find(
+      m => m.enabled && m.id === 'free_shipping'
+    );
+    
+    if (freeShippingMethod && freeShippingMethod.minAmount) {
+      if (subtotal >= freeShippingMethod.minAmount) {
+        console.log(`✅ Free shipping applies (≥€${freeShippingMethod.minAmount})`);
+        return 0;
       }
     }
     
-    // Fallback for unknown countries
-    console.warn(`No shipping rate found for ${country}, using default €9.95`);
-    return 9.95;
+    // 2. Use flat rate method
+    const flatRateMethod = matchingZone.methods.find(
+      m => m.enabled && m.id === 'flat_rate'
+    );
+    
+    if (flatRateMethod) {
+      console.log(`✅ Using flat rate: €${flatRateMethod.cost}`);
+      return flatRateMethod.cost;
+    }
+    
+    // 3. Use any other enabled method with a cost
+    const anyMethod = matchingZone.methods.find(m => m.enabled);
+    if (anyMethod) {
+      console.log(`✅ Using method: ${anyMethod.title} - €${anyMethod.cost}`);
+      return anyMethod.cost;
+    }
+    
+    // No enabled methods found
+    console.warn('⚠️  No enabled methods in zone, using fallback');
+    return getFallbackShippingCost(subtotal, countryUpper);
+    
   } catch (error) {
-    console.error('Error calculating shipping:', error);
-    // Fallback
-    if (countryUpper === 'NL') return subtotal >= 40 ? 0 : 0;
-    if (countryUpper === 'BE' || countryUpper === 'DE') return subtotal >= 60 ? 0 : 4.95;
-    return 9.95;
+    console.error('❌ Error fetching from WooCommerce:', error);
+    // Use fallback on error
+    return getFallbackShippingCost(subtotal, countryUpper);
   }
+}
+
+/**
+ * Fallback shipping costs (used when WooCommerce API fails)
+ * Based on current WooCommerce settings as of 2026-02-26
+ */
+function getFallbackShippingCost(subtotal: number, country: string): number {
+  const countryUpper = country.toUpperCase();
+  
+  // Netherlands: Free from €40
+  if (countryUpper === 'NL') {
+    return subtotal >= 40 ? 0 : 0; // NL only has free shipping in WC
+  }
+  
+  // Belgium & Germany: €4.95, free from €60
+  if (countryUpper === 'BE' || countryUpper === 'DE') {
+    return subtotal >= 60 ? 0 : 4.95;
+  }
+  
+  // Default for other countries
+  return 9.95;
 }
 
 /**
