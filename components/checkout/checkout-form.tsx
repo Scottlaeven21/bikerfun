@@ -128,8 +128,11 @@ export function CheckoutForm() {
 
       if (response.ok) {
         const data = await response.json();
-        setShippingCost(data.shipping_cost);
-        setFreeShippingThreshold(data.free_shipping_threshold || 50);
+        setShippingCost(data.shipping_cost ?? 0); // Default to 0 if undefined
+        setFreeShippingThreshold(data.free_shipping_threshold ?? null); // null = no threshold
+      } else {
+        // On error, set default shipping cost
+        setShippingCost(formData.country === 'NL' ? 0 : 4.95);
       }
     } catch (error) {
       console.error('Failed to fetch shipping cost:', error);
