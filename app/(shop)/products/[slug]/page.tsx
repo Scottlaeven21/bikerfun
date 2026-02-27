@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getProductBySlug } from '@/lib/supabase/products';
 import { AddToCartButton } from '@/components/products/add-to-cart-button';
+import { sanitizeHtmlDescription } from '@/lib/utils/sanitize-html';
 
 export async function generateMetadata({
   params,
@@ -152,7 +153,7 @@ export default async function ProductPage({
             {/* Short Description */}
             {product.short_description && (
               <div className="text-gray-700 text-lg leading-relaxed">
-                <div dangerouslySetInnerHTML={{ __html: product.short_description }} />
+                <div dangerouslySetInnerHTML={{ __html: sanitizeHtmlDescription(product.short_description) }} />
               </div>
             )}
 
@@ -208,7 +209,7 @@ export default async function ProductPage({
               Productinformatie
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
-              <div dangerouslySetInnerHTML={{ __html: product.description }} />
+              <div dangerouslySetInnerHTML={{ __html: sanitizeHtmlDescription(product.description) }} />
             </div>
           </div>
         )}

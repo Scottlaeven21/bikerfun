@@ -57,7 +57,7 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
 
   return (
     <div className="group bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-biker-yellow shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col">
-      <Link href={`/products/${productSlug}`} className="relative aspect-square overflow-hidden bg-gray-50 block">
+      <Link href={`/products/${productSlug}`} className="relative aspect-square overflow-hidden bg-white block">
         {showPlaceholder ? (
           <div className="w-full h-full flex items-center justify-center text-gray-300">
             <span className="text-6xl">📦</span>
