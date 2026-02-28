@@ -11,9 +11,9 @@ Het contactformulier op bikerfun.nl moet emails kunnen versturen via **StackMail
 De IT'er moet de volgende **SMTP inloggegevens** aanleveren:
 
 ### 1. **SMTP Host**
-- ✅ **`smtp.stackmail.com`** (StackMail centrale server)
-- **Niet** `smtp.bikerfun.nl` (die werkt alleen met extra doorstuur configuratie)
-- Dit is de server die emails verstuurt
+- ✅ **`mail.bikerfun.nl`** (eigen domein - CNAME bestaat al in DNS!)
+- Dit wijst door naar StackMail via bestaande CNAME record
+- Alternatief: `smtp.stackmail.com` werkt ook
 
 ### 2. **SMTP Port**
 - ✅ **465** (SSL) - Aanbevolen voor Bikerfun
@@ -60,7 +60,7 @@ https://vercel.com/scottlaeven21s-projects/bikerfun/settings/environment-variabl
 ### Voeg de volgende variabelen toe:
 
 ```env
-SMTP_HOST=smtp.stackmail.com
+SMTP_HOST=mail.bikerfun.nl
 SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=info@bikerfun.nl
@@ -82,7 +82,7 @@ Om lokaal te testen, voeg toe aan `.env.local`:
 
 ```env
 # StackMail SMTP Configuration
-SMTP_HOST=smtp.stackmail.com
+SMTP_HOST=mail.bikerfun.nl
 SMTP_PORT=465
 SMTP_SECURE=true
 SMTP_USER=info@bikerfun.nl
@@ -137,6 +137,17 @@ Na correcte SMTP setup werken:
 ### SMTP Configuratie Voorbeeld (StackMail/StackCP):
 
 ```
+Host: mail.bikerfun.nl
+Port: 465
+Encryption: SSL (SMTP_SECURE=true)
+Authentication: Yes
+Username: info@bikerfun.nl
+Password: [wachtwoord van IT'er]
+```
+
+**Alternatief (als mail.bikerfun.nl niet werkt):**
+
+```
 Host: smtp.stackmail.com
 Port: 465
 Encryption: SSL (SMTP_SECURE=true)
@@ -145,20 +156,10 @@ Username: info@bikerfun.nl
 Password: [wachtwoord van IT'er]
 ```
 
-**Alternatief (non-SSL, meestal niet nodig):**
-
-```
-Host: smtp.stackmail.com
-Port: 587
-Encryption: STARTTLS (SMTP_SECURE=false)
-Authentication: Yes
-Username: info@bikerfun.nl
-Password: [wachtwoord van IT'er]
-```
-
-**⚠️ BELANGRIJK:** 
-- Gebruik **`smtp.stackmail.com`** (StackMail centrale server)
-- Gebruik NIET `smtp.bikerfun.nl` - die werkt alleen met extra doorstuur configuratie!
+**✅ BELANGRIJK:** 
+- Gebruik **`mail.bikerfun.nl`** - de CNAME record bestaat al in je DNS!
+- Dit wijst automatisch door naar StackMail servers
+- Fallback: `smtp.stackmail.com` werkt ook altijd
 
 ---
 
