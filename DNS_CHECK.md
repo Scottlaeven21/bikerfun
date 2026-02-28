@@ -10,32 +10,22 @@ Deze CNAME record **bestaat al** in je DNS!
 
 ---
 
-## ✅ Dit betekent:
+## ⚠️ BELANGRIJK: Verschil tussen Webmail en SMTP
 
-Je kunt **`mail.bikerfun.nl`** gebruiken als SMTP host!
+### **mail.bikerfun.nl** (CNAME naar webmail.stackcp.com)
+- Dit is voor **webmail toegang** (inloggen in browser)
+- **NIET** voor SMTP verzenden vanaf server
+- Gebruikt door: Gebruikers die hun email via web willen checken
 
----
-
-## 🔄 Twee opties:
-
-### Optie 1: **mail.bikerfun.nl** (als CNAME bestaat)
-```
-SMTP_HOST=mail.bikerfun.nl
-SMTP_PORT=465
-```
-**Voordeel:** Eigen domein, looks professional
-
-### Optie 2: **smtp.stackmail.com** (altijd werkt)
-```
-SMTP_HOST=smtp.stackmail.com
-SMTP_PORT=465
-```
-**Voordeel:** Werkt altijd, geen DNS afhankelijkheid
+### **smtp.stackmail.com** (SMTP server)
+- Dit is voor **SMTP verzenden** vanaf servers (Vercel)
+- **WEL** voor contactformulier emails
+- Gebruikt door: Website om emails te versturen
 
 ---
 
-## 💡 Mijn advies:
+## ✅ Conclusie:
 
-Gebruik **`mail.bikerfun.nl`** aangezien de CNAME record al bestaat in je DNS!
+Voor het contactformulier moet je **`smtp.stackmail.com`** gebruiken, NIET `mail.bikerfun.nl`.
 
-Dit is professioneler en je bent niet afhankelijk van externe StackMail servers.
+De `mail.bikerfun.nl` CNAME is alleen bedoeld voor webmail toegang (zoals Outlook Web Access).
