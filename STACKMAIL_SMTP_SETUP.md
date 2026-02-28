@@ -139,10 +139,10 @@ Na correcte SMTP setup werken:
 ```
 Host: smtp.stackmail.com
 Port: 465
-Encryption: SSL
+Encryption: SSL (SMTP_SECURE=true)
 Authentication: Yes
 Username: info@bikerfun.nl
-Password: [jouw email wachtwoord]
+Password: [wachtwoord van IT'er]
 ```
 
 **Alternatief (non-SSL, meestal niet nodig):**
@@ -150,13 +150,15 @@ Password: [jouw email wachtwoord]
 ```
 Host: smtp.stackmail.com
 Port: 587
-Encryption: STARTTLS
+Encryption: STARTTLS (SMTP_SECURE=false)
 Authentication: Yes
 Username: info@bikerfun.nl
-Password: [jouw email wachtwoord]
+Password: [wachtwoord van IT'er]
 ```
 
-**Let op:** Gebruik NIET `smtp.bikerfun.nl` - die werkt alleen met extra doorstuur configuratie!
+**⚠️ BELANGRIJK:** 
+- Gebruik **`smtp.stackmail.com`** (StackMail centrale server)
+- Gebruik NIET `smtp.bikerfun.nl` - die werkt alleen met extra doorstuur configuratie!
 
 ---
 
