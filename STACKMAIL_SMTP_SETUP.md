@@ -11,24 +11,24 @@ Het contactformulier op bikerfun.nl moet emails kunnen versturen via **StackMail
 De IT'er moet de volgende **SMTP inloggegevens** aanleveren:
 
 ### 1. **SMTP Host**
-- Bijvoorbeeld: `smtp.stackmail.com` of `mail.bikerfun.nl`
+- ✅ **`smtp.bikerfun.nl`** (uit StackMail settings)
 - Dit is de server die emails verstuurt
 
 ### 2. **SMTP Port**
-- **587** (TLS/STARTTLS) - meest gebruikelijk ✅
-- **465** (SSL) - ook mogelijk
-- **25** (onbeveiligd) - niet aanbevolen
+- ✅ **465** (SSL) - Aanbevolen voor Bikerfun
+- **587** (STARTTLS) - Ook mogelijk
+- **25** (onbeveiligd) - Niet aanbevolen
 
 ### 3. **SMTP User**
-- Bijvoorbeeld: `noreply@bikerfun.nl` of `info@bikerfun.nl`
+- ✅ **`info@bikerfun.nl`** (bestaand email account)
 - Het email account dat gebruikt wordt om te versturen
 
 ### 4. **SMTP Password**
-- Het wachtwoord van bovenstaande email account
+- ✅ Het wachtwoord van `info@bikerfun.nl` email account
+- Vraag dit aan de IT'er
 
 ### 5. **SSL/TLS Setting**
-- **false** als port 587 (STARTTLS)
-- **true** als port 465 (SSL)
+- ✅ **true** (omdat we port 465 gebruiken met SSL)
 
 ---
 
@@ -81,9 +81,9 @@ Om lokaal te testen, voeg toe aan `.env.local`:
 
 ```env
 # StackMail SMTP Configuration
-SMTP_HOST=smtp.stackmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
+SMTP_HOST=smtp.bikerfun.nl
+SMTP_PORT=465
+SMTP_SECURE=true
 SMTP_USER=info@bikerfun.nl
 SMTP_PASSWORD=jouw_wachtwoord_hier
 SMTP_FROM_EMAIL=info@bikerfun.nl
