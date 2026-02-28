@@ -1,34 +1,52 @@
-// Email client using Resend
-// Documentation: https://resend.com/docs/send-with-nextjs
+// Email client using SMTP (StackMail)
+// Compatible with StackCP hosting email
 
-import { Resend } from 'resend';
-
-// Initialize Resend client
-const resend = new Resend(process.env.RESEND_API_KEY);
+import nodemailer from 'nodemailer';
 
 /**
  * Check if email is properly configured
  */
 export function isEmailConfigured(): boolean {
-  return !!process.env.RESEND_API_KEY && !!process.env.RESEND_FROM_EMAIL;
+  return !!(
+    process.env.SMTP_HOST &&
+    process.env.SMTP_PORT &&
+    process.env.SMTP_USER &&
+    process.env.SMTP_PASSWORD &&
+    process.env.SMTP_FROM_EMAIL
+  );
 }
 
 /**
  * Get configured "from" email address
  */
 export function getFromEmail(): string {
-  return process.env.RESEND_FROM_EMAIL || 'noreply@bikerfun.nl';
+  return process.env.SMTP_FROM_EMAIL || 'info@bikerfun.nl';
 }
 
 /**
  * Get configured "to" email address (for receiving notifications)
  */
 export function getToEmail(): string {
-  return process.env.RESEND_TO_EMAIL || 'info@bikerfun.nl';
+  return process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl';
 }
 
 /**
- * Send email using Resend
+ * Create SMTP transporter
+ */
+function createTransporter() {
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASSWORD,
+    },
+  });
+}
+
+/**
+ * Send email using SMTP
  */
 export async function sendEmail({
   to,
@@ -43,32 +61,30 @@ export async function sendEmail({
 }) {
   try {
     if (!isEmailConfigured()) {
-      console.error('Email is not configured. Please add RESEND_API_KEY to environment variables.');
+      console.error('Email is not configured. Please add SMTP credentials to environment variables.');
       return {
         success: false,
         error: 'Email service is not configured',
       };
     }
 
-    const { data, error } = await resend.emails.send({
+    const transporter = createTransporter();
+    
+    const mailOptions = {
       from: getFromEmail(),
-      to: Array.isArray(to) ? to : [to],
+      to: Array.isArray(to) ? to.join(', ') : to,
       subject,
       html,
       text: text || stripHtml(html),
-    });
+    };
 
-    if (error) {
-      console.error('Failed to send email:', error);
-      return {
-        success: false,
-        error: error.message,
-      };
-    }
+    const info = await transporter.sendMail(mailOptions);
+
+    console.log('✅ Email sent:', info.messageId);
 
     return {
       success: true,
-      id: data?.id,
+      id: info.messageId,
     };
   } catch (error) {
     console.error('Email sending error:', error);
@@ -92,5 +108,3 @@ function stripHtml(html: string): string {
     .replace(/&quot;/g, '"')
     .trim();
 }
-
-export { resend };
