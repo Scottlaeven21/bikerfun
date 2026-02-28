@@ -59,9 +59,9 @@ https://vercel.com/scottlaeven21s-projects/bikerfun/settings/environment-variabl
 ### Voeg de volgende variabelen toe:
 
 ```env
-SMTP_HOST=smtp.stackmail.com
-SMTP_PORT=587
-SMTP_SECURE=false
+SMTP_HOST=smtp.bikerfun.nl
+SMTP_PORT=465
+SMTP_SECURE=true
 SMTP_USER=info@bikerfun.nl
 SMTP_PASSWORD=[wachtwoord van email account]
 SMTP_FROM_EMAIL=info@bikerfun.nl
@@ -136,18 +136,18 @@ Na correcte SMTP setup werken:
 ### SMTP Configuratie Voorbeeld (StackMail/StackCP):
 
 ```
-Host: smtp.stackmail.com
-Port: 587
-Encryption: STARTTLS
+Host: smtp.bikerfun.nl
+Port: 465
+Encryption: SSL
 Authentication: Yes
 Username: info@bikerfun.nl
 Password: [jouw email wachtwoord]
 ```
 
-**Of als je een StackCP panel hebt:**
+**Alternatief (non-SSL):**
 
 ```
-Host: mail.bikerfun.nl
+Host: smtp.bikerfun.nl
 Port: 587
 Encryption: STARTTLS
 Authentication: Yes
