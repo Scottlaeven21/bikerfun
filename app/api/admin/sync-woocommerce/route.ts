@@ -101,9 +101,9 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
     // Get existing occasions from Supabase
     const { data: existingOccasions } = await supabase
       .from('occasions')
-      .select('id, slug, updated_at');
+      .select('id, woo_product_id');
 
-    const existingSlugs = new Set(existingOccasions?.map((o: any) => o.slug) || []);
+    const existingWooIds = new Set(existingOccasions?.map((o: any) => o.woo_product_id) || []);
 
     // Sync each occasion
     for (const product of occasions) {
@@ -111,7 +111,8 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
         const brand = extractBrand(product.name);
         const year = extractYear(product.name);
         const model = extractModel(product.name, brand);
-        const slug = generateSlug(`${brand}-${model}-${year}`, product.id);
+        // Always include WooCommerce ID in slug to ensure uniqueness
+        const slug = `${generateSlug(`${brand}-${model}-${year}`)}-${product.id}`;
 
         const mainImage = product.images?.[0]?.src || null;
         const images = product.images?.map((img: any) => img.src) || [];
@@ -149,13 +150,13 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
           woo_product_id: product.id,
         };
 
-        // Check if exists
-        if (existingSlugs.has(slug)) {
+        // Check if exists (by woo_product_id, not slug)
+        if (existingWooIds.has(product.id)) {
           // Update existing
           const { error } = await supabase
             .from('occasions')
             .update(occasionData)
-            .eq('slug', slug);
+            .eq('woo_product_id', product.id);
 
           if (error) {
             console.error(`Failed to update ${product.name}:`, error.message);
@@ -262,7 +263,7 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
           woo_product_id: product.id,
           sku: product.sku || null,
           name: product.name,
-          slug: generateSlug(product.name, product.id),
+          slug: `${generateSlug(product.name)}-${product.id}`,
           description: product.description || null,
           short_description: product.short_description || null,
           price,
