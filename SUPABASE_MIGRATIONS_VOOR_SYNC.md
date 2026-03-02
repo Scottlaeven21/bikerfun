@@ -1,51 +1,42 @@
 # 🗄️ Supabase Migrations Voor WooCommerce Sync
 
 **Datum:** 2 maart 2026  
-**Status:** ⚠️ REQUIRED - Migrations moeten worden uitgevoerd
+**Urgentie:** 🔴 CRITICAL - Sync werkt niet zonder deze migrations!
 
 ---
 
-## ❌ **Problemen Die Dit Oplost:**
+## ⚠️ **Waarom Nodig?**
 
-### **1. Occasions: Missing `woo_product_id` Column**
-```
-Error: Could not find the 'woo_product_id' column of 'occasions' in the schema cache
-```
+De WooCommerce sync faalt met:
 
-**Fix:** Voeg `woo_product_id` kolom toe aan `occasions` tabel
-
-### **2. Products: Duplicate SKU Constraint**
-```
-Error: duplicate key value violates unique constraint "webshop_products_sku_key"
-```
-
-**Fix:** Verwijder unique constraint op `sku`, gebruik `woo_product_id` als unique identifier
+**Error 1:** `Could not find the 'woo_product_id' column of 'occasions'`  
+**Error 2:** `duplicate key value violates unique constraint "webshop_products_sku_key"`
 
 ---
 
-## 🚀 **Automatisch Runnen (Methode 1)**
+## 🔧 **Wat Wordt Gefixt:**
 
-### **Via Script:**
+### **Migration 1: Add `woo_product_id` to Occasions**
+- Voegt `woo_product_id` kolom toe aan `occasions` tabel
+- Maakt deze uniek voor sync tracking
+- Zonder dit kan sync occasions niet updaten
 
-```bash
-npx tsx scripts/run-woo-sync-migrations.ts
-```
-
-**Let op:** Dit werkt mogelijk niet als Supabase RPC niet beschikbaar is.
+### **Migration 2: Fix Duplicate SKU Constraint**
+- Verwijdert unique constraint van `sku` kolom
+- Maakt `woo_product_id` de echte unique identifier
+- Meerdere producten kunnen nu dezelfde SKU hebben (gebeurt in WooCommerce)
 
 ---
 
-## 📝 **Handmatig Runnen (Methode 2 - AANBEVOLEN)**
+## 📝 **Stap 1: Ga Naar Supabase SQL Editor**
 
-### **Stap 1: Ga Naar Supabase Dashboard**
+**Link:** https://supabase.com/dashboard/project/uxepjramdcqvwafxwcxk/sql/new
 
-1. Open: https://supabase.com/dashboard
-2. Selecteer je project: **Bikerfun**
-3. Ga naar: **SQL Editor** (in linker sidebar)
+---
 
-### **Stap 2: Run Migration 1 - Add woo_product_id to Occasions**
+## 📋 **Stap 2: Voer Migration 015 Uit**
 
-Klik **"New Query"** en plak:
+**Copy-paste deze SQL:**
 
 ```sql
 -- Add woo_product_id column to occasions table for WooCommerce sync
@@ -61,11 +52,18 @@ CREATE INDEX IF NOT EXISTS idx_occasions_woo_product_id ON occasions(woo_product
 COMMENT ON COLUMN occasions.woo_product_id IS 'WooCommerce product ID for sync tracking';
 ```
 
-**Klik "Run"** → Zou moeten geven: `Success. No rows returned`
+**Klik:** "Run" (rechtsboven)
 
-### **Stap 3: Run Migration 2 - Fix Products SKU Constraint**
+**Verwacht resultaat:**
+```
+Success. No rows returned
+```
 
-Klik **"New Query"** en plak:
+---
+
+## 📋 **Stap 3: Voer Migration 016 Uit**
+
+**Copy-paste deze SQL:**
 
 ```sql
 -- Fix duplicate SKU constraint issue
@@ -95,27 +93,30 @@ CREATE INDEX IF NOT EXISTS idx_webshop_products_woo_product_id ON webshop_produc
 COMMENT ON COLUMN webshop_products.woo_product_id IS 'WooCommerce product ID - unique identifier for sync';
 ```
 
-**Klik "Run"** → Zou moeten geven: `Success. No rows returned`
+**Klik:** "Run" (rechtsboven)
+
+**Verwacht resultaat:**
+```
+Success. No rows returned
+```
 
 ---
 
-## ✅ **Verificatie**
+## ✅ **Stap 4: Verifieer**
 
-### **Check Of Migrations Succesvol Zijn:**
-
-Run deze query in SQL Editor:
+**Check of kolommen bestaan:**
 
 ```sql
 -- Check occasions table
-SELECT column_name, data_type, is_nullable
-FROM information_schema.columns
-WHERE table_name = 'occasions' AND column_name = 'woo_product_id';
+SELECT column_name, data_type, is_nullable 
+FROM information_schema.columns 
+WHERE table_name = 'occasions' 
+AND column_name = 'woo_product_id';
 
 -- Check webshop_products constraints
-SELECT constraint_name, table_name
+SELECT constraint_name, constraint_type
 FROM information_schema.table_constraints
-WHERE table_name = 'webshop_products' 
-  AND constraint_type = 'UNIQUE';
+WHERE table_name = 'webshop_products';
 ```
 
 **Verwacht:**
@@ -125,62 +126,42 @@ WHERE table_name = 'webshop_products'
 
 ---
 
-## 🧪 **Test Na Migrations**
+## 🚀 **Stap 5: Test Sync Opnieuw**
 
-Na het runnen van migrations:
+**Na migrations:**
 
-1. **Ga naar:** `/admin/sync`
-2. **Klik:** "Start Synchronisatie"
+1. Ga naar: `https://bikerfun.nl/admin/sync`
+2. Klik: "Start Synchronisatie"
 3. **Verwacht:**
-   - ✅ 14 occasions geïmporteerd
-   - ✅ ~100 producten geïmporteerd  
-   - ✅ 0 fouten
+   - ✅ 14 occasions geïmporteerd (geen fouten)
+   - ✅ ~140 producten geïmporteerd (geen duplicate SKU errors)
+   - ✅ Orders gesynct
 
 ---
 
-## 📋 **Wat Gebeurt Er:**
+## 🆘 **Als Er Fouten Zijn:**
 
-### **Voor:**
-```
-occasions tabel: GEEN woo_product_id kolom ❌
-→ Insert faalt met "column not found"
+### **Error: "relation occasions does not exist"**
+- Je bent in de verkeerde database
+- Check dat je in het juiste Supabase project bent
 
-webshop_products: UNIQUE constraint op SKU ❌
-→ Insert faalt met "duplicate key" (veel motors hebben zelfde SKU)
-```
+### **Error: "permission denied"**
+- Je hebt geen rechten om ALTER TABLE uit te voeren
+- Login met owner/admin account
 
-### **Na:**
-```
-occasions tabel: woo_product_id kolom toegevoegd ✅
-→ Insert/Update werkt perfect
-
-webshop_products: UNIQUE constraint op woo_product_id ✅
-→ SKU kan duplicates hebben, woo_product_id is unique
-```
-
----
-
-## 🎯 **Waarom Deze Changes:**
-
-### **`woo_product_id` Op Occasions:**
-- Unieke identifier van WooCommerce
-- Nodig voor update/insert logica
-- Voorkomt duplicate occasions
-- Maakt bidirectionele sync mogelijk
-
-### **SKU Unique Constraint Verwijderd:**
-- Veel WooCommerce producten hebben zelfde/lege SKU
-- SKU is niet betrouwbaar als unique identifier
-- `woo_product_id` is de echte unique key
+### **Error blijft bestaan na migrations**
+- Refresh Supabase schema cache
+- Wacht 1 minuut en probeer opnieuw
 
 ---
 
 ## 📞 **Hulp Nodig?**
 
-Als de migrations niet lukken:
-1. Screenshot de error
-2. Check Supabase logs
-3. Vraag hulp in chat
+**Stuur screenshot van:**
+1. SQL Editor met error (als die er is)
+2. Sync resultaten na migrations
+
+**WhatsApp:** 06 15 45 21 08
 
 ---
 
