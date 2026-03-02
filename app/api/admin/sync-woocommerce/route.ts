@@ -88,8 +88,9 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
 
   try {
     // Fetch occasions from WooCommerce (category "Motoren")
+    // Use smaller batch size to avoid WordPress memory issues
     const wcProducts = await wooCommerce.getProducts({
-      per_page: 100,
+      per_page: 20,
       orderby: 'date',
       order: 'desc',
     });
@@ -192,6 +193,12 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
     console.log(`✅ Occasions sync complete: ${result.imported} imported, ${result.updated} updated`);
   } catch (error: any) {
     console.error('❌ Occasions sync failed:', error.message);
+    
+    // Check if it's a WordPress memory error
+    if (error.message && error.message.includes('500')) {
+      throw new Error('WordPress memory limit (128MB) exceeded. Please ask IT to increase to 512MB. See URGENT_VOOR_ITER_2_MAART.md');
+    }
+    
     throw error;
   }
 
@@ -213,8 +220,9 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
 
   try {
     // Fetch all products from WooCommerce
+    // Use smaller batch size to avoid WordPress memory issues
     const wcProducts = await wooCommerce.getProducts({
-      per_page: 100,
+      per_page: 20,
       orderby: 'date',
       order: 'desc',
     });
@@ -309,6 +317,12 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
     console.log(`✅ Products sync complete: ${result.imported} imported, ${result.updated} updated`);
   } catch (error: any) {
     console.error('❌ Products sync failed:', error.message);
+    
+    // Check if it's a WordPress memory error
+    if (error.message && error.message.includes('500')) {
+      throw new Error('WordPress memory limit (128MB) exceeded. Please ask IT to increase to 512MB. See URGENT_VOOR_ITER_2_MAART.md');
+    }
+    
     throw error;
   }
 
