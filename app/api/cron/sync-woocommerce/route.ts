@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { wooCommerce } from '@/lib/woocommerce/client';
 import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
 
@@ -416,7 +416,8 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const supabase = await createClient();
+    // Use admin client to bypass RLS for sync operations
+    const supabase = createAdminClient();
     const errors: string[] = [];
     const result: SyncResult = {
       success: true,

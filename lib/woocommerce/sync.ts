@@ -123,7 +123,8 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
       ],
     };
 
-    const wooOrderId = await wooClient.createOrder(wooOrder);
+    const wooOrderResponse = await wooClient.createOrder(wooOrder);
+    const wooOrderId = wooOrderResponse.id;
     
     console.log(`✅ Order synced to WooCommerce! WooCommerce Order ID: ${wooOrderId}`);
     

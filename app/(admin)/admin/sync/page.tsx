@@ -1,325 +1,146 @@
-'use client';
+import { Metadata } from 'next';
+import { SyncButton } from '@/components/admin/sync-button';
 
-import { useState } from 'react';
-import { RefreshCw, CheckCircle, XCircle, AlertCircle, ArrowRight } from 'lucide-react';
-
-interface SyncResult {
-  success: boolean;
-  occasions?: {
-    imported: number;
-    updated: number;
-    deleted: number;
-    failed: number;
-  };
-  products?: {
-    imported: number;
-    updated: number;
-    deleted: number;
-    failed: number;
-  };
-  orders?: {
-    synced: number;
-    failed: number;
-  };
-  errors?: string[];
-}
+export const metadata: Metadata = {
+  title: 'WooCommerce Sync - Admin',
+  description: 'Synchroniseer data tussen WooCommerce en Supabase',
+};
 
 export default function SyncPage() {
-  const [syncing, setSyncing] = useState(false);
-  const [result, setResult] = useState<SyncResult | null>(null);
-  const [progress, setProgress] = useState<string>('');
-
-  const handleSync = async () => {
-    setSyncing(true);
-    setResult(null);
-    setProgress('');
-
-    try {
-      setProgress('Verbinden met WooCommerce...');
-      
-      const response = await fetch('/api/admin/sync-woocommerce', {
-        method: 'POST',
-      });
-
-      if (!response.ok) {
-        throw new Error('Sync failed');
-      }
-
-      const data = await response.json();
-      setResult(data);
-      setProgress('');
-    } catch (error: any) {
-      setResult({
-        success: false,
-        errors: [error.message || 'Er ging iets mis tijdens het syncen'],
-      });
-      setProgress('');
-    } finally {
-      setSyncing(false);
-    }
-  };
-
   return (
     <div className="p-8">
-      <div className="max-w-4xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            WooCommerce Synchronisatie
-          </h1>
-          <p className="text-gray-600">
-            Synchroniseer occasions, producten en bestellingen tussen WooCommerce en de website.
+      {/* Header */}
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900 font-['Inter'] mb-2">WooCommerce Synchronisatie</h1>
+        <p className="text-gray-600">
+          Synchroniseer occasions, producten en bestellingen tussen WooCommerce en Supabase
+        </p>
+      </div>
+
+      {/* Info Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        {/* Occasions Info */}
+        <div className="bg-gradient-to-br from-biker-yellow/10 to-white rounded-xl shadow-lg p-6 border-2 border-biker-yellow/30">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-12 h-12 rounded-lg bg-biker-yellow/20 flex items-center justify-center">
+              <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 className="font-bold text-gray-900 text-lg">Occasions</h3>
+          </div>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Importeert motoren uit WooCommerce categorie "Motoren" naar de occasions tabel.
+          </p>
+          <div className="mt-4 flex items-center space-x-2 text-xs text-gray-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            <span>WooCommerce → Supabase</span>
+          </div>
+        </div>
+
+        {/* Products Info */}
+        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6 border border-purple-200">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-12 h-12 rounded-lg bg-purple-100 flex items-center justify-center">
+              <svg className="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </div>
+            <h3 className="font-bold text-gray-900 text-lg">Producten</h3>
+          </div>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Synchroniseert alle webshop producten (helmcovers, sleutelhangers, etc.) naar Supabase.
+          </p>
+          <div className="mt-4 flex items-center space-x-2 text-xs text-gray-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+            <span>WooCommerce → Supabase</span>
+          </div>
+        </div>
+
+        {/* Orders Info */}
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6 border border-blue-200">
+          <div className="flex items-center space-x-3 mb-3">
+            <div className="w-12 h-12 rounded-lg bg-blue-100 flex items-center justify-center">
+              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </div>
+            <h3 className="font-bold text-gray-900 text-lg">Bestellingen</h3>
+          </div>
+          <p className="text-sm text-gray-600 leading-relaxed">
+            Stuurt betaalde bestellingen naar WooCommerce voor email automatisering.
+          </p>
+          <div className="mt-4 flex items-center space-x-2 text-xs text-gray-500">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            <span>Supabase → WooCommerce</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Sync Control */}
+      <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+        <div className="mb-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-2 flex items-center">
+            <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Handmatige Synchronisatie
+          </h2>
+          <p className="text-sm text-gray-600">
+            Klik op de knop hieronder om een handmatige synchronisatie te starten. 
+            Dit proces kan 30-60 seconden duren.
           </p>
         </div>
 
-        {/* Sync Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {/* Occasions */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🏍️</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Occasions</h3>
-                <p className="text-sm text-gray-600">WooCommerce → Website</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              Importeert en update occasions vanuit WooCommerce (categorie "Motoren")
-            </p>
-          </div>
+        <SyncButton />
+      </div>
 
-          {/* Products */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">🛍️</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Producten</h3>
-                <p className="text-sm text-gray-600">WooCommerce → Website</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              Importeert en update webshop producten vanuit WooCommerce
-            </p>
-          </div>
-
-          {/* Orders */}
-          <div className="bg-white rounded-lg border border-gray-200 p-6">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                <span className="text-2xl">📦</span>
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-900">Bestellingen</h3>
-                <p className="text-sm text-gray-600">Website → WooCommerce</p>
-              </div>
-            </div>
-            <p className="text-sm text-gray-600">
-              Synchroniseert nieuwe bestellingen naar WooCommerce
+      {/* Automatic Sync Info */}
+      <div className="mt-8 bg-blue-50 rounded-xl shadow p-6 border border-blue-200">
+        <div className="flex items-start space-x-3">
+          <svg className="w-6 h-6 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <div>
+            <h3 className="font-semibold text-blue-900 mb-2">Automatische Synchronisatie</h3>
+            <p className="text-sm text-blue-800 leading-relaxed">
+              De synchronisatie draait automatisch <strong>elke nacht om 03:00 uur</strong> via een Vercel cron job. 
+              Handmatige synchronisatie is alleen nodig als je direct updates wilt zien.
             </p>
           </div>
         </div>
+      </div>
 
-        {/* Sync Button */}
-        <div className="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg p-8 mb-8 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-2xl font-bold mb-2">Synchroniseer Nu</h2>
-              <p className="text-blue-100 mb-4">
-                Voert een volledige synchronisatie uit van alle data
-              </p>
-              {progress && (
-                <div className="flex items-center gap-2 text-sm">
-                  <RefreshCw className="w-4 h-4 animate-spin" />
-                  <span>{progress}</span>
-                </div>
-              )}
-            </div>
-            <button
-              onClick={handleSync}
-              disabled={syncing}
-              className="bg-white text-blue-600 px-8 py-4 rounded-lg font-bold hover:bg-blue-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center gap-2 shadow-lg"
-            >
-              {syncing ? (
-                <>
-                  <RefreshCw className="w-5 h-5 animate-spin" />
-                  Bezig met syncen...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="w-5 h-5" />
-                  Start Synchronisatie
-                </>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Results */}
-        {result && (
-          <div className="space-y-6">
-            {/* Success/Error Summary */}
-            <div
-              className={`rounded-lg p-6 ${
-                result.success
-                  ? 'bg-green-50 border border-green-200'
-                  : 'bg-red-50 border border-red-200'
-              }`}
-            >
-              <div className="flex items-center gap-3 mb-2">
-                {result.success ? (
-                  <>
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                    <h3 className="text-lg font-semibold text-green-900">
-                      Synchronisatie Voltooid
-                    </h3>
-                  </>
-                ) : (
-                  <>
-                    <XCircle className="w-6 h-6 text-red-600" />
-                    <h3 className="text-lg font-semibold text-red-900">
-                      Synchronisatie Mislukt
-                    </h3>
-                  </>
-                )}
-              </div>
-              {result.errors && result.errors.length > 0 && (
-                <div className="mt-4">
-                  <p className="font-medium text-red-900 mb-2">Fouten:</p>
-                  <ul className="list-disc list-inside space-y-1">
-                    {result.errors.map((error, i) => (
-                      <li key={i} className="text-sm text-red-800">
-                        {error}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-
-            {/* Occasions Results */}
-            {result.occasions && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">🏍️</span>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Occasions Sync
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">
-                      {result.occasions.imported}
-                    </div>
-                    <div className="text-sm text-gray-600">Geïmporteerd</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">
-                      {result.occasions.updated}
-                    </div>
-                    <div className="text-sm text-gray-600">Geüpdatet</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-600">
-                      {result.occasions.deleted}
-                    </div>
-                    <div className="text-sm text-gray-600">Verwijderd</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-red-600">
-                      {result.occasions.failed}
-                    </div>
-                    <div className="text-sm text-gray-600">Mislukt</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Products Results */}
-            {result.products && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">🛍️</span>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Producten Sync
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">
-                      {result.products.imported}
-                    </div>
-                    <div className="text-sm text-gray-600">Geïmporteerd</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600">
-                      {result.products.updated}
-                    </div>
-                    <div className="text-sm text-gray-600">Geüpdatet</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-gray-600">
-                      {result.products.deleted}
-                    </div>
-                    <div className="text-sm text-gray-600">Verwijderd</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-red-600">
-                      {result.products.failed}
-                    </div>
-                    <div className="text-sm text-gray-600">Mislukt</div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {/* Orders Results */}
-            {result.orders && (
-              <div className="bg-white rounded-lg border border-gray-200 p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <span className="text-2xl">📦</span>
-                  <h3 className="text-lg font-semibold text-gray-900">
-                    Bestellingen Sync
-                  </h3>
-                </div>
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-green-600">
-                      {result.orders.synced}
-                    </div>
-                    <div className="text-sm text-gray-600">Gesynct</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-red-600">
-                      {result.orders.failed}
-                    </div>
-                    <div className="text-sm text-gray-600">Mislukt</div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Info Box */}
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-6 mt-8">
-          <div className="flex items-start gap-3">
-            <AlertCircle className="w-5 h-5 text-blue-600 mt-0.5" />
-            <div>
-              <h3 className="font-semibold text-blue-900 mb-2">
-                Automatische Synchronisatie
-              </h3>
-              <p className="text-sm text-blue-800 mb-2">
-                De synchronisatie draait automatisch elke nacht om 03:00 uur.
-              </p>
-              <p className="text-sm text-blue-800">
-                Gebruik deze pagina alleen als je direct wilt synchroniseren na het toevoegen
-                van nieuwe producten of occasions in WooCommerce.
-              </p>
-            </div>
+      {/* Known Issues */}
+      <div className="mt-6 bg-orange-50 rounded-xl shadow p-6 border border-orange-200">
+        <div className="flex items-start space-x-3">
+          <svg className="w-6 h-6 text-orange-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          </svg>
+          <div>
+            <h3 className="font-semibold text-orange-900 mb-2">Bekende Problemen</h3>
+            <ul className="space-y-2 text-sm text-orange-800">
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>
+                  <strong>Occasions Sync:</strong> WordPress memory limit (128MB) is te laag. 
+                  IT moet dit verhogen naar 512MB in wp-config.php. 
+                  Zie <code className="bg-orange-100 px-2 py-0.5 rounded text-xs">URGENT_VOOR_ITER_2_MAART.md</code> voor details.
+                </span>
+              </li>
+              <li className="flex items-start">
+                <span className="mr-2">•</span>
+                <span>
+                  <strong>Sync Duur:</strong> De synchronisatie kan 30-60 seconden duren afhankelijk van het aantal producten.
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       </div>
