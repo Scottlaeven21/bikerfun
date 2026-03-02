@@ -116,34 +116,6 @@ export default function SyncPage() {
           </div>
         </div>
       </div>
-
-      {/* Known Issues */}
-      <div className="mt-6 bg-orange-50 rounded-xl shadow p-6 border border-orange-200">
-        <div className="flex items-start space-x-3">
-          <svg className="w-6 h-6 text-orange-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <div>
-            <h3 className="font-semibold text-orange-900 mb-2">Bekende Problemen</h3>
-            <ul className="space-y-2 text-sm text-orange-800">
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>
-                  <strong>Occasions Sync:</strong> WordPress memory limit (128MB) is te laag. 
-                  IT moet dit verhogen naar 512MB in wp-config.php. 
-                  Zie <code className="bg-orange-100 px-2 py-0.5 rounded text-xs">URGENT_VOOR_ITER_2_MAART.md</code> voor details.
-                </span>
-              </li>
-              <li className="flex items-start">
-                <span className="mr-2">•</span>
-                <span>
-                  <strong>Sync Duur:</strong> De synchronisatie kan 30-60 seconden duren afhankelijk van het aantal producten.
-                </span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
