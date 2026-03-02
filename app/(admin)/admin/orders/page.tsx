@@ -1,7 +1,6 @@
 import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { SyncOrdersButton } from './sync-button';
 
 export const metadata: Metadata = {
   title: 'Bestellingen Beheer',
@@ -50,14 +49,11 @@ export default async function AdminOrdersPage() {
 
   return (
     <div className="p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Webshop Bestellingen</h1>
-          <p className="text-gray-600 mt-2">
-            {orders?.length || 0} bestellingen via Mollie checkout
-          </p>
-        </div>
-        <SyncOrdersButton />
+      <div className="mb-8">
+        <h1 className="text-3xl font-bold text-gray-900">Webshop Bestellingen</h1>
+        <p className="text-gray-600 mt-2">
+          {orders?.length || 0} bestellingen via Mollie checkout
+        </p>
       </div>
 
       {error && (
