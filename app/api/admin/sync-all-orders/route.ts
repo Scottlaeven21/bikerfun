@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
-import { syncOrdersToWooCommerce } from '@/lib/woocommerce/sync';
+import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
 
 /**
  * Manual sync endpoint for admin dashboard
@@ -15,7 +15,10 @@ export async function POST(request: NextRequest) {
     // Find paid orders without WooCommerce ID
     const { data: orders, error } = await supabase
       .from('webshop_orders')
-      .select('*')
+      .select(`
+        *,
+        order_items:webshop_order_items(*)
+      `)
       .eq('payment_status', 'paid')
       .is('woo_order_id', null)
       .order('created_at', { ascending: true })
@@ -33,19 +36,56 @@ export async function POST(request: NextRequest) {
 
     console.log(`📦 [MANUAL SYNC] Found ${orders.length} paid order(s) to sync`);
 
-    // Sync orders
-    const result = await syncOrdersToWooCommerce(orders);
+    // Sync orders one by one
+    let synced = 0;
+    const errors: string[] = [];
 
-    console.log(`✅ [MANUAL SYNC] Successfully synced ${result.synced} order(s)`);
+    for (const order of orders) {
+      try {
+        // Transform order items to expected format
+        const items = (order.order_items || []).map((item: any) => ({
+          product_id: item.product_id,
+          product_name: item.product_name,
+          quantity: item.quantity,
+          price: item.price,
+          subtotal: item.subtotal,
+        }));
 
-    if (result.errors.length > 0) {
-      console.error(`⚠️ [MANUAL SYNC] ${result.errors.length} order(s) failed:`, result.errors);
+        const orderData = {
+          ...order,
+          items,
+        };
+
+        const wooOrderId = await syncOrderToWooCommerce(orderData);
+
+        // Update Supabase with WooCommerce ID
+        await supabase
+          .from('webshop_orders')
+          .update({ 
+            woo_order_id: wooOrderId,
+            synced_to_woo: true 
+          })
+          .eq('id', order.id);
+
+        synced++;
+        console.log(`✅ [MANUAL SYNC] Order ${order.order_number} synced (WC ID: ${wooOrderId})`);
+      } catch (err) {
+        const errorMsg = `Order ${order.order_number}: ${err instanceof Error ? err.message : 'Unknown error'}`;
+        errors.push(errorMsg);
+        console.error(`❌ [MANUAL SYNC] ${errorMsg}`);
+      }
+    }
+
+    console.log(`✅ [MANUAL SYNC] Successfully synced ${synced} order(s)`);
+
+    if (errors.length > 0) {
+      console.error(`⚠️ [MANUAL SYNC] ${errors.length} order(s) failed:`, errors);
     }
 
     return NextResponse.json({
-      synced: result.synced,
-      failed: result.errors.length,
-      message: `${result.synced} order(s) gesynchroniseerd${result.errors.length > 0 ? `, ${result.errors.length} mislukt` : ''}`,
+      synced,
+      failed: errors.length,
+      message: `${synced} order(s) gesynchroniseerd${errors.length > 0 ? `, ${errors.length} mislukt` : ''}`,
     });
   } catch (error) {
     console.error('❌ [MANUAL SYNC] Unexpected error:', error);
