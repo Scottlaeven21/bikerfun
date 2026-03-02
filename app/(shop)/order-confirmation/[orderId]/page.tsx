@@ -24,6 +24,18 @@ interface Order {
   status: string;
   payment_status: string;
   items: OrderItem[];
+  billing_first_name?: string;
+  billing_last_name?: string;
+  billing_address_1?: string;
+  billing_city?: string;
+  billing_postcode?: string;
+  billing_country?: string;
+  shipping_first_name?: string;
+  shipping_last_name?: string;
+  shipping_address_1?: string;
+  shipping_city?: string;
+  shipping_postcode?: string;
+  shipping_country?: string;
 }
 
 export default function OrderConfirmationPage() {
@@ -143,6 +155,19 @@ export default function OrderConfirmationPage() {
                   <span>Totaal</span>
                   <span>€{order.total.toFixed(2)}</span>
                 </div>
+              </div>
+            </div>
+          )}
+
+          {/* Shipping Address */}
+          {order && order.shipping_address_1 && (
+            <div className="bg-gray-50 rounded-lg p-6 mb-8 text-left">
+              <h2 className="text-xl font-bold text-biker-black mb-4">Verzendadres</h2>
+              <div className="text-gray-700 space-y-1">
+                <p className="font-semibold">{order.shipping_first_name} {order.shipping_last_name}</p>
+                <p>{order.shipping_address_1}</p>
+                <p>{order.shipping_postcode} {order.shipping_city}</p>
+                <p>{order.shipping_country || 'NL'}</p>
               </div>
             </div>
           )}
