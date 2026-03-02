@@ -27,6 +27,7 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
       type: 'simple',
       status: product.status as 'publish' | 'draft' | 'pending' | 'private',
       featured: product.featured,
+      catalog_visibility: 'visible',
       description: product.description || '',
       short_description: product.short_description || '',
       sku: product.sku || '',
