@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import { SyncOrdersButton } from './sync-button';
 
 export const metadata: Metadata = {
   title: 'Bestellingen Beheer',
@@ -56,6 +57,7 @@ export default async function AdminOrdersPage() {
             {orders?.length || 0} bestellingen via Mollie checkout
           </p>
         </div>
+        <SyncOrdersButton />
       </div>
 
       {error && (
