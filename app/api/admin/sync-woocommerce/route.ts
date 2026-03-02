@@ -87,20 +87,19 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
   };
 
   try {
-    // Fetch occasions from WooCommerce (expensive products > €5000)
+    // Fetch occasions from WooCommerce (category "Motoren")
     const wcProducts = await wooCommerce.getProducts({
       per_page: 100,
       orderby: 'date',
       order: 'desc',
     });
 
-    // Filter for occasions (price > 5000)
+    // Filter for occasions (category slug "motoren")
     const occasions = wcProducts.filter(p => {
-      const price = parseFloat(p.price || '0');
-      return price > 5000;
+      return p.categories?.some((cat: any) => cat.slug === 'motoren');
     });
 
-    console.log(`Found ${occasions.length} occasions in WooCommerce`);
+    console.log(`Found ${occasions.length} occasions in WooCommerce (category: Motoren)`);
 
     // Get existing occasions from Supabase
     const { data: existingOccasions } = await supabase
@@ -216,13 +215,14 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
       order: 'desc',
     });
 
-    // Filter out occasions (price <= 5000)
+    // Filter out occasions (NOT in "motoren" category)
     const products = wcProducts.filter(p => {
       const price = parseFloat(p.price || '0');
-      return price > 0 && price <= 5000;
+      const isMotor = p.categories?.some((cat: any) => cat.slug === 'motoren');
+      return price > 0 && !isMotor;
     });
 
-    console.log(`Found ${products.length} products in WooCommerce`);
+    console.log(`Found ${products.length} products in WooCommerce (excluding Motoren category)`);
 
     // Get existing products from Supabase
     const { data: existingProducts } = await supabase

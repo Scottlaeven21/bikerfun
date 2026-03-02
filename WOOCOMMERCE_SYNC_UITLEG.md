@@ -101,7 +101,7 @@ Website → WooCommerce:
 ### **Logica:**
 
 1. Haalt alle producten op uit WooCommerce
-2. Filtert op **prijs > €5000** (= occasions)
+2. Filtert op **categorie "Motoren"** (slug: `motoren`)
 3. Extraheert brand, model, jaar uit productnaam
 4. Sync naar Supabase `occasions` tabel
 
@@ -131,8 +131,16 @@ WooCommerce Product → Supabase Occasion
 ### **Logica:**
 
 1. Haalt alle producten op uit WooCommerce
-2. Filtert op **prijs ≤ €5000** (= webshop producten)
+2. Filtert op **NIET in categorie "Motoren"** (alle andere categorieën)
 3. Sync naar Supabase `webshop_products` tabel
+
+**Categorieën:**
+- Helmcovers
+- Kentekenplaathouders
+- Knipperlichten
+- Rugzakken
+- Sleutelhangers
+- etc.
 
 ### **Data Mapping:**
 

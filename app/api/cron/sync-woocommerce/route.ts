@@ -93,11 +93,10 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
     });
 
     const occasions = wcProducts.filter(p => {
-      const price = parseFloat(p.price || '0');
-      return price > 5000;
+      return p.categories?.some((cat: any) => cat.slug === 'motoren');
     });
 
-    console.log(`Found ${occasions.length} occasions in WooCommerce`);
+    console.log(`Found ${occasions.length} occasions in WooCommerce (category: Motoren)`);
 
     const { data: existingOccasions } = await supabase
       .from('occasions')
@@ -208,10 +207,11 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
 
     const products = wcProducts.filter(p => {
       const price = parseFloat(p.price || '0');
-      return price > 0 && price <= 5000;
+      const isMotor = p.categories?.some((cat: any) => cat.slug === 'motoren');
+      return price > 0 && !isMotor;
     });
 
-    console.log(`Found ${products.length} products in WooCommerce`);
+    console.log(`Found ${products.length} products in WooCommerce (excluding Motoren category)`);
 
     const { data: existingProducts } = await supabase
       .from('webshop_products')

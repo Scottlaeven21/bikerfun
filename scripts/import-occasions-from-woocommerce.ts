@@ -61,9 +61,9 @@ async function importOccasionsFromWooCommerce() {
   const supabase = createClient(supabaseUrl, supabaseKey);
   const auth = Buffer.from(`${WC_KEY}:${WC_SECRET}`).toString('base64');
 
-  // Fetch occasions from WooCommerce (products > €5000)
+  // Fetch occasions from WooCommerce (category "Motoren")
   const response = await fetch(
-    `${WC_URL}/wp-json/wc/v3/products?per_page=100&min_price=5000&orderby=date&order=desc`,
+    `${WC_URL}/wp-json/wc/v3/products?per_page=100&category=87&orderby=date&order=desc`,
     {
       headers: {
         'Authorization': `Basic ${auth}`,

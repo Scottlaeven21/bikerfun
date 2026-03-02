@@ -86,7 +86,7 @@ export default function SyncPage() {
               </div>
             </div>
             <p className="text-sm text-gray-600">
-              Importeert en update occasions vanuit WooCommerce (producten &gt; €5000)
+              Importeert en update occasions vanuit WooCommerce (categorie "Motoren")
             </p>
           </div>
 
