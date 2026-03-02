@@ -35,6 +35,7 @@ export interface WooCommerceProduct {
   type: 'simple' | 'grouped' | 'external' | 'variable';
   status: 'draft' | 'pending' | 'private' | 'publish';
   featured: boolean;
+  catalog_visibility: 'visible' | 'catalog' | 'search' | 'hidden';
   description: string;
   short_description: string;
   sku: string;
