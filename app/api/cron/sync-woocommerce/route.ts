@@ -305,18 +305,7 @@ async function syncOrders(supabase: any): Promise<SyncResult['orders']> {
   try {
     const { data: orders, error } = await supabase
       .from('webshop_orders')
-      .select(`
-        *,
-        order_items (
-          id,
-          order_id,
-          product_id,
-          product_name,
-          quantity,
-          price,
-          subtotal
-        )
-      `)
+      .select('*')
       .eq('synced_to_woo', false)
       .eq('payment_status', 'paid')
       .order('created_at', { ascending: true });
@@ -334,7 +323,13 @@ async function syncOrders(supabase: any): Promise<SyncResult['orders']> {
 
     for (const order of orders) {
       try {
-        const items = (order.order_items || []).map((item: any) => ({
+        // Fetch order items separately
+        const { data: orderItems } = await supabase
+          .from('order_items')
+          .select('*')
+          .eq('order_id', order.id);
+
+        const items = (orderItems || []).map((item: any) => ({
           product_id: item.product_id,
           product_name: item.product_name,
           quantity: item.quantity,

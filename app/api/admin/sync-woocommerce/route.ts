@@ -162,6 +162,7 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
 
           if (error) {
             console.error(`Failed to update ${product.name}:`, error.message);
+            console.error('Error details:', error);
             result.failed++;
           } else {
             result.updated++;
@@ -174,6 +175,8 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
 
           if (error) {
             console.error(`Failed to import ${product.name}:`, error.message);
+            console.error('Error details:', error);
+            console.error('Occasion data:', JSON.stringify(occasionData, null, 2));
             result.failed++;
           } else {
             result.imported++;
@@ -181,6 +184,7 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
         }
       } catch (err: any) {
         console.error(`Error processing occasion ${product.name}:`, err.message);
+        console.error('Error stack:', err);
         result.failed++;
       }
     }
@@ -274,7 +278,8 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
             .eq('woo_product_id', product.id);
 
           if (error) {
-            console.error(`Failed to update ${product.name}:`, error.message);
+            console.error(`Failed to update product ${product.name}:`, error.message);
+            console.error('Error details:', error);
             result.failed++;
           } else {
             result.updated++;
@@ -286,7 +291,9 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
             .insert(productData);
 
           if (error) {
-            console.error(`Failed to import ${product.name}:`, error.message);
+            console.error(`Failed to import product ${product.name}:`, error.message);
+            console.error('Error details:', error);
+            console.error('Product data:', JSON.stringify(productData, null, 2));
             result.failed++;
           } else {
             result.imported++;
@@ -294,6 +301,7 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
         }
       } catch (err: any) {
         console.error(`Error processing product ${product.name}:`, err.message);
+        console.error('Error stack:', err);
         result.failed++;
       }
     }
@@ -322,18 +330,7 @@ async function syncOrders(supabase: any): Promise<SyncResult['orders']> {
     // Fetch unsynced paid orders
     const { data: orders, error } = await supabase
       .from('webshop_orders')
-      .select(`
-        *,
-        order_items (
-          id,
-          order_id,
-          product_id,
-          product_name,
-          quantity,
-          price,
-          subtotal
-        )
-      `)
+      .select('*')
       .eq('synced_to_woo', false)
       .eq('payment_status', 'paid')
       .order('created_at', { ascending: true });
@@ -352,7 +349,13 @@ async function syncOrders(supabase: any): Promise<SyncResult['orders']> {
     // Sync each order
     for (const order of orders) {
       try {
-        const items = (order.order_items || []).map((item: any) => ({
+        // Fetch order items separately
+        const { data: orderItems } = await supabase
+          .from('order_items')
+          .select('*')
+          .eq('order_id', order.id);
+
+        const items = (orderItems || []).map((item: any) => ({
           product_id: item.product_id,
           product_name: item.product_name,
           quantity: item.quantity,
