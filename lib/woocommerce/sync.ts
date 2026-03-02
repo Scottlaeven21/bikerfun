@@ -65,13 +65,23 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
     };
 
     // Prepare line items
-    const lineItems = order.items.map(item => ({
-      product_id: item.product_id || 0,
-      name: item.product_name,
-      quantity: item.quantity,
-      price: item.price.toString(),
-      total: item.subtotal.toString(),
-    }));
+    // Note: product_id is omitted when null/0 to avoid WooCommerce validation errors
+    // WooCommerce accepts line items with just name + price for custom products
+    const lineItems = order.items.map(item => {
+      const lineItem: any = {
+        name: item.product_name,
+        quantity: item.quantity,
+        price: item.price.toString(),
+        total: item.subtotal.toString(),
+      };
+      
+      // Only add product_id if it's a valid WooCommerce product ID
+      if (item.product_id && item.product_id > 0) {
+        lineItem.product_id = item.product_id;
+      }
+      
+      return lineItem;
+    });
 
     // Prepare shipping lines
     const shippingLines = order.shipping_cost > 0 ? [{
