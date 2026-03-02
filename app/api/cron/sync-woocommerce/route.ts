@@ -394,7 +394,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const supabase = createClient();
+    const supabase = await createClient();
     const errors: string[] = [];
     const result: SyncResult = {
       success: true,

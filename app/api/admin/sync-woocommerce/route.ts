@@ -395,7 +395,7 @@ async function syncOrders(supabase: any): Promise<SyncResult['orders']> {
  */
 export async function POST(request: NextRequest) {
   try {
-    const supabase = createClient();
+    const supabase = await createClient();
     const errors: string[] = [];
     const result: SyncResult = {
       success: true,
