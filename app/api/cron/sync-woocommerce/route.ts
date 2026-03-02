@@ -86,14 +86,13 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
   };
 
   try {
-    const wcProducts = await wooCommerce.getProducts({
-      per_page: 20,
+    // Fetch occasions from WooCommerce (category "Motoren" only)
+    // Query directly by category ID (87) to reduce memory usage
+    const occasions = await wooCommerce.getProducts({
+      per_page: 50,
+      category: '87', // Motoren category ID
       orderby: 'date',
       order: 'desc',
-    });
-
-    const occasions = wcProducts.filter(p => {
-      return p.categories?.some((cat: any) => cat.slug === 'motoren');
     });
 
     console.log(`Found ${occasions.length} occasions in WooCommerce (category: Motoren)`);
@@ -205,16 +204,31 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
   };
 
   try {
-    const wcProducts = await wooCommerce.getProducts({
-      per_page: 20,
-      orderby: 'date',
-      order: 'desc',
-    });
-
-    const products = wcProducts.filter(p => {
+    // Fetch products from WooCommerce (excluding Motoren category)
+    // Query each category separately to reduce memory usage
+    const allProducts: any[] = [];
+    
+    // Get all categories except Motoren (ID: 87)
+    const categories = [16, 48, 78, 72, 69, 47]; // Alles, Helmcovers, Kentekenplaathouders, Knipperlichten, Rugzakken, Sleutelhangers
+    
+    for (const categoryId of categories) {
+      try {
+        const categoryProducts = await wooCommerce.getProducts({
+          per_page: 50,
+          category: categoryId.toString(),
+          orderby: 'date',
+          order: 'desc',
+        });
+        allProducts.push(...categoryProducts);
+      } catch (err) {
+        console.warn(`Failed to fetch category ${categoryId}:`, err);
+      }
+    }
+    
+    // Filter for valid products with price > 0
+    const products = allProducts.filter(p => {
       const price = parseFloat(p.price || '0');
-      const isMotor = p.categories?.some((cat: any) => cat.slug === 'motoren');
-      return price > 0 && !isMotor;
+      return price > 0;
     });
 
     console.log(`Found ${products.length} products in WooCommerce (excluding Motoren category)`);
