@@ -1,5 +1,41 @@
 # Waarom 128MB Memory Te Weinig Is Voor WooCommerce
 
+## 🚨 **URGENT UPDATE - 2 Maart 2026 15:45**
+
+**STATUS: Memory is NOG STEEDS 128MB - NIET verhoogd naar 512MB!**
+
+### Laatste Test Resultaten:
+
+**Test 1: Product API**
+```
+GET /wp-json/wc/v3/products?sku=6097719696642
+Resultaat: 500 Internal Server Error
+Error: Allowed memory size of 134217728 bytes exhausted
+```
+
+**Test 2: Order Creation**
+```
+POST /wp-json/wc/v3/orders
+Resultaat: 500 Internal Server Error  
+Error: Allowed memory size of 134217728 bytes exhausted
+File: /wp-includes/functions.php line 4961
+```
+
+**Test 3: Manual Order Sync**
+```
+Order BF-1772438235364 (betaald, €29.95)
+Resultaat: Sync FAALT door WordPress memory error
+WooCommerce API crasht bij order creation
+```
+
+### ⚠️ **Conclusie:**
+
+De memory limiet staat **nog steeds op 128MB**, ondanks eerdere verzoeken om te verhogen naar 512MB.
+
+**ALLE WooCommerce API calls crashen** → Orders kunnen NIET worden gesynct → Klanten ontvangen GEEN emails!
+
+---
+
 ## 🚨 Het Probleem: Bewijs Met Exacte Error
 
 **Exacte error die jullie krijgen:**
