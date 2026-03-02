@@ -83,13 +83,17 @@ export async function POST(request: NextRequest) {
         const wooOrderId = await syncOrderToWooCommerce(orderData);
 
         // Update Supabase with WooCommerce ID
-        await supabase
+        const { error: updateError } = await supabase
           .from('webshop_orders')
           .update({ 
             woo_order_id: wooOrderId,
             synced_to_woo: true 
-          })
+          } as any)
           .eq('id', order.id);
+        
+        if (updateError) {
+          throw new Error(`Failed to update order in database: ${updateError.message}`);
+        }
 
         synced++;
         console.log(`✅ [MANUAL SYNC] Order ${order.order_number} synced (WC ID: ${wooOrderId})`);
