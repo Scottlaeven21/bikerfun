@@ -83,12 +83,13 @@ export async function POST(request: NextRequest) {
         const wooOrderId = await syncOrderToWooCommerce(orderData);
 
         // Update Supabase with WooCommerce ID
+        // @ts-ignore - Supabase type inference issue
         const { error: updateError } = await supabase
           .from('webshop_orders')
           .update({ 
             woo_order_id: wooOrderId,
             synced_to_woo: true 
-          } as any)
+          })
           .eq('id', order.id);
         
         if (updateError) {
