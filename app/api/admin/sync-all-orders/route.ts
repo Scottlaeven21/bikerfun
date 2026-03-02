@@ -2,6 +2,28 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
 
+interface OrderWithItems {
+  id: string;
+  order_number: string;
+  customer_email: string;
+  customer_name: string;
+  customer_phone: string | null;
+  billing_address: any;
+  shipping_address: any;
+  subtotal: number;
+  shipping_cost: number;
+  tax: number;
+  total: number;
+  mollie_payment_id: string;
+  order_items?: Array<{
+    product_id: number | null;
+    product_name: string;
+    quantity: number;
+    price: number;
+    subtotal: number;
+  }>;
+}
+
 /**
  * Manual sync endpoint for admin dashboard
  * Syncs all paid orders without WooCommerce ID to WooCommerce
@@ -13,7 +35,7 @@ export async function POST(request: NextRequest) {
     const supabase = await createClient();
 
     // Find paid orders without WooCommerce ID
-    const { data: orders, error } = await supabase
+    const { data, error } = await supabase
       .from('webshop_orders')
       .select(`
         *,
@@ -23,6 +45,8 @@ export async function POST(request: NextRequest) {
       .is('woo_order_id', null)
       .order('created_at', { ascending: true })
       .limit(10); // Sync max 10 orders at once
+    
+    const orders = data as OrderWithItems[] | null;
 
     if (error) {
       console.error('❌ [MANUAL SYNC] Error fetching orders:', error);
