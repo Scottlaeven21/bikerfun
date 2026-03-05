@@ -142,37 +142,37 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 </div>
               </div>
 
-              {/* Technical Specifications - Only show if there's actual data, filter defaults */}
+              {/* Technical Specifications - Only show if there's actual data, filter defaults/zero/empty */}
               <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
                 <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    {occasion.specs?.engine && (
+                    {occasion.specs?.engine && occasion.specs.engine.trim() !== '' && occasion.specs.engine !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
                         <div className="text-white font-semibold">{occasion.specs.engine}</div>
                       </div>
                     )}
-                    {occasion.power && occasion.power !== '35kw' && occasion.power !== '35 kW' && occasion.power !== '35' && (
+                    {occasion.power && occasion.power.trim() !== '' && occasion.power !== '0' && occasion.power !== '35kw' && occasion.power !== '35 kW' && occasion.power !== '35' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
                         <div className="text-white font-semibold">{occasion.power}</div>
                       </div>
                     )}
-                    {occasion.transmission && occasion.transmission.toLowerCase() !== 'handgeschakeld' && (
+                    {occasion.transmission && occasion.transmission.trim() !== '' && occasion.transmission !== '0' && occasion.transmission.toLowerCase() !== 'handgeschakeld' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
                         <div className="text-white font-semibold">{occasion.transmission}</div>
                       </div>
                     )}
-                    {occasion.fuel && occasion.fuel.toLowerCase() !== 'benzine' && (
+                    {occasion.fuel && occasion.fuel.trim() !== '' && occasion.fuel !== '0' && occasion.fuel.toLowerCase() !== 'benzine' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
                         <div className="text-white font-semibold">{occasion.fuel}</div>
                       </div>
                     )}
-                    {occasion.specs?.finalDrive && (
+                    {occasion.specs?.finalDrive && occasion.specs.finalDrive.trim() !== '' && occasion.specs.finalDrive !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
                         <div className="text-white font-semibold">{occasion.specs.finalDrive}</div>
@@ -181,31 +181,31 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                   </div>
 
                   <div className="space-y-4">
-                    {occasion.specs?.weight && (
+                    {occasion.specs?.weight && occasion.specs.weight.trim() !== '' && occasion.specs.weight !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
                         <div className="text-white font-semibold">{occasion.specs.weight}</div>
                       </div>
                     )}
-                    {occasion.specs?.seatHeight && (
+                    {occasion.specs?.seatHeight && occasion.specs.seatHeight.trim() !== '' && occasion.specs.seatHeight !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
                         <div className="text-white font-semibold">{occasion.specs.seatHeight}</div>
                       </div>
                     )}
-                    {occasion.specs?.tankCapacity && (
+                    {occasion.specs?.tankCapacity && occasion.specs.tankCapacity.trim() !== '' && occasion.specs.tankCapacity !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
                         <div className="text-white font-semibold">{occasion.specs.tankCapacity}</div>
                       </div>
                     )}
-                    {occasion.specs?.topSpeed && (
+                    {occasion.specs?.topSpeed && occasion.specs.topSpeed.trim() !== '' && occasion.specs.topSpeed !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
                         <div className="text-white font-semibold">{occasion.specs.topSpeed}</div>
                       </div>
                     )}
-                    {occasion.specs?.cooling && (
+                    {occasion.specs?.cooling && occasion.specs.cooling.trim() !== '' && occasion.specs.cooling !== '0' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
                         <div className="text-white font-semibold">{occasion.specs.cooling}</div>
@@ -262,7 +262,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 {/* Header */}
                 <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
 
-                {/* Info List - Only show fields with actual data, filter default values */}
+                {/* Info List - Only show fields with actual data, filter default/zero/empty values */}
                 <div className="space-y-0 mb-8">
                   {occasion.mileage && occasion.mileage > 0 && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
@@ -276,13 +276,13 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       <span className="text-white font-bold">{occasion.year}</span>
                     </div>
                   )}
-                  {occasion.category && (
+                  {occasion.category && occasion.category.trim() !== '' && occasion.category !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Categorie</span>
                       <span className="text-white font-bold">{occasion.category}</span>
                     </div>
                   )}
-                  {occasion.condition && (
+                  {occasion.condition && occasion.condition.trim() !== '' && occasion.condition !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Staat</span>
                       <span className="text-biker-yellow font-bold">{occasion.condition}</span>
@@ -294,13 +294,13 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       <span className="text-white font-bold">{occasion.owners}</span>
                     </div>
                   )}
-                  {occasion.service_history && (
+                  {occasion.service_history && occasion.service_history.trim() !== '' && occasion.service_history !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Onderhoudshistorie</span>
                       <span className="text-white font-bold">{occasion.service_history}</span>
                     </div>
                   )}
-                  {occasion.warranty && (
+                  {occasion.warranty && occasion.warranty.trim() !== '' && occasion.warranty !== '0' && (
                     <div className="flex justify-between items-center py-4">
                       <span className="text-white">Garantie</span>
                       <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
