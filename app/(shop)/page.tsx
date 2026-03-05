@@ -17,11 +17,10 @@ export const revalidate = 300;
 
 export default async function HomePage() {
   // Fetch occasions from Supabase - only available (not sold) for homepage
-  // Select only needed fields for better performance
   const supabase = await createClient();
   const { data: occasions } = await supabase
     .from('occasions')
-    .select('id, brand, model, year, price, images, mileage, power, status, category, transmission, fuel')
+    .select('*')
     .eq('is_active', true)
     .eq('status', 'available')
     .order('created_at', { ascending: false })
