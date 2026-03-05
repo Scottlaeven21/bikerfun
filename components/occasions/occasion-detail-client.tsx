@@ -259,8 +259,20 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             <div className="lg:col-span-1">
               {/* Info Card */}
               <div className="bg-[#1a1a1a] rounded-2xl p-8 border-2 border-biker-gray sticky top-24">
+                {/* Main Title */}
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
+                  {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
+                </h1>
+                
+                {/* Year Badge */}
+                {occasion.year && occasion.year > 1900 && (
+                  <div className="inline-block bg-biker-yellow text-biker-black px-4 py-1 rounded-full text-sm font-bold mb-6">
+                    {occasion.year}
+                  </div>
+                )}
+                
                 {/* Header */}
-                <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
+                <h2 className="text-xl font-bold text-white mb-6 mt-6">INFORMATIE</h2>
 
                 {/* Info List */}
                 <div className="space-y-0 mb-8">

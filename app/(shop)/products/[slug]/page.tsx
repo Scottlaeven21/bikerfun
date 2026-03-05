@@ -20,12 +20,19 @@ export async function generateMetadata({
     };
   }
 
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
+  const pageUrl = `${baseUrl}/products/${slug}`;
+
   return {
     title: `${product.name} | Bikerfun Webshop`,
     description: product.short_description || product.description || `Koop ${product.name} bij Bikerfun`,
+    alternates: {
+      canonical: pageUrl,
+    },
     openGraph: {
       title: product.name,
       description: product.short_description || product.description || '',
+      url: pageUrl,
       images: product.images.length > 0 ? [product.images[0].src] : [],
     },
   };
