@@ -2,18 +2,10 @@
 
 import { useState, useMemo } from 'react';
 import { SupabaseProductCard } from './supabase-product-card';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  stock_quantity: number;
-  category_name?: string;
-  [key: string]: any;
-}
+import { SupabaseProduct } from '@/lib/supabase/products';
 
 interface ProductsFilterProps {
-  products: Product[];
+  products: SupabaseProduct[];
   categories: string[];
 }
 
