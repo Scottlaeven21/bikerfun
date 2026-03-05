@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import dynamic from 'next/dynamic';
+import { TikTokGrid } from '@/components/tiktok-grid';
+import { OccasionsCarousel } from '@/components/occasions-carousel';
 import { HeroVideo } from '@/components/hero-video';
 import { createClient } from '@/lib/supabase/server';
 import { Occasion } from '@/types';
@@ -8,19 +9,6 @@ import { BusinessStructuredData } from '@/components/seo/business-structured-dat
 import { getHomeMetadata } from '@/lib/seo/metadata';
 import { StructuredData } from '@/components/seo/structured-data';
 import { getWebsiteSchema } from '@/lib/seo/structured-data';
-
-// Dynamic imports for below-the-fold components (code splitting)
-const TikTokGrid = dynamic(() => import('@/components/tiktok-grid').then(mod => ({ default: mod.TikTokGrid })), {
-  loading: () => <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 animate-pulse">
-    {[1,2,3,4,5,6].map(i => <div key={i} className="aspect-[9/16] bg-gray-800 rounded-lg" />)}
-  </div>,
-});
-
-const OccasionsCarousel = dynamic(() => import('@/components/occasions-carousel').then(mod => ({ default: mod.OccasionsCarousel })), {
-  loading: () => <div className="flex gap-8 animate-pulse">
-    {[1,2,3].map(i => <div key={i} className="flex-none w-[370px] h-[500px] bg-gray-800 rounded-2xl" />)}
-  </div>,
-});
 
 export const metadata = getHomeMetadata();
 
