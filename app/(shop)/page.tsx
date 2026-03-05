@@ -231,15 +231,15 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {/* Helmen */}
+            {/* Helmcovers */}
             <Link
-              href="/products?category=helmen"
+              href="/products?category=helmcovers"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-helmet-white-bg.jpg"
-                  alt="Motorhelmen"
+                  src="/product-helmet-cover-white-bg.jpg"
+                  alt="Helmcovers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
@@ -247,41 +247,20 @@ export default async function HomePage() {
               </div>
               <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Helmen
+                  Helmcovers
                 </h3>
               </div>
             </Link>
 
-            {/* Jassen */}
+            {/* Kentekenplaathouders */}
             <Link
-              href="/products?category=jassen"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-jacket-white-bg.jpg"
-                  alt="Motorjassen"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Jassen
-                </h3>
-              </div>
-            </Link>
-
-            {/* Overige */}
-            <Link
-              href="/products?category=overige"
+              href="/products?category=kentekenplaathouders"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
                   src="/product-accessories-white-bg.jpg"
-                  alt="Motor Accessoires"
+                  alt="Kentekenplaathouders"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
@@ -289,7 +268,49 @@ export default async function HomePage() {
               </div>
               <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Overige
+                  Kentekenplaathouders
+                </h3>
+              </div>
+            </Link>
+
+            {/* Knipperlichten */}
+            <Link
+              href="/products?category=knipperlichten"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-accessories-white-bg.jpg"
+                  alt="Knipperlichten"
+                  fill
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+                  Knipperlichten
+                </h3>
+              </div>
+            </Link>
+
+            {/* Rugzakken */}
+            <Link
+              href="/products?category=rugzakken"
+              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
+            >
+              <div className="relative aspect-square overflow-hidden bg-white">
+                <Image
+                  src="/product-accessories-white-bg.jpg"
+                  alt="Rugzakken"
+                  fill
+                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                />
+              </div>
+              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+                  Rugzakken
                 </h3>
               </div>
             </Link>
@@ -302,7 +323,7 @@ export default async function HomePage() {
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
                   src="/product-keychain-white-bg.jpg"
-                  alt="Motor Sleutelhangers"
+                  alt="Sleutelhangers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
@@ -311,27 +332,6 @@ export default async function HomePage() {
               <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
                   Sleutelhangers
-                </h3>
-              </div>
-            </Link>
-
-            {/* Helmet Covers */}
-            <Link
-              href="/products?category=helmet-covers"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-helmet-cover-white-bg.jpg"
-                  alt="Helmet Covers"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Helmet Covers
                 </h3>
               </div>
             </Link>
