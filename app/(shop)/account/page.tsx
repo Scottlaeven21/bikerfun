@@ -30,7 +30,7 @@ export default async function AccountPage() {
   const { data: ordersData } = await supabase
     .from('webshop_orders')
     .select('*')
-    .eq('email', user.email)
+    .eq('email', user.email || '')
     .eq('payment_status', 'paid')
     .order('created_at', { ascending: false });
 
