@@ -4,6 +4,7 @@ import { useCart } from '@/contexts/cart-context';
 import { formatPrice } from '@/lib/utils/format';
 import Link from 'next/link';
 import Image from 'next/image';
+import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 
 const SHIPPING_COST = 7.50;
 const FREE_SHIPPING_THRESHOLD = 75;
@@ -23,6 +24,7 @@ export default function CartPage() {
 
   if (cart.length === 0) {
     return (
+      <WhiteBackgroundWrapper>
       <div className="min-h-screen bg-white md:bg-gradient-to-b md:from-gray-50 md:to-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
@@ -42,10 +44,12 @@ export default function CartPage() {
           </div>
         </div>
       </div>
+      </WhiteBackgroundWrapper>
     );
   }
 
   return (
+    <WhiteBackgroundWrapper>
     <div className="min-h-screen bg-white md:bg-gradient-to-b md:from-gray-50 md:to-white pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-8 uppercase tracking-tight">
@@ -197,5 +201,6 @@ export default function CartPage() {
         </div>
       </div>
     </div>
+    </WhiteBackgroundWrapper>
   );
 }

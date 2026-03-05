@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Metadata } from 'next';
 import { getAllProducts, getCategories } from '@/lib/supabase/products';
 import { ProductsFilter } from '@/components/products/products-filter';
+import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 
 export const metadata: Metadata = {
   title: 'Webshop | Bikerfun',
@@ -30,6 +31,7 @@ export default async function ProductsPage({
   console.log(`Loaded ${products.length} products from Supabase`);
 
   return (
+    <WhiteBackgroundWrapper>
     <div className="min-h-screen bg-white md:bg-gradient-to-b md:from-gray-50 md:to-white pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
@@ -49,5 +51,6 @@ export default async function ProductsPage({
         <ProductsFilter products={products} categories={allCategories} />
       </div>
     </div>
+    </WhiteBackgroundWrapper>
   );
 }
