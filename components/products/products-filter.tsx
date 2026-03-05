@@ -132,7 +132,8 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
                 : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
             }`}
           >
-            {category}
+            <span className="hidden md:inline">{category}</span>
+            <span className="md:hidden">{category === 'Kentekenplaathouders' ? 'Kentekenhouders' : category}</span>
           </button>
         ))}
       </div>
@@ -159,7 +160,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
           </svg>
         </button>
         
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 text-right ml-4">
           <span className="font-bold text-biker-yellow">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'product' : 'producten'} gevonden
         </p>
       </div>
