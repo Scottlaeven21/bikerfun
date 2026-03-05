@@ -8,6 +8,10 @@ export const metadata: Metadata = {
   description: 'Beheer je Bikerfun account',
 };
 
+// Force dynamic rendering - no caching for account pages
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function AccountPage() {
   const supabase = await createClient();
 
@@ -26,11 +30,14 @@ export default async function AccountPage() {
 
   const profile = profileData as { id: string; full_name?: string; email: string; is_admin?: boolean } | null;
 
-  // Fetch orders from webshop_orders table (new checkout system)
+  // Fetch orders from webshop_orders table with order items
   const { data: ordersData } = await supabase
     .from('webshop_orders')
-    .select('*')
-    .eq('email', user.email || '')
+    .select(`
+      *,
+      items:webshop_order_items(*)
+    `)
+    .eq('customer_email', user.email || '')
     .eq('payment_status', 'paid')
     .order('created_at', { ascending: false });
 
@@ -129,7 +136,7 @@ export default async function AccountPage() {
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-bold text-biker-yellow">
-                            €{order.total_amount.toFixed(2)}
+                            €{order.total.toFixed(2)}
                           </p>
                           <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
                             order.payment_status === 'paid' 
@@ -147,14 +154,14 @@ export default async function AccountPage() {
 
                       <div className="space-y-2">
                         <div className="text-sm text-gray-600">
-                          <strong>Verzendadres:</strong> {order.shipping_address_line1}, {order.shipping_postal_code} {order.shipping_city}
+                          <strong>Verzendadres:</strong> {order.shipping_address_1 || order.billing_address_1}, {order.shipping_postcode || order.billing_postcode} {order.shipping_city || order.billing_city}
                         </div>
-                        {order.cart_items && order.cart_items.length > 0 && (
+                        {order.items && order.items.length > 0 && (
                           <div className="mt-3 pt-3 border-t border-gray-200">
                             <p className="text-xs font-semibold text-gray-700 mb-2 uppercase">Producten:</p>
-                            {order.cart_items.map((item: any, idx: number) => (
-                              <div key={idx} className="text-sm text-gray-600">
-                                • {item.name} <span className="text-biker-yellow font-semibold">×{item.quantity}</span>
+                            {order.items.map((item: any) => (
+                              <div key={item.id} className="text-sm text-gray-600">
+                                • {item.product_name} <span className="text-biker-yellow font-semibold">×{item.quantity}</span>
                               </div>
                             ))}
                           </div>
