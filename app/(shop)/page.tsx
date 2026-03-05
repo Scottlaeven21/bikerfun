@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { TikTokGrid } from '@/components/tiktok-grid';
 import { OccasionsCarousel } from '@/components/occasions-carousel';
+import { HeroVideo } from '@/components/hero-video';
 import { createClient } from '@/lib/supabase/server';
 import { Occasion } from '@/types';
 import { BusinessStructuredData } from '@/components/seo/business-structured-data';
@@ -31,26 +32,7 @@ export default async function HomePage() {
       {/* Hero Section with Video Background */}
       <section className="relative h-screen overflow-hidden">
         {/* Video Background - Positioned Higher */}
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="auto"
-          disablePictureInPicture
-          disableRemotePlayback
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ 
-            objectPosition: 'center top',
-            imageRendering: 'crisp-edges',
-            WebkitBackfaceVisibility: 'hidden',
-            backfaceVisibility: 'hidden',
-            transform: 'translateZ(0)',
-            willChange: 'transform'
-          }}
-        >
-          <source src="/hero-video.mp4" type="video/mp4" />
-        </video>
+        <HeroVideo />
 
         {/* Dark Overlay for Text Readability */}
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/80"></div>
