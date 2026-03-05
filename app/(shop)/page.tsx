@@ -238,7 +238,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-helmet-cover-white-bg.jpg"
+                  src="/product-helmcover-transparent.png"
                   alt="Helmcovers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -259,7 +259,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-accessories-white-bg.jpg"
+                  src="/product-license-plate-holder-transparent.png"
                   alt="Kentekenplaathouders"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -280,7 +280,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-accessories-white-bg.jpg"
+                  src="/product-turn-signals-transparent.png"
                   alt="Knipperlichten"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -301,7 +301,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-accessories-white-bg.jpg"
+                  src="/product-backpack-transparent.png"
                   alt="Rugzakken"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -322,7 +322,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-keychain-white-bg.jpg"
+                  src="/product-keychain-transparent.png"
                   alt="Sleutelhangers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
