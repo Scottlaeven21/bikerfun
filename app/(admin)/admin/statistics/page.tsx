@@ -43,12 +43,12 @@ export default async function StatisticsPage({
   const analytics = await getDetailedAnalytics(startDate, endDate);
 
   return (
-    <div className="min-h-screen bg-biker-black pt-32 pb-12">
-      <div className="max-w-[1800px] mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 p-8">
+      <div className="max-w-[1800px] mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-white mb-2">Website Statistieken</h1>
-          <p className="text-gray-400">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">Website Statistieken</h1>
+          <p className="text-gray-600">
             Uitgebreid overzicht van bezoekersgedrag en website prestaties
           </p>
         </div>

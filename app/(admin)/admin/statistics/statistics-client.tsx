@@ -90,35 +90,35 @@ export function StatisticsClient({
   return (
     <div className="space-y-8">
       {/* Date Range Picker */}
-      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
         <div className="flex flex-wrap gap-4 items-end">
           {/* Quick Presets */}
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setPresetRange(7)}
               disabled={isPending}
-              className="px-4 py-2 bg-biker-gray text-white rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
             >
               Laatste 7 dagen
             </button>
             <button
               onClick={() => setPresetRange(30)}
               disabled={isPending}
-              className="px-4 py-2 bg-biker-gray text-white rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
             >
               Laatste 30 dagen
             </button>
             <button
               onClick={() => setPresetRange(90)}
               disabled={isPending}
-              className="px-4 py-2 bg-biker-gray text-white rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
             >
               Laatste 90 dagen
             </button>
             <button
               onClick={setThisWeek}
               disabled={isPending}
-              className="px-4 py-2 bg-biker-gray text-white rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
             >
               Deze Week
             </button>
@@ -127,25 +127,25 @@ export function StatisticsClient({
           {/* Custom Date Range */}
           <div className="flex gap-4 items-end">
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Van
               </label>
               <input
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="bg-biker-black text-white border-2 border-biker-gray rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
+                className="bg-white text-gray-900 border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-400 mb-2">
+              <label className="block text-sm font-medium text-gray-600 mb-2">
                 Tot
               </label>
               <input
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="bg-biker-black text-white border-2 border-biker-gray rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
+                className="bg-white text-gray-900 border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
               />
             </div>
             <button
@@ -161,51 +161,51 @@ export function StatisticsClient({
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Totaal Views</span>
+            <span className="text-gray-600 text-sm font-bold uppercase">Totaal Views</span>
             <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
             </svg>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.total_views.toLocaleString()}</div>
+          <div className="text-4xl font-bold text-gray-900">{data.totalStats.total_views.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Unieke Bezoekers</span>
+            <span className="text-gray-600 text-sm font-bold uppercase">Unieke Bezoekers</span>
             <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
             </svg>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.unique_visitors.toLocaleString()}</div>
+          <div className="text-4xl font-bold text-gray-900">{data.totalStats.unique_visitors.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Totaal Events</span>
+            <span className="text-gray-600 text-sm font-bold uppercase">Totaal Events</span>
             <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.total_events.toLocaleString()}</div>
+          <div className="text-4xl font-bold text-gray-900">{data.totalStats.total_events.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Conversie Rate</span>
+            <span className="text-gray-600 text-sm font-bold uppercase">Conversie Rate</span>
             <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.conversion_rate.toFixed(2)}%</div>
+          <div className="text-4xl font-bold text-gray-900">{data.totalStats.conversion_rate.toFixed(2)}%</div>
         </div>
       </div>
 
       {/* Views Over Time Chart */}
-      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-        <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
           <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
           </svg>
@@ -213,22 +213,22 @@ export function StatisticsClient({
         </h2>
         <ResponsiveContainer width="100%" height={400}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+            <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
             <XAxis 
               dataKey="date" 
-              stroke="#9CA3AF"
+              stroke="#6B7280"
               style={{ fontSize: '12px' }}
             />
             <YAxis 
-              stroke="#9CA3AF"
+              stroke="#6B7280"
               style={{ fontSize: '12px' }}
             />
             <Tooltip 
               contentStyle={{ 
-                backgroundColor: '#1F2937', 
+                backgroundColor: '#fff', 
                 border: '2px solid #F7D917',
                 borderRadius: '8px',
-                color: '#fff'
+                color: '#111827'
               }}
             />
             <Legend />
@@ -255,8 +255,8 @@ export function StatisticsClient({
       {/* Two Column Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Device Breakdown */}
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
             <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
             </svg>
@@ -280,10 +280,10 @@ export function StatisticsClient({
               </Pie>
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+                  backgroundColor: '#fff', 
                   border: '2px solid #F7D917',
                   borderRadius: '8px',
-                  color: '#fff'
+                  color: '#111827'
                 }}
               />
             </PieChart>
@@ -291,8 +291,8 @@ export function StatisticsClient({
         </div>
 
         {/* Top Events */}
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
             <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
@@ -300,21 +300,21 @@ export function StatisticsClient({
           </h2>
           <ResponsiveContainer width="100%" height={300}>
             <BarChart data={eventData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-              <XAxis type="number" stroke="#9CA3AF" style={{ fontSize: '12px' }} />
+              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+              <XAxis type="number" stroke="#6B7280" style={{ fontSize: '12px' }} />
               <YAxis 
                 dataKey="name" 
                 type="category" 
-                stroke="#9CA3AF" 
+                stroke="#6B7280" 
                 width={150}
                 style={{ fontSize: '11px' }}
               />
               <Tooltip 
                 contentStyle={{ 
-                  backgroundColor: '#1F2937', 
+                  backgroundColor: '#fff', 
                   border: '2px solid #F7D917',
                   borderRadius: '8px',
-                  color: '#fff'
+                  color: '#111827'
                 }}
               />
               <Bar dataKey="value" fill="#F7D917" />
@@ -324,8 +324,8 @@ export function StatisticsClient({
       </div>
 
       {/* Top Pages */}
-      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-        <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
           <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
           </svg>
@@ -338,36 +338,36 @@ export function StatisticsClient({
                 <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
                   #
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Pagina
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Views
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Unieke Bezoekers
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Views/Bezoeker
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-biker-gray">
+            <tbody className="divide-y divide-gray-200">
               {data.topPages.map((page, index) => (
-                <tr key={page.page_path} className="hover:bg-biker-black transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-400">
+                <tr key={page.page_path} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 text-sm text-white font-medium">
+                  <td className="px-6 py-4 text-sm text-gray-900 font-medium">
                     {page.page_path || '/'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
                     {page.views.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-right font-bold">
                     {page.unique_visitors.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
                     {(page.views / page.unique_visitors).toFixed(1)}
                   </td>
                 </tr>
@@ -378,8 +378,8 @@ export function StatisticsClient({
       </div>
 
       {/* Referrer Stats */}
-      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-        <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
           <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" />
           </svg>
@@ -393,14 +393,14 @@ export function StatisticsClient({
             return (
               <div key={index}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-white text-sm font-medium">
+                  <span className="text-gray-900 text-sm font-medium">
                     {referrer.referrer === 'Direct' ? '🔗 Direct' : `🌐 ${referrer.referrer.replace(/^https?:\/\//, '').split('/')[0]}`}
                   </span>
-                  <span className="text-gray-400 text-sm">
+                  <span className="text-gray-600 text-sm">
                     {referrer.count} ({percentage.toFixed(1)}%)
                   </span>
                 </div>
-                <div className="w-full bg-biker-gray/30 rounded-full h-2 overflow-hidden">
+                <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div 
                     className="bg-biker-yellow h-full rounded-full transition-all duration-500"
                     style={{ width: `${percentage}%` }}
@@ -413,8 +413,8 @@ export function StatisticsClient({
       </div>
 
       {/* Daily Breakdown Table */}
-      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-        <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight flex items-center">
+      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-6 uppercase tracking-tight flex items-center">
           <svg className="w-6 h-6 text-biker-yellow mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
           </svg>
@@ -422,35 +422,35 @@ export function StatisticsClient({
         </h2>
         <div className="overflow-x-auto">
           <table className="w-full">
-            <thead className="bg-biker-black border-b-2 border-biker-gray">
+            <thead className="bg-gray-50 border-b-2 border-gray-200">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Datum
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Totaal Views
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Unieke Bezoekers
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
                   Views per Bezoeker
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-biker-gray">
+            <tbody className="divide-y divide-gray-200">
               {data.dailyStats.map((stat) => (
-                <tr key={stat.date} className="hover:bg-biker-black transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white font-medium">
+                <tr key={stat.date} className="hover:bg-gray-50 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
                     {format(new Date(stat.date), 'EEEE d MMMM yyyy', { locale: nl })}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
                     {stat.total_views.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-right font-bold">
                     {stat.unique_visitors.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
                     {stat.unique_visitors > 0 ? (stat.total_views / stat.unique_visitors).toFixed(2) : '-'}
                   </td>
                 </tr>
