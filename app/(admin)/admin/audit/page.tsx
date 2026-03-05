@@ -82,19 +82,11 @@ export default async function AuditLogsPage({
     <div className="min-h-screen bg-biker-black pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Audit Logs</h1>
-            <p className="text-gray-400">
-              Overzicht van alle admin acties en systeemgebeurtenissen
-            </p>
-          </div>
-          <Link
-            href="/admin"
-            className="px-6 py-3 bg-biker-gray text-white rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold"
-          >
-            ← Terug naar Dashboard
-          </Link>
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-white mb-2">Audit Logs</h1>
+          <p className="text-gray-400">
+            Overzicht van alle admin acties en systeemgebeurtenissen
+          </p>
         </div>
 
         {/* Filters */}
