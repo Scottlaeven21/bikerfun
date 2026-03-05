@@ -47,7 +47,7 @@ export async function addManualOverride(
   if (!currentOverrides.includes(fieldName)) {
     const newOverrides = [...currentOverrides, fieldName];
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from(tableName)
       .update({ manual_overrides: newOverrides })
       .eq('id', recordId);
@@ -80,7 +80,7 @@ export async function addManualOverrides(
   if (newFields.length > 0) {
     const newOverrides = [...currentOverrides, ...newFields];
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from(tableName)
       .update({ manual_overrides: newOverrides })
       .eq('id', recordId);
@@ -111,7 +111,7 @@ export async function removeManualOverride(
   if (currentOverrides.includes(fieldName)) {
     const newOverrides = currentOverrides.filter(f => f !== fieldName);
     
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from(tableName)
       .update({ manual_overrides: newOverrides })
       .eq('id', recordId);
@@ -134,7 +134,7 @@ export async function clearManualOverrides(
 ): Promise<boolean> {
   const supabase = createClient();
   
-  const { error } = await supabase
+  const { error } = await (supabase as any)
     .from(tableName)
     .update({ manual_overrides: [] })
     .eq('id', recordId);
