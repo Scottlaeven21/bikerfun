@@ -142,7 +142,7 @@ export function ContactForm() {
           type="submit"
           loading={isPending}
           loadingText="VERSTUREN..."
-          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 text-center"
         >
           VERSTUUR BERICHT
         </LoadingButton>

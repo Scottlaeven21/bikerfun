@@ -68,7 +68,7 @@ export function CartDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-2xl z-50 border-2 border-gray-200">
+        <div className="absolute right-0 md:right-0 left-0 md:left-auto mx-4 md:mx-0 mt-2 w-auto md:w-80 bg-white rounded-lg shadow-2xl z-50 border-2 border-gray-200">
           <div className="p-4 border-b-2 border-gray-100">
             <h3 className="font-bold text-lg text-biker-black">
               Winkelwagen ({itemCount})
@@ -161,7 +161,7 @@ export function CartDropdown() {
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full uppercase tracking-wider transition-all"
+                  className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full uppercase tracking-wider transition-all text-center"
                 >
                   Naar Checkout
                 </button>

@@ -298,7 +298,7 @@ export function MotorAanvraagFormClient() {
         <button
           type="submit"
           disabled={isLoading}
-          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed text-center"
         >
           {isLoading ? 'VERSTUREN...' : 'VERSTUUR AANVRAAG'}
         </button>

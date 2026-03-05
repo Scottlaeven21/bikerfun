@@ -463,7 +463,7 @@ export function CheckoutForm() {
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-4 rounded-full uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-4 rounded-full uppercase tracking-wider transition-all disabled:opacity-50 disabled:cursor-not-allowed text-center"
           >
             {isSubmitting ? 'Verwerken...' : 'Bestelling Plaatsen'}
           </button>
