@@ -74,6 +74,25 @@ function generateSlug(text: string, id?: number): string {
 }
 
 /**
+ * Get attribute value from WooCommerce product
+ */
+function getAttribute(product: any, attributeName: string): string | null {
+  const attr = product.attributes?.find((a: any) => 
+    a.name.toLowerCase() === attributeName.toLowerCase() ||
+    a.name.toLowerCase().includes(attributeName.toLowerCase())
+  );
+  return attr?.option || null;
+}
+
+/**
+ * Get meta data value from WooCommerce product
+ */
+function getMetaData(product: any, key: string): any {
+  const meta = product.meta_data?.find((m: any) => m.key === key);
+  return meta?.value || null;
+}
+
+/**
  * Sync Occasions from WooCommerce to Supabase
  */
 async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
@@ -123,6 +142,35 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
           status = 'sold';
         }
 
+        // Extract data from WooCommerce attributes and meta_data
+        const mileage = parseInt(getAttribute(product, 'km-stand') || getAttribute(product, 'mileage') || getMetaData(product, '_km_stand') || '0');
+        const transmission = getAttribute(product, 'transmissie') || getAttribute(product, 'transmission') || getMetaData(product, '_transmissie') || 'Handgeschakeld';
+        const fuel = getAttribute(product, 'brandstof') || getAttribute(product, 'fuel') || getMetaData(product, '_brandstof') || 'Benzine';
+        const power = getAttribute(product, 'vermogen') || getAttribute(product, 'power') || getMetaData(product, '_vermogen') || product.name.match(/(\d+\s*kw)/i)?.[1] || '35kw';
+        const color = getAttribute(product, 'kleur') || getAttribute(product, 'color') || getMetaData(product, '_kleur') || null;
+        const category = getAttribute(product, 'categorie') || getAttribute(product, 'category') || getMetaData(product, '_motor_category') || 'Sportmotor';
+        const condition = getAttribute(product, 'staat') || getAttribute(product, 'condition') || getMetaData(product, '_staat') || 'Gebruikt';
+        const owners = parseInt(getAttribute(product, 'eigenaren') || getAttribute(product, 'owners') || getMetaData(product, '_eigenaren') || '0') || null;
+        const serviceHistory = getAttribute(product, 'onderhoudshistorie') || getAttribute(product, 'service_history') || getMetaData(product, '_onderhoudshistorie') || null;
+        const warranty = getAttribute(product, 'garantie') || getAttribute(product, 'warranty') || getMetaData(product, '_garantie') || '3 maanden garantie';
+        
+        // Extract features and extras from attributes
+        const features: string[] = [];
+        const extras: string[] = [];
+        
+        product.attributes?.forEach((attr: any) => {
+          const name = attr.name.toLowerCase();
+          // Skip already mapped attributes
+          if (!['km-stand', 'mileage', 'transmissie', 'transmission', 'brandstof', 'fuel', 
+                'vermogen', 'power', 'kleur', 'color', 'categorie', 'category', 
+                'staat', 'condition', 'eigenaren', 'owners', 'onderhoudshistorie', 
+                'service_history', 'garantie', 'warranty'].includes(name)) {
+            if (attr.option && attr.option.trim() !== '') {
+              features.push(`${attr.name}: ${attr.option}`);
+            }
+          }
+        });
+
         const occasionData = {
           brand,
           model,
@@ -130,19 +178,19 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
           price: parseFloat(product.price || '0'),
           status,
           is_active: product.status === 'publish',
-          mileage: 0,
-          transmission: 'Handgeschakeld',
-          fuel: 'Benzine',
-          power: product.name.match(/(\d+kw)/i)?.[1] || '35kw',
-          color: null,
-          category: 'Sportmotor',
-          condition: 'Gebruikt',
-          owners: null,
-          service_history: null,
-          warranty: '3 maanden garantie',
+          mileage,
+          transmission,
+          fuel,
+          power,
+          color,
+          category,
+          condition,
+          owners,
+          service_history: serviceHistory,
+          warranty,
           description: product.description || product.short_description || null,
-          features: [],
-          extras: [],
+          features,
+          extras,
           images,
           main_image: mainImage,
           slug,
