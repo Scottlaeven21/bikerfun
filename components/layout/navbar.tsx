@@ -80,7 +80,11 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
+                className={`btn-primary px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300 border-2 ${
+                  showShopIcons 
+                    ? 'bg-white md:bg-biker-yellow text-biker-black border-gray-300 md:border-biker-yellow md:hover:bg-biker-black md:hover:text-biker-yellow' 
+                    : 'bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-biker-yellow'
+                }`}
               >
                 <span>MENU</span>
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
