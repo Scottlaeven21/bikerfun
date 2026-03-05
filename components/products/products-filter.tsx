@@ -14,8 +14,8 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
   const [sortBy, setSortBy] = useState<'name' | 'price-low' | 'price-high'>('name');
-  const [showFilters, setShowFilters] = useState(false);
   const [inStock, setInStock] = useState(false);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   // Calculate max price from products
   const maxPrice = useMemo(() => {
@@ -110,22 +110,38 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
         </div>
       </div>
 
-      {/* Filter Bar */}
-      <div className="mb-8 bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-biker-black uppercase tracking-tight">
+      {/* Filter Button */}
+      <div className="mb-6 flex items-center justify-between">
+        <button
+          onClick={() => setIsFilterOpen(!isFilterOpen)}
+          className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 rounded-lg hover:border-biker-yellow transition-all shadow-sm"
+        >
+          <svg className="w-5 h-5 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          </svg>
+          <span className="font-bold text-biker-black uppercase text-sm tracking-wider">
             Filters & Sortering
-          </h3>
-          <button
-            onClick={() => setShowFilters(!showFilters)}
-            className="lg:hidden text-biker-yellow font-bold"
+          </span>
+          <svg 
+            className={`w-5 h-5 text-biker-black transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
+            fill="none" 
+            stroke="currentColor" 
+            viewBox="0 0 24 24"
           >
-            {showFilters ? 'Verberg' : 'Toon'}
-          </button>
-        </div>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        
+        <p className="text-sm text-gray-600">
+          <span className="font-bold text-biker-yellow">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'product' : 'producten'} gevonden
+        </p>
+      </div>
 
-        <div className={`${showFilters ? 'block' : 'hidden'} lg:block space-y-6`}>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Filter Bar - Collapsible */}
+      {isFilterOpen && (
+        <div className="mb-8 bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6">
+          <div className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Category Filter */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
@@ -191,20 +207,18 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
             </div>
           </div>
 
-          {/* Reset & Results */}
-          <div className="flex items-center justify-between pt-4 border-t border-gray-200">
+          {/* Reset Button */}
+          <div className="flex items-center justify-start pt-4 border-t border-gray-200">
             <button
               onClick={resetFilters}
               className="text-sm text-biker-yellow hover:text-biker-yellowHover font-bold uppercase tracking-wider"
             >
               Reset filters
             </button>
-            <p className="text-sm text-gray-600">
-              <span className="font-bold text-biker-yellow">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'product' : 'producten'} gevonden
-            </p>
           </div>
         </div>
       </div>
+      )}
 
       {/* Products Grid */}
       {filteredProducts.length > 0 ? (
