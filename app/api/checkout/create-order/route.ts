@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { wooCommerce } from '@/lib/woocommerce/client';
+import { logAuditEvent, getClientIp } from '@/lib/audit/logger';
 
 export async function POST(request: NextRequest) {
+  let customerEmail = 'unknown';
+  let itemsCount = 0;
+  
   try {
     const { customer, items, total } = await request.json();
+    customerEmail = customer?.email || 'unknown';
+    itemsCount = items?.length || 0;
 
     // Validate input
     if (!customer || !items || items.length === 0) {
@@ -59,6 +65,20 @@ export async function POST(request: NextRequest) {
     // WooCommerce will use configured payment gateway (Mollie/etc)
     const paymentUrl = order.payment_url || `${process.env.NEXT_PUBLIC_WOOCOMMERCE_URL}/checkout/order-pay/${order.id}/?pay_for_order=true&key=${order.order_key}`;
 
+    // Log order creation
+    await logAuditEvent({
+      userEmail: customer.email,
+      action: 'create',
+      resourceType: 'order',
+      resourceId: order.id.toString(),
+      details: { 
+        order_number: order.number, 
+        total: order.total,
+        items_count: items.length 
+      },
+      ipAddress: getClientIp(request),
+    });
+
     return NextResponse.json({
       success: true,
       orderId: order.id,
@@ -68,6 +88,19 @@ export async function POST(request: NextRequest) {
     });
   } catch (error: any) {
     console.error('Order creation error:', error);
+    
+    // Log failed order creation
+    await logAuditEvent({
+      userEmail: customerEmail,
+      action: 'create',
+      resourceType: 'order',
+      details: { 
+        error: error.message,
+        items_count: itemsCount 
+      },
+      ipAddress: getClientIp(request),
+    });
+    
     return NextResponse.json(
       { 
         error: 'Failed to create order',

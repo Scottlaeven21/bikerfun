@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { wooCommerce } from '@/lib/woocommerce/client';
 import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
+import { createAuditLog } from '@/lib/audit/logger';
 
 /**
  * Sync everything between WooCommerce and Supabase
@@ -560,22 +561,73 @@ export async function POST(request: NextRequest) {
     // Sync Occasions
     try {
       result.occasions = await syncOccasions(supabase);
+      await createAuditLog(
+        request,
+        'sync_occasions',
+        'occasions',
+        undefined,
+        result.occasions,
+        'success'
+      );
     } catch (error: any) {
       errors.push(`Occasions sync failed: ${error.message}`);
+      await createAuditLog(
+        request,
+        'sync_occasions',
+        'occasions',
+        undefined,
+        { error: error.message },
+        'failure',
+        error.message
+      );
     }
 
     // Sync Products
     try {
       result.products = await syncProducts(supabase);
+      await createAuditLog(
+        request,
+        'sync_products',
+        'products',
+        undefined,
+        result.products,
+        'success'
+      );
     } catch (error: any) {
       errors.push(`Products sync failed: ${error.message}`);
+      await createAuditLog(
+        request,
+        'sync_products',
+        'products',
+        undefined,
+        { error: error.message },
+        'failure',
+        error.message
+      );
     }
 
     // Sync Orders
     try {
       result.orders = await syncOrders(supabase);
+      await createAuditLog(
+        request,
+        'sync_orders',
+        'orders',
+        undefined,
+        result.orders,
+        'success'
+      );
     } catch (error: any) {
       errors.push(`Orders sync failed: ${error.message}`);
+      await createAuditLog(
+        request,
+        'sync_orders',
+        'orders',
+        undefined,
+        { error: error.message },
+        'failure',
+        error.message
+      );
     }
 
     // Build response
@@ -589,6 +641,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(result);
   } catch (error: any) {
     console.error('❌ Sync failed:', error);
+    await createAuditLog(
+      request,
+      'sync_woocommerce',
+      'system',
+      undefined,
+      { error: error.message },
+      'failure',
+      error.message
+    );
     return NextResponse.json(
       {
         success: false,

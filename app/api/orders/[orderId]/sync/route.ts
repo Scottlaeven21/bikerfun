@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 import { syncOrderToWooCommerce, checkOrderExists } from '@/lib/woocommerce/sync';
+import { createAuditLog } from '@/lib/audit/logger';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -65,6 +66,16 @@ export async function POST(
       })
       .eq('id', orderId);
 
+    // Log successful sync
+    await createAuditLog(
+      request,
+      'sync',
+      'order',
+      orderId,
+      { woo_order_id: wooOrderId },
+      'success'
+    );
+
     return NextResponse.json({
       success: true,
       message: 'Order succesvol gesynchroniseerd',
@@ -73,6 +84,19 @@ export async function POST(
 
   } catch (error) {
     console.error('Sync error:', error);
+    
+    // Log failed sync
+    const { orderId } = await context.params;
+    await createAuditLog(
+      request,
+      'sync',
+      'order',
+      orderId,
+      { error: error instanceof Error ? error.message : 'Unknown error' },
+      'failure',
+      error instanceof Error ? error.message : 'Sync mislukt'
+    );
+    
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Sync mislukt' },
       { status: 500 }

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getMolliePayment } from '@/lib/mollie/client';
 import { createClient } from '@supabase/supabase-js';
 import { syncOrderToWooCommerce, checkOrderExists } from '@/lib/woocommerce/sync';
+import { logAuditEvent } from '@/lib/audit/logger';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
@@ -57,10 +58,30 @@ export async function POST(request: NextRequest) {
 
     if (updateError) {
       console.error('Error updating order:', updateError);
+      await logAuditEvent({
+        userEmail: 'system',
+        action: 'update',
+        resourceType: 'order',
+        resourceId: orderId,
+        details: { payment_status: payment.status, error: updateError.message },
+      });
       return NextResponse.json({ error: 'Database update failed' }, { status: 500 });
     }
 
     console.log(`Order ${orderId} updated to status: ${orderStatus}`);
+    
+    // Log payment status update
+    await logAuditEvent({
+      userEmail: 'system',
+      action: 'update',
+      resourceType: 'order',
+      resourceId: orderId,
+      details: { 
+        payment_status: payment.status, 
+        order_status: orderStatus,
+        payment_id: paymentId 
+      },
+    });
 
     // Sync to WooCommerce if payment is successful
     if (payment.status === 'paid') {
@@ -145,9 +166,29 @@ export async function POST(request: NextRequest) {
             
             console.log(`✅ Order synced! WooCommerce Order ID: ${wooOrderId}`);
             console.log(`✅ WooCommerce will now send emails and handle shipping.`);
+            
+            // Log successful sync
+            await logAuditEvent({
+              userEmail: 'system',
+              action: 'sync',
+              resourceType: 'order',
+              resourceId: orderId,
+              details: { woo_order_id: wooOrderId, payment_id: paymentId },
+            });
           }
       } catch (syncError) {
         console.error('WooCommerce sync error:', syncError);
+        // Log sync failure
+        await logAuditEvent({
+          userEmail: 'system',
+          action: 'sync',
+          resourceType: 'order',
+          resourceId: orderId,
+          details: { 
+            error: syncError instanceof Error ? syncError.message : 'Unknown error',
+            payment_id: paymentId 
+          },
+        });
         // Don't fail the webhook - order is already paid
         // We can retry sync manually later if needed
       }

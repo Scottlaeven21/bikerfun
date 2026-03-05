@@ -266,16 +266,48 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
 
         if (updateError) throw updateError;
         
+        // Log audit event
+        await fetch('/api/audit/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'update',
+            resourceType: 'occasion',
+            resourceId: occasion.id,
+            details: { 
+              brand, 
+              model, 
+              year, 
+              changedFields,
+              manualOverrides: newOverrides 
+            },
+          }),
+        });
+        
         if (changedFields.length > 0) {
           console.log('🔒 Marked fields as manually overridden:', changedFields);
         }
       } else {
         // Insert new occasion
-        const { error: insertError } = await (supabase as any)
+        const { data: newOccasion, error: insertError } = await (supabase as any)
           .from('occasions')
-          .insert(occasionData);
+          .insert(occasionData)
+          .select()
+          .single();
 
         if (insertError) throw insertError;
+        
+        // Log audit event
+        await fetch('/api/audit/log', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            action: 'create',
+            resourceType: 'occasion',
+            resourceId: newOccasion?.id,
+            details: { brand, model, year },
+          }),
+        });
       }
 
       router.push('/admin/occasions');
@@ -309,6 +341,18 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         .eq('id', occasion.id);
 
       if (deleteError) throw deleteError;
+
+      // Log audit event
+      await fetch('/api/audit/log', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'delete',
+          resourceType: 'occasion',
+          resourceId: occasion.id,
+          details: { brand: occasion.brand, model: occasion.model, year: occasion.year },
+        }),
+      });
 
       router.push('/admin/occasions');
       router.refresh();
