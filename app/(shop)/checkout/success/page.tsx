@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import Link from 'next/link';
-import { useCart } from '@/hooks/use-cart';
+import { useCart } from '@/contexts/cart-context';
 
 export default function CheckoutSuccessPage() {
   const { clearCart } = useCart();
