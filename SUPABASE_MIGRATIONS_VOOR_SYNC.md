@@ -1,6 +1,6 @@
 # 🗄️ Supabase Migrations Voor WooCommerce Sync
 
-**Datum:** 2 maart 2026  
+**Datum:** 2 maart 2026 (Update: 5 maart 2026)  
 **Urgentie:** 🔴 CRITICAL - Sync werkt niet zonder deze migrations!
 
 ---
@@ -288,4 +288,133 @@ ALTER TABLE webshop_products DROP CONSTRAINT [exact_name_hier];
 
 ---
 
-**Laatste update:** 2 maart 2026, 17:41
+## 🔒 **UPDATE 5 MAART 2026: Manual Overrides Migratie**
+
+### **Waarom Deze Extra Migratie?**
+
+**Probleem:** WooCommerce sync overschrijft al je handmatige aanpassingen in Bikerfun!
+- Je past een beschrijving aan → wordt weer overschreven bij volgende sync
+- Je wijzigt een prijs → gaat terug naar WooCommerce waarde
+- Je voegt custom features toe → verdwijnen na sync
+
+**Oplossing:** Manual Overrides systeem!
+- ✅ Systeem detecteert welke velden je hebt aangepast
+- ✅ Deze velden worden **niet** meer overschreven door sync
+- ✅ Andere velden worden wel gesynct (beste van beide werelden!)
+
+### **Migration 020: Manual Overrides**
+
+**Voer dit uit NADAT je de vorige migrations hebt gedaan!**
+
+```sql
+-- ================================================================
+-- MIGRATION 020: Add manual_overrides tracking
+-- ================================================================
+-- Purpose: Track which fields have been manually edited in Bikerfun
+-- so they won't be overwritten during WooCommerce sync
+
+-- Add to occasions table
+ALTER TABLE occasions 
+ADD COLUMN IF NOT EXISTS manual_overrides JSONB DEFAULT '[]'::jsonb;
+
+COMMENT ON COLUMN occasions.manual_overrides IS 'Array of field names that have been manually edited and should not be overwritten by WooCommerce sync. Example: ["description", "price", "features"]';
+
+-- Add to webshop_products table
+ALTER TABLE webshop_products 
+ADD COLUMN IF NOT EXISTS manual_overrides JSONB DEFAULT '[]'::jsonb;
+
+COMMENT ON COLUMN webshop_products.manual_overrides IS 'Array of field names that have been manually edited and should not be overwritten by WooCommerce sync. Example: ["description", "price", "stock_quantity"]';
+
+-- Create indexes for better performance
+CREATE INDEX IF NOT EXISTS idx_occasions_manual_overrides 
+ON occasions USING gin (manual_overrides);
+
+CREATE INDEX IF NOT EXISTS idx_webshop_products_manual_overrides 
+ON webshop_products USING gin (manual_overrides);
+
+-- Helper function to add a field to manual_overrides
+CREATE OR REPLACE FUNCTION add_manual_override(
+  table_name TEXT,
+  record_id UUID,
+  field_name TEXT
+) RETURNS void AS $$
+BEGIN
+  EXECUTE format(
+    'UPDATE %I SET manual_overrides = 
+      CASE 
+        WHEN manual_overrides ? %L THEN manual_overrides
+        ELSE manual_overrides || jsonb_build_array(%L)
+      END
+    WHERE id = %L',
+    table_name, field_name, field_name, record_id
+  );
+END;
+$$ LANGUAGE plpgsql;
+
+-- Helper function to remove a field from manual_overrides
+CREATE OR REPLACE FUNCTION remove_manual_override(
+  table_name TEXT,
+  record_id UUID,
+  field_name TEXT
+) RETURNS void AS $$
+BEGIN
+  EXECUTE format(
+    'UPDATE %I SET manual_overrides = manual_overrides - %L
+    WHERE id = %L',
+    table_name, field_name, record_id
+  );
+END;
+$$ LANGUAGE plpgsql;
+
+-- Helper function to check if a field has manual override
+CREATE OR REPLACE FUNCTION has_manual_override(
+  overrides JSONB,
+  field_name TEXT
+) RETURNS BOOLEAN AS $$
+BEGIN
+  RETURN overrides ? field_name;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+```
+
+### **Verificatie**
+
+Check of het werkt:
+
+```sql
+-- 1. Check of kolommen bestaan
+SELECT 
+  column_name, 
+  data_type, 
+  column_default
+FROM information_schema.columns 
+WHERE table_name IN ('occasions', 'webshop_products') 
+AND column_name = 'manual_overrides';
+
+-- 2. Check of functies bestaan
+SELECT 
+  routine_name,
+  routine_type
+FROM information_schema.routines 
+WHERE routine_name IN ('add_manual_override', 'remove_manual_override', 'has_manual_override');
+
+-- 3. Test de functie
+SELECT add_manual_override('occasions', 
+  (SELECT id FROM occasions LIMIT 1), 
+  'price'
+);
+
+-- 4. Check of het werkte
+SELECT brand, model, manual_overrides 
+FROM occasions 
+WHERE manual_overrides != '[]'::jsonb 
+LIMIT 5;
+```
+
+### **Documentatie**
+
+Volledige uitleg in: **`MANUAL_OVERRIDES_SYSTEEM.md`**
+
+---
+
+**Laatste update:** 5 maart 2026, 12:45
