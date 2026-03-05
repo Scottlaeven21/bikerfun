@@ -26,7 +26,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
     <>
       <nav className={`absolute top-0 left-0 right-0 z-50 ${
         showShopIcons 
-          ? 'bg-white text-biker-black border-b border-gray-200' 
+          ? 'bg-white text-biker-black' 
           : 'bg-gradient-to-b from-black/50 to-transparent text-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
