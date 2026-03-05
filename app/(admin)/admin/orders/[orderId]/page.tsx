@@ -247,7 +247,7 @@ export default async function OrderDetailPage({
             <div className="bg-white rounded-lg shadow p-6">
               <h2 className="text-xl font-bold text-gray-900 mb-4">WooCommerce</h2>
               <a
-                href={`${process.env.NEXT_PUBLIC_WOOCOMMERCE_URL}/wp-admin/post.php?post=${orderData.woo_order_id}&action=edit`}
+                href={`${process.env.NEXT_PUBLIC_WOOCOMMERCE_URL}/login/?redirect_to=/wp-admin/post.php?post=${orderData.woo_order_id}%26action=edit`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-blue-600 hover:text-blue-800 font-semibold"
