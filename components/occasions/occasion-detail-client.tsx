@@ -246,7 +246,11 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 <div className="space-y-0 mb-8">
                   <div className="flex justify-between items-center py-4 border-b border-gray-800">
                     <span className="text-white">KM-stand</span>
-                    <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                    <span className="text-white font-bold">
+                      {occasion.mileage && occasion.mileage > 0 
+                        ? `${occasion.mileage.toLocaleString('nl-NL')} km` 
+                        : 'Onbekend'}
+                    </span>
                   </div>
                   <div className="flex justify-between items-center py-4 border-b border-gray-800">
                     <span className="text-white">Bouwjaar</span>
