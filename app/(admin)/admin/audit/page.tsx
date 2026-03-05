@@ -35,13 +35,13 @@ export default async function AuditLogsPage({
 
   const { data: profileData } = await supabase
     .from('profiles')
-    .select('role')
+    .select('is_admin')
     .eq('id', user.id)
     .single();
 
-  const profile = profileData as { role: string } | null;
+  const profile = profileData as { is_admin: boolean } | null;
 
-  if (profile?.role !== 'admin') {
+  if (!profile?.is_admin) {
     redirect('/');
   }
 
