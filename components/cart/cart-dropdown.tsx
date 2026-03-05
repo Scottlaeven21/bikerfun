@@ -161,7 +161,7 @@ export function CartDropdown() {
                 </div>
                 <button
                   onClick={handleCheckout}
-                  className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full uppercase tracking-wider transition-all text-center"
+                  className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full uppercase tracking-wider transition-all text-center"
                 >
                   Naar Checkout
                 </button>

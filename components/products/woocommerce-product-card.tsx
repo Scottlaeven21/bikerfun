@@ -165,7 +165,7 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
           <button
             onClick={handleAddToCart}
             disabled={isAdding}
-            className="flex-1 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl flex items-center justify-center"
+            className="btn-primary flex-1 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl flex items-center justify-center"
           >
             {isAdding ? '✓' : 'Toevoegen'}
           </button>

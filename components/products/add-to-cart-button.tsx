@@ -123,7 +123,7 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
       <button
         onClick={handleAddToCart}
         disabled={disabled || isAdding}
-        className={`w-full py-4 rounded-lg font-bold text-lg transition-all ${
+        className={`btn-primary w-full py-4 rounded-lg font-bold text-lg transition-all ${
           disabled
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
             : isAdding
