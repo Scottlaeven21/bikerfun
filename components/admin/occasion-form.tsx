@@ -224,12 +224,51 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
 
       if (isEdit && occasion) {
         // Update existing occasion
+        // Track which fields have been manually changed
+        const fieldsToTrack = [
+          'brand', 'model', 'year', 'price', 'mileage', 'transmission', 
+          'fuel', 'power', 'color', 'category', 'condition', 'owners',
+          'service_history', 'warranty', 'description', 'features', 'extras'
+        ];
+        
+        const changedFields: string[] = [];
+        fieldsToTrack.forEach(field => {
+          const originalValue = occasion[field as keyof typeof occasion];
+          const newValue = occasionData[field as keyof typeof occasionData];
+          
+          // Compare values (handle arrays and objects)
+          let hasChanged = false;
+          if (Array.isArray(originalValue) && Array.isArray(newValue)) {
+            hasChanged = JSON.stringify(originalValue) !== JSON.stringify(newValue);
+          } else if (typeof originalValue === 'object' && typeof newValue === 'object') {
+            hasChanged = JSON.stringify(originalValue) !== JSON.stringify(newValue);
+          } else {
+            hasChanged = originalValue !== newValue;
+          }
+          
+          if (hasChanged) {
+            changedFields.push(field);
+          }
+        });
+        
+        // Get current manual overrides and add new changed fields
+        const currentOverrides = occasion.manual_overrides || [];
+        const newOverrides = Array.from(new Set([...currentOverrides, ...changedFields]));
+        
+        // Update occasion with manual_overrides tracking
         const { error: updateError } = await (supabase as any)
           .from('occasions')
-          .update(occasionData)
+          .update({
+            ...occasionData,
+            manual_overrides: newOverrides,
+          })
           .eq('id', occasion.id);
 
         if (updateError) throw updateError;
+        
+        if (changedFields.length > 0) {
+          console.log('🔒 Marked fields as manually overridden:', changedFields);
+        }
       } else {
         // Insert new occasion
         const { error: insertError } = await (supabase as any)
