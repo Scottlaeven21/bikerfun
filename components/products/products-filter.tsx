@@ -6,7 +6,7 @@ import { SupabaseProductCard } from './supabase-product-card';
 interface Product {
   id: string;
   name: string;
-  price: string;
+  price: number;
   stock_quantity: number;
   category_name?: string;
   [key: string]: any;
@@ -27,7 +27,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
 
   // Calculate max price from products
   const maxPrice = useMemo(() => {
-    return Math.max(...products.map(p => parseFloat(p.price) || 0), 500);
+    return Math.max(...products.map(p => p.price || 0), 500);
   }, [products]);
 
   // Filter and sort products
@@ -52,7 +52,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
 
     // Price filter
     filtered = filtered.filter(product => {
-      const price = parseFloat(product.price) || 0;
+      const price = product.price || 0;
       return price >= priceRange[0] && price <= priceRange[1];
     });
 
@@ -65,9 +65,9 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
     filtered.sort((a, b) => {
       switch (sortBy) {
         case 'price-low':
-          return (parseFloat(a.price) || 0) - (parseFloat(b.price) || 0);
+          return (a.price || 0) - (b.price || 0);
         case 'price-high':
-          return (parseFloat(b.price) || 0) - (parseFloat(a.price) || 0);
+          return (b.price || 0) - (a.price || 0);
         case 'name':
         default:
           return a.name.localeCompare(b.name);
