@@ -90,35 +90,35 @@ export function StatisticsClient({
   return (
     <div className="space-y-8">
       {/* Date Range Picker */}
-      <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+      <div className="bg-gradient-to-br from-gray-50 to-white rounded-xl shadow-lg border border-gray-200 p-6">
         <div className="flex flex-wrap gap-4 items-end">
           {/* Quick Presets */}
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={() => setPresetRange(7)}
               disabled={isPending}
-              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black hover:border-biker-yellow transition-all font-bold shadow-sm hover:shadow-md disabled:opacity-50"
             >
               Laatste 7 dagen
             </button>
             <button
               onClick={() => setPresetRange(30)}
               disabled={isPending}
-              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black hover:border-biker-yellow transition-all font-bold shadow-sm hover:shadow-md disabled:opacity-50"
             >
               Laatste 30 dagen
             </button>
             <button
               onClick={() => setPresetRange(90)}
               disabled={isPending}
-              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black hover:border-biker-yellow transition-all font-bold shadow-sm hover:shadow-md disabled:opacity-50"
             >
               Laatste 90 dagen
             </button>
             <button
               onClick={setThisWeek}
               disabled={isPending}
-              className="px-4 py-2 bg-gray-200 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black transition-colors font-bold disabled:opacity-50"
+              className="px-4 py-2 bg-white border border-gray-300 text-gray-900 rounded-lg hover:bg-biker-yellow hover:text-biker-black hover:border-biker-yellow transition-all font-bold shadow-sm hover:shadow-md disabled:opacity-50"
             >
               Deze Week
             </button>
@@ -134,7 +134,7 @@ export function StatisticsClient({
                 type="date"
                 value={startDate}
                 onChange={(e) => setStartDate(e.target.value)}
-                className="bg-white text-gray-900 border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
+                className="bg-white text-gray-900 border border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow focus:ring-2 focus:ring-biker-yellow/20 outline-none shadow-sm"
               />
             </div>
             <div>
@@ -145,13 +145,13 @@ export function StatisticsClient({
                 type="date"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
-                className="bg-white text-gray-900 border-2 border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow outline-none"
+                className="bg-white text-gray-900 border border-gray-300 rounded-lg px-4 py-2 focus:border-biker-yellow focus:ring-2 focus:ring-biker-yellow/20 outline-none shadow-sm"
               />
             </div>
             <button
               onClick={handleDateChange}
               disabled={isPending}
-              className="px-6 py-2 bg-biker-yellow text-biker-black rounded-lg hover:bg-yellow-400 transition-colors font-bold disabled:opacity-50"
+              className="px-6 py-2 bg-biker-yellow text-biker-black rounded-lg hover:bg-yellow-400 transition-all font-bold shadow-md hover:shadow-lg disabled:opacity-50"
             >
               {isPending ? 'Laden...' : 'Toepassen'}
             </button>
