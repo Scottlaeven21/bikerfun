@@ -264,21 +264,25 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
 
                 {/* Info List */}
                 <div className="space-y-0 mb-8">
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">KM-stand</span>
-                    <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Bouwjaar</span>
-                    <span className="text-white font-bold">{occasion.year}</span>
-                  </div>
-                  {occasion.category && (
+                  {occasion.mileage && occasion.mileage > 0 && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">KM-stand</span>
+                      <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                    </div>
+                  )}
+                  {occasion.year && occasion.year > 1900 && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Bouwjaar</span>
+                      <span className="text-white font-bold">{occasion.year}</span>
+                    </div>
+                  )}
+                  {occasion.category && occasion.category.trim() !== '' && occasion.category !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Categorie</span>
                       <span className="text-white font-bold">{occasion.category}</span>
                     </div>
                   )}
-                  {occasion.condition && (
+                  {occasion.condition && occasion.condition.trim() !== '' && occasion.condition !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Staat</span>
                       <span className="text-biker-yellow font-bold">{occasion.condition}</span>
@@ -290,7 +294,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       <span className="text-white font-bold">{occasion.owners}</span>
                     </div>
                   )}
-                  {occasion.service_history && (
+                  {occasion.service_history && occasion.service_history.trim() !== '' && occasion.service_history !== '0' && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Onderhoudshistorie</span>
                       <span className="text-white font-bold">{occasion.service_history}</span>

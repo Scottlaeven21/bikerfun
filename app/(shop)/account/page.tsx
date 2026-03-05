@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { Metadata } from 'next';
+import { LogoutButton } from '@/components/auth/logout-button';
 
 export const metadata: Metadata = {
   title: 'Mijn Account - Bikerfun',
@@ -67,12 +68,7 @@ export default async function AccountPage() {
                 </div>
               </div>
 
-              <Link
-                href="/api/auth/signout"
-                className="btn-secondary block w-full bg-transparent border-2 border-biker-black text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
-              >
-                Uitloggen
-              </Link>
+              <LogoutButton />
             </div>
 
             {/* Quick Stats */}
