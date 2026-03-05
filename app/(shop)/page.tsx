@@ -259,7 +259,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-license-plate-holder-transparent.png"
+                  src="/product-license-plate-holder-white-bg.jpg"
                   alt="Kentekenplaathouders"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -280,7 +280,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-turn-signals-transparent.png"
+                  src="/product-turn-signals-white-bg.jpg"
                   alt="Knipperlichten"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -301,7 +301,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-backpack-transparent.png"
+                  src="/product-backpack-white-bg.jpg"
                   alt="Rugzakken"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
@@ -322,7 +322,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-keychain-transparent.png"
+                  src="/product-keychain-white-bg.jpg"
                   alt="Sleutelhangers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
