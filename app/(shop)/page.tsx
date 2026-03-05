@@ -233,7 +233,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {/* Helmcovers */}
             <Link
-              href="/products?category=helmcovers"
+              href="/products?category=Helmcovers"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -254,7 +254,7 @@ export default async function HomePage() {
 
             {/* Kentekenplaathouders */}
             <Link
-              href="/products?category=kentekenplaathouders"
+              href="/products?category=Kentekenplaathouders"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -275,7 +275,7 @@ export default async function HomePage() {
 
             {/* Knipperlichten */}
             <Link
-              href="/products?category=knipperlichten"
+              href="/products?category=Knipperlichten"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -296,7 +296,7 @@ export default async function HomePage() {
 
             {/* Rugzakken */}
             <Link
-              href="/products?category=rugzakken"
+              href="/products?category=Rugzakken"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -317,7 +317,7 @@ export default async function HomePage() {
 
             {/* Sleutelhangers */}
             <Link
-              href="/products?category=sleutelhangers"
+              href="/products?category=Sleutelhangers"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
