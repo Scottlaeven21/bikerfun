@@ -110,6 +110,33 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
         </div>
       </div>
 
+      {/* Category Pills */}
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-3">
+        <button
+          onClick={() => setSelectedCategory('')}
+          className={`px-6 py-2.5 rounded-full font-bold uppercase text-sm tracking-wider transition-all ${
+            selectedCategory === ''
+              ? 'bg-biker-yellow text-biker-black'
+              : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
+          }`}
+        >
+          ALLE
+        </button>
+        {categories.map((category) => (
+          <button
+            key={category}
+            onClick={() => setSelectedCategory(category)}
+            className={`px-6 py-2.5 rounded-full font-bold uppercase text-sm tracking-wider transition-all ${
+              selectedCategory === category
+                ? 'bg-biker-yellow text-biker-black'
+                : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
+            }`}
+          >
+            {category}
+          </button>
+        ))}
+      </div>
+
       {/* Filter Button */}
       <div className="mb-6 flex items-center justify-between">
         <button
@@ -141,24 +168,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       {isFilterOpen && (
         <div className="mb-8 bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6">
           <div className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {/* Category Filter */}
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
-                Categorie
-              </label>
-              <select
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-                className="w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-biker-yellow focus:outline-none"
-              >
-                <option value="">Alle categorieën</option>
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat}</option>
-                ))}
-              </select>
-            </div>
-
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Sort */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wider">
