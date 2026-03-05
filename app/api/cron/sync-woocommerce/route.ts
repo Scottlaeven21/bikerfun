@@ -160,7 +160,7 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
           const updateData: any = {};
           Object.keys(occasionData).forEach(key => {
             if (!manualOverrides.includes(key)) {
-              updateData[key] = occasionData[key];
+              updateData[key] = (occasionData as any)[key];
             }
           });
 
@@ -312,7 +312,7 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
           const updateData: any = {};
           Object.keys(productData).forEach(key => {
             if (!manualOverrides.includes(key)) {
-              updateData[key] = productData[key];
+              updateData[key] = (productData as any)[key];
             }
           });
 
