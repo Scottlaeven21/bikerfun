@@ -108,8 +108,9 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
   try {
     // Fetch occasions from WooCommerce (category "Motoren" only)
     // Query directly by category ID (87) to reduce memory usage
+    // Using per_page: 10 to avoid WordPress 503 errors due to low memory (128MB)
     const occasions = await wooCommerce.getProducts({
-      per_page: 50,
+      per_page: 10,
       category: '87', // Motoren category ID
       orderby: 'date',
       order: 'desc',
@@ -299,7 +300,7 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
     for (const categoryId of categories) {
       try {
         const categoryProducts = await wooCommerce.getProducts({
-          per_page: 50,
+          per_page: 10,
           category: categoryId.toString(),
           orderby: 'date',
           order: 'desc',
