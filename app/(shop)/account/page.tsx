@@ -104,7 +104,7 @@ export default async function AccountPage() {
                 </h2>
                 <Link
                   href="/products"
-                  className="btn-primary inline-block bg-biker-yellow text-biker-black px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider transition-all duration-300"
+                  className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-6 py-2 rounded-full font-bold uppercase text-xs tracking-wider transition-all duration-300"
                 >
                   Shop Nu
                 </Link>
@@ -172,7 +172,7 @@ export default async function AccountPage() {
                   <p className="text-gray-600 mb-6">Je hebt nog geen bestellingen geplaatst</p>
                   <Link
                     href="/products"
-                    className="btn-primary inline-block bg-biker-yellow text-biker-black px-8 py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
+                    className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
                   >
                     Start met shoppen
                   </Link>

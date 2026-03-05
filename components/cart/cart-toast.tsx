@@ -56,7 +56,7 @@ export function CartToast({ show, productName, onClose }: CartToastProps) {
               </button>
               <Link
                 href="/cart"
-                className="flex-1 text-xs bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-2 px-3 rounded-full transition-all text-center shadow-lg hover:shadow-xl"
+                className="flex-1 text-xs bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-2 px-3 rounded-full transition-all text-center shadow-lg hover:shadow-xl"
               >
                 Naar winkelwagen →
               </Link>

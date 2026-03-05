@@ -226,7 +226,7 @@ export default function PrivacyPolicyPage() {
               </p>
               <Link
                 href="/contact"
-                className="inline-block bg-biker-yellow hover:bg-biker-yellowHover text-black px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                className="inline-block bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
               >
                 NEEM CONTACT OP
               </Link>

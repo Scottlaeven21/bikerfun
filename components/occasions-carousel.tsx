@@ -38,7 +38,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Scroll Buttons - Desktop Only */}
       <button
         onClick={() => scroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all -translate-x-24 hidden lg:block"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow p-4 rounded-full shadow-xl transition-all -translate-x-24 hidden lg:block"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -46,7 +46,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       </button>
       <button
         onClick={() => scroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black p-4 rounded-full shadow-xl transition-all translate-x-24 hidden lg:block"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow p-4 rounded-full shadow-xl transition-all translate-x-24 hidden lg:block"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
           <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -179,7 +179,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
               {/* CTA Button */}
               <Link
                 href={`/occasions/${occasion.id}`}
-                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-yellowHover text-biker-black text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto"
+                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto"
               >
                 BEKIJK DETAILS
               </Link>

@@ -330,7 +330,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     
                     <Link
                       href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
-                      className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
+                      className="block w-full bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
                     >
                       Motor Op Aanvraag
                     </Link>
@@ -339,7 +339,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                   <div className="space-y-3 mb-8">
                     <Link
                       href={`/occasions/${occasion.id}/aanvraag`}
-                      className="block w-full bg-biker-yellow hover:bg-biker-yellowHover text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
+                      className="block w-full bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
                     >
                       Plan Bezichtiging
                     </Link>

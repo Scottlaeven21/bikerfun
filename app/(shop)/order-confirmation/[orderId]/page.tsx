@@ -205,7 +205,7 @@ export default function OrderConfirmationPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link
                 href="/contact"
-                className="bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-all"
+                className="bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 px-8 rounded-full uppercase tracking-wider transition-all"
               >
                 Contact Opnemen
               </Link>

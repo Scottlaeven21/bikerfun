@@ -753,7 +753,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             <button
               type="button"
               onClick={addFeature}
-              className="px-6 py-3 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold rounded-lg transition-colors"
+              className="px-6 py-3 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold rounded-lg transition-colors"
             >
               + Toevoegen
             </button>
@@ -796,7 +796,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             <button
               type="button"
               onClick={addExtra}
-              className="px-6 py-3 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold rounded-lg transition-colors"
+              className="px-6 py-3 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold rounded-lg transition-colors"
             >
               + Toevoegen
             </button>
@@ -911,7 +911,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             <button
               type="button"
               onClick={addImage}
-              className="px-6 py-3 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold rounded-lg transition-colors"
+              className="px-6 py-3 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold rounded-lg transition-colors"
             >
               + Toevoegen
             </button>
@@ -970,7 +970,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         <button
           type="submit"
           disabled={loading}
-          className="px-8 py-3 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-3 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Opslaan...' : isEdit ? 'Occasion Bijwerken' : 'Occasion Toevoegen'}
         </button>

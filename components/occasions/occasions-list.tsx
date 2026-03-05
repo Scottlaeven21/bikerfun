@@ -269,7 +269,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                   {/* CTA -zelfde animatie als overige buttons */}
                   <Link
                     href={`/occasions/${occasion.id}`}
-                    className="btn-primary block w-full text-center bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-3 rounded-full uppercase tracking-wider transition-all duration-300"
+                    className="btn-primary block w-full text-center bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full uppercase tracking-wider transition-all duration-300"
                   >
                     BEKIJK DETAILS
                   </Link>

@@ -78,7 +78,7 @@ export default async function HomePage() {
                 <Link
                   href="/occasions"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+                  className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
                 >
                   BEKIJK AANBOD
                 </Link>
@@ -124,7 +124,7 @@ export default async function HomePage() {
             <Link
               href="/occasions"
               style={{ fontFamily: 'var(--font-montserrat)' }}
-              className="btn-primary inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+              className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
             >
               BEKIJK ALLE OCCASIONS
             </Link>
@@ -160,7 +160,7 @@ export default async function HomePage() {
                 <Link
                   href="/occasions"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
-                  className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 text-center"
+                  className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 text-center"
                 >
                   BEKIJK AANBOD
                 </Link>
@@ -208,7 +208,7 @@ export default async function HomePage() {
           <Link
             href="/contact"
             style={{ fontFamily: 'var(--font-montserrat)' }}
-            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
           >
             NEEM CONTACT OP
           </Link>

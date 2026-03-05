@@ -76,7 +76,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
+                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
               >
                 <span>MENU</span>
                 <svg className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
@@ -104,7 +104,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
         <div className="absolute top-6 right-6">
           <button
             onClick={() => setMenuOpen(false)}
-            className="bg-biker-yellow text-biker-black p-2 rounded-full hover:bg-biker-yellowHover transition-colors"
+            className="bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow p-2 rounded-full transition-colors"
           >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />

@@ -30,7 +30,7 @@ export default async function AdminOccasionsPage() {
         </div>
         <Link
           href="/admin/occasions/new"
-          className="flex items-center space-x-2 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-6 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="flex items-center space-x-2 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-6 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -202,7 +202,7 @@ export default async function AdminOccasionsPage() {
             <p className="text-gray-600 mb-6 font-medium">Nog geen occasions toegevoegd</p>
             <Link
               href="/admin/occasions/new"
-              className="inline-flex items-center space-x-2 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-8 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
+              className="inline-flex items-center space-x-2 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-8 py-3 rounded-lg font-bold uppercase text-sm tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
             >
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

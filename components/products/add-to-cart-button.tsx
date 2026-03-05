@@ -128,7 +128,7 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
             ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
             : isAdding
             ? 'bg-green-600 text-white'
-            : 'bg-biker-yellow hover:bg-biker-yellowHover text-biker-black shadow-lg hover:shadow-xl'
+            : 'bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow shadow-lg hover:shadow-xl'
         }`}
       >
         {disabled ? (

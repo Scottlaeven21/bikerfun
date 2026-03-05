@@ -92,7 +92,7 @@ export default async function OccasionsPage() {
           <Link
             href="/motor-op-aanvraag"
             style={{ fontFamily: 'var(--font-montserrat)' }}
-            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-yellowHover text-biker-black px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
           >
             MOTOR OP AANVRAAG
           </Link>
