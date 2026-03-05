@@ -25,14 +25,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const productsData = (products as { slug: string; updated_at: string }[]) || [];
 
-  // Fetch all categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('slug, updated_at')
-    .eq('is_active', true)
-    .order('name', { ascending: true });
+  // Fetch all products to get unique categories
+  const { data: productsForCategories } = await supabase
+    .from('webshop_products')
+    .select('categories, updated_at')
+    .eq('status', 'publish');
 
-  const categoriesData = (categories as { slug: string; updated_at: string }[]) || [];
+  const productsForCategoriesData = (productsForCategories as { categories: string[]; updated_at: string }[]) || [];
+
+  // Extract unique categories
+  const excludedCategories = ['Alles', 'All', 'Motoren', 'Motors', 'Occasions', 'Bikes'];
+  const categorySet = new Map<string, string>();
+  
+  productsForCategoriesData.forEach(product => {
+    product.categories?.forEach((cat: string) => {
+      if (cat && !excludedCategories.includes(cat)) {
+        const slug = cat.toLowerCase().replace(/\s+/g, '-');
+        if (!categorySet.has(slug) || product.updated_at > categorySet.get(slug)!) {
+          categorySet.set(slug, product.updated_at);
+        }
+      }
+    });
+  });
+
+  const categoriesData = Array.from(categorySet.entries()).map(([slug, updated_at]) => ({
+    slug,
+    updated_at,
+  }));
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -108,12 +127,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Category pages (as query parameters)
+  // Category pages (as dedicated URLs)
   const categoryPages: MetadataRoute.Sitemap = categoriesData.map((category) => ({
-    url: `${baseUrl}/products?category=${encodeURIComponent(category.slug)}`,
+    url: `${baseUrl}/products/${category.slug}`,
     lastModified: new Date(category.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
-    priority: 0.7,
+    priority: 0.8,
   }));
 
   return [...staticPages, ...occasionPages, ...productPages, ...categoryPages];

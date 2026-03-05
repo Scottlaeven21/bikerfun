@@ -218,7 +218,7 @@ export default async function HomePage() {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
             {/* Helmcovers */}
             <Link
-              href="/products?category=Helmcovers"
+              href="/products/helmcovers"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -239,7 +239,7 @@ export default async function HomePage() {
 
             {/* Kentekenplaathouders */}
             <Link
-              href="/products?category=Kentekenplaathouders"
+              href="/products/kentekenplaathouders"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -260,7 +260,7 @@ export default async function HomePage() {
 
             {/* Knipperlichten */}
             <Link
-              href="/products?category=Knipperlichten"
+              href="/products/knipperlichten"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -281,7 +281,7 @@ export default async function HomePage() {
 
             {/* Rugzakken */}
             <Link
-              href="/products?category=Rugzakken"
+              href="/products/rugzakken"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">
@@ -302,7 +302,7 @@ export default async function HomePage() {
 
             {/* Sleutelhangers */}
             <Link
-              href="/products?category=Sleutelhangers"
+              href="/products/sleutelhangers"
               className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
             >
               <div className="relative aspect-square overflow-hidden bg-white">

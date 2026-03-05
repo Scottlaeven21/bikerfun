@@ -135,7 +135,7 @@ export default async function ProductPage({
                   {product.categories.map((category) => (
                     <Link
                       key={category}
-                      href={`/products?category=${category}`}
+                      href={`/products/${category.toLowerCase()}`}
                       className="text-sm text-gray-600 hover:text-biker-yellow transition-colors"
                     >
                       #{category}

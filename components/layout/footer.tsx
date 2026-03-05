@@ -69,27 +69,27 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Helmcovers" className="hover:text-biker-yellow transition-colors">
+                <Link href="/products/helmcovers" className="hover:text-biker-yellow transition-colors">
                   Helmcovers
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Kentekenplaathouders" className="hover:text-biker-yellow transition-colors">
+                <Link href="/products/kentekenplaathouders" className="hover:text-biker-yellow transition-colors">
                   Kentekenplaathouders
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Knipperlichten" className="hover:text-biker-yellow transition-colors">
+                <Link href="/products/knipperlichten" className="hover:text-biker-yellow transition-colors">
                   Knipperlichten
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Rugzakken" className="hover:text-biker-yellow transition-colors">
+                <Link href="/products/rugzakken" className="hover:text-biker-yellow transition-colors">
                   Rugzakken
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=Sleutelhangers" className="hover:text-biker-yellow transition-colors">
+                <Link href="/products/sleutelhangers" className="hover:text-biker-yellow transition-colors">
                   Sleutelhangers
                 </Link>
               </li>
