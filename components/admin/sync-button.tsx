@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface SyncResult {
   success: boolean;
@@ -25,11 +25,39 @@ export function SyncButton() {
   const [syncing, setSyncing] = useState(false);
   const [result, setResult] = useState<SyncResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+
+  // Progress bar animation
+  useEffect(() => {
+    if (!syncing) {
+      setProgress(0);
+      return;
+    }
+
+    // Simulate progress over ~3 minutes
+    const duration = 180000; // 3 minutes in ms
+    const interval = 500; // Update every 500ms
+    const increment = (interval / duration) * 100;
+    
+    const timer = setInterval(() => {
+      setProgress(prev => {
+        // Slow down near the end (90-95%)
+        if (prev >= 90) return Math.min(prev + (increment * 0.2), 95);
+        // Speed up in middle (30-70%)
+        if (prev >= 30 && prev < 70) return prev + (increment * 1.5);
+        // Normal speed
+        return Math.min(prev + increment, 95);
+      });
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [syncing]);
 
   const handleSync = async () => {
     setSyncing(true);
     setError(null);
     setResult(null);
+    setProgress(0);
 
     try {
       const response = await fetch('/api/admin/sync-woocommerce', {
@@ -40,6 +68,7 @@ export function SyncButton() {
       });
 
       const data = await response.json();
+      setProgress(100); // Complete!
       setResult(data);
 
       if (!data.success && data.errors) {
@@ -55,35 +84,72 @@ export function SyncButton() {
   return (
     <div className="space-y-6">
       {/* Sync Button */}
-      <div className="flex items-center justify-between">
-        <button
-          onClick={handleSync}
-          disabled={syncing}
-          className="flex items-center space-x-3 px-6 py-3 bg-biker-yellow text-black text-base font-bold rounded-lg hover:bg-yellow-500 transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-biker-yellow"
-        >
-          <svg 
-            className={`w-5 h-5 ${syncing ? 'animate-spin' : ''}`} 
-            fill="none" 
-            stroke="currentColor" 
-            viewBox="0 0 24 24"
+      <div>
+        <div className="flex items-center justify-between mb-4">
+          <button
+            onClick={handleSync}
+            disabled={syncing}
+            className="flex items-center space-x-3 px-6 py-3 bg-biker-yellow text-black text-base font-bold rounded-lg hover:bg-yellow-500 transition-all hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-biker-yellow"
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
-            />
-          </svg>
-          <span>{syncing ? 'Synchroniseren...' : 'Start Synchronisatie'}</span>
-        </button>
+            <svg 
+              className={`w-5 h-5 ${syncing ? 'animate-spin' : ''}`} 
+              fill="none" 
+              stroke="currentColor" 
+              viewBox="0 0 24 24"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" 
+              />
+            </svg>
+            <span>{syncing ? 'Synchroniseren...' : 'Start Synchronisatie'}</span>
+          </button>
 
+          {syncing && (
+            <div className="flex items-center space-x-2 text-gray-600">
+              <div className="w-2 h-2 bg-biker-yellow rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium">Bezig met synchroniseren...</span>
+            </div>
+          )}
+        </div>
+
+        {/* Progress Bar */}
         {syncing && (
-          <div className="flex items-center space-x-2 text-gray-600">
-            <div className="w-2 h-2 bg-biker-yellow rounded-full animate-pulse"></div>
-            <span className="text-sm font-medium">Bezig met synchroniseren...</span>
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-sm">
+              <span className="text-gray-600 font-medium">Voortgang</span>
+              <span className="text-biker-yellow font-bold">{Math.round(progress)}%</span>
+            </div>
+            <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden shadow-inner">
+              <div 
+                className="h-full bg-gradient-to-r from-biker-yellow to-yellow-500 rounded-full transition-all duration-500 ease-out relative overflow-hidden"
+                style={{ width: `${progress}%` }}
+              >
+                {/* Animated shimmer effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent animate-shimmer"></div>
+              </div>
+            </div>
+            <p className="text-xs text-gray-500 italic">
+              {progress < 30 && 'Ophalen van occasions uit WooCommerce...'}
+              {progress >= 30 && progress < 60 && 'Ophalen van producten uit WooCommerce...'}
+              {progress >= 60 && progress < 90 && 'Synchroniseren naar database...'}
+              {progress >= 90 && 'Bijna klaar...'}
+            </p>
           </div>
         )}
       </div>
+
+      <style jsx>{`
+        @keyframes shimmer {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100%); }
+        }
+        .animate-shimmer {
+          animation: shimmer 2s infinite;
+        }
+      `}</style>
 
       {/* Error Display */}
       {error && (

@@ -94,7 +94,7 @@ export default function SyncPage() {
           </h2>
           <p className="text-sm text-gray-600">
             Klik op de knop hieronder om een handmatige synchronisatie te starten. 
-            Dit proces kan 30-60 seconden duren.
+            Dit proces kan <strong className="text-gray-900">1 tot 5 minuten</strong> duren, afhankelijk van het aantal producten.
           </p>
         </div>
 
