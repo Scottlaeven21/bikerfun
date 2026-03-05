@@ -31,14 +31,14 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       const query = searchQuery.toLowerCase();
       filtered = filtered.filter(product => 
         product.name.toLowerCase().includes(query) ||
-        product.category_name?.toLowerCase().includes(query)
+        product.categories?.some(cat => cat.toLowerCase().includes(query))
       );
     }
 
     // Category filter
     if (selectedCategory) {
       filtered = filtered.filter(product => 
-        product.category_name === selectedCategory
+        product.categories?.includes(selectedCategory)
       );
     }
 
