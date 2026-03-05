@@ -26,7 +26,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
     <>
       <nav className={`absolute top-0 left-0 right-0 z-50 ${
         showShopIcons 
-          ? 'bg-white md:bg-gradient-to-b md:from-black/50 md:to-transparent text-biker-black md:text-white' 
+          ? 'bg-white text-biker-black border-b border-gray-200' 
           : 'bg-gradient-to-b from-black/50 to-transparent text-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,14 +50,14 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {showShopIcons && (
                 <>
                   {/* Cart Dropdown */}
-                  <div className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
+                  <div className="bg-gray-200 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
                     <CartDropdown />
                   </div>
 
                   {/* Account Icon */}
                   <Link
                     href={user ? "/account" : "/login?redirect=/account"}
-                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    className="bg-gray-200 text-biker-black p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
