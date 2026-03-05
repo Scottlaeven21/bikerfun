@@ -380,12 +380,23 @@
 
 body {
   color: var(--foreground);
-  background: #000000;
+  background: #ffffff;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
 html {
-  background: #000000;
+  background: #ffffff;
+}
+
+/* Black background on desktop */
+@media (min-width: 768px) {
+  body {
+    background: #000000;
+  }
+  
+  html {
+    background: #000000;
+  }
 }
 
 @layer utilities {
