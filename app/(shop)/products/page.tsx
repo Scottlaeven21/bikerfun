@@ -30,7 +30,7 @@ export default async function ProductsPage({
   console.log(`Loaded ${products.length} products from Supabase`);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
+    <div className="min-h-screen bg-white md:bg-gradient-to-b md:from-gray-50 md:to-white pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
