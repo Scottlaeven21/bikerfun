@@ -133,9 +133,18 @@ export async function getDetailedAnalytics(
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
-  // Calculate total stats
+  // Calculate total stats with better unique visitor tracking
   const totalViews = pageViewsData?.length || 0;
-  const uniqueVisitors = new Set(pageViewsData?.map((v: any) => v.ip_address).filter(Boolean)).size;
+  const uniqueIPs = pageViewsData?.map((v: any) => v.ip_address).filter(Boolean) || [];
+  const uniqueVisitors = new Set(uniqueIPs).size;
+  
+  console.log('Analytics Debug:', {
+    totalViews,
+    uniqueIPsCount: uniqueIPs.length,
+    uniqueVisitors,
+    sampleIPs: uniqueIPs.slice(0, 5)
+  });
+  
   const totalEvents = eventsData?.length || 0;
   const conversionEvents = eventsData?.filter((e: any) => 
     e.event_name.includes('contact') || e.event_name.includes('motor_request')

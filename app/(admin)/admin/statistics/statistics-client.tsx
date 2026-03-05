@@ -442,7 +442,7 @@ export function StatisticsClient({
               {data.dailyStats.map((stat) => (
                 <tr key={stat.date} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                    {format(new Date(stat.date), 'EEEE d MMMM yyyy', { locale: nl })}
+                    {format(new Date(stat.date), 'EEEE dd MMMM yyyy', { locale: nl })}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
                     {stat.total_views.toLocaleString()}
