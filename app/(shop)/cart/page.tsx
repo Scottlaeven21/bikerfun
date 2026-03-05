@@ -35,7 +35,7 @@ export default function CartPage() {
             </p>
             <Link
               href="/products"
-              className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-12 py-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 text-center"
+              className="btn-primary inline-block bg-biker-yellow text-biker-black border-2 border-biker-yellow px-12 py-4 rounded-full font-bold uppercase text-sm tracking-wider text-center"
             >
               Verder Shoppen
             </Link>
@@ -178,7 +178,7 @@ export default function CartPage() {
 
               <Link
                 href="/checkout"
-                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow text-center px-8 py-4 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300"
+                className="btn-primary block w-full bg-biker-yellow text-biker-black border-2 border-biker-yellow text-center px-8 py-4 rounded-full font-bold uppercase text-sm tracking-wider"
               >
                 Afrekenen
               </Link>
