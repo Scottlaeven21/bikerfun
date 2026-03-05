@@ -133,7 +133,7 @@ export default function ContactPage() {
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">WhatsApp</h3>
                     <p className="text-biker-light">
                       <a 
-                        href="https://wa.me/31616298684?text=Hoi%20Bikerfun%2C%20ik%20heb%20een%20vraag%20over..." 
+                        href="https://wa.me/31615452108?text=Hoi%20Bikerfun%2C%20ik%20heb%20een%20vraag%20over..." 
                         target="_blank"
                         rel="noopener noreferrer"
                         className="hover:text-biker-yellow transition-colors"

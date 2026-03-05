@@ -9,7 +9,7 @@ export function BusinessStructuredData() {
     url: baseUrl,
     logo: `${baseUrl}/logo.png`,
     image: `${baseUrl}/og-image.jpg`,
-    telephone: '+31616298684',
+    telephone: '+31615452108',
     email: 'info@bikerfun.nl',
     address: {
       '@type': 'PostalAddress',
