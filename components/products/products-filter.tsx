@@ -111,10 +111,10 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       </div>
 
       {/* Category Pills */}
-      <div className="mb-8 flex flex-wrap items-center justify-center gap-2 px-4">
+      <div className="mb-8 flex flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
         <button
           onClick={() => setSelectedCategory('')}
-          className={`px-4 md:px-6 py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center ${
+          className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center ${
             selectedCategory === ''
               ? 'bg-biker-yellow text-biker-black'
               : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
@@ -126,7 +126,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-4 md:px-6 py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center whitespace-nowrap ${
+            className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center whitespace-nowrap ${
               selectedCategory === category
                 ? 'bg-biker-yellow text-biker-black'
                 : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
