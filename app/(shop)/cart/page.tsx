@@ -50,7 +50,7 @@ export default function CartPage() {
 
   return (
     <WhiteBackgroundWrapper>
-    <div className="min-h-screen bg-white md:bg-gradient-to-b md:from-gray-50 md:to-white pt-32 pb-20">
+    <div className="min-h-screen bg-white pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-8 uppercase tracking-tight">
           Winkel<span className="text-biker-yellow">wagen</span>

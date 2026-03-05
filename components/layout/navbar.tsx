@@ -26,7 +26,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
     <>
       <nav className={`absolute top-0 left-0 right-0 z-50 ${
         showShopIcons 
-          ? 'bg-white text-biker-black' 
+          ? 'bg-white md:bg-gradient-to-b md:from-black/50 md:to-transparent text-biker-black md:text-white' 
           : 'bg-gradient-to-b from-black/50 to-transparent text-white'
       }`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -50,14 +50,14 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {showShopIcons && (
                 <>
                   {/* Cart Dropdown */}
-                  <div className="bg-gray-200 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
+                  <div className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
                     <CartDropdown />
                   </div>
 
                   {/* Account Icon */}
                   <Link
                     href={user ? "/account" : "/login?redirect=/account"}
-                    className="bg-gray-200 text-biker-black p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -70,10 +70,8 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Aanbod Button - Hidden on mobile when shop icons are shown */}
               <Link
                 href="/occasions"
-                className={`btn-secondary bg-transparent px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 ${
-                  showShopIcons 
-                    ? 'hidden md:inline-block text-biker-black border-biker-black' 
-                    : 'text-white border-white'
+                className={`btn-secondary bg-transparent text-white px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white ${
+                  showShopIcons ? 'hidden md:inline-block' : ''
                 }`}
               >
                 AANBOD
