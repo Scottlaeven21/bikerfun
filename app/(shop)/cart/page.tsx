@@ -1,19 +1,27 @@
 'use client';
 
-import { useCart } from '@/hooks/use-cart';
-import { CartItem } from '@/components/cart/cart-item';
+import { useCart } from '@/contexts/cart-context';
 import { formatPrice } from '@/lib/utils/format';
 import Link from 'next/link';
+import Image from 'next/image';
+
+const SHIPPING_COST = 7.50;
+const FREE_SHIPPING_THRESHOLD = 75;
+const TAX_RATE = 0.21;
 
 export default function CartPage() {
-  const { items, getSubtotal, getShippingCost, getTax, getTotal } = useCart();
+  const { cart, removeFromCart, updateQuantity, total: cartTotal } = useCart();
 
-  const subtotal = getSubtotal();
-  const shipping = getShippingCost();
-  const tax = getTax();
-  const total = getTotal();
+  const subtotal = cart.reduce((sum, item) => {
+    const price = parseFloat(item.product.price || '0');
+    return sum + (price * item.quantity);
+  }, 0);
 
-  if (items.length === 0) {
+  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+  const tax = subtotal * TAX_RATE;
+  const total = subtotal + shipping + tax;
+
+  if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -49,9 +57,74 @@ export default function CartPage() {
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg overflow-hidden">
               <div className="divide-y divide-gray-200">
-                {items.map((item) => (
-                  <CartItem key={item.product_id} item={item} />
-                ))}
+                {cart.map((item) => {
+                  const itemPrice = parseFloat(item.product.price || '0');
+                  const itemTotal = itemPrice * item.quantity;
+                  const imageUrl = item.product.images?.[0]?.src;
+                  
+                  return (
+                    <div key={item.product.id} className="p-6 flex gap-6">
+                      {/* Product Image */}
+                      <div className="relative w-24 h-24 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden">
+                        {imageUrl ? (
+                          <Image
+                            src={imageUrl}
+                            alt={item.product.name}
+                            fill
+                            className="object-contain p-2"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-gray-300">
+                            <span className="text-3xl">📦</span>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Product Info */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-biker-black mb-2 text-lg">
+                          {item.product.name}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-3">
+                          {formatPrice(itemPrice)} per stuk
+                        </p>
+
+                        {/* Quantity Controls */}
+                        <div className="flex items-center gap-4">
+                          <div className="flex items-center border-2 border-gray-200 rounded-lg">
+                            <button
+                              onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
+                              className="px-3 py-1 hover:bg-gray-100 transition-colors"
+                            >
+                              −
+                            </button>
+                            <span className="px-4 py-1 font-semibold">{item.quantity}</span>
+                            <button
+                              onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                              className="px-3 py-1 hover:bg-gray-100 transition-colors"
+                            >
+                              +
+                            </button>
+                          </div>
+
+                          <button
+                            onClick={() => removeFromCart(item.product.id)}
+                            className="text-red-600 hover:text-red-800 text-sm font-semibold transition-colors"
+                          >
+                            Verwijderen
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Item Total */}
+                      <div className="text-right">
+                        <p className="text-2xl font-bold text-biker-black">
+                          {formatPrice(itemTotal)}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
 
@@ -78,19 +151,19 @@ export default function CartPage() {
               <div className="space-y-4 mb-6">
                 <div className="flex justify-between text-gray-600">
                   <span>Subtotaal</span>
-                  <span className="font-semibold text-biker-black">{formatPrice(subtotal)}</span>
+                  <span className="font-semibold text-biker-black">€{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Verzending (NL)</span>
-                  <span className="font-semibold text-biker-yellow">Gratis</span>
+                  <span className="font-semibold text-biker-yellow">{shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>BTW (21%)</span>
-                  <span className="font-semibold text-biker-black">{formatPrice(tax)}</span>
+                  <span className="font-semibold text-biker-black">€{tax.toFixed(2)}</span>
                 </div>
                 <div className="border-t-2 border-gray-200 pt-4 flex justify-between text-xl font-bold text-biker-black">
                   <span>Totaal</span>
-                  <span className="text-biker-yellow">{formatPrice(total)}</span>
+                  <span className="text-biker-yellow">€{total.toFixed(2)}</span>
                 </div>
               </div>
 
