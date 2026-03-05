@@ -220,7 +220,7 @@ export default async function HomePage() {
             >
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
-                  src="/product-helmcover-transparent-v2.png"
+                  src="/product-helmcover-white-bg-v3.jpg"
                   alt="Helmcovers"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"

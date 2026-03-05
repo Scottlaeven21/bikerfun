@@ -1,6 +1,7 @@
 'use client';
 
-import { useCart } from '@/contexts/cart-context';
+import { useEffect, useState } from 'react';
+import { useCart } from '@/hooks/use-cart';
 import { Navbar } from './navbar';
 
 interface NavbarClientProps {
@@ -9,7 +10,22 @@ interface NavbarClientProps {
 }
 
 export function NavbarClient({ user, isAdmin }: NavbarClientProps) {
-  const { itemCount } = useCart();
+  const [cartCount, setCartCount] = useState(0);
+  const [mounted, setMounted] = useState(false);
+  const { getTotalItems, hydrate, items } = useCart();
 
-  return <Navbar user={user} isAdmin={isAdmin} cartItemCount={itemCount} />;
+  // Hydrate cart from localStorage on mount
+  useEffect(() => {
+    hydrate();
+    setMounted(true);
+  }, [hydrate]);
+
+  // Update cart count when items change
+  useEffect(() => {
+    if (mounted) {
+      setCartCount(getTotalItems());
+    }
+  }, [items, getTotalItems, mounted]);
+
+  return <Navbar user={user} isAdmin={isAdmin} cartItemCount={cartCount} />;
 }
