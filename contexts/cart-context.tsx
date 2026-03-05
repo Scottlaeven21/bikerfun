@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { CartItem, getCart, addToCart as addToCartUtil, removeFromCart as removeFromCartUtil, updateQuantity as updateQuantityUtil, clearCart as clearCartUtil, getCartTotal, getCartItemCount } from '@/lib/woocommerce/cart';
 import { WooCommerceProduct } from '@/types/woocommerce';
+import { CartToast } from '@/components/cart/cart-toast';
 
 interface CartContextType {
   cart: CartItem[];
@@ -20,6 +21,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [itemCount, setItemCount] = useState(0);
   const [total, setTotal] = useState(0);
+  const [showToast, setShowToast] = useState(false);
+  const [lastAddedProduct, setLastAddedProduct] = useState<string>('');
 
   // Load cart on mount
   useEffect(() => {
@@ -46,6 +49,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addToCart = (product: WooCommerceProduct, quantity: number = 1) => {
     addToCartUtil(product, quantity);
     loadCart();
+    
+    // Show toast notification
+    setLastAddedProduct(product.name);
+    setShowToast(true);
   };
 
   const removeFromCart = (productId: number) => {
@@ -66,6 +73,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   return (
     <CartContext.Provider value={{ cart, itemCount, total, addToCart, removeFromCart, updateQuantity, clearCart }}>
       {children}
+      <CartToast 
+        show={showToast} 
+        productName={lastAddedProduct}
+        onClose={() => setShowToast(false)}
+      />
     </CartContext.Provider>
   );
 }

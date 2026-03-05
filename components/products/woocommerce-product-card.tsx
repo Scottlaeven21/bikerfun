@@ -45,6 +45,53 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
     setTimeout(() => setIsAdding(false), 1000);
   };
 
+  // If out of stock, show special card
+  if (isOutOfStock) {
+    return (
+      <div className="group bg-gray-100 rounded-xl overflow-hidden border-2 border-gray-300 shadow-lg flex flex-col relative">
+        <div className="relative aspect-square overflow-hidden bg-gray-200">
+          {showPlaceholder ? (
+            <div className="w-full h-full flex items-center justify-center text-gray-400">
+              <span className="text-6xl">📦</span>
+            </div>
+          ) : (
+            <Image
+              src={imageUrl!}
+              alt={product.name}
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="object-contain p-6 opacity-40 filter grayscale"
+              loading="lazy"
+              unoptimized={true}
+              onError={() => setImageError(true)}
+            />
+          )}
+          
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent flex items-center justify-center">
+            <div className="text-center">
+              <span className="bg-biker-black text-white px-8 py-4 rounded-full font-bold uppercase text-lg tracking-wider shadow-2xl inline-block">
+                Uitverkocht
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-5 bg-gray-50 border-t-2 border-gray-200 flex flex-col flex-1">
+          <h3 className="font-bold text-gray-600 mb-3 line-clamp-2 text-base">
+            {product.name}
+          </h3>
+          
+          <button
+            onClick={handleViewProduct}
+            className="w-full bg-gray-300 text-gray-600 font-bold py-3 px-4 rounded-full text-center transition-all hover:bg-gray-400 mt-auto uppercase tracking-wide"
+          >
+            Meer Informatie
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div
       className="group bg-white rounded-xl overflow-hidden border-2 border-gray-200 hover:border-biker-yellow shadow-lg hover:shadow-2xl transition-all duration-300 flex flex-col"
@@ -73,14 +120,6 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
         {hasDiscount && (
           <div className="absolute top-3 right-3 bg-biker-yellow text-biker-black px-3 py-1 rounded-full text-sm font-bold shadow-lg">
             -{discountPercentage}%
-          </div>
-        )}
-
-        {isOutOfStock && (
-          <div className="absolute inset-0 bg-white bg-opacity-95 flex items-center justify-center">
-            <span className="bg-biker-black text-white px-6 py-3 rounded-full font-bold uppercase text-sm tracking-wider">
-              Uitverkocht
-            </span>
           </div>
         )}
       </div>
@@ -119,19 +158,17 @@ export function WooCommerceProductCard({ product }: WooCommerceProductCardProps)
         <div className="flex gap-2 mt-4">
           <button
             onClick={handleViewProduct}
-            className="flex-1 bg-gray-100 hover:bg-gray-200 text-biker-black font-bold py-2 px-4 rounded-lg text-sm transition-colors"
+            className="flex-1 bg-gray-100 hover:bg-gray-200 text-biker-black font-bold py-3 px-4 rounded-full text-sm transition-colors uppercase tracking-wide"
           >
             Bekijken
           </button>
-          {!isOutOfStock && (
-            <button
-              onClick={handleAddToCart}
-              disabled={isAdding}
-              className="flex-1 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-2 px-4 rounded-lg text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isAdding ? '✓ Toegevoegd' : 'Toevoegen'}
-            </button>
-          )}
+          <button
+            onClick={handleAddToCart}
+            disabled={isAdding}
+            className="flex-1 bg-biker-yellow hover:bg-biker-yellowHover text-biker-black font-bold py-3 px-4 rounded-full text-sm transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl"
+          >
+            {isAdding ? '✓' : 'Toevoegen'}
+          </button>
         </div>
       </div>
     </div>

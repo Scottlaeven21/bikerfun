@@ -95,17 +95,17 @@ export default async function ProductPage({
               )}
             </div>
 
-            {/* Thumbnail Gallery */}
+            {/* Thumbnail Gallery - Skip first image (hero) */}
             {product.images.length > 1 && (
               <div className="grid grid-cols-4 gap-2">
-                {product.images.slice(0, 4).map((image, index) => (
+                {product.images.slice(1, 5).map((image, index) => (
                   <div
                     key={index}
                     className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                   >
                     <Image
                       src={image.src}
-                      alt={image.alt || `${product.name} ${index + 1}`}
+                      alt={image.alt || `${product.name} ${index + 2}`}
                       fill
                       className="object-contain p-2"
                     />

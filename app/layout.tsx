@@ -31,9 +31,18 @@ export const metadata: Metadata = {
   description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
   keywords: ["motor", "biker", "motorkleding", "motorgear", "lifestyle"],
   authors: [{ name: "Bikerfun" }],
+  icons: {
+    icon: [
+      { url: '/bikerfun-new-logo.png', sizes: 'any' },
+      { url: '/bikerfun-new-logo.png', type: 'image/png', sizes: '32x32' },
+    ],
+    shortcut: '/bikerfun-new-logo.png',
+    apple: '/bikerfun-new-logo.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
+    title: "Bikerfun",
   },
   openGraph: {
     type: "website",
@@ -42,11 +51,13 @@ export const metadata: Metadata = {
     siteName: "Bikerfun",
     title: "Bikerfun - Motor & Biker Lifestyle Shop",
     description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
+    images: ['/bikerfun-new-logo.png'],
   },
   twitter: {
     card: "summary_large_image",
     title: "Bikerfun - Motor & Biker Lifestyle Shop",
     description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
+    images: ['/bikerfun-new-logo.png'],
   },
 };
 
