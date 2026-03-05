@@ -20,6 +20,7 @@ export function TikTokGrid({ size = 'normal' }: TikTokGridProps) {
             loop
             muted
             playsInline
+            preload="none"
             className="absolute inset-0 w-full h-full object-cover"
             onMouseEnter={(e) => e.currentTarget.play()}
             onMouseLeave={(e) => {

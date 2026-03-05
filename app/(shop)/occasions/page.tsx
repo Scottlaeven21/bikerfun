@@ -9,15 +9,16 @@ import { getItemListSchema, getBreadcrumbSchema } from '@/lib/seo/structured-dat
 
 export const metadata = getOccasionsMetadata();
 
-// Force revalidation every request during development
-export const revalidate = 0;
+// Revalidate every 5 minutes for better performance
+export const revalidate = 300;
 
 export default async function OccasionsPage() {
   const supabase = await createClient();
 
+  // Select only needed fields for better performance
   const { data: occasions } = await supabase
     .from('occasions')
-    .select('*')
+    .select('id, brand, model, year, price, images, mileage, power, status, category, transmission, fuel, condition')
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 

@@ -69,6 +69,7 @@ export default function RootLayout({
   return (
     <html lang="nl" className={`${inter.variable} ${montserrat.variable} overflow-x-hidden bg-black`}>
       <head>
+        {/* Preconnect to external domains */}
         <link
           rel="preconnect"
           href="https://fonts.googleapis.com"
@@ -78,6 +79,24 @@ export default function RootLayout({
           href="https://fonts.gstatic.com"
           crossOrigin="anonymous"
         />
+        <link
+          rel="dns-prefetch"
+          href="https://www.googletagmanager.com"
+        />
+        
+        {/* Preload critical assets */}
+        <link
+          rel="preload"
+          href="/hero-home.mp4"
+          as="video"
+          type="video/mp4"
+        />
+        <link
+          rel="preload"
+          href="/bikerfun-new-logo.png"
+          as="image"
+        />
+        
         <meta name="theme-color" content="#000000" />
       </head>
       <body className="antialiased overflow-x-hidden bg-black">
