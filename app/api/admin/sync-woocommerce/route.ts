@@ -106,17 +106,32 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
   };
 
   try {
-    // Fetch occasions from WooCommerce (category "Motoren" only)
-    // Query directly by category ID (87) to reduce memory usage
+    // Fetch ALL occasions from WooCommerce with pagination
     // Using per_page: 10 to avoid WordPress 503 errors due to low memory (128MB)
-    const occasions = await wooCommerce.getProducts({
-      per_page: 10,
-      category: '87', // Motoren category ID
-      orderby: 'date',
-      order: 'desc',
-    });
+    console.log('🔄 Fetching occasions from WooCommerce with pagination...');
+    const allOccasions: any[] = [];
+    let page = 1;
+    let hasMore = true;
 
-    console.log(`Found ${occasions.length} occasions in WooCommerce (category: Motoren)`);
+    while (hasMore) {
+      const occasions = await wooCommerce.getProducts({
+        per_page: 10,
+        page,
+        category: '87', // Motoren category ID
+        orderby: 'date',
+        order: 'desc',
+      });
+
+      allOccasions.push(...occasions);
+      console.log(`  📄 Page ${page}: ${occasions.length} occasions`);
+
+      // If we got less than per_page, we've reached the end
+      hasMore = occasions.length === 10;
+      page++;
+    }
+
+    const occasions = allOccasions;
+    console.log(`✅ Total found: ${occasions.length} occasions in WooCommerce (category: Motoren)`);
 
     // Get existing occasions from Supabase
     const { data: existingOccasions } = await supabase
@@ -290,8 +305,9 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
   };
 
   try {
-    // Fetch products from WooCommerce (excluding Motoren category)
+    // Fetch ALL products from WooCommerce with pagination
     // Query each category separately to reduce memory usage
+    console.log('🔄 Fetching products from WooCommerce with pagination...');
     const allProducts: any[] = [];
     
     // Get all categories except Motoren (ID: 87)
@@ -299,13 +315,25 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
     
     for (const categoryId of categories) {
       try {
-        const categoryProducts = await wooCommerce.getProducts({
-          per_page: 10,
-          category: categoryId.toString(),
-          orderby: 'date',
-          order: 'desc',
-        });
-        allProducts.push(...categoryProducts);
+        let page = 1;
+        let hasMore = true;
+
+        while (hasMore) {
+          const categoryProducts = await wooCommerce.getProducts({
+            per_page: 10,
+            page,
+            category: categoryId.toString(),
+            orderby: 'date',
+            order: 'desc',
+          });
+          
+          allProducts.push(...categoryProducts);
+          console.log(`  📄 Category ${categoryId}, Page ${page}: ${categoryProducts.length} products`);
+
+          // If we got less than per_page, we've reached the end
+          hasMore = categoryProducts.length === 10;
+          page++;
+        }
       } catch (err) {
         console.warn(`Failed to fetch category ${categoryId}:`, err);
       }
