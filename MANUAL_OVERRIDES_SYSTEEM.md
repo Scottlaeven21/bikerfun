@@ -73,7 +73,7 @@ Na volgende WooCommerce sync:
 
 ## 🛠️ Gebruik In Admin Dashboard
 
-### Occasions Bewerken
+### Occasions Bewerken (Automatisch)
 
 ```typescript
 // In /admin/occasions/[id]/edit
@@ -82,6 +82,28 @@ Na volgende WooCommerce sync:
 3. Klik "Opslaan"
 4. ✅ Velden worden automatisch beschermd tegen sync
 ```
+
+### Webshop Products (Handmatig via SQL)
+
+**Let op:** Webshop producten hebben geen edit interface in het admin dashboard.  
+Ze worden puur via WooCommerce sync bijgewerkt.
+
+Als je toch een veld wilt beschermen (bijv. custom prijs), gebruik SQL:
+
+```sql
+-- Voeg manual override toe voor een specifiek product
+UPDATE webshop_products 
+SET manual_overrides = manual_overrides || '["price", "description"]'::jsonb
+WHERE woo_product_id = 123;
+
+-- Of gebruik de helper functie
+SELECT add_manual_override('webshop_products', 
+  (SELECT id FROM webshop_products WHERE woo_product_id = 123), 
+  'price'
+);
+```
+
+**Toekomstige feature:** Edit interface voor webshop_products met automatische tracking.
 
 ### Sync Logging
 

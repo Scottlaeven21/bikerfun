@@ -147,16 +147,41 @@ async function syncOccasions(supabase: any): Promise<SyncResult['occasions']> {
         };
 
         if (existingWooIds.has(product.id)) {
-          const { error } = await supabase
+          // Update existing - but respect manual overrides
+          const { data: existingRecord } = await supabase
             .from('occasions')
-            .update(occasionData)
-            .eq('woo_product_id', product.id);
+            .select('manual_overrides')
+            .eq('woo_product_id', product.id)
+            .single();
 
-          if (error) {
-            console.error(`Failed to update ${product.name}:`, error.message);
-            result.failed++;
+          const manualOverrides = existingRecord?.manual_overrides || [];
+          
+          // Filter out fields that have been manually overridden
+          const updateData: any = {};
+          Object.keys(occasionData).forEach(key => {
+            if (!manualOverrides.includes(key)) {
+              updateData[key] = occasionData[key];
+            }
+          });
+
+          // Only update if there are fields to update
+          if (Object.keys(updateData).length > 0) {
+            const { error } = await supabase
+              .from('occasions')
+              .update(updateData)
+              .eq('woo_product_id', product.id);
+
+            if (error) {
+              console.error(`Failed to update ${product.name}:`, error.message);
+              result.failed++;
+            } else {
+              result.updated++;
+              if (manualOverrides.length > 0) {
+                console.log(`  ⚠️  Skipped ${manualOverrides.length} manually overridden fields`);
+              }
+            }
           } else {
-            result.updated++;
+            console.log(`  ⏭️  All fields manually overridden, skipping update for ${product.name}`);
           }
         } else {
           const { error } = await supabase
@@ -274,16 +299,41 @@ async function syncProducts(supabase: any): Promise<SyncResult['products']> {
         };
 
         if (existingIds.has(product.id)) {
-          const { error } = await supabase
+          // Update existing - but respect manual overrides
+          const { data: existingRecord } = await supabase
             .from('webshop_products')
-            .update(productData)
-            .eq('woo_product_id', product.id);
+            .select('manual_overrides')
+            .eq('woo_product_id', product.id)
+            .single();
 
-          if (error) {
-            console.error(`Failed to update ${product.name}:`, error.message);
-            result.failed++;
+          const manualOverrides = existingRecord?.manual_overrides || [];
+          
+          // Filter out fields that have been manually overridden
+          const updateData: any = {};
+          Object.keys(productData).forEach(key => {
+            if (!manualOverrides.includes(key)) {
+              updateData[key] = productData[key];
+            }
+          });
+
+          // Only update if there are fields to update
+          if (Object.keys(updateData).length > 0) {
+            const { error } = await supabase
+              .from('webshop_products')
+              .update(updateData)
+              .eq('woo_product_id', product.id);
+
+            if (error) {
+              console.error(`Failed to update ${product.name}:`, error.message);
+              result.failed++;
+            } else {
+              result.updated++;
+              if (manualOverrides.length > 0) {
+                console.log(`  ⚠️  Skipped ${manualOverrides.length} manually overridden fields`);
+              }
+            }
           } else {
-            result.updated++;
+            console.log(`  ⏭️  All fields manually overridden, skipping update for ${product.name}`);
           }
         } else {
           const { error } = await supabase

@@ -258,6 +258,8 @@ export interface Database {
           updated_at: string;
           created_by: string | null;
           updated_by: string | null;
+          woo_product_id: number | null;
+          manual_overrides: string[];
         };
         Insert: {
           id?: string;
@@ -289,6 +291,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           updated_by?: string | null;
+          woo_product_id?: number | null;
+          manual_overrides?: string[];
         };
         Update: {
           id?: string;
@@ -320,6 +324,8 @@ export interface Database {
           updated_at?: string;
           created_by?: string | null;
           updated_by?: string | null;
+          woo_product_id?: number | null;
+          manual_overrides?: string[];
         };
       };
       page_views: {
