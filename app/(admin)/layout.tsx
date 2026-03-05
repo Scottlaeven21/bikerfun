@@ -51,6 +51,15 @@ export default async function AdminLayout({
                 <span className="font-medium group-hover:text-biker-yellow transition-colors">Dashboard</span>
               </Link>
               <Link
+                href="/admin/statistics"
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-biker-yellow/20 transition-all group relative"
+              >
+                <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+                <span className="font-medium group-hover:text-biker-yellow transition-colors">Statistieken</span>
+              </Link>
+              <Link
                 href="/admin/occasions"
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-biker-yellow/20 transition-all group relative"
               >
