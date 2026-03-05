@@ -161,45 +161,61 @@ export function StatisticsClient({
 
       {/* Summary Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Totaal Views</span>
-            <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
+        <div className="bg-gradient-to-br from-biker-yellow/10 to-white rounded-xl shadow-lg p-6 border-2 border-biker-yellow hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1 font-medium">Totaal Views</p>
+              <p className="text-3xl font-bold text-gray-900">{data.totalStats.total_views.toLocaleString()}</p>
+            </div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-biker-yellow to-yellow-600 flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.total_views.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Unieke Bezoekers</span>
-            <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
+        <div className="bg-gradient-to-br from-blue-50 to-white rounded-xl shadow-lg p-6 border border-blue-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1 font-medium">Unieke Bezoekers</p>
+              <p className="text-3xl font-bold text-gray-900">{data.totalStats.unique_visitors.toLocaleString()}</p>
+            </div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </div>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.unique_visitors.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Totaal Events</span>
-            <svg className="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-            </svg>
+        <div className="bg-gradient-to-br from-purple-50 to-white rounded-xl shadow-lg p-6 border border-purple-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1 font-medium">Totaal Events</p>
+              <p className="text-3xl font-bold text-gray-900">{data.totalStats.total_events.toLocaleString()}</p>
+            </div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.total_events.toLocaleString()}</div>
         </div>
 
-        <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm font-bold uppercase">Conversie Rate</span>
-            <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+        <div className="bg-gradient-to-br from-green-50 to-white rounded-xl shadow-lg p-6 border border-green-200 hover:shadow-xl transition-shadow">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600 mb-1 font-medium">Conversie Rate</p>
+              <p className="text-3xl font-bold text-gray-900">{data.totalStats.conversion_rate.toFixed(2)}%</p>
+            </div>
+            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
           </div>
-          <div className="text-4xl font-bold text-white">{data.totalStats.conversion_rate.toFixed(2)}%</div>
         </div>
       </div>
 
@@ -447,7 +463,7 @@ export function StatisticsClient({
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right font-bold">
                     {stat.total_views.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-400 text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-biker-yellow text-right font-bold">
                     {stat.unique_visitors.toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
