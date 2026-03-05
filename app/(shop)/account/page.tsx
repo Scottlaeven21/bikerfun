@@ -26,17 +26,12 @@ export default async function AccountPage() {
 
   const profile = profileData as { id: string; full_name?: string; email: string; is_admin?: boolean } | null;
 
-  // Fetch orders
+  // Fetch orders from webshop_orders table (new checkout system)
   const { data: ordersData } = await supabase
-    .from('orders')
-    .select(`
-      *,
-      order_items(
-        *,
-        product:products(*)
-      )
-    `)
-    .eq('user_id', user.id)
+    .from('webshop_orders')
+    .select('*')
+    .eq('email', user.email)
+    .eq('payment_status', 'paid')
     .order('created_at', { ascending: false });
 
   const orders = ordersData as any[] | null;
@@ -122,7 +117,7 @@ export default async function AccountPage() {
                       <div className="flex items-start justify-between mb-4">
                         <div>
                           <p className="text-sm text-gray-600 mb-1">
-                            Bestelling #{order.id.slice(0, 8)}
+                            Bestelling #{order.order_number || order.id.slice(0, 8)}
                           </p>
                           <p className="text-xs text-gray-500">
                             {new Date(order.created_at).toLocaleDateString('nl-NL', {
@@ -134,30 +129,37 @@ export default async function AccountPage() {
                         </div>
                         <div className="text-right">
                           <p className="text-lg font-bold text-biker-yellow">
-                            €{order.total.toFixed(2)}
+                            €{order.total_amount.toFixed(2)}
                           </p>
                           <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                            order.status === 'completed' 
+                            order.payment_status === 'paid' 
                               ? 'bg-green-100 text-green-700' 
-                              : order.status === 'pending'
+                              : order.payment_status === 'pending'
                               ? 'bg-yellow-100 text-yellow-700'
                               : 'bg-gray-200 text-gray-600'
                           }`}>
-                            {order.status === 'completed' ? 'Voltooid' : 
-                             order.status === 'pending' ? 'In behandeling' : order.status}
+                            {order.payment_status === 'paid' ? 'Betaald' : 
+                             order.payment_status === 'pending' ? 'In behandeling' : 
+                             order.payment_status === 'failed' ? 'Mislukt' : order.payment_status}
                           </span>
                         </div>
                       </div>
 
-                      {order.order_items && order.order_items.length > 0 && (
-                        <div className="space-y-2">
-                          {order.order_items.map((item: any) => (
-                            <div key={item.id} className="text-sm text-gray-600">
-                              • {item.product?.name || 'Product'} <span className="text-biker-yellow font-semibold">×{item.quantity}</span>
-                            </div>
-                          ))}
+                      <div className="space-y-2">
+                        <div className="text-sm text-gray-600">
+                          <strong>Verzendadres:</strong> {order.shipping_address_line1}, {order.shipping_postal_code} {order.shipping_city}
                         </div>
-                      )}
+                        {order.cart_items && order.cart_items.length > 0 && (
+                          <div className="mt-3 pt-3 border-t border-gray-200">
+                            <p className="text-xs font-semibold text-gray-700 mb-2 uppercase">Producten:</p>
+                            {order.cart_items.map((item: any, idx: number) => (
+                              <div key={idx} className="text-sm text-gray-600">
+                                • {item.name} <span className="text-biker-yellow font-semibold">×{item.quantity}</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
