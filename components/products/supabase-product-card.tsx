@@ -169,7 +169,7 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
         <button
           onClick={handleAddToCart}
           disabled={isAdding}
-          className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 px-6 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl text-center"
+          className="w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl flex items-center justify-center"
         >
           {isAdding ? '✓ Toegevoegd' : 'Toevoegen'}
         </button>

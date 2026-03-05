@@ -111,10 +111,10 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       </div>
 
       {/* Category Pills */}
-      <div className="mb-8 flex flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
+      <div className="mb-8 grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
         <button
           onClick={() => setSelectedCategory('')}
-          className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center ${
+          className={`px-4 py-2.5 rounded-full font-bold uppercase text-xs tracking-wider transition-all text-center ${
             selectedCategory === ''
               ? 'bg-biker-yellow text-biker-black'
               : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
@@ -126,7 +126,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
           <button
             key={category}
             onClick={() => setSelectedCategory(category)}
-            className={`px-4 md:px-6 py-2 md:py-2.5 rounded-full font-bold uppercase text-xs md:text-sm tracking-wider transition-all text-center whitespace-nowrap ${
+            className={`px-4 py-2.5 rounded-full font-bold uppercase text-xs tracking-wider transition-all text-center ${
               selectedCategory === category
                 ? 'bg-biker-yellow text-biker-black'
                 : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
@@ -141,12 +141,12 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       <div className="mb-6 flex items-center justify-between">
         <button
           onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="flex items-center gap-2 px-6 py-3 bg-white border-2 border-gray-300 rounded-lg hover:border-biker-yellow transition-all shadow-sm"
+          className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-biker-yellow transition-all shadow-sm"
         >
-          <svg className="w-5 h-5 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
-          <span className="font-bold text-biker-black uppercase text-sm tracking-wider">
+          <span className="font-bold text-biker-black uppercase text-xs tracking-wider">
             Filters & Sortering
           </span>
           <svg 
