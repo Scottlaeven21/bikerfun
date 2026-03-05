@@ -142,55 +142,75 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 </div>
               </div>
 
-              {/* Technical Specifications */}
+              {/* Technical Specifications - Only show if there's actual data */}
               <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
                 <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
-                      <div className="text-white font-semibold">{occasion.specs.engine || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
-                      <div className="text-white font-semibold">{occasion.power}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
-                      <div className="text-white font-semibold">{occasion.transmission}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
-                      <div className="text-white font-semibold">{occasion.fuel}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
-                      <div className="text-white font-semibold">{occasion.specs.finalDrive || 'N/A'}</div>
-                    </div>
+                    {occasion.specs?.engine && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
+                        <div className="text-white font-semibold">{occasion.specs.engine}</div>
+                      </div>
+                    )}
+                    {occasion.power && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
+                        <div className="text-white font-semibold">{occasion.power}</div>
+                      </div>
+                    )}
+                    {occasion.transmission && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
+                        <div className="text-white font-semibold">{occasion.transmission}</div>
+                      </div>
+                    )}
+                    {occasion.fuel && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
+                        <div className="text-white font-semibold">{occasion.fuel}</div>
+                      </div>
+                    )}
+                    {occasion.specs?.finalDrive && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
+                        <div className="text-white font-semibold">{occasion.specs.finalDrive}</div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="space-y-4">
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
-                      <div className="text-white font-semibold">{occasion.specs.weight || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
-                      <div className="text-white font-semibold">{occasion.specs.seatHeight || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
-                      <div className="text-white font-semibold">{occasion.specs.tankCapacity || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
-                      <div className="text-white font-semibold">{occasion.specs.topSpeed || 'N/A'}</div>
-                    </div>
-                    <div>
-                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
-                      <div className="text-white font-semibold">{occasion.specs.cooling || 'N/A'}</div>
-                    </div>
+                    {occasion.specs?.weight && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
+                        <div className="text-white font-semibold">{occasion.specs.weight}</div>
+                      </div>
+                    )}
+                    {occasion.specs?.seatHeight && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
+                        <div className="text-white font-semibold">{occasion.specs.seatHeight}</div>
+                      </div>
+                    )}
+                    {occasion.specs?.tankCapacity && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
+                        <div className="text-white font-semibold">{occasion.specs.tankCapacity}</div>
+                      </div>
+                    )}
+                    {occasion.specs?.topSpeed && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
+                        <div className="text-white font-semibold">{occasion.specs.topSpeed}</div>
+                      </div>
+                    )}
+                    {occasion.specs?.cooling && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
+                        <div className="text-white font-semibold">{occasion.specs.cooling}</div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
@@ -242,40 +262,50 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 {/* Header */}
                 <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
 
-                {/* Info List */}
+                {/* Info List - Only show fields with actual data */}
                 <div className="space-y-0 mb-8">
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">KM-stand</span>
-                    <span className="text-white font-bold">
-                      {occasion.mileage && occasion.mileage > 0 
-                        ? `${occasion.mileage.toLocaleString('nl-NL')} km` 
-                        : 'Onbekend'}
-                    </span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Bouwjaar</span>
-                    <span className="text-white font-bold">{occasion.year}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Categorie</span>
-                    <span className="text-white font-bold">{occasion.category || 'Supersport'}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Staat</span>
-                    <span className="text-biker-yellow font-bold">{occasion.condition || 'Zeer goed'}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Eigenaren</span>
-                    <span className="text-white font-bold">{occasion.owners || '2'}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                    <span className="text-white">Onderhoudshistorie</span>
-                    <span className="text-white font-bold">{occasion.service_history || 'Volledig'}</span>
-                  </div>
-                  <div className="flex justify-between items-center py-4">
-                    <span className="text-white">Garantie</span>
-                    <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
-                  </div>
+                  {occasion.mileage && occasion.mileage > 0 && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">KM-stand</span>
+                      <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                    </div>
+                  )}
+                  {occasion.year && occasion.year > 0 && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Bouwjaar</span>
+                      <span className="text-white font-bold">{occasion.year}</span>
+                    </div>
+                  )}
+                  {occasion.category && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Categorie</span>
+                      <span className="text-white font-bold">{occasion.category}</span>
+                    </div>
+                  )}
+                  {occasion.condition && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Staat</span>
+                      <span className="text-biker-yellow font-bold">{occasion.condition}</span>
+                    </div>
+                  )}
+                  {occasion.owners && occasion.owners > 0 && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Eigenaren</span>
+                      <span className="text-white font-bold">{occasion.owners}</span>
+                    </div>
+                  )}
+                  {occasion.service_history && (
+                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                      <span className="text-white">Onderhoudshistorie</span>
+                      <span className="text-white font-bold">{occasion.service_history}</span>
+                    </div>
+                  )}
+                  {occasion.warranty && (
+                    <div className="flex justify-between items-center py-4">
+                      <span className="text-white">Garantie</span>
+                      <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* CTA Buttons - Conditional based on sold status */}
