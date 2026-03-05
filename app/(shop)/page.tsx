@@ -260,7 +260,7 @@ export default async function HomePage() {
               <div className="relative aspect-square overflow-hidden bg-white">
                 <Image
                   src="/product-license-plate-holder-white-bg.jpg"
-                  alt="Kentekenplaathouders"
+                  alt="Kentekenhouder"
                   fill
                   className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
@@ -268,7 +268,7 @@ export default async function HomePage() {
               </div>
               <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
                 <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Kentekenplaathouders
+                  Kentekenhouder
                 </h3>
               </div>
             </Link>
