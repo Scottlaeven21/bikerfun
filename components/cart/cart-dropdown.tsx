@@ -68,7 +68,7 @@ export function CartDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="fixed md:absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto right-auto md:right-0 top-20 md:top-auto mt-0 md:mt-2 w-[90vw] max-w-sm md:w-96 bg-white rounded-lg shadow-2xl z-50 border-2 border-white md:border-gray-200">
+        <div className="fixed md:absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto right-auto md:right-0 top-20 md:top-auto mt-0 md:mt-2 w-[90vw] max-w-sm md:w-96 ml-4 md:ml-0 bg-white rounded-lg shadow-2xl z-50 border-2 border-white md:border-gray-200">
           <div className="p-4 border-b-2 border-gray-100">
             <h3 className="font-bold text-lg text-biker-black">
               Winkelwagen ({itemCount})
