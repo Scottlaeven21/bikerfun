@@ -77,9 +77,11 @@ export function RegisterForm() {
           name="password"
           type="password"
           required
-          minLength={6}
+          minLength={8}
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$"
+          title="Minimaal 8 karakters met hoofdletter, kleine letter en cijfer"
           className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black transition-all"
-          placeholder="Minimaal 6 karakters"
+          placeholder="Minimaal 8 karakters (1 hoofdletter, 1 cijfer)"
         />
       </div>
 

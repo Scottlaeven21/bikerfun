@@ -55,7 +55,7 @@ export async function signup(prevState: any, formData: FormData) {
       return { error: 'Dit e-mailadres is al in gebruik. Probeer in te loggen of gebruik een ander e-mailadres.' };
     }
     if (error.message.includes('password')) {
-      return { error: 'Wachtwoord is te zwak. Gebruik minimaal 6 karakters.' };
+      return { error: 'Wachtwoord is te zwak. Gebruik minimaal 8 karakters met een hoofdletter, kleine letter en cijfer.' };
     }
     if (error.message.includes('email')) {
       return { error: 'Voer een geldig e-mailadres in.' };
