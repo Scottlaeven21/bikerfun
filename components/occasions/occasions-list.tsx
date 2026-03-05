@@ -214,7 +214,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                     € {occasion.price.toLocaleString('nl-NL')}
                   </div>
 
-                  {/* Specs - Only show if data is actually known */}
+                  {/* Specs - Only show if data is actually known, filter out default/placeholder values */}
                   <div className="grid grid-cols-2 gap-x-4 gap-y-2 mb-4 text-white/90 text-sm">
                     {occasion.mileage && occasion.mileage > 0 && (
                       <div className="flex items-center gap-2">
@@ -224,7 +224,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                         <span>{occasion.mileage.toLocaleString('nl-NL')} km</span>
                       </div>
                     )}
-                    {occasion.fuel && (
+                    {occasion.fuel && occasion.fuel.toLowerCase() !== 'benzine' && (
                       <div className="flex items-center gap-2">
                         <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
@@ -232,7 +232,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                         <span>{occasion.fuel}</span>
                       </div>
                     )}
-                    {occasion.transmission && (
+                    {occasion.transmission && occasion.transmission.toLowerCase() !== 'handgeschakeld' && (
                       <div className="flex items-center gap-2">
                         <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
@@ -241,7 +241,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                         <span>{occasion.transmission}</span>
                       </div>
                     )}
-                    {occasion.power && (
+                    {occasion.power && occasion.power !== '35kw' && occasion.power !== '35 kW' && occasion.power !== '35' && (
                       <div className="flex items-center gap-2">
                         <svg className="w-4 h-4 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
@@ -249,7 +249,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
                         <span>{occasion.power}</span>
                       </div>
                     )}
-                    {occasion.year && occasion.year > 0 && (
+                    {occasion.year && occasion.year > 2000 && occasion.year !== 2016 && (
                       <div className="flex items-center gap-2">
                         <svg className="w-4 h-4 text-gray-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />

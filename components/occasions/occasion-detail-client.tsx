@@ -142,7 +142,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 </div>
               </div>
 
-              {/* Technical Specifications - Only show if there's actual data */}
+              {/* Technical Specifications - Only show if there's actual data, filter defaults */}
               <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
                 <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
                 
@@ -154,19 +154,19 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                         <div className="text-white font-semibold">{occasion.specs.engine}</div>
                       </div>
                     )}
-                    {occasion.power && (
+                    {occasion.power && occasion.power !== '35kw' && occasion.power !== '35 kW' && occasion.power !== '35' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
                         <div className="text-white font-semibold">{occasion.power}</div>
                       </div>
                     )}
-                    {occasion.transmission && (
+                    {occasion.transmission && occasion.transmission.toLowerCase() !== 'handgeschakeld' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
                         <div className="text-white font-semibold">{occasion.transmission}</div>
                       </div>
                     )}
-                    {occasion.fuel && (
+                    {occasion.fuel && occasion.fuel.toLowerCase() !== 'benzine' && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
                         <div className="text-white font-semibold">{occasion.fuel}</div>
@@ -262,7 +262,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 {/* Header */}
                 <h3 className="text-xl font-bold text-white mb-6">INFORMATIE</h3>
 
-                {/* Info List - Only show fields with actual data */}
+                {/* Info List - Only show fields with actual data, filter default values */}
                 <div className="space-y-0 mb-8">
                   {occasion.mileage && occasion.mileage > 0 && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
@@ -270,7 +270,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
                     </div>
                   )}
-                  {occasion.year && occasion.year > 0 && (
+                  {occasion.year && occasion.year > 2000 && occasion.year !== 2016 && (
                     <div className="flex justify-between items-center py-4 border-b border-gray-800">
                       <span className="text-white">Bouwjaar</span>
                       <span className="text-white font-bold">{occasion.year}</span>
