@@ -12,6 +12,11 @@ export async function trackPageView(pagePath: string, pageTitle?: string) {
     const userAgent = headersList.get('user-agent') || '';
     const referrer = headersList.get('referer') || '';
     
+    // Get IP address from headers
+    const forwarded = headersList.get('x-forwarded-for');
+    const realIp = headersList.get('x-real-ip');
+    const ipAddress = forwarded ? forwarded.split(',')[0].trim() : (realIp || 'unknown');
+    
     // Determine device type from user agent
     const deviceType = /mobile/i.test(userAgent) ? 'mobile' : 
                       /tablet/i.test(userAgent) ? 'tablet' : 'desktop';
@@ -23,6 +28,7 @@ export async function trackPageView(pagePath: string, pageTitle?: string) {
       referrer,
       user_agent: userAgent,
       device_type: deviceType,
+      ip_address: ipAddress,
     });
 
     return { success: true };
@@ -39,12 +45,19 @@ export async function trackEvent(eventName: string, eventData?: Record<string, a
     const headersList = await headers();
     
     const userAgent = headersList.get('user-agent') || '';
+    
+    // Get IP address from headers
+    const forwarded = headersList.get('x-forwarded-for');
+    const realIp = headersList.get('x-real-ip');
+    const ipAddress = forwarded ? forwarded.split(',')[0].trim() : (realIp || 'unknown');
 
     // Cast to any to avoid TypeScript errors before migration is run
     await (supabase as any).from('analytics_events').insert({
       event_name: eventName,
       event_data: eventData || {},
       user_agent: userAgent,
+      ip_address: ipAddress,
+      page_path: typeof window !== 'undefined' ? window.location.pathname : null,
     });
 
     return { success: true };
@@ -61,11 +74,17 @@ export async function trackOccasionView(occasionId: string) {
     const headersList = await headers();
     
     const userAgent = headersList.get('user-agent') || '';
+    
+    // Get IP address from headers
+    const forwarded = headersList.get('x-forwarded-for');
+    const realIp = headersList.get('x-real-ip');
+    const ipAddress = forwarded ? forwarded.split(',')[0].trim() : (realIp || 'unknown');
 
     // Cast to any to avoid TypeScript errors before migration is run
     await (supabase as any).from('occasion_views').insert({
       occasion_id: occasionId,
       user_agent: userAgent,
+      ip_address: ipAddress,
     });
 
     return { success: true };
