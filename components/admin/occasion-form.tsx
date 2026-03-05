@@ -252,7 +252,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         });
         
         // Get current manual overrides and add new changed fields
-        const currentOverrides = occasion.manual_overrides || [];
+        const currentOverrides = (occasion as any).manual_overrides || [];
         const newOverrides = Array.from(new Set([...currentOverrides, ...changedFields]));
         
         // Update occasion with manual_overrides tracking

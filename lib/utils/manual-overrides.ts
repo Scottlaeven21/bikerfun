@@ -27,7 +27,7 @@ export async function getManualOverrides(
     return [];
   }
   
-  return data?.manual_overrides || [];
+  return (data as any)?.manual_overrides || [];
 }
 
 /**
