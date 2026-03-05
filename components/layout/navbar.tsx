@@ -70,8 +70,10 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Aanbod Button - Hidden on mobile when shop icons are shown */}
               <Link
                 href="/occasions"
-                className={`btn-secondary bg-transparent text-white px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white ${
-                  showShopIcons ? 'hidden md:inline-block' : ''
+                className={`btn-secondary bg-transparent px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 ${
+                  showShopIcons 
+                    ? 'hidden md:inline-block text-biker-black border-biker-black' 
+                    : 'text-white border-white'
                 }`}
               >
                 AANBOD
