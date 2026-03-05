@@ -43,11 +43,11 @@ export function CartDropdown() {
       {/* Cart Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-3 hover:bg-biker-gray/10 rounded-full transition-colors"
+        className="relative p-3 hover:bg-biker-gray/10 rounded-full transition-colors text-biker-black md:text-white"
         aria-label="Winkelwagen"
       >
         <svg
-          className="w-6 h-6 text-white"
+          className="w-6 h-6"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
