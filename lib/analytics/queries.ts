@@ -59,12 +59,13 @@ export async function getDetailedAnalytics(
 
   const dailyStats: DailyStats[] = dailyData || [];
 
-  // Get page views grouped by page
+  // Get page views grouped by page - removed row limit
   const { data: pageViewsData } = await (supabase as any)
     .from('page_views')
     .select('page_path, ip_address')
     .gte('created_at', start)
-    .lte('created_at', end);
+    .lte('created_at', end)
+    .limit(100000); // Increase limit to handle more data
 
   const pageViewsMap = new Map<string, Set<string>>();
   pageViewsData?.forEach((view: any) => {
@@ -90,7 +91,8 @@ export async function getDetailedAnalytics(
     .from('analytics_events')
     .select('event_name')
     .gte('created_at', start)
-    .lte('created_at', end);
+    .lte('created_at', end)
+    .limit(100000); // Increase limit to handle more data
 
   const eventCounts = new Map<string, number>();
   eventsData?.forEach((event: any) => {
@@ -107,7 +109,8 @@ export async function getDetailedAnalytics(
     .from('page_views')
     .select('device_type')
     .gte('created_at', start)
-    .lte('created_at', end);
+    .lte('created_at', end)
+    .limit(100000); // Increase limit to handle more data
 
   const deviceBreakdown = {
     mobile: deviceData?.filter((d: any) => d.device_type === 'mobile').length || 0,
@@ -120,7 +123,8 @@ export async function getDetailedAnalytics(
     .from('page_views')
     .select('referrer')
     .gte('created_at', start)
-    .lte('created_at', end);
+    .lte('created_at', end)
+    .limit(100000); // Increase limit to handle more data
 
   const referrerCounts = new Map<string, number>();
   referrerData?.forEach((r: any) => {
