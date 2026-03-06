@@ -159,7 +159,7 @@ export default function CartPage() {
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>Verzending (NL)</span>
-                  <span className="font-semibold text-biker-yellow">{shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`}</span>
+                  <span className="font-semibold text-green-600">Gratis</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
                   <span>BTW (21%)</span>
@@ -191,9 +191,11 @@ export default function CartPage() {
                 <h3 className="font-semibold text-biker-black mb-3 uppercase text-sm tracking-wider">
                   Veilig betalen met:
                 </h3>
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
-                  <span>🔒</span>
-                  <span>Stripe - Veilige betalingen</span>
+                <div className="flex items-center space-x-3">
+                  <svg width="80" height="32" viewBox="0 0 200 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M100.2 21.7h7.8v23.1h-7.8V21.7zm32.1 0v23.1h-7.2v-2.8c-1.6 2.2-4.4 3.5-7.6 3.5-6.6 0-11.9-5.4-11.9-12.3s5.3-12.3 11.9-12.3c3.2 0 6 1.3 7.6 3.5v-2.7h7.2zm-18.9 11.5c0 3.4 2.7 6.2 6.2 6.2s6.2-2.8 6.2-6.2-2.7-6.2-6.2-6.2-6.2 2.8-6.2 6.2zm-28.3-11.5c3.2 0 6 1.3 7.6 3.5v-2.7h7.2v23.1h-7.2v-2.8c-1.6 2.2-4.4 3.5-7.6 3.5-6.6 0-11.9-5.4-11.9-12.3s5.3-12.3 11.9-12.3zm.9 18.5c3.5 0 6.2-2.8 6.2-6.2s-2.7-6.2-6.2-6.2-6.2 2.8-6.2 6.2 2.8 6.2 6.2 6.2zm-24.5-18.5c3.2 0 6 1.3 7.6 3.5v-2.7h7.2v23.1h-7.2v-2.8c-1.6 2.2-4.4 3.5-7.6 3.5-6.6 0-11.9-5.4-11.9-12.3s5.3-12.3 11.9-12.3zm.9 18.5c3.5 0 6.2-2.8 6.2-6.2s-2.7-6.2-6.2-6.2-6.2 2.8-6.2 6.2 2.8 6.2 6.2 6.2zM36.8 21.7c6.6 0 11.9 5.4 11.9 12.3 0 6.9-5.3 12.3-11.9 12.3-3.2 0-6-1.3-7.6-3.5v11.8h-7.2V21.7h7.2v2.8c1.6-2.3 4.4-3.5 7.6-3.5zm-.9 18.5c3.5 0 6.2-2.8 6.2-6.2s-2.7-6.2-6.2-6.2-6.2 2.8-6.2 6.2 2.7 6.2 6.2 6.2z" fill="#0D1B2A"/>
+                    <path d="M170.8 45.5c-6.6 0-11.9-5.4-11.9-12.3s5.3-12.3 11.9-12.3c3.2 0 6 1.3 7.6 3.5v-2.7h7.2v23.1h-7.2v-2.8c-1.6 2.2-4.4 3.5-7.6 3.5zm.9-6.3c3.5 0 6.2-2.8 6.2-6.2s-2.7-6.2-6.2-6.2-6.2 2.8-6.2 6.2 2.8 6.2 6.2 6.2zM145.9 21.7v23.1h-7.8V21.7h7.8z" fill="#0D1B2A"/>
+                  </svg>
                 </div>
               </div>
             </div>
