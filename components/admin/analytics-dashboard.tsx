@@ -74,10 +74,15 @@ export function AnalyticsDashboard() {
         <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
           <div className="flex items-center justify-between mb-2">
             <span className="text-biker-light text-sm font-bold uppercase tracking-wider">Vandaag</span>
-            <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
+            <div className="relative group">
+              <svg className="w-6 h-6 text-biker-yellow cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <div className="absolute right-0 top-8 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-biker-yellow">
+                Aantal pagina weergaven vandaag
+              </div>
+            </div>
           </div>
           <div className="text-4xl font-bold text-white mb-1">{data.views.today}</div>
           <div className={`text-sm ${changeColor} font-medium`}>
@@ -89,9 +94,14 @@ export function AnalyticsDashboard() {
         <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
           <div className="flex items-center justify-between mb-2">
             <span className="text-biker-light text-sm font-bold uppercase tracking-wider">Deze Week</span>
-            <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-            </svg>
+            <div className="relative group">
+              <svg className="w-6 h-6 text-biker-yellow cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <div className="absolute right-0 top-8 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-biker-yellow">
+                Totaal pagina weergaven in de laatste 7 dagen
+              </div>
+            </div>
           </div>
           <div className="text-4xl font-bold text-white mb-1">{data.views.week}</div>
           <div className="text-sm text-biker-light">
@@ -103,9 +113,14 @@ export function AnalyticsDashboard() {
         <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
           <div className="flex items-center justify-between mb-2">
             <span className="text-biker-light text-sm font-bold uppercase tracking-wider">Deze Maand</span>
-            <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-            </svg>
+            <div className="relative group">
+              <svg className="w-6 h-6 text-biker-yellow cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+              <div className="absolute right-0 top-8 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-biker-yellow">
+                Totaal pagina weergaven in de laatste 30 dagen
+              </div>
+            </div>
           </div>
           <div className="text-4xl font-bold text-white mb-1">{data.views.month}</div>
           <div className="text-sm text-biker-light">
@@ -117,9 +132,14 @@ export function AnalyticsDashboard() {
         <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
           <div className="flex items-center justify-between mb-2">
             <span className="text-biker-light text-sm font-bold uppercase tracking-wider">Conversies</span>
-            <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
+            <div className="relative group">
+              <svg className="w-6 h-6 text-green-500 cursor-help" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div className="absolute right-0 top-8 w-52 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-green-500">
+                Totaal aantal contactformulier inzendingen en motor op aanvraag formulieren van de laatste 30 dagen
+              </div>
+            </div>
           </div>
           <div className="text-4xl font-bold text-white mb-1">{data.conversions.total}</div>
           <div className="text-sm text-biker-light">

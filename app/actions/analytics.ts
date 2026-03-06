@@ -159,7 +159,8 @@ export async function getAnalyticsData() {
     const { data: topOccasions } = await supabase
       .from('occasion_views')
       .select('occasion_id, occasions(brand, model, main_image)')
-      .gte('created_at', lastMonth.toISOString());
+      .gte('created_at', lastMonth.toISOString())
+      .limit(100000);
 
     // Count views per occasion
     const occasionViewCounts: Record<string, number> = {};
@@ -182,11 +183,12 @@ export async function getAnalyticsData() {
         };
       });
 
-    // Device breakdown
+    // Device breakdown - increase limit to handle more data
     const { data: deviceData } = await supabase
       .from('page_views')
       .select('device_type')
-      .gte('created_at', lastMonth.toISOString());
+      .gte('created_at', lastMonth.toISOString())
+      .limit(100000);
 
     const deviceBreakdown = {
       mobile: deviceData?.filter((d: any) => d.device_type === 'mobile').length || 0,

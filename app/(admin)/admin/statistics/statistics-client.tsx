@@ -167,11 +167,16 @@ export function StatisticsClient({
               <p className="text-sm text-gray-600 mb-1 font-medium">Totaal Views</p>
               <p className="text-3xl font-bold text-gray-900">{data.totalStats.total_views.toLocaleString()}</p>
             </div>
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-biker-yellow to-yellow-600 flex items-center justify-center shadow-lg">
-              <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
+            <div className="relative group">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-biker-yellow to-yellow-600 flex items-center justify-center shadow-lg cursor-help">
+                <svg className="w-7 h-7 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              </div>
+              <div className="absolute right-0 top-16 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-biker-yellow">
+                Totaal aantal pagina weergaven in de geselecteerde periode
+              </div>
             </div>
           </div>
         </div>
@@ -182,10 +187,15 @@ export function StatisticsClient({
               <p className="text-sm text-gray-600 mb-1 font-medium">Unieke Bezoekers</p>
               <p className="text-3xl font-bold text-gray-900">{data.totalStats.unique_visitors.toLocaleString()}</p>
             </div>
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-              </svg>
+            <div className="relative group">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center shadow-lg cursor-help">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </div>
+              <div className="absolute right-0 top-16 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-blue-400">
+                Aantal unieke bezoekers gebaseerd op IP-adressen in de geselecteerde periode
+              </div>
             </div>
           </div>
         </div>
@@ -196,10 +206,15 @@ export function StatisticsClient({
               <p className="text-sm text-gray-600 mb-1 font-medium">Totaal Events</p>
               <p className="text-3xl font-bold text-gray-900">{data.totalStats.total_events.toLocaleString()}</p>
             </div>
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-lg">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+            <div className="relative group">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 flex items-center justify-center shadow-lg cursor-help">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                </svg>
+              </div>
+              <div className="absolute right-0 top-16 w-48 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-purple-400">
+                Totaal aantal geregistreerde gebruikersacties zoals klikken en formulier inzendingen
+              </div>
             </div>
           </div>
         </div>
@@ -210,10 +225,15 @@ export function StatisticsClient({
               <p className="text-sm text-gray-600 mb-1 font-medium">Conversie Rate</p>
               <p className="text-3xl font-bold text-gray-900">{data.totalStats.conversion_rate.toFixed(2)}%</p>
             </div>
-            <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg">
-              <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="relative group">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-400 to-green-600 flex items-center justify-center shadow-lg cursor-help">
+                <svg className="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <div className="absolute right-0 top-16 w-52 bg-gray-900 text-white text-xs rounded-lg p-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-10 shadow-xl border border-green-400">
+                Percentage bezoekers dat een actie heeft voltooid (contact of motor aanvraag)
+              </div>
             </div>
           </div>
         </div>
