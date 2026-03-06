@@ -351,39 +351,39 @@ export function StatisticsClient({
           <table className="w-full">
             <thead className="bg-biker-black border-b-2 border-biker-gray">
               <tr>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                   #
                 </th>
-                <th className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-4 text-left text-xs font-bold text-white uppercase tracking-wider">
                   Pagina
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">
                   Views
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">
                   Unieke Bezoekers
                 </th>
-                <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">
+                <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">
                   Views/Bezoeker
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-biker-gray">
               {data.topPages.map((page, index) => (
-                <tr key={page.page_path} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                <tr key={page.page_path} className="hover:bg-biker-black/30 transition-colors">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                     {index + 1}
                   </td>
-                  <td className="px-6 py-4 text-sm text-gray-900 font-medium">
+                  <td className="px-6 py-4 text-sm text-white font-medium">
                     {page.page_path || '/'}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right font-bold">
                     {page.views.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-blue-600 text-right font-bold">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-biker-yellow text-right font-bold">
                     {page.unique_visitors.toLocaleString()}
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 text-right">
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
                     {(page.views / page.unique_visitors).toFixed(1)}
                   </td>
                 </tr>
