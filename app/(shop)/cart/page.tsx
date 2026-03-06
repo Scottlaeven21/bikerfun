@@ -191,14 +191,8 @@ export default function CartPage() {
                 <h3 className="font-semibold text-biker-black mb-3 uppercase text-sm tracking-wider">
                   Veilig betalen met:
                 </h3>
-                <div className="flex items-center space-x-3">
-                  <Image
-                    src="/mollie-logo.png"
-                    alt="Mollie"
-                    width={90}
-                    height={36}
-                    className="object-contain"
-                  />
+                <div className="flex items-center gap-2 text-gray-600">
+                  <span className="text-2xl font-bold" style={{ color: '#0A2540', fontFamily: 'system-ui, -apple-system, sans-serif' }}>mollie</span>
                 </div>
               </div>
             </div>
