@@ -26,15 +26,28 @@ export default async function InzendingenPage() {
     redirect('/');
   }
 
-  const { data: submissions } = await (supabase as any)
-    .from('form_submissions')
-    .select('*')
-    .order('created_at', { ascending: false })
-    .limit(500);
+  let contactSubmissions: any[] = [];
+  let motorSubmissions: any[] = [];
+  let bezichtigingSubmissions: any[] = [];
+  let dbError: string | null = null;
 
-  const contactSubmissions = submissions?.filter((s: any) => s.type === 'contact') || [];
-  const motorSubmissions = submissions?.filter((s: any) => s.type === 'motor_aanvraag') || [];
-  const bezichtigingSubmissions = submissions?.filter((s: any) => s.type === 'bezichtiging') || [];
+  try {
+    const { data: submissions, error } = await (supabase as any)
+      .from('form_submissions')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(500);
+
+    if (error) {
+      dbError = error.message;
+    } else {
+      contactSubmissions = submissions?.filter((s: any) => s.type === 'contact') || [];
+      motorSubmissions = submissions?.filter((s: any) => s.type === 'motor_aanvraag') || [];
+      bezichtigingSubmissions = submissions?.filter((s: any) => s.type === 'bezichtiging') || [];
+    }
+  } catch (err) {
+    dbError = err instanceof Error ? err.message : 'Databasefout bij laden inzendingen';
+  }
 
   const formSections = [
     {
@@ -131,6 +144,16 @@ export default async function InzendingenPage() {
           Alle formulierinzendingen per type
         </p>
       </div>
+
+      {dbError && (
+        <div className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+          <p className="font-semibold text-amber-800">Database niet gevonden</p>
+          <p className="text-sm text-amber-700 mt-1">
+            Voer de SQL uit Supabase uit zoals beschreven in INZENDINGEN_SETUP.md. Tabel: form_submissions
+          </p>
+          <p className="text-xs text-amber-600 mt-2 font-mono">{dbError}</p>
+        </div>
+      )}
 
       <div className="space-y-8">
         {formSections.map((section) => (
