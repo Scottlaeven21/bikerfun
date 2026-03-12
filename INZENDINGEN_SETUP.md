@@ -2,17 +2,20 @@
 
 ## Overzicht
 
-De admin heeft nu een **Inzendingen** tab waar alle contactformulier en motor op aanvraag inzendingen worden getoond. Dit is handig omdat de mailing nog niet werkt - alle inzendingen worden nu opgeslagen in de database.
+De admin heeft een **Inzendingen** tab waar alle formulierinzendingen per type worden getoond:
+- **Contactformulier** - Algemene contactberichten
+- **Bezichtiging inplannen** - Aanvragen voor een specifieke occasion
+- **Motor op aanvraag** - Algemene motor zoekopdrachten
 
 ## Database Migratie
 
 Voer de migratie uit via **Supabase Dashboard** → **SQL Editor**:
 
 ```sql
--- Form submissions table for contact and motor aanvraag forms
+-- Form submissions table
 CREATE TABLE IF NOT EXISTS form_submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  type TEXT NOT NULL CHECK (type IN ('contact', 'motor_aanvraag')),
+  type TEXT NOT NULL CHECK (type IN ('contact', 'motor_aanvraag', 'bezichtiging')),
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone TEXT,
@@ -36,11 +39,17 @@ CREATE POLICY "Allow authenticated reads on form_submissions" ON form_submission
   FOR SELECT TO authenticated USING (true);
 ```
 
-Of voer de migratie uit: `supabase/migrations/023_create_form_submissions.sql`
+**Als je de tabel al hebt:** voer alleen dit uit om het type 'bezichtiging' toe te voegen:
+```sql
+ALTER TABLE form_submissions DROP CONSTRAINT IF EXISTS form_submissions_type_check;
+ALTER TABLE form_submissions ADD CONSTRAINT form_submissions_type_check 
+  CHECK (type IN ('contact', 'motor_aanvraag', 'bezichtiging'));
+```
 
-## Wat er werkt
+## Form types
 
-- **Contactformulier** - Alle inzendingen worden opgeslagen met naam, email, telefoon, onderwerp en bericht
-- **Motor op Aanvraag** - Alle aanvragen worden opgeslagen inclusief motor details
-- **Admin Inzendingen** - Bekijk alle inzendingen via Admin → Inzendingen
-- Inzendingen worden altijd opgeslagen, ook als de email niet werkt
+| Type | Bron |
+|------|------|
+| contact | Contactpagina formulier |
+| bezichtiging | "Plan Bezichtiging" op occasion pagina |
+| motor_aanvraag | "Motor op Aanvraag" algemene pagina |

@@ -12,7 +12,7 @@ import {
 } from '@/lib/email/templates';
 
 async function saveFormSubmission(data: {
-  type: 'contact' | 'motor_aanvraag';
+  type: 'contact' | 'motor_aanvraag' | 'bezichtiging';
   name: string;
   email: string;
   phone?: string;
@@ -169,8 +169,9 @@ export async function sendMotorAanvraagEmail({
     }
 
     // Always save to DB first (mailing may not work yet)
+    // Bezichtiging = specific occasion, Motor aanvraag = general search
     await saveFormSubmission({
-      type: 'motor_aanvraag',
+      type: motorDetails ? 'bezichtiging' : 'motor_aanvraag',
       name,
       email,
       phone,

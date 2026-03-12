@@ -3,7 +3,7 @@
 
 CREATE TABLE IF NOT EXISTS form_submissions (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  type TEXT NOT NULL CHECK (type IN ('contact', 'motor_aanvraag')),
+  type TEXT NOT NULL CHECK (type IN ('contact', 'motor_aanvraag', 'bezichtiging')),
   name TEXT NOT NULL,
   email TEXT NOT NULL,
   phone TEXT,
