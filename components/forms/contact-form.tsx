@@ -13,11 +13,13 @@ export function ContactForm() {
   async function handleSubmit(formData: FormData) {
     setMessage(null);
 
+    const subject = formData.get('subject') as string;
     const data = {
       name: formData.get('name') as string,
       email: formData.get('email') as string,
       phone: formData.get('phone') as string || undefined,
-      message: `${formData.get('subject') ? `Onderwerp: ${formData.get('subject')}\n\n` : ''}${formData.get('message')}`,
+      message: `${subject ? `Onderwerp: ${subject}\n\n` : ''}${formData.get('message')}`,
+      subject: subject || undefined,
     };
 
     startTransition(async () => {

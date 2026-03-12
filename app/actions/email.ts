@@ -2,12 +2,43 @@
 
 // Server Actions for sending emails
 
+import { headers } from 'next/headers';
+import { createClient } from '@/lib/supabase/server';
 import { sendEmail, getToEmail, isEmailConfigured } from '@/lib/email/client';
 import {
   contactFormEmail,
   motorAanvraagEmail,
   contactAutoReplyEmail,
 } from '@/lib/email/templates';
+
+async function saveFormSubmission(data: {
+  type: 'contact' | 'motor_aanvraag';
+  name: string;
+  email: string;
+  phone?: string;
+  message: string;
+  subject?: string;
+  motor_details?: object;
+}) {
+  const supabase = await createClient();
+  const headersList = await headers();
+  const forwarded = headersList.get('x-forwarded-for');
+  const realIp = headersList.get('x-real-ip');
+  const referrer = headersList.get('referer') || '';
+
+  let pagePath: string | null = null;
+  try {
+    if (referrer) pagePath = new URL(referrer).pathname;
+  } catch {
+    // Invalid URL, ignore
+  }
+
+  await (supabase as any).from('form_submissions').insert({
+    ...data,
+    ip_address: forwarded ? forwarded.split(',')[0].trim() : realIp || null,
+    page_path: pagePath,
+  });
+}
 
 /**
  * Send contact form email
@@ -17,21 +48,15 @@ export async function sendContactEmail({
   email,
   phone,
   message,
+  subject,
 }: {
   name: string;
   email: string;
   phone?: string;
   message: string;
+  subject?: string;
 }) {
   try {
-    if (!isEmailConfigured()) {
-      console.error('Email not configured');
-      return {
-        success: false,
-        error: 'Email service is momenteel niet beschikbaar. Probeer het later opnieuw of bel ons direct.',
-      };
-    }
-
     // Validation
     if (!name || !email || !message) {
       return {
@@ -49,6 +74,23 @@ export async function sendContactEmail({
       };
     }
 
+    // Always save to DB first (mailing may not work yet)
+    await saveFormSubmission({
+      type: 'contact',
+      name,
+      email,
+      phone,
+      message,
+      subject,
+    });
+
+    if (!isEmailConfigured()) {
+      return {
+        success: true,
+        message: 'Bericht ontvangen! We nemen zo snel mogelijk contact met je op.',
+      };
+    }
+
     // Generate email content
     const emailContent = contactFormEmail({ name, email, phone, message });
 
@@ -61,8 +103,8 @@ export async function sendContactEmail({
 
     if (!result.success) {
       return {
-        success: false,
-        error: 'Er is iets misgegaan bij het versturen. Probeer het opnieuw.',
+        success: true,
+        message: 'Bericht ontvangen! We nemen zo snel mogelijk contact met je op.',
       };
     }
 
@@ -109,16 +151,6 @@ export async function sendMotorAanvraagEmail({
   };
 }) {
   try {
-    console.log('Motor aanvraag received:', { name, email, hasMotorDetails: !!motorDetails });
-
-    if (!isEmailConfigured()) {
-      console.error('Email not configured');
-      return {
-        success: false,
-        error: 'Email service is momenteel niet beschikbaar. Probeer het later opnieuw of bel ons direct: 06 16 29 86 84',
-      };
-    }
-
     // Validation
     if (!name || !email || !message) {
       return {
@@ -136,6 +168,23 @@ export async function sendMotorAanvraagEmail({
       };
     }
 
+    // Always save to DB first (mailing may not work yet)
+    await saveFormSubmission({
+      type: 'motor_aanvraag',
+      name,
+      email,
+      phone,
+      message,
+      motor_details: motorDetails || undefined,
+    });
+
+    if (!isEmailConfigured()) {
+      return {
+        success: true,
+        message: 'Aanvraag ontvangen! We nemen zo snel mogelijk contact met je op.',
+      };
+    }
+
     // Generate email content
     const emailContent = motorAanvraagEmail({
       name,
@@ -145,8 +194,6 @@ export async function sendMotorAanvraagEmail({
       motorDetails: motorDetails || undefined,
     });
 
-    console.log('Sending email to:', getToEmail());
-
     // Send to business
     const result = await sendEmail({
       to: getToEmail(),
@@ -155,14 +202,11 @@ export async function sendMotorAanvraagEmail({
     });
 
     if (!result.success) {
-      console.error('Failed to send email:', result.error);
       return {
-        success: false,
-        error: 'Er is iets misgegaan bij het versturen. Probeer het opnieuw of bel ons: 06 16 29 86 84',
+        success: true,
+        message: 'Aanvraag ontvangen! We nemen zo snel mogelijk contact met je op.',
       };
     }
-
-    console.log('Email sent successfully, sending auto-reply...');
 
     // Send auto-reply to customer
     try {
@@ -172,10 +216,8 @@ export async function sendMotorAanvraagEmail({
         subject: autoReply.subject,
         html: autoReply.html,
       });
-      console.log('Auto-reply sent successfully');
     } catch (autoReplyError) {
       console.error('Auto-reply failed (non-critical):', autoReplyError);
-      // Don't fail the whole request if auto-reply fails
     }
 
     return {
