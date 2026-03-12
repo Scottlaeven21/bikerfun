@@ -28,10 +28,60 @@ interface InzendingenTableProps {
   submissions: FormSubmission[];
   type: 'contact' | 'motor_aanvraag' | 'bezichtiging';
   columns: string[];
-  renderRow: (sub: FormSubmission) => React.ReactNode;
 }
 
-export function InzendingenTable({ submissions, type, columns, renderRow }: InzendingenTableProps) {
+function renderRowCells(sub: FormSubmission, type: 'contact' | 'motor_aanvraag' | 'bezichtiging') {
+  const motor = sub.motor_details as { brand?: string; model?: string } | null;
+  const motorStr = motor ? `${motor.brand || ''} ${motor.model || ''}`.trim() : '-';
+
+  const base = (
+    <>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+        {format(new Date(sub.created_at), 'dd MMM yyyy HH:mm', { locale: nl })}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{sub.name}</td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm">
+        <a href={`mailto:${sub.email}`} className="text-biker-yellow hover:underline">{sub.email}</a>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sub.phone || '-'}</td>
+    </>
+  );
+
+  if (type === 'contact') {
+    return (
+      <>
+        {base}
+        <td className="px-6 py-4 text-sm text-gray-600">{sub.subject || '-'}</td>
+        <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
+          <span className="line-clamp-2">{sub.message}</span>
+        </td>
+      </>
+    );
+  }
+
+  if (type === 'bezichtiging') {
+    return (
+      <>
+        {base}
+        <td className="px-6 py-4 text-sm text-gray-600 font-medium">{motorStr}</td>
+        <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
+          <span className="line-clamp-2">{sub.message}</span>
+        </td>
+      </>
+    );
+  }
+
+  return (
+    <>
+      {base}
+      <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
+        <span className="line-clamp-2">{sub.message}</span>
+      </td>
+    </>
+  );
+}
+
+export function InzendingenTable({ submissions, type, columns }: InzendingenTableProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
   const toggleExpand = (id: string) => {
@@ -111,7 +161,7 @@ export function InzendingenTable({ submissions, type, columns, renderRow }: Inze
                   className="hover:bg-gray-50 cursor-pointer transition-colors"
                   onClick={() => toggleExpand(sub.id)}
                 >
-                  {renderRow(sub)}
+                  {renderRowCells(sub, type)}
                   <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
                     <button
                       type="button"

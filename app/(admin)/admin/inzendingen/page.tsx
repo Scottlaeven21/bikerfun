@@ -1,7 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
-import { format } from 'date-fns';
-import { nl } from 'date-fns/locale';
 import { InzendingenTable } from '@/components/admin/inzendingen-table';
 
 export const dynamic = 'force-dynamic';
@@ -51,7 +49,7 @@ export default async function InzendingenPage() {
 
   const formSections = [
     {
-      id: 'contact',
+      id: 'contact' as const,
       title: 'Contactformulier',
       icon: (
         <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -60,25 +58,9 @@ export default async function InzendingenPage() {
       ),
       data: contactSubmissions,
       columns: ['Datum', 'Naam', 'Email', 'Telefoon', 'Onderwerp', 'Bericht'],
-      renderRow: (sub: any) => (
-        <>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {format(new Date(sub.created_at), 'dd MMM yyyy HH:mm', { locale: nl })}
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{sub.name}</td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm">
-            <a href={`mailto:${sub.email}`} className="text-biker-yellow hover:underline">{sub.email}</a>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sub.phone || '-'}</td>
-          <td className="px-6 py-4 text-sm text-gray-600">{sub.subject || '-'}</td>
-          <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
-            <span className="line-clamp-2">{sub.message}</span>
-          </td>
-        </>
-      ),
     },
     {
-      id: 'bezichtiging',
+      id: 'bezichtiging' as const,
       title: 'Bezichtiging inplannen',
       icon: (
         <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -87,29 +69,9 @@ export default async function InzendingenPage() {
       ),
       data: bezichtigingSubmissions,
       columns: ['Datum', 'Naam', 'Email', 'Telefoon', 'Motor', 'Bericht'],
-      renderRow: (sub: any) => {
-        const motor = sub.motor_details as { brand?: string; model?: string } | null;
-        const motorStr = motor ? `${motor.brand || ''} ${motor.model || ''}`.trim() : '-';
-        return (
-          <>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-              {format(new Date(sub.created_at), 'dd MMM yyyy HH:mm', { locale: nl })}
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{sub.name}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm">
-              <a href={`mailto:${sub.email}`} className="text-biker-yellow hover:underline">{sub.email}</a>
-            </td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sub.phone || '-'}</td>
-            <td className="px-6 py-4 text-sm text-gray-600 font-medium">{motorStr}</td>
-            <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
-              <span className="line-clamp-2">{sub.message}</span>
-            </td>
-          </>
-        );
-      },
     },
     {
-      id: 'motor_aanvraag',
+      id: 'motor_aanvraag' as const,
       title: 'Motor op aanvraag',
       icon: (
         <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,21 +80,6 @@ export default async function InzendingenPage() {
       ),
       data: motorSubmissions,
       columns: ['Datum', 'Naam', 'Email', 'Telefoon', 'Bericht'],
-      renderRow: (sub: any) => (
-        <>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-            {format(new Date(sub.created_at), 'dd MMM yyyy HH:mm', { locale: nl })}
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{sub.name}</td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm">
-            <a href={`mailto:${sub.email}`} className="text-biker-yellow hover:underline">{sub.email}</a>
-          </td>
-          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{sub.phone || '-'}</td>
-          <td className="px-6 py-4 text-sm text-gray-600 max-w-md" title={sub.message}>
-            <span className="line-clamp-2">{sub.message}</span>
-          </td>
-        </>
-      ),
     },
   ];
 
@@ -166,9 +113,8 @@ export default async function InzendingenPage() {
           </div>
           <InzendingenTable
             submissions={section.data}
-            type={section.id as 'contact' | 'motor_aanvraag' | 'bezichtiging'}
+            type={section.id}
             columns={section.columns}
-            renderRow={section.renderRow}
           />
         </div>
         ))}
