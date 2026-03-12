@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
+import { submitMotorAanvraagForm } from '@/app/actions/email';
 
 export function MotorAanvraagFormClient() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   
   // Get pre-filled data from URL params
   const prefillBrand = searchParams.get('brand') || '';
@@ -41,28 +43,56 @@ export function MotorAanvraagFormClient() {
   }, [prefillBrand, prefillModel, prefillYear, prefillMessage]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({
-      ...formData,
+    setFormData(prev => ({
+      ...prev,
       [e.target.name]: e.target.value,
-    });
+    }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage(null);
     setIsLoading(true);
     
-    // Here you would send the form data
-    console.log('Form submitted:', formData);
+    const result = await submitMotorAanvraagForm(formData);
     
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      alert('Bedankt voor je aanvraag! We nemen zo snel mogelijk contact met je op.');
-    }, 1000);
+    setIsLoading(false);
+    if (result.success) {
+      setMessage({ type: 'success', text: result.message || 'Aanvraag verzonden!' });
+      setFormData({
+        name: '',
+        email: '',
+        phone: '',
+        location: '',
+        brand: prefillBrand,
+        model: prefillModel,
+        year_from: prefillYear,
+        year_to: '',
+        mileage_max: '',
+        budget: '',
+        color: '',
+        additional_info: prefillMessage,
+        urgency: '',
+      });
+    } else {
+      setMessage({ type: 'error', text: result.error || 'Er ging iets mis.' });
+    }
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
+      {message && (
+        <div
+          className={`p-4 rounded-lg ${
+            message.type === 'success'
+              ? 'bg-green-500/20 border-2 border-green-500 text-green-100'
+              : 'bg-red-500/20 border-2 border-red-500 text-red-100'
+          }`}
+        >
+          <p className="text-sm font-medium">{message.text}</p>
+        </div>
+      )}
+
       {/* Personal Info */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>

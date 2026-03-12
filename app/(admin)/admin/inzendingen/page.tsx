@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { format } from 'date-fns';
 import { nl } from 'date-fns/locale';
+import { InzendingenTable } from '@/components/admin/inzendingen-table';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -140,32 +141,12 @@ export default async function InzendingenPage() {
               <span className="ml-2">{section.title} ({section.data.length})</span>
             </h2>
           </div>
-          <div className="overflow-x-auto">
-            {section.data.length === 0 ? (
-              <div className="p-12 text-center text-gray-500">
-                Nog geen inzendingen
-              </div>
-            ) : (
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    {section.columns.map((col) => (
-                      <th key={col} className="px-6 py-4 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">
-                        {col}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {section.data.map((sub: any) => (
-                    <tr key={sub.id} className="hover:bg-gray-50">
-                      {section.renderRow(sub)}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
+          <InzendingenTable
+            submissions={section.data}
+            type={section.id as 'contact' | 'motor_aanvraag' | 'bezichtiging'}
+            columns={section.columns}
+            renderRow={section.renderRow}
+          />
         </div>
         ))}
       </div>
