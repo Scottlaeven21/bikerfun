@@ -95,6 +95,7 @@ export default function SyncPage() {
           <p className="text-sm text-gray-600">
             Klik op de knop hieronder om een handmatige synchronisatie te starten. 
             Dit proces kan <strong className="text-gray-900">1 tot 5 minuten</strong> duren, afhankelijk van het aantal producten.
+            Op Vercel Hobby (10s limiet) kan de knop timeout geven: voer dan lokaal <code className="text-xs bg-gray-100 px-1 rounded">npm run sync:woocommerce</code> uit met dezelfde secrets als productie.
           </p>
         </div>
 

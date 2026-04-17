@@ -17,7 +17,8 @@
     "update:image-urls": "tsx scripts/update-image-urls.ts",
     "migrate:images": "tsx scripts/migrate-images-to-supabase.ts",
     "fix:relative-urls": "tsx scripts/fix-relative-image-urls.ts",
-    "fix:occasion-images": "tsx scripts/fix-occasion-image-urls.ts"
+    "fix:occasion-images": "tsx scripts/fix-occasion-image-urls.ts",
+    "sync:woocommerce": "tsx scripts/run-woocommerce-full-sync.ts"
   },
   "dependencies": {
     "@stripe/stripe-js": "^4.8.0",

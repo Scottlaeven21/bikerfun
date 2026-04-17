@@ -65,13 +65,32 @@ export function SyncButton() {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include',
       });
 
-      const data = await response.json();
-      setProgress(100); // Complete!
+      const text = await response.text();
+      let data: SyncResult;
+      try {
+        data = text ? JSON.parse(text) : { success: false };
+      } catch {
+        setError(
+          response.status === 504 || response.status === 503
+            ? 'Server timeout: sync duurt te lang voor dit hostingplan. Gebruik lokaal: npm run sync:woocommerce (zie .env.local).'
+            : `Ongeldig antwoord (${response.status}). ${text.slice(0, 200)}`
+        );
+        return;
+      }
+
+      setProgress(100);
       setResult(data);
 
-      if (!data.success && data.errors) {
+      if (!response.ok) {
+        const msg = (data as any).error || (data as any).message || `HTTP ${response.status}`;
+        setError(msg);
+        return;
+      }
+
+      if (!data.success && data.errors?.length) {
         setError(data.errors.join(', '));
       }
     } catch (err: any) {

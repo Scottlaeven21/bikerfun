@@ -1,4 +1,12 @@
 {
+  "functions": {
+    "app/api/admin/sync-woocommerce/route.ts": {
+      "maxDuration": 300
+    },
+    "app/api/cron/sync-woocommerce/route.ts": {
+      "maxDuration": 300
+    }
+  },
   "crons": [
     {
       "path": "/api/cron/sync-orders",
