@@ -31,9 +31,10 @@ class WooCommerceClient {
   }
 
   /**
-   * Make authenticated API request using Basic Auth over HTTPS.
-   * Basic Auth avoids the long OAuth query string that Cloudflare Bot Protection
-   * often flags as suspicious. Credentials are passed in the Authorization header.
+   * Make authenticated API request.
+   * Credentials are passed as query parameters (consumer_key / consumer_secret).
+   * This avoids the Authorization header which Cloudflare WAF tends to block for
+   * server-side requests, while still being fully supported by WooCommerce REST API.
    */
   private async makeRequest<T>(
     endpoint: string,
@@ -46,30 +47,27 @@ class WooCommerceClient {
 
     const base = `${this.config.url}/wp-json/${this.config.version}/${endpoint}`;
 
-    // Build final URL (query params only for GET)
-    let finalUrl = base;
-    if (method === 'GET' && Object.keys(params).length > 0) {
-      const qs = new URLSearchParams(
-        Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
-      ).toString();
-      finalUrl = `${base}?${qs}`;
+    // Always include credentials as query params (WAF-safe, officially supported by WooCommerce)
+    const authParams: Record<string, string> = {
+      consumer_key: this.config.consumerKey,
+      consumer_secret: this.config.consumerSecret,
+    };
+
+    const allQueryParams: Record<string, string> = { ...authParams };
+    if (method === 'GET') {
+      Object.entries(params).forEach(([k, v]) => { allQueryParams[k] = String(v); });
     }
 
-    // Basic Auth: base64(consumerKey:consumerSecret)
-    const credentials = Buffer.from(
-      `${this.config.consumerKey}:${this.config.consumerSecret}`
-    ).toString('base64');
+    const qs = new URLSearchParams(allQueryParams).toString();
+    const finalUrl = `${base}?${qs}`;
 
     const fetchOptions: RequestInit = {
       method,
       headers: {
-        'Authorization': `Basic ${credentials}`,
         'Content-Type': 'application/json',
-        // A descriptive User-Agent prevents Cloudflare from flagging the request as a headless bot
         'User-Agent': 'Bikerfun-NextJS-Sync/1.0 (+https://bikerfun.nl)',
         'Accept': 'application/json',
       },
-      // Never serve a cached response for sync calls; always hit WooCommerce live
       cache: 'no-store',
     };
 
