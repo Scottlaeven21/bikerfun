@@ -62,35 +62,29 @@ export function SyncButton() {
     try {
       const response = await fetch('/api/admin/sync-woocommerce', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
       });
 
       const text = await response.text();
-      let data: SyncResult;
+      let data: SyncResult & { message?: string };
       try {
         data = text ? JSON.parse(text) : { success: false };
       } catch {
-        setError(
-          response.status === 504 || response.status === 503
-            ? 'Server timeout: sync duurt te lang voor dit hostingplan. Gebruik lokaal: npm run sync:woocommerce (zie .env.local).'
-            : `Ongeldig antwoord (${response.status}). ${text.slice(0, 200)}`
-        );
+        setError(`Ongeldig antwoord (${response.status}). ${text.slice(0, 200)}`);
         return;
       }
-
-      setProgress(100);
-      setResult(data);
 
       if (!response.ok) {
-        const msg = (data as any).error || (data as any).message || `HTTP ${response.status}`;
-        setError(msg);
+        setError((data as any).error || (data as any).message || `HTTP ${response.status}`);
         return;
       }
 
-      if (!data.success && data.errors?.length) {
+      // 202 = sync gestart op achtergrond
+      setProgress(100);
+      setResult({ success: true, ...data });
+
+      if (data.errors?.length) {
         setError(data.errors.join(', '));
       }
     } catch (err: any) {
@@ -198,13 +192,13 @@ export function SyncButton() {
               <svg className={`w-6 h-6 ${result.success ? 'text-green-500' : 'text-yellow-500'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={result.success ? "M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" : "M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"} />
               </svg>
-              <div>
+                <div>
                 <h3 className={`text-sm font-bold ${result.success ? 'text-green-800' : 'text-yellow-800'}`}>
-                  {result.success ? 'Synchronisatie Voltooid!' : 'Synchronisatie Voltooid met Waarschuwingen'}
+                  {result.success ? 'Sync Gestart!' : 'Synchronisatie met Waarschuwingen'}
                 </h3>
                 <p className={`text-xs ${result.success ? 'text-green-700' : 'text-yellow-700'} mt-1`}>
-                  {result.success 
-                    ? 'Alle data is succesvol gesynchroniseerd.' 
+                  {result.success
+                    ? 'De synchronisatie loopt op de achtergrond. Ververs de pagina na ±1 minuut.'
                     : 'Sommige onderdelen konden niet worden gesynchroniseerd.'}
                 </p>
               </div>
