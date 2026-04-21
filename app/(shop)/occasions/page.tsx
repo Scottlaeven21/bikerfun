@@ -21,7 +21,10 @@ export default async function OccasionsPage() {
     .eq('is_active', true)
     .order('created_at', { ascending: false });
 
-  const occasionsList = (occasions as Occasion[]) || [];
+  const statusOrder: Record<string, number> = { available: 0, reserved: 1, sold: 2 };
+  const occasionsList = ((occasions as Occasion[]) || []).sort(
+    (a, b) => (statusOrder[a.status] ?? 0) - (statusOrder[b.status] ?? 0)
+  );
 
   return (
     <>
