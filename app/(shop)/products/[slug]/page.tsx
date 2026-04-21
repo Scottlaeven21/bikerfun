@@ -1,3 +1,9 @@
+/**
+ * NOTE: Next.js picks [category] over [slug] alphabetically, so this route is
+ * effectively unreachable.  All /products/[x] traffic is handled by
+ * app/(shop)/products/[category]/page.tsx which covers both products and
+ * categories.  This file is kept as a fallback only.
+ */
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
