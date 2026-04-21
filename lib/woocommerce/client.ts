@@ -75,7 +75,16 @@ class WooCommerceClient {
       fetchOptions.body = JSON.stringify(params);
     }
 
-    const response = await fetch(finalUrl, fetchOptions);
+    let response: Response;
+    try {
+      response = await fetch(finalUrl, fetchOptions);
+    } catch (err: any) {
+      // Surface the real underlying cause (DNS, SSL, ECONNREFUSED, etc.)
+      const cause = err?.cause?.message ?? err?.cause ?? '';
+      throw new Error(
+        `WooCommerce verbindingsfout naar ${new URL(finalUrl).hostname}: ${err.message}${cause ? ` (oorzaak: ${cause})` : ''}`
+      );
+    }
 
     if (!response.ok) {
       const error = await response.text();
