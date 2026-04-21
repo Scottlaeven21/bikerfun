@@ -14,13 +14,16 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  const lastX = useRef(0);
+  const lastTime = useRef(0);
+  const velocity = useRef(0);
+  const animFrame = useRef<number | null>(null);
   const [dragged, setDragged] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      const scrollAmount = 400;
       scrollRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
+        left: direction === 'left' ? -400 : 400,
         behavior: 'smooth',
       });
     }
@@ -28,10 +31,14 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
 
   const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!scrollRef.current) return;
+    if (animFrame.current !== null) cancelAnimationFrame(animFrame.current);
     isDragging.current = true;
     setDragged(false);
-    startX.current = e.clientX - scrollRef.current.getBoundingClientRect().left;
+    startX.current = e.clientX;
     scrollLeft.current = scrollRef.current.scrollLeft;
+    lastX.current = e.clientX;
+    lastTime.current = performance.now();
+    velocity.current = 0;
     scrollRef.current.setPointerCapture(e.pointerId);
     scrollRef.current.style.cursor = 'grabbing';
     scrollRef.current.style.userSelect = 'none';
@@ -39,17 +46,34 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current || !scrollRef.current) return;
-    const x = e.clientX - scrollRef.current.getBoundingClientRect().left;
-    const walk = x - startX.current;
+    const walk = e.clientX - startX.current;
     if (Math.abs(walk) > 5) setDragged(true);
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
+
+    // Track velocity for momentum
+    const now = performance.now();
+    const dt = now - lastTime.current;
+    if (dt > 0) velocity.current = (e.clientX - lastX.current) / dt;
+    lastX.current = e.clientX;
+    lastTime.current = now;
   }, []);
 
-  const onPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+  const onPointerUp = useCallback(() => {
+    if (!scrollRef.current) return;
     isDragging.current = false;
-    if (scrollRef.current) {
-      scrollRef.current.style.cursor = 'grab';
-      scrollRef.current.style.userSelect = '';
+    scrollRef.current.style.cursor = 'grab';
+    scrollRef.current.style.userSelect = '';
+
+    // Apply momentum (inertia scroll)
+    const FRICTION = 0.94;
+    const applyMomentum = () => {
+      if (!scrollRef.current || Math.abs(velocity.current) < 0.3) return;
+      scrollRef.current.scrollLeft -= velocity.current * 16;
+      velocity.current *= FRICTION;
+      animFrame.current = requestAnimationFrame(applyMomentum);
+    };
+    if (Math.abs(velocity.current) > 0.3) {
+      animFrame.current = requestAnimationFrame(applyMomentum);
     }
   }, []);
 
@@ -87,12 +111,13 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 md:gap-8 pb-4 snap-x snap-mandatory scrollbar-hide px-4 md:px-0"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: 'grab' }}
+        className="flex overflow-x-auto gap-6 md:gap-8 pb-4 snap-x snap-proximity scrollbar-hide px-4 md:px-0"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: 'grab', scrollBehavior: 'auto' }}
         onPointerDown={onPointerDown}
         onPointerMove={onPointerMove}
         onPointerUp={onPointerUp}
         onPointerLeave={onPointerUp}
+        onPointerCancel={onPointerUp}
       >
         {occasions.map((occasion) => (
           <Link
