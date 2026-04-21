@@ -7,11 +7,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   
   const supabase = await createClient();
   
-  // Fetch all occasions for dynamic URLs
+  // Fetch all occasions for dynamic URLs (available + reserved have public pages)
   const { data: occasions } = await supabase
     .from('occasions')
-    .select('id, updated_at')
-    .eq('status', 'available')
+    .select('id, updated_at, status')
+    .in('status', ['available', 'reserved'])
+    .eq('is_active', true)
     .order('updated_at', { ascending: false });
 
   const occasionsData = (occasions as Pick<Occasion, 'id' | 'updated_at'>[]) || [];
@@ -119,13 +120,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Dynamic product pages
-  const productPages: MetadataRoute.Sitemap = productsData.map((product) => ({
-    url: `${baseUrl}/products/${product.slug}`,
-    lastModified: new Date(product.updated_at || new Date()),
-    changeFrequency: 'weekly' as const,
-    priority: 0.8,
-  }));
+  // Dynamic product pages (only those with valid slugs)
+  const productPages: MetadataRoute.Sitemap = productsData
+    .filter((product) => product.slug && product.slug.trim() !== '')
+    .map((product) => ({
+      url: `${baseUrl}/products/${product.slug}`,
+      lastModified: new Date(product.updated_at || new Date()),
+      changeFrequency: 'weekly' as const,
+      priority: 0.8,
+    }));
 
   // Category pages (as dedicated URLs)
   const categoryPages: MetadataRoute.Sitemap = categoriesData.map((category) => ({

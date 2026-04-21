@@ -16,13 +16,13 @@ export const metadata = getHomeMetadata();
 export const revalidate = 300;
 
 export default async function HomePage() {
-  // Fetch occasions from Supabase - only available (not sold) for homepage
+  // Fetch occasions from Supabase - available + reserved (not sold) for homepage
   const supabase = await createClient();
   const { data: occasions } = await supabase
     .from('occasions')
     .select('*')
     .eq('is_active', true)
-    .eq('status', 'available')
+    .in('status', ['available', 'reserved'])
     .order('created_at', { ascending: false })
     .limit(8);
 

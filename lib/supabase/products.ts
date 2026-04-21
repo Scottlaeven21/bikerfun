@@ -71,13 +71,24 @@ export async function getProductBySlug(slug: string): Promise<SupabaseProduct | 
     .select('*')
     .eq('slug', slug)
     .eq('status', 'publish')
-    .single();
+    .limit(1);
   
   if (error) {
     console.error('Error fetching product by slug:', error);
     return null;
   }
-  return data;
+  if (!data || data.length === 0) {
+    // Try case-insensitive fallback via ilike
+    const { data: fallback, error: fallbackError } = await supabase
+      .from('webshop_products')
+      .select('*')
+      .ilike('slug', slug)
+      .eq('status', 'publish')
+      .limit(1);
+    if (fallbackError || !fallback || fallback.length === 0) return null;
+    return fallback[0];
+  }
+  return data[0];
 }
 
 /**

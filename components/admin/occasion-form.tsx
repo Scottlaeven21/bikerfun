@@ -21,7 +21,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
   const [model, setModel] = useState(occasion?.model || '');
   const [year, setYear] = useState(occasion?.year || new Date().getFullYear());
   const [price, setPrice] = useState(occasion?.price || 0);
-  const [status, setStatus] = useState<'available' | 'sold'>(occasion?.status === 'sold' ? 'sold' : 'available');
+  const [status, setStatus] = useState<'available' | 'reserved' | 'sold'>(occasion?.status ?? 'available');
   const [isActive, setIsActive] = useState(occasion?.is_active ?? true);
 
   // Technical Details
@@ -57,6 +57,26 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
   const [seatHeight, setSeatHeight] = useState(occasion?.specs?.seatHeight || '');
   const [tankCapacity, setTankCapacity] = useState(occasion?.specs?.tankCapacity || '');
   const [topSpeed, setTopSpeed] = useState(occasion?.specs?.topSpeed || '');
+
+  // Section Visibility
+  const defaultVisibility = {
+    description: true,
+    tech_specs: true,
+    features_extras: true,
+    mileage: true,
+    year: true,
+    category: true,
+    condition: true,
+    owners: true,
+    service_history: true,
+    warranty: true,
+  };
+  const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>(
+    occasion?.specs?.visible_sections ?? defaultVisibility
+  );
+  const toggleSection = (key: string) => {
+    setVisibleSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
 
   // Images
   const [mainImage, setMainImage] = useState(occasion?.main_image || '');
@@ -217,6 +237,7 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
           seatHeight,
           tankCapacity,
           topSpeed,
+          visible_sections: visibleSections,
         },
         created_by: user.id,
         updated_by: user.id,
@@ -483,17 +504,44 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
               </span>
             </label>
 
-            <label className="flex items-center cursor-pointer">
-              <input
-                type="checkbox"
-                checked={status === 'sold'}
-                onChange={(e) => setStatus(e.target.checked ? 'sold' : 'available')}
-                className="w-5 h-5 text-red-600 focus:ring-red-500 border-gray-300 rounded"
-              />
-              <span className="ml-3 text-sm font-semibold text-gray-700">
-                Verkocht
-              </span>
-            </label>
+            <div className="flex flex-col gap-2">
+              <span className="text-sm font-semibold text-gray-700">Status</span>
+              <div className="flex gap-3 flex-wrap">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="occasion-status"
+                    value="available"
+                    checked={status === 'available'}
+                    onChange={() => setStatus('available')}
+                    className="w-4 h-4 text-green-600 focus:ring-green-500"
+                  />
+                  <span className="text-sm font-medium text-green-700">Beschikbaar</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="occasion-status"
+                    value="reserved"
+                    checked={status === 'reserved'}
+                    onChange={() => setStatus('reserved')}
+                    className="w-4 h-4 text-orange-500 focus:ring-orange-400"
+                  />
+                  <span className="text-sm font-medium text-orange-600">Gereserveerd</span>
+                </label>
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="occasion-status"
+                    value="sold"
+                    checked={status === 'sold'}
+                    onChange={() => setStatus('sold')}
+                    className="w-4 h-4 text-red-600 focus:ring-red-500"
+                  />
+                  <span className="text-sm font-medium text-red-600">Verkocht</span>
+                </label>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -985,6 +1033,54 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
               ))}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Section Visibility */}
+      <div className="bg-white rounded-lg shadow-md p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-2 pb-3 border-b-2 border-biker-yellow">
+          Zichtbaarheid secties op detailpagina
+        </h2>
+        <p className="text-sm text-gray-500 mb-5">
+          Vink aan welke informatie-blokken zichtbaar zijn op de publieke pagina van deze motor.
+        </p>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {[
+            { key: 'description', label: 'Beschrijving' },
+            { key: 'tech_specs', label: 'Technische specificaties' },
+            { key: 'features_extras', label: 'Features & Extras' },
+            { key: 'mileage', label: 'Kilometerstand' },
+            { key: 'year', label: 'Bouwjaar' },
+            { key: 'category', label: 'Categorie' },
+            { key: 'condition', label: 'Staat / conditie' },
+            { key: 'owners', label: 'Aantal eigenaren' },
+            { key: 'service_history', label: 'Onderhoudshistorie' },
+            { key: 'warranty', label: 'Garantie' },
+          ].map(({ key, label }) => (
+            <label key={key} className="flex items-center gap-3 cursor-pointer select-none group">
+              <div
+                className={`w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition-colors ${
+                  visibleSections[key] !== false
+                    ? 'bg-biker-yellow border-biker-yellow'
+                    : 'bg-white border-gray-300 group-hover:border-biker-yellow'
+                }`}
+                onClick={() => toggleSection(key)}
+              >
+                {visibleSections[key] !== false && (
+                  <svg className="w-3 h-3 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                )}
+              </div>
+              <input
+                type="checkbox"
+                className="hidden"
+                checked={visibleSections[key] !== false}
+                onChange={() => toggleSection(key)}
+              />
+              <span className="text-sm font-medium text-gray-700">{label}</span>
+            </label>
+          ))}
         </div>
       </div>
 

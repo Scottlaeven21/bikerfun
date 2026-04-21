@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Occasion } from '@/types';
@@ -11,6 +11,10 @@ interface OccasionsCarouselProps {
 
 export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isDragging = useRef(false);
+  const startX = useRef(0);
+  const scrollLeft = useRef(0);
+  const [dragged, setDragged] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -21,6 +25,33 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       });
     }
   };
+
+  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!scrollRef.current) return;
+    isDragging.current = true;
+    setDragged(false);
+    startX.current = e.clientX - scrollRef.current.getBoundingClientRect().left;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+    scrollRef.current.setPointerCapture(e.pointerId);
+    scrollRef.current.style.cursor = 'grabbing';
+    scrollRef.current.style.userSelect = 'none';
+  }, []);
+
+  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDragging.current || !scrollRef.current) return;
+    const x = e.clientX - scrollRef.current.getBoundingClientRect().left;
+    const walk = x - startX.current;
+    if (Math.abs(walk) > 5) setDragged(true);
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  }, []);
+
+  const onPointerUp = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    isDragging.current = false;
+    if (scrollRef.current) {
+      scrollRef.current.style.cursor = 'grab';
+      scrollRef.current.style.userSelect = '';
+    }
+  }, []);
 
   return (
     <div className="relative">
@@ -57,15 +88,23 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       <div
         ref={scrollRef}
         className="flex overflow-x-auto gap-6 md:gap-8 pb-4 snap-x snap-mandatory scrollbar-hide px-4 md:px-0"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: 'grab' }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerLeave={onPointerUp}
       >
         {occasions.map((occasion) => (
           <div
             key={occasion.id}
             className="flex-none w-[320px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col"
           >
-            {/* Image */}
-            <div className="relative aspect-[4/3] bg-biker-black overflow-hidden">
+            {/* Image - clickable */}
+            <Link
+              href={`/occasions/${occasion.id}`}
+              onClick={(e) => { if (dragged) e.preventDefault(); }}
+              className="relative aspect-[4/3] bg-biker-black overflow-hidden block"
+            >
               {occasion.images.length > 0 ? (
                 <>
                   <Image
@@ -88,17 +127,28 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                       </div>
                     </div>
                   )}
+
+                  {/* Gereserveerd Sticker */}
+                  {occasion.status === 'reserved' && (
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
+                      <div className="bg-orange-500 text-white px-8 py-4 rounded-lg transform -rotate-12 shadow-2xl border-4 border-white">
+                        <div className="text-2xl font-black uppercase tracking-wider">
+                          GERESERVEERD
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </>
               ) : (
                 <div className="absolute inset-0 bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
                   <div className="text-center">
                     <div className="text-6xl mb-4">🏍️</div>
-                    <div className="text-white font-bold text-lg mb-1">FOTO'S VOLGEN</div>
+                    <div className="text-white font-bold text-lg mb-1">FOTO&apos;S VOLGEN</div>
                     <div className="text-biker-yellow font-bold text-xl">BINNENKORT</div>
                   </div>
                 </div>
               )}
-            </div>
+            </Link>
 
             {/* Content */}
             <div className="p-6 flex flex-col flex-1">
@@ -164,9 +214,9 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                 )}
               </div>
 
-              {/* Features */}
+              {/* Features - max 5 */}
               <div className="flex flex-wrap gap-2 mb-4 min-h-[60px]">
-                {occasion.features.map((feature, idx) => (
+                {occasion.features.slice(0, 5).map((feature, idx) => (
                   <span
                     key={idx}
                     className="text-xs px-2 py-1 bg-biker-black text-biker-light rounded border border-biker-gray h-fit"
@@ -174,11 +224,17 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                     {feature}
                   </span>
                 ))}
+                {occasion.features.length > 5 && (
+                  <span className="text-xs px-2 py-1 bg-biker-gray/30 text-biker-muted rounded border border-biker-gray h-fit">
+                    +{occasion.features.length - 5} meer
+                  </span>
+                )}
               </div>
 
               {/* CTA Button */}
               <Link
                 href={`/occasions/${occasion.id}`}
+                onClick={(e) => { if (dragged) e.preventDefault(); }}
                 className="btn-primary block w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto"
               >
                 BEKIJK DETAILS

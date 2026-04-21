@@ -21,7 +21,7 @@ export default async function AdminDashboardPage() {
     { count: totalOccasions },
     recentOrdersResponse,
   ] = await Promise.all([
-    supabase.from('webshop_products').select('*', { count: 'exact', head: true }),
+    supabase.from('webshop_products').select('*', { count: 'exact', head: true }).eq('status', 'publish'),
     supabase.from('webshop_orders').select('*', { count: 'exact', head: true }),
     supabase.from('categories').select('*', { count: 'exact', head: true }),
     supabase.from('occasions').select('*', { count: 'exact', head: true }),

@@ -75,8 +75,10 @@ export function getOccasionSchema(occasion: Occasion) {
       '@type': 'Offer',
       price: occasion.price,
       priceCurrency: 'EUR',
-      availability: occasion.status === 'available' 
-        ? 'https://schema.org/InStock' 
+      availability: occasion.status === 'available'
+        ? 'https://schema.org/InStock'
+        : occasion.status === 'reserved'
+        ? 'https://schema.org/LimitedAvailability'
         : 'https://schema.org/OutOfStock',
       seller: {
         '@type': 'Organization',
@@ -137,8 +139,10 @@ export function getItemListSchema(occasions: Occasion[]) {
           '@type': 'Offer',
           price: occasion.price,
           priceCurrency: 'EUR',
-          availability: occasion.status === 'available' 
-            ? 'https://schema.org/InStock' 
+          availability: occasion.status === 'available'
+            ? 'https://schema.org/InStock'
+            : occasion.status === 'reserved'
+            ? 'https://schema.org/LimitedAvailability'
             : 'https://schema.org/OutOfStock',
         },
       },
