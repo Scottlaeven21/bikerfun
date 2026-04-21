@@ -95,14 +95,14 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
         onPointerLeave={onPointerUp}
       >
         {occasions.map((occasion) => (
-          <div
+          <Link
             key={occasion.id}
-            className="flex-none w-[320px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col"
+            href={`/occasions/${occasion.id}`}
+            onClick={(e) => { if (dragged) e.preventDefault(); }}
+            className="flex-none w-[320px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col cursor-pointer"
           >
-            {/* Image - clickable */}
-            <Link
-              href={`/occasions/${occasion.id}`}
-              onClick={(e) => { if (dragged) e.preventDefault(); }}
+            {/* Image */}
+            <div
               className="relative aspect-[4/3] bg-biker-black overflow-hidden block"
             >
               {occasion.images.length > 0 ? (
@@ -148,7 +148,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                   </div>
                 </div>
               )}
-            </Link>
+            </div>
 
             {/* Content */}
             <div className="p-6 flex flex-col flex-1">
@@ -232,15 +232,11 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
               </div>
 
               {/* CTA Button */}
-              <Link
-                href={`/occasions/${occasion.id}`}
-                onClick={(e) => { if (dragged) e.preventDefault(); }}
-                className="btn-primary block w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto"
-              >
+              <div className="btn-primary block w-full bg-biker-yellow group-hover:bg-biker-black text-biker-black group-hover:text-biker-yellow border-2 border-biker-yellow text-center py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300 mt-auto">
                 BEKIJK DETAILS
-              </Link>
+              </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
 
