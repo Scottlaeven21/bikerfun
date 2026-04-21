@@ -33,24 +33,25 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
     if (!scrollRef.current) return;
     if (animFrame.current !== null) cancelAnimationFrame(animFrame.current);
     isDragging.current = true;
-    draggedRef.current = false; // reset vóór elke nieuwe interactie
+    draggedRef.current = false;
     startX.current = e.clientX;
     scrollLeft.current = scrollRef.current.scrollLeft;
     lastX.current = e.clientX;
     lastTime.current = performance.now();
     velocity.current = 0;
-    // Geen setPointerCapture — dat kaapt click-events weg van child Links
     scrollRef.current.style.cursor = 'grabbing';
     scrollRef.current.style.userSelect = 'none';
+    // Disable pointer-events on children so pointermove stays on the container
+    scrollRef.current.classList.add('is-dragging');
   }, []);
 
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current || !scrollRef.current) return;
+    e.preventDefault();
     const walk = e.clientX - startX.current;
     if (Math.abs(walk) > 5) draggedRef.current = true;
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
 
-    // Track velocity for momentum
     const now = performance.now();
     const dt = now - lastTime.current;
     if (dt > 0) velocity.current = (e.clientX - lastX.current) / dt;
@@ -63,8 +64,8 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
     isDragging.current = false;
     scrollRef.current.style.cursor = 'grab';
     scrollRef.current.style.userSelect = '';
+    scrollRef.current.classList.remove('is-dragging');
 
-    // Apply momentum (inertia scroll)
     const FRICTION = 0.94;
     const applyMomentum = () => {
       if (!scrollRef.current || Math.abs(velocity.current) < 0.3) return;
@@ -269,6 +270,9 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
+        }
+        .is-dragging > * {
+          pointer-events: none !important;
         }
       `}</style>
     </div>
