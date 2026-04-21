@@ -16,6 +16,7 @@ export default async function AdminOccasionsPage() {
   const { data: occasions } = await supabase
     .from('occasions')
     .select('*')
+    .eq('is_active', true)
     .order('created_at', { ascending: false });
 
   const occasionsList = occasions as Occasion[] | null;
