@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Occasion } from '@/types';
@@ -12,13 +12,13 @@ interface OccasionsCarouselProps {
 export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
+  const draggedRef = useRef(false); // ref zodat onClick altijd de actuele waarde leest
   const startX = useRef(0);
   const scrollLeft = useRef(0);
   const lastX = useRef(0);
   const lastTime = useRef(0);
   const velocity = useRef(0);
   const animFrame = useRef<number | null>(null);
-  const [dragged, setDragged] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -33,13 +33,13 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
     if (!scrollRef.current) return;
     if (animFrame.current !== null) cancelAnimationFrame(animFrame.current);
     isDragging.current = true;
-    setDragged(false);
+    draggedRef.current = false; // reset vóór elke nieuwe interactie
     startX.current = e.clientX;
     scrollLeft.current = scrollRef.current.scrollLeft;
     lastX.current = e.clientX;
     lastTime.current = performance.now();
     velocity.current = 0;
-    scrollRef.current.setPointerCapture(e.pointerId);
+    // Geen setPointerCapture — dat kaapt click-events weg van child Links
     scrollRef.current.style.cursor = 'grabbing';
     scrollRef.current.style.userSelect = 'none';
   }, []);
@@ -47,7 +47,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
     if (!isDragging.current || !scrollRef.current) return;
     const walk = e.clientX - startX.current;
-    if (Math.abs(walk) > 5) setDragged(true);
+    if (Math.abs(walk) > 5) draggedRef.current = true;
     scrollRef.current.scrollLeft = scrollLeft.current - walk;
 
     // Track velocity for momentum
@@ -123,7 +123,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
           <Link
             key={occasion.id}
             href={`/occasions/${occasion.id}`}
-            onClick={(e) => { if (dragged) e.preventDefault(); }}
+            onClick={(e) => { if (draggedRef.current) e.preventDefault(); }}
             className="flex-none w-[320px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col cursor-pointer"
           >
             {/* Image */}

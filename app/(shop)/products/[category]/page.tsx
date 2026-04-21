@@ -47,7 +47,7 @@ export async function generateMetadata({
         title: product.name,
         description: product.short_description || product.description || '',
         url: pageUrl,
-        images: product.images.length > 0 ? [product.images[0].src] : [],
+        images: (product.images ?? []).length > 0 ? [product.images[0].src] : [],
       },
     };
   }
@@ -86,7 +86,8 @@ export default async function ProductOrCategoryPage({
   const product = await getProductBySlug(slug);
 
   if (product) {
-    const mainImage = product.images[0] || { src: '/placeholder-product.png', alt: product.name };
+    const images = product.images ?? [];
+    const mainImage = images[0] || { src: '/placeholder-product.png', alt: product.name };
     const formattedPrice = new Intl.NumberFormat('nl-NL', {
       style: 'currency',
       currency: 'EUR',
@@ -137,9 +138,9 @@ export default async function ProductOrCategoryPage({
                 )}
               </div>
 
-              {product.images.length > 1 && (
+              {images.length > 1 && (
                 <div className="grid grid-cols-4 gap-2">
-                  {product.images.slice(1, 5).map((image, index) => (
+                  {images.slice(1, 5).map((image, index) => (
                     <div
                       key={index}
                       className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm"
