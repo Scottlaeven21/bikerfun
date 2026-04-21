@@ -53,7 +53,8 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
     setTimeout(() => setIsAdding(false), 1000);
   };
 
-  const productSlug = product.slug || product.name.toLowerCase().replace(/\s+/g, '-');
+  // Use slug if available, fall back to UUID so the detail page can always find the product
+  const productSlug = product.slug || product.id;
 
   // If out of stock, show special card
   if (isOutOfStock) {

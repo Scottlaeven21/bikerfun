@@ -63,32 +63,52 @@ export async function getAllProducts(limit: number = 100): Promise<SupabaseProdu
 }
 
 /**
- * Get a single product by slug
+ * Get a single product by slug, name-derived slug, or UUID.
+ * Tries multiple strategies so products with null slugs still work.
  */
 export async function getProductBySlug(slug: string): Promise<SupabaseProduct | null> {
-  const { data, error } = await supabase
+  // 1. Exact slug match
+  const { data: exact } = await supabase
     .from('webshop_products')
     .select('*')
     .eq('slug', slug)
     .eq('status', 'publish')
     .limit(1);
-  
-  if (error) {
-    console.error('Error fetching product by slug:', error);
-    return null;
-  }
-  if (!data || data.length === 0) {
-    // Try case-insensitive fallback via ilike
-    const { data: fallback, error: fallbackError } = await supabase
+  if (exact && exact.length > 0) return exact[0];
+
+  // 2. Case-insensitive slug match
+  const { data: ilike } = await supabase
+    .from('webshop_products')
+    .select('*')
+    .ilike('slug', slug)
+    .eq('status', 'publish')
+    .limit(1);
+  if (ilike && ilike.length > 0) return ilike[0];
+
+  // 3. Name-based match (for products where slug is null in DB)
+  //    The card generates: name.toLowerCase().replace(/\s+/g, '-')
+  //    We reverse: replace - with space and do a fuzzy match
+  const namePattern = `%${slug.replace(/-/g, '%')}%`;
+  const { data: byName } = await supabase
+    .from('webshop_products')
+    .select('*')
+    .ilike('name', namePattern)
+    .eq('status', 'publish')
+    .limit(1);
+  if (byName && byName.length > 0) return byName[0];
+
+  // 4. UUID match (if the card used product.id as fallback)
+  if (/^[0-9a-f-]{36}$/i.test(slug)) {
+    const { data: byId } = await supabase
       .from('webshop_products')
       .select('*')
-      .ilike('slug', slug)
+      .eq('id', slug)
       .eq('status', 'publish')
       .limit(1);
-    if (fallbackError || !fallback || fallback.length === 0) return null;
-    return fallback[0];
+    if (byId && byId.length > 0) return byId[0];
   }
-  return data[0];
+
+  return null;
 }
 
 /**

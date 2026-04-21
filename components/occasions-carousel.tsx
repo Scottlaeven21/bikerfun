@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Occasion } from '@/types';
@@ -12,7 +12,7 @@ interface OccasionsCarouselProps {
 export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
-  const draggedRef = useRef(false); // ref zodat onClick altijd de actuele waarde leest
+  const draggedRef = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
   const lastX = useRef(0);
@@ -22,16 +22,65 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
-      scrollRef.current.scrollBy({
-        left: direction === 'left' ? -400 : 400,
-        behavior: 'smooth',
-      });
+      scrollRef.current.scrollBy({ left: direction === 'left' ? -400 : 400, behavior: 'smooth' });
     }
   };
 
-  const onPointerDown = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+  // Attach mouse events to document during drag so the drag keeps working
+  // even when the pointer moves outside the carousel or over child elements.
+  useEffect(() => {
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isDragging.current || !scrollRef.current) return;
+      e.preventDefault();
+      const walk = e.clientX - startX.current;
+      if (Math.abs(walk) > 4) draggedRef.current = true;
+      scrollRef.current.scrollLeft = scrollLeft.current - walk;
+
+      const now = performance.now();
+      const dt = now - lastTime.current;
+      if (dt > 0) velocity.current = (e.clientX - lastX.current) / dt;
+      lastX.current = e.clientX;
+      lastTime.current = now;
+    };
+
+    const onMouseUp = () => {
+      if (!isDragging.current) return;
+      isDragging.current = false;
+      if (scrollRef.current) {
+        scrollRef.current.style.cursor = 'grab';
+        scrollRef.current.classList.remove('is-dragging');
+      }
+
+      // Momentum scroll
+      if (Math.abs(velocity.current) > 0.1) {
+        const FRICTION = 0.92;
+        const applyMomentum = () => {
+          if (!scrollRef.current || Math.abs(velocity.current) < 0.05) {
+            velocity.current = 0;
+            return;
+          }
+          scrollRef.current.scrollLeft -= velocity.current * 16;
+          velocity.current *= FRICTION;
+          animFrame.current = requestAnimationFrame(applyMomentum);
+        };
+        animFrame.current = requestAnimationFrame(applyMomentum);
+      }
+    };
+
+    document.addEventListener('mousemove', onMouseMove, { passive: false });
+    document.addEventListener('mouseup', onMouseUp);
+    return () => {
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+  }, []);
+
+  const onMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
     if (!scrollRef.current) return;
-    if (animFrame.current !== null) cancelAnimationFrame(animFrame.current);
+    if (animFrame.current !== null) {
+      cancelAnimationFrame(animFrame.current);
+      animFrame.current = null;
+    }
     isDragging.current = true;
     draggedRef.current = false;
     startX.current = e.clientX;
@@ -40,42 +89,9 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
     lastTime.current = performance.now();
     velocity.current = 0;
     scrollRef.current.style.cursor = 'grabbing';
-    scrollRef.current.style.userSelect = 'none';
-    // Disable pointer-events on children so pointermove stays on the container
+    // Prevent child links from receiving mouse events during drag
     scrollRef.current.classList.add('is-dragging');
-  }, []);
-
-  const onPointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
-    if (!isDragging.current || !scrollRef.current) return;
-    e.preventDefault();
-    const walk = e.clientX - startX.current;
-    if (Math.abs(walk) > 5) draggedRef.current = true;
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-
-    const now = performance.now();
-    const dt = now - lastTime.current;
-    if (dt > 0) velocity.current = (e.clientX - lastX.current) / dt;
-    lastX.current = e.clientX;
-    lastTime.current = now;
-  }, []);
-
-  const onPointerUp = useCallback(() => {
-    if (!scrollRef.current) return;
-    isDragging.current = false;
-    scrollRef.current.style.cursor = 'grab';
-    scrollRef.current.style.userSelect = '';
-    scrollRef.current.classList.remove('is-dragging');
-
-    const FRICTION = 0.94;
-    const applyMomentum = () => {
-      if (!scrollRef.current || Math.abs(velocity.current) < 0.3) return;
-      scrollRef.current.scrollLeft -= velocity.current * 16;
-      velocity.current *= FRICTION;
-      animFrame.current = requestAnimationFrame(applyMomentum);
-    };
-    if (Math.abs(velocity.current) > 0.3) {
-      animFrame.current = requestAnimationFrame(applyMomentum);
-    }
+    e.preventDefault(); // Prevent browser native link/image drag
   }, []);
 
   return (
@@ -112,25 +128,28 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto gap-6 md:gap-8 pb-4 snap-x snap-proximity scrollbar-hide px-4 md:px-0"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', cursor: 'grab', scrollBehavior: 'auto' }}
-        onPointerDown={onPointerDown}
-        onPointerMove={onPointerMove}
-        onPointerUp={onPointerUp}
-        onPointerLeave={onPointerUp}
-        onPointerCancel={onPointerUp}
+        className="flex overflow-x-auto gap-6 md:gap-8 pb-4 scrollbar-hide px-4 md:px-0"
+        style={{
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
+          cursor: 'grab',
+          scrollBehavior: 'auto',
+          userSelect: 'none',
+          WebkitOverflowScrolling: 'touch',
+        }}
+        onMouseDown={onMouseDown}
       >
         {occasions.map((occasion) => (
           <Link
             key={occasion.id}
             href={`/occasions/${occasion.id}`}
+            draggable={false}
             onClick={(e) => { if (draggedRef.current) e.preventDefault(); }}
+            onDragStart={(e) => e.preventDefault()}
             className="flex-none w-[320px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col cursor-pointer"
           >
             {/* Image */}
-            <div
-              className="relative aspect-[4/3] bg-biker-black overflow-hidden block"
-            >
+            <div className="relative aspect-[4/3] bg-biker-black overflow-hidden block">
               {occasion.images.length > 0 ? (
                 <>
                   <Image
@@ -140,16 +159,15 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                     quality={100}
                     unoptimized
+                    draggable={false}
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 350px"
                   />
-                  
+
                   {/* Verkocht Sticker */}
                   {occasion.status === 'sold' && (
                     <div className="absolute inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-10">
                       <div className="bg-red-600 text-white px-8 py-4 rounded-lg transform -rotate-12 shadow-2xl border-4 border-white">
-                        <div className="text-2xl font-black uppercase tracking-wider">
-                          VERKOCHT
-                        </div>
+                        <div className="text-2xl font-black uppercase tracking-wider">VERKOCHT</div>
                       </div>
                     </div>
                   )}
@@ -158,9 +176,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                   {occasion.status === 'reserved' && (
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
                       <div className="bg-orange-500 text-white px-8 py-4 rounded-lg transform -rotate-12 shadow-2xl border-4 border-white">
-                        <div className="text-2xl font-black uppercase tracking-wider">
-                          GERESERVEERD
-                        </div>
+                        <div className="text-2xl font-black uppercase tracking-wider">GERESERVEERD</div>
                       </div>
                     </div>
                   )}
@@ -183,9 +199,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                 <h3 className="text-biker-yellow font-bold text-sm uppercase tracking-wider mb-1">
                   {occasion.brand}
                 </h3>
-                <h4 className="text-white font-bold text-2xl">
-                  {occasion.model}
-                </h4>
+                <h4 className="text-white font-bold text-2xl">{occasion.model}</h4>
               </div>
 
               {/* Pricing */}
@@ -266,13 +280,15 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
         ))}
       </div>
 
-      {/* Custom Scrollbar Hide */}
       <style jsx>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
         }
+        /* Disable pointer events on cards while dragging so mouse events
+           go straight to the container instead of being captured by children */
         .is-dragging > * {
           pointer-events: none !important;
+          user-select: none !important;
         }
       `}</style>
     </div>
