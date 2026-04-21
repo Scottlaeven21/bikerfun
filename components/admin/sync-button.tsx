@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 interface SyncResult {
   success: boolean;
@@ -26,27 +26,37 @@ export function SyncButton() {
   const [result, setResult] = useState<SyncResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  // true zodra de 202-respons ontvangen is; balk versnelt naar 100%
+  const responseReceived = useRef(false);
 
-  // Progress bar animation
   useEffect(() => {
     if (!syncing) {
       setProgress(0);
+      responseReceived.current = false;
       return;
     }
 
-    // Simulate progress over ~3 minutes
-    const duration = 180000; // 3 minutes in ms
-    const interval = 500; // Update every 500ms
-    const increment = (interval / duration) * 100;
-    
+    const interval = 500;
+    // Normale duur ~60s; na ontvangen respons versnellen naar 100%
+    const normalDuration = 60000;
+    const normalIncrement = (interval / normalDuration) * 100;
+
     const timer = setInterval(() => {
       setProgress(prev => {
-        // Slow down near the end (90-95%)
-        if (prev >= 90) return Math.min(prev + (increment * 0.2), 95);
-        // Speed up in middle (30-70%)
-        if (prev >= 30 && prev < 70) return prev + (increment * 1.5);
-        // Normal speed
-        return Math.min(prev + increment, 95);
+        if (responseReceived.current) {
+          // Respons ontvangen: snel naar 100% (2% per tick)
+          const next = prev + 2;
+          if (next >= 100) {
+            clearInterval(timer);
+            setTimeout(() => setSyncing(false), 400);
+            return 100;
+          }
+          return next;
+        }
+        // Normaal: vertraag boven 80%
+        if (prev >= 80) return Math.min(prev + normalIncrement * 0.3, 85);
+        if (prev >= 50) return prev + normalIncrement * 1.2;
+        return Math.min(prev + normalIncrement, 80);
       });
     }, interval);
 
@@ -80,8 +90,8 @@ export function SyncButton() {
         return;
       }
 
-      // 202 = sync gestart op achtergrond
-      setProgress(100);
+      // 202 = sync gestart op achtergrond; balk loopt door naar 100%
+      responseReceived.current = true;
       setResult({ ...data, success: true });
 
       if (data.errors?.length) {
@@ -89,7 +99,6 @@ export function SyncButton() {
       }
     } catch (err: any) {
       setError(err.message || 'Onbekende fout tijdens synchronisatie');
-    } finally {
       setSyncing(false);
     }
   };
