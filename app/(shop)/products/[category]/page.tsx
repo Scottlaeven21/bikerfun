@@ -47,7 +47,7 @@ export async function generateMetadata({
         title: product.name,
         description: product.short_description || product.description || '',
         url: pageUrl,
-        images: (product.images ?? []).length > 0 ? [product.images[0].src] : [],
+        images: (product.images ?? []).filter(img => img?.src).slice(0, 1).map(img => img.src),
       },
     };
   }
@@ -86,14 +86,14 @@ export default async function ProductOrCategoryPage({
   const product = await getProductBySlug(slug);
 
   if (product) {
-    const images = product.images ?? [];
+    const images = (product.images ?? []).filter(img => img?.src);
     const categories = product.categories ?? [];
     const tags = product.tags ?? [];
-    const mainImage = images[0] || { src: '/placeholder-product.png', alt: product.name };
+    const mainImage = images[0] ?? { src: '/placeholder-product.png', alt: product.name };
     const formattedPrice = new Intl.NumberFormat('nl-NL', {
       style: 'currency',
       currency: 'EUR',
-    }).format(product.price);
+    }).format(product.price ?? 0);
     const formattedRegularPrice =
       product.on_sale && product.regular_price
         ? new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR' }).format(
