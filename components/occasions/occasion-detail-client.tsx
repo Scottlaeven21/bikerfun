@@ -250,38 +250,52 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               </div>
               )}
 
-              {/* Technical Specifications */}
-              {show('tech_specs') && (
+              {/* Technical Specifications - only show if at least one spec is visible */}
+              {(show('engine') || show('power') || show('transmission') || show('fuel') ||
+                show('finalDrive') || show('weight') || show('seatHeight') ||
+                show('tankCapacity') || show('topSpeed') || show('cooling') || show('cylinders') || show('gears')) && (
               <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
                 <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-4">
-                    {occasion.specs?.engine && (
+                    {show('engine') && occasion.specs?.engine && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
                         <div className="text-white font-semibold">{occasion.specs.engine}</div>
                       </div>
                     )}
-                    {occasion.power && (
+                    {show('cylinders') && occasion.specs?.cylinders && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Cilinders</div>
+                        <div className="text-white font-semibold">{occasion.specs.cylinders}</div>
+                      </div>
+                    )}
+                    {show('power') && occasion.power && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
                         <div className="text-white font-semibold">{occasion.power}</div>
                       </div>
                     )}
-                    {occasion.transmission && (
+                    {show('transmission') && occasion.transmission && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
                         <div className="text-white font-semibold">{occasion.transmission}</div>
                       </div>
                     )}
-                    {occasion.fuel && (
+                    {show('fuel') && occasion.fuel && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
                         <div className="text-white font-semibold">{occasion.fuel}</div>
                       </div>
                     )}
-                    {occasion.specs?.finalDrive && (
+                    {show('gears') && occasion.specs?.gears && (
+                      <div>
+                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Versnellingen</div>
+                        <div className="text-white font-semibold">{occasion.specs.gears}</div>
+                      </div>
+                    )}
+                    {show('finalDrive') && occasion.specs?.finalDrive && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
                         <div className="text-white font-semibold">{occasion.specs.finalDrive}</div>
@@ -290,31 +304,31 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                   </div>
 
                   <div className="space-y-4">
-                    {occasion.specs?.weight && (
+                    {show('weight') && occasion.specs?.weight && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
                         <div className="text-white font-semibold">{occasion.specs.weight}</div>
                       </div>
                     )}
-                    {occasion.specs?.seatHeight && (
+                    {show('seatHeight') && occasion.specs?.seatHeight && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
                         <div className="text-white font-semibold">{occasion.specs.seatHeight}</div>
                       </div>
                     )}
-                    {occasion.specs?.tankCapacity && (
+                    {show('tankCapacity') && occasion.specs?.tankCapacity && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
                         <div className="text-white font-semibold">{occasion.specs.tankCapacity}</div>
                       </div>
                     )}
-                    {occasion.specs?.topSpeed && (
+                    {show('topSpeed') && occasion.specs?.topSpeed && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
                         <div className="text-white font-semibold">{occasion.specs.topSpeed}</div>
                       </div>
                     )}
-                    {occasion.specs?.cooling && (
+                    {show('cooling') && occasion.specs?.cooling && (
                       <div>
                         <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
                         <div className="text-white font-semibold">{occasion.specs.cooling}</div>
@@ -326,11 +340,11 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               )}
 
               {/* Features & Extras */}
-              {show('features_extras') && (occasion.features.length > 0 || occasion.extras.length > 0) && (
+              {(show('features') && occasion.features.length > 0) || (show('extras') && occasion.extras.length > 0) ? (
                 <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray mt-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">Features & Extras</h3>
+                  <h3 className="text-2xl font-bold text-white mb-6">Features &amp; Extras</h3>
                   
-                  {occasion.features.length > 0 && (
+                  {show('features') && occasion.features.length > 0 && (
                     <div className="mb-6">
                       <h4 className="text-biker-yellow font-bold mb-3">Features</h4>
                       <div className="grid grid-cols-2 gap-3">
@@ -346,7 +360,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     </div>
                   )}
 
-                  {occasion.extras.length > 0 && (
+                  {show('extras') && occasion.extras.length > 0 && (
                     <div>
                       <h4 className="text-biker-yellow font-bold mb-3">Extras</h4>
                       <div className="grid grid-cols-2 gap-3">
@@ -362,7 +376,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     </div>
                   )}
                 </div>
-              )}
+              ) : null}
             </div>
 
             {/* Right Column - Details & CTA */}

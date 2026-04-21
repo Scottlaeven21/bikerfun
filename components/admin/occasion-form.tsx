@@ -58,24 +58,51 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
   const [tankCapacity, setTankCapacity] = useState(occasion?.specs?.tankCapacity || '');
   const [topSpeed, setTopSpeed] = useState(occasion?.specs?.topSpeed || '');
 
-  // Section Visibility
-  const defaultVisibility = {
-    description: true,
-    tech_specs: true,
-    features_extras: true,
-    mileage: true,
-    year: true,
-    category: true,
-    condition: true,
-    owners: true,
-    service_history: true,
-    warranty: true,
+  // Field-level visibility (stored per field key)
+  const defaultVisibility: Record<string, boolean> = {
+    year: true, category: true, color: true,
+    mileage: true, transmission: true, fuel: true, power: true,
+    engine: true, cylinders: true, cooling: true, gears: true,
+    finalDrive: true, weight: true, seatHeight: true, tankCapacity: true, topSpeed: true,
+    condition: true, owners: true, service_history: true, warranty: true,
+    description: true, features: true, extras: true,
   };
   const [visibleSections, setVisibleSections] = useState<Record<string, boolean>>(
-    occasion?.specs?.visible_sections ?? defaultVisibility
+    occasion?.specs?.visible_sections
+      ? { ...defaultVisibility, ...occasion.specs.visible_sections }
+      : defaultVisibility
   );
   const toggleSection = (key: string) => {
     setVisibleSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
+
+  // Inline eye-toggle component (defined inside render, uses closure over state)
+  const EyeToggle = ({ fieldKey }: { fieldKey: string }) => {
+    const visible = visibleSections[fieldKey] !== false;
+    return (
+      <button
+        type="button"
+        onClick={() => toggleSection(fieldKey)}
+        title={visible ? 'Klik om te verbergen op de detailpagina' : 'Klik om zichtbaar te maken op de detailpagina'}
+        className={`flex items-center gap-1 text-xs px-2 py-0.5 rounded-full border transition-all ${
+          visible
+            ? 'text-green-700 bg-green-50 border-green-200 hover:bg-green-100'
+            : 'text-gray-400 bg-gray-100 border-gray-200 hover:bg-gray-200'
+        }`}
+      >
+        {visible ? (
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+          </svg>
+        ) : (
+          <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 4.411m0 0L21 21" />
+          </svg>
+        )}
+        {visible ? 'Zichtbaar' : 'Verborgen'}
+      </button>
+    );
   };
 
   // Images
@@ -427,10 +454,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Jaar *
-            </label>
+          <div className={visibleSections['year'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Jaar *</label>
+              <EyeToggle fieldKey="year" />
+            </div>
             <input
               type="number"
               value={year}
@@ -457,10 +485,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Categorie
-            </label>
+          <div className={visibleSections['category'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Categorie</label>
+              <EyeToggle fieldKey="category" />
+            </div>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
@@ -478,10 +507,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Kleur
-            </label>
+          <div className={visibleSections['color'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Kleur</label>
+              <EyeToggle fieldKey="color" />
+            </div>
             <input
               type="text"
               value={color}
@@ -553,10 +583,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Km-stand *
-            </label>
+          <div className={visibleSections['mileage'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Km-stand *</label>
+              <EyeToggle fieldKey="mileage" />
+            </div>
             <input
               type="number"
               value={mileage}
@@ -567,10 +598,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Transmissie *
-            </label>
+          <div className={visibleSections['transmission'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Transmissie *</label>
+              <EyeToggle fieldKey="transmission" />
+            </div>
             <select
               value={transmission}
               onChange={(e) => setTransmission(e.target.value)}
@@ -582,10 +614,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Brandstof *
-            </label>
+          <div className={visibleSections['fuel'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Brandstof *</label>
+              <EyeToggle fieldKey="fuel" />
+            </div>
             <select
               value={fuel}
               onChange={(e) => setFuel(e.target.value)}
@@ -597,10 +630,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Vermogen *
-            </label>
+          <div className={visibleSections['power'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Vermogen *</label>
+              <EyeToggle fieldKey="power" />
+            </div>
             <input
               type="text"
               value={power}
@@ -611,10 +645,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Motor
-            </label>
+          <div className={visibleSections['engine'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Motor</label>
+              <EyeToggle fieldKey="engine" />
+            </div>
             <input
               type="text"
               value={engine}
@@ -624,10 +659,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Cilinders
-            </label>
+          <div className={visibleSections['cylinders'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Cilinders</label>
+              <EyeToggle fieldKey="cylinders" />
+            </div>
             <input
               type="text"
               value={cylinders}
@@ -637,10 +673,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Koeling
-            </label>
+          <div className={visibleSections['cooling'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Koeling</label>
+              <EyeToggle fieldKey="cooling" />
+            </div>
             <select
               value={cooling}
               onChange={(e) => setCooling(e.target.value)}
@@ -652,10 +689,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Versnellingen
-            </label>
+          <div className={visibleSections['gears'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Versnellingen</label>
+              <EyeToggle fieldKey="gears" />
+            </div>
             <input
               type="text"
               value={gears}
@@ -665,10 +703,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Aandrijving
-            </label>
+          <div className={visibleSections['finalDrive'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Aandrijving</label>
+              <EyeToggle fieldKey="finalDrive" />
+            </div>
             <select
               value={finalDrive}
               onChange={(e) => setFinalDrive(e.target.value)}
@@ -680,10 +719,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Gewicht
-            </label>
+          <div className={visibleSections['weight'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Gewicht</label>
+              <EyeToggle fieldKey="weight" />
+            </div>
             <input
               type="text"
               value={weight}
@@ -693,10 +733,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Zithoogte
-            </label>
+          <div className={visibleSections['seatHeight'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Zithoogte</label>
+              <EyeToggle fieldKey="seatHeight" />
+            </div>
             <input
               type="text"
               value={seatHeight}
@@ -706,10 +747,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Tankinhoud
-            </label>
+          <div className={visibleSections['tankCapacity'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Tankinhoud</label>
+              <EyeToggle fieldKey="tankCapacity" />
+            </div>
             <input
               type="text"
               value={tankCapacity}
@@ -719,10 +761,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Topsnelheid
-            </label>
+          <div className={visibleSections['topSpeed'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Topsnelheid</label>
+              <EyeToggle fieldKey="topSpeed" />
+            </div>
             <input
               type="text"
               value={topSpeed}
@@ -741,10 +784,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
         </h2>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Staat
-            </label>
+          <div className={visibleSections['condition'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Staat</label>
+              <EyeToggle fieldKey="condition" />
+            </div>
             <select
               value={condition}
               onChange={(e) => setCondition(e.target.value)}
@@ -759,10 +803,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Aantal eigenaren
-            </label>
+          <div className={visibleSections['owners'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Aantal eigenaren</label>
+              <EyeToggle fieldKey="owners" />
+            </div>
             <input
               type="number"
               value={owners}
@@ -772,10 +817,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             />
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Onderhoudshistorie
-            </label>
+          <div className={visibleSections['service_history'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Onderhoudshistorie</label>
+              <EyeToggle fieldKey="service_history" />
+            </div>
             <select
               value={serviceHistory}
               onChange={(e) => setServiceHistory(e.target.value)}
@@ -789,10 +835,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
             </select>
           </div>
 
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-2">
-              Garantie
-            </label>
+          <div className={visibleSections['warranty'] !== false ? '' : 'opacity-50'}>
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-sm font-semibold text-gray-700">Garantie</label>
+              <EyeToggle fieldKey="warranty" />
+            </div>
             <select
               value={warranty}
               onChange={(e) => setWarranty(e.target.value)}
@@ -809,11 +856,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
       </div>
 
       {/* Description */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-6 pb-3 border-b-2 border-biker-yellow">
-          Beschrijving
-        </h2>
-        
+      <div className={`bg-white rounded-lg shadow-md p-6 ${visibleSections['description'] !== false ? '' : 'opacity-60'}`}>
+        <div className="flex items-center justify-between pb-3 border-b-2 border-biker-yellow mb-6">
+          <h2 className="text-xl font-bold text-gray-900">Beschrijving</h2>
+          <EyeToggle fieldKey="description" />
+        </div>
         <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
@@ -826,13 +873,14 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
       {/* Features */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-6 pb-3 border-b-2 border-biker-yellow">
-          Features & Specificaties
+          Features &amp; Specificaties
         </h2>
-        
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Voeg feature toe
-          </label>
+
+        <div className={`mb-4 ${visibleSections['features'] !== false ? '' : 'opacity-60'}`}>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-semibold text-gray-700">Voeg feature toe</label>
+            <EyeToggle fieldKey="features" />
+          </div>
           <div className="flex gap-2">
             <input
               type="text"
@@ -872,10 +920,11 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
           </div>
         )}
 
-        <div className="mb-4">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Voeg extra toe
-          </label>
+        <div className={`mb-4 ${visibleSections['extras'] !== false ? '' : 'opacity-60'}`}>
+          <div className="flex items-center justify-between mb-2">
+            <label className="text-sm font-semibold text-gray-700">Voeg extra toe</label>
+            <EyeToggle fieldKey="extras" />
+          </div>
           <div className="flex gap-2">
             <input
               type="text"
@@ -1033,54 +1082,6 @@ export function OccasionForm({ occasion, isEdit = false }: OccasionFormProps) {
               ))}
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Section Visibility */}
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h2 className="text-xl font-bold text-gray-900 mb-2 pb-3 border-b-2 border-biker-yellow">
-          Zichtbaarheid secties op detailpagina
-        </h2>
-        <p className="text-sm text-gray-500 mb-5">
-          Vink aan welke informatie-blokken zichtbaar zijn op de publieke pagina van deze motor.
-        </p>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-          {[
-            { key: 'description', label: 'Beschrijving' },
-            { key: 'tech_specs', label: 'Technische specificaties' },
-            { key: 'features_extras', label: 'Features & Extras' },
-            { key: 'mileage', label: 'Kilometerstand' },
-            { key: 'year', label: 'Bouwjaar' },
-            { key: 'category', label: 'Categorie' },
-            { key: 'condition', label: 'Staat / conditie' },
-            { key: 'owners', label: 'Aantal eigenaren' },
-            { key: 'service_history', label: 'Onderhoudshistorie' },
-            { key: 'warranty', label: 'Garantie' },
-          ].map(({ key, label }) => (
-            <label key={key} className="flex items-center gap-3 cursor-pointer select-none group">
-              <div
-                className={`w-5 h-5 flex-shrink-0 rounded border-2 flex items-center justify-center transition-colors ${
-                  visibleSections[key] !== false
-                    ? 'bg-biker-yellow border-biker-yellow'
-                    : 'bg-white border-gray-300 group-hover:border-biker-yellow'
-                }`}
-                onClick={() => toggleSection(key)}
-              >
-                {visibleSections[key] !== false && (
-                  <svg className="w-3 h-3 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
-                )}
-              </div>
-              <input
-                type="checkbox"
-                className="hidden"
-                checked={visibleSections[key] !== false}
-                onChange={() => toggleSection(key)}
-              />
-              <span className="text-sm font-medium text-gray-700">{label}</span>
-            </label>
-          ))}
         </div>
       </div>
 
