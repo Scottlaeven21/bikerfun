@@ -1,11 +1,8 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { ContactForm } from '@/components/forms/contact-form';
+import { getContactMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Contact | Bikerfun',
-  description: 'Neem contact op met Bikerfun voor vragen over occasions, motorkleding of service.',
-};
+export const metadata = getContactMetadata();
 
 export default function ContactPage() {
   return (

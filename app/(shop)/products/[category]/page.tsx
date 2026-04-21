@@ -101,8 +101,34 @@ export default async function ProductOrCategoryPage({
           )
         : null;
 
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
+    const productJsonLd = {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: product.short_description || product.description || product.name,
+      image: images.map(img => img.src),
+      sku: product.sku || undefined,
+      brand: { '@type': 'Brand', name: 'Bikerfun' },
+      offers: {
+        '@type': 'Offer',
+        url: `${baseUrl}/products/${slug}`,
+        priceCurrency: 'EUR',
+        price: product.price ?? 0,
+        availability:
+          product.stock_status === 'instock'
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
+        seller: { '@type': 'Organization', name: 'Bikerfun' },
+      },
+    };
+
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-gray-600 mb-8">

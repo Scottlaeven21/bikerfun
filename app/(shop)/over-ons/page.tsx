@@ -1,12 +1,9 @@
-import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { TikTokGrid } from '@/components/tiktok-grid';
+import { getAboutMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Over Ons | Bikerfun',
-  description: 'Leer meer over Bikerfun - jouw partner voor occasions en motorkleding.',
-};
+export const metadata = getAboutMetadata();
 
 export default function OverOnsPage() {
   return (

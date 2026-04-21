@@ -47,6 +47,7 @@ export function getHomeMetadata(): Metadata {
     title: 'Bikerfun | Specialist in Motoroccasions & Accessoires',
     description: defaultDescription,
     keywords: ['motor occasions', 'motoroccasions', 'tweedehands motoren', 'motor dealer', 'motor accessoires', 'bikerfun'],
+    alternates: { canonical: baseUrl },
     openGraph: {
       title: 'Bikerfun | Specialist in Motoroccasions & Accessoires',
       description: defaultDescription,
@@ -74,14 +75,16 @@ export function getHomeMetadata(): Metadata {
 
 // Occasions overview metadata
 export function getOccasionsMetadata(): Metadata {
+  const desc = 'Ontdek ons aanbod aan occasions. Van sportmotoren tot tourers - wij hebben iets voor elke rijder.';
   return {
     ...getBaseMetadata(),
     title: 'Occasions | Bikerfun',
-    description: 'Ontdek ons aanbod aan occasions. Van sportmotoren tot tourers - wij hebben iets voor elke rijder.',
+    description: desc,
     keywords: ['motor occasions', 'tweedehands motoren', 'occasions', 'sportmotoren', 'tourers', 'naked bikes'],
+    alternates: { canonical: `${baseUrl}/occasions` },
     openGraph: {
       title: 'Occasions | Bikerfun',
-      description: 'Ontdek ons aanbod aan occasions. Van sportmotoren tot tourers - wij hebben iets voor elke rijder.',
+      description: desc,
       url: `${baseUrl}/occasions`,
       siteName,
       images: [
@@ -94,6 +97,12 @@ export function getOccasionsMetadata(): Metadata {
       ],
       locale: 'nl_NL',
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Occasions | Bikerfun',
+      description: desc,
+      images: [`${baseUrl}/og-occasions.jpg`],
     },
   };
 }
@@ -142,14 +151,16 @@ export function getOccasionMetadata(occasion: Occasion): Metadata {
 
 // Webshop metadata
 export function getWebshopMetadata(): Metadata {
+  const desc = 'Shop motoraccessoires, helmen, kleding en onderdelen. Alles voor de motorrijder.';
   return {
     ...getBaseMetadata(),
     title: 'Webshop | Motoraccessoires & Onderdelen | Bikerfun',
-    description: 'Shop motoraccessoires, helmen, kleding en onderdelen. Alles voor de motorrijder.',
+    description: desc,
     keywords: ['motor accessoires', 'motorkleding', 'helmen', 'motor onderdelen', 'webshop'],
+    alternates: { canonical: `${baseUrl}/products` },
     openGraph: {
       title: 'Webshop | Motoraccessoires & Onderdelen | Bikerfun',
-      description: 'Shop motoraccessoires, helmen, kleding en onderdelen. Alles voor de motorrijder.',
+      description: desc,
       url: `${baseUrl}/products`,
       siteName,
       images: [
@@ -163,41 +174,61 @@ export function getWebshopMetadata(): Metadata {
       locale: 'nl_NL',
       type: 'website',
     },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Webshop | Motoraccessoires & Onderdelen | Bikerfun',
+      description: desc,
+      images: [`${baseUrl}/og-webshop.jpg`],
+    },
   };
 }
 
 // Contact metadata
 export function getContactMetadata(): Metadata {
+  const desc = 'Neem contact op met Bikerfun voor vragen over occasions of producten. Bel 06 15 45 21 08 of stuur een bericht.';
   return {
     ...getBaseMetadata(),
     title: 'Contact | Bikerfun',
-    description: 'Neem contact op met Bikerfun voor vragen over occasions of producten. Bel 06 16 29 86 84 of stuur een bericht.',
+    description: desc,
     keywords: ['contact', 'bikerfun contact', 'motor dealer contact'],
+    alternates: { canonical: `${baseUrl}/contact` },
     openGraph: {
       title: 'Contact | Bikerfun',
-      description: 'Neem contact op met Bikerfun voor vragen over occasions of producten.',
+      description: desc,
       url: `${baseUrl}/contact`,
       siteName,
       locale: 'nl_NL',
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Contact | Bikerfun',
+      description: desc,
     },
   };
 }
 
 // About metadata
 export function getAboutMetadata(): Metadata {
+  const desc = 'Leer Bikerfun kennen - jouw partner voor motoroccasions en accessoires. Passie, kwaliteit en service.';
   return {
     ...getBaseMetadata(),
     title: 'Over Ons | Bikerfun',
-    description: 'Leer Bikerfun kennen - jouw partner voor motoroccasions en accessoires. Passie, kwaliteit en service.',
+    description: desc,
     keywords: ['over bikerfun', 'motor dealer', 'geschiedenis'],
+    alternates: { canonical: `${baseUrl}/over-ons` },
     openGraph: {
       title: 'Over Ons | Bikerfun',
-      description: 'Leer Bikerfun kennen - jouw partner voor motoroccasions en accessoires.',
+      description: desc,
       url: `${baseUrl}/over-ons`,
       siteName,
       locale: 'nl_NL',
       type: 'website',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: 'Over Ons | Bikerfun',
+      description: desc,
     },
   };
 }

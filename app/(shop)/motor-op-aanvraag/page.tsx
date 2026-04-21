@@ -5,7 +5,7 @@ import { MotorAanvraagFormClient } from '@/components/forms/motor-aanvraag-form-
 
 export const metadata: Metadata = {
   title: 'Motor Op Aanvraag | Bikerfun',
-  description: 'Zoek je een specifieke motor? Wij gaan voor jou op zoek naar je droommoddel.',
+  description: 'Zoek je een specifieke motor? Wij gaan voor jou op zoek naar je droommodel.',
 };
 
 export default function AanvraagPage() {

@@ -2,6 +2,11 @@ import { Occasion } from '@/types';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 
+// Canonical contact details — update here if they change
+const PHONE = '+31-6-15452108';        // 06 15 45 21 08
+const EMAIL = 'bikerfun.info@gmail.com';
+const LOGO  = `${baseUrl}/bikerfun-new-logo.png`;
+
 // Organization Schema
 export function getOrganizationSchema() {
   return {
@@ -9,21 +14,22 @@ export function getOrganizationSchema() {
     '@type': 'Organization',
     name: 'Bikerfun',
     url: baseUrl,
-    logo: `${baseUrl}/logo.png`,
+    logo: LOGO,
+    image: LOGO,
     description: 'Specialist in motoren, occasions en motoraccessoires',
     address: {
       '@type': 'PostalAddress',
+      addressLocality: 'Nederland',
       addressCountry: 'NL',
     },
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+31-6-16298684',
-      contactType: 'Customer Service',
+      telephone: PHONE,
+      email: EMAIL,
+      contactType: 'customer service',
       availableLanguage: 'Dutch',
     },
-    sameAs: [
-      // Voeg hier social media links toe
-    ],
+    sameAs: [],
   };
 }
 
@@ -34,10 +40,13 @@ export function getLocalBusinessSchema() {
     '@type': 'AutomotiveBusiness',
     name: 'Bikerfun',
     url: baseUrl,
-    telephone: '+31-6-16298684',
-    email: 'info@bikerfun.nl',
+    logo: LOGO,
+    image: LOGO,
+    telephone: PHONE,
+    email: EMAIL,
     address: {
       '@type': 'PostalAddress',
+      addressLocality: 'Nederland',
       addressCountry: 'NL',
     },
     openingHoursSpecification: [
@@ -46,6 +55,12 @@ export function getLocalBusinessSchema() {
         dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
         opens: '09:00',
         closes: '18:00',
+      },
+      {
+        '@type': 'OpeningHoursSpecification',
+        dayOfWeek: ['Saturday'],
+        opens: '10:00',
+        closes: '16:00',
       },
     ],
     priceRange: '€€',

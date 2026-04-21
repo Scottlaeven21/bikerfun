@@ -1,17 +1,10 @@
 import Link from 'next/link';
-import { Metadata } from 'next';
 import { getAllProducts, getCategories } from '@/lib/supabase/products';
 import { ProductsFilter } from '@/components/products/products-filter';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
+import { getWebshopMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Webshop | Bikerfun',
-  description: 'Ontdek onze premium motor gear en accessoires',
-  themeColor: '#ffffff',
-  appleWebApp: {
-    statusBarStyle: 'default',
-  },
-};
+export const metadata = getWebshopMetadata();
 
 export const revalidate = 300; // Cache for 5 minutes
 
