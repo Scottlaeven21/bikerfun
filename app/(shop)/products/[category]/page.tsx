@@ -87,6 +87,8 @@ export default async function ProductOrCategoryPage({
 
   if (product) {
     const images = product.images ?? [];
+    const categories = product.categories ?? [];
+    const tags = product.tags ?? [];
     const mainImage = images[0] || { src: '/placeholder-product.png', alt: product.name };
     const formattedPrice = new Intl.NumberFormat('nl-NL', {
       style: 'currency',
@@ -164,9 +166,9 @@ export default async function ProductOrCategoryPage({
                   {product.name}
                 </h1>
 
-                {product.categories.length > 0 && (
+                {categories.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
-                    {product.categories.map((category) => (
+                    {categories.map((category) => (
                       <Link
                         key={category}
                         href={`/products/${category.toLowerCase().replace(/\s+/g, '-')}`}
@@ -220,10 +222,10 @@ export default async function ProductOrCategoryPage({
                 </div>
               )}
 
-              {product.tags.length > 0 && (
+              {tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200">
                   <span className="text-sm text-gray-600">Tags:</span>
-                  {product.tags.map((tag) => (
+                  {tags.map((tag) => (
                     <span key={tag} className="text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded">
                       {tag}
                     </span>
