@@ -1,7 +1,6 @@
 // WooCommerce REST API Client
 // Uses OAuth 1.0a authentication for secure API access
 
-import crypto from 'crypto';
 import type { 
   WooCommerceProduct, 
   WooCommerceAPIConfig, 
@@ -32,44 +31,9 @@ class WooCommerceClient {
   }
 
   /**
-   * Generate OAuth 1.0a signature
-   */
-  private generateOAuthSignature(
-    method: string,
-    url: string,
-    params: Record<string, string>
-  ): string {
-    const baseString = this.createSignatureBaseString(method, url, params);
-    const signingKey = `${encodeURIComponent(this.config.consumerSecret)}&`;
-    
-    return crypto
-      .createHmac('sha256', signingKey)
-      .update(baseString)
-      .digest('base64');
-  }
-
-  /**
-   * Create OAuth base string for signature
-   */
-  private createSignatureBaseString(
-    method: string,
-    url: string,
-    params: Record<string, string>
-  ): string {
-    const sortedParams = Object.keys(params)
-      .sort()
-      .map(key => `${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`)
-      .join('&');
-
-    return [
-      method.toUpperCase(),
-      encodeURIComponent(url),
-      encodeURIComponent(sortedParams),
-    ].join('&');
-  }
-
-  /**
-   * Make authenticated API request
+   * Make authenticated API request using Basic Auth over HTTPS.
+   * Basic Auth avoids the long OAuth query string that Cloudflare Bot Protection
+   * often flags as suspicious. Credentials are passed in the Authorization header.
    */
   private async makeRequest<T>(
     endpoint: string,
@@ -80,58 +44,36 @@ class WooCommerceClient {
       throw new Error('WooCommerce is not configured. Please add API credentials to environment variables.');
     }
 
-    const url = `${this.config.url}/wp-json/${this.config.version}/${endpoint}`;
-    
-    // OAuth parameters
-    const oauthParams: Record<string, string> = {
-      oauth_consumer_key: this.config.consumerKey,
-      oauth_timestamp: Math.floor(Date.now() / 1000).toString(),
-      oauth_nonce: crypto.randomBytes(16).toString('hex'),
-      oauth_signature_method: 'HMAC-SHA256',
-      oauth_version: '1.0',
-    };
+    const base = `${this.config.url}/wp-json/${this.config.version}/${endpoint}`;
 
-    // For POST/PUT/DELETE: body data separate from OAuth params
-    // For GET: query params are part of OAuth signature
-    const isWriteRequest = method !== 'GET';
-    const signatureParams = isWriteRequest ? oauthParams : { ...oauthParams, ...params };
-    
-    // Generate signature
-    const signature = this.generateOAuthSignature(
-      method,
-      url,
-      signatureParams
-    );
-
-    // Add signature to oauth params
-    oauthParams.oauth_signature = signature;
-
-    // Build URL
-    let finalUrl: string;
-    if (isWriteRequest) {
-      // POST/PUT/DELETE: Only OAuth params in URL
-      const queryString = new URLSearchParams(oauthParams).toString();
-      finalUrl = `${url}?${queryString}`;
-    } else {
-      // GET: OAuth params + query params in URL
-      const allParams = { ...oauthParams, ...params };
-      const queryString = new URLSearchParams(allParams).toString();
-      finalUrl = `${url}?${queryString}`;
+    // Build final URL (query params only for GET)
+    let finalUrl = base;
+    if (method === 'GET' && Object.keys(params).length > 0) {
+      const qs = new URLSearchParams(
+        Object.fromEntries(Object.entries(params).map(([k, v]) => [k, String(v)]))
+      ).toString();
+      finalUrl = `${base}?${qs}`;
     }
 
-    // Build fetch options
+    // Basic Auth: base64(consumerKey:consumerSecret)
+    const credentials = Buffer.from(
+      `${this.config.consumerKey}:${this.config.consumerSecret}`
+    ).toString('base64');
+
     const fetchOptions: RequestInit = {
       method,
       headers: {
+        'Authorization': `Basic ${credentials}`,
         'Content-Type': 'application/json',
+        // A descriptive User-Agent prevents Cloudflare from flagging the request as a headless bot
+        'User-Agent': 'Bikerfun-NextJS-Sync/1.0 (+https://bikerfun.nl)',
+        'Accept': 'application/json',
       },
-      next: {
-        revalidate: 300, // Cache for 5 minutes
-      },
+      // Never serve a cached response for sync calls; always hit WooCommerce live
+      cache: 'no-store',
     };
 
-    // Add body for POST/PUT/DELETE requests
-    if (isWriteRequest && Object.keys(params).length > 0) {
+    if (method !== 'GET' && Object.keys(params).length > 0) {
       fetchOptions.body = JSON.stringify(params);
     }
 
