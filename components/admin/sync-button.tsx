@@ -82,7 +82,7 @@ export function SyncButton() {
 
       // 202 = sync gestart op achtergrond
       setProgress(100);
-      setResult({ success: true, ...data });
+      setResult({ ...data, success: true });
 
       if (data.errors?.length) {
         setError(data.errors.join(', '));
