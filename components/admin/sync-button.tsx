@@ -77,25 +77,50 @@ export function SyncButton() {
       });
 
       const text = await response.text();
-      let data: SyncResult & { message?: string };
+      let data: { success: boolean; jobId?: string; error?: string };
       try {
         data = text ? JSON.parse(text) : { success: false };
       } catch {
         setError(`Ongeldig antwoord (${response.status}). ${text.slice(0, 200)}`);
+        setSyncing(false);
         return;
       }
 
-      if (!response.ok) {
-        setError((data as any).error || (data as any).message || `HTTP ${response.status}`);
+      if (!response.ok || !data.success) {
+        setError(data.error || `HTTP ${response.status}`);
+        setSyncing(false);
         return;
       }
 
-      // 202 = sync gestart op achtergrond; balk loopt door naar 100%
-      responseReceived.current = true;
-      setResult({ ...data, success: true });
+      // 202 ontvangen — poll elke 3s voor het eindresultaat
+      const jobId = data.jobId;
+      if (jobId) {
+        const poll = setInterval(async () => {
+          try {
+            const statusRes = await fetch(`/api/admin/sync-status?jobId=${jobId}`, { credentials: 'include' });
+            const statusData = await statusRes.json();
 
-      if (data.errors?.length) {
-        setError(data.errors.join(', '));
+            if (statusData.status === 'completed') {
+              clearInterval(poll);
+              responseReceived.current = true;
+              const d = statusData.details;
+              setResult({
+                success: !d.errors?.length,
+                occasions: d.occasions ?? undefined,
+                products: d.products ?? undefined,
+                orders: d.orders ?? undefined,
+                errors: d.errors?.length ? d.errors : undefined,
+              });
+              if (d.errors?.length) setError(d.errors.join(', '));
+            }
+          } catch {
+            // stil blijven pollen bij netwerk-hickup
+          }
+        }, 3000);
+      } else {
+        // Geen jobId — gewoon balk laten aflopen
+        responseReceived.current = true;
+        setResult({ success: true });
       }
     } catch (err: any) {
       setError(err.message || 'Onbekende fout tijdens synchronisatie');
@@ -203,11 +228,11 @@ export function SyncButton() {
               </svg>
                 <div>
                 <h3 className={`text-sm font-bold ${result.success ? 'text-green-800' : 'text-yellow-800'}`}>
-                  {result.success ? 'Sync Gestart!' : 'Synchronisatie met Waarschuwingen'}
+                  {result.success ? 'Synchronisatie Voltooid!' : 'Synchronisatie met Fouten'}
                 </h3>
                 <p className={`text-xs ${result.success ? 'text-green-700' : 'text-yellow-700'} mt-1`}>
                   {result.success
-                    ? 'De synchronisatie loopt op de achtergrond. Ververs de pagina na ±1 minuut.'
+                    ? 'Alle data is succesvol gesynchroniseerd.'
                     : 'Sommige onderdelen konden niet worden gesynchroniseerd.'}
                 </p>
               </div>
