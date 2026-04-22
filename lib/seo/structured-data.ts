@@ -6,7 +6,8 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 const PHONE       = '+31-6-15452108';
 const EMAIL       = 'bikerfun.info@gmail.com';
 const LOGO        = `${baseUrl}/bikerfun-new-logo.png`;
-const TIKTOK_URL  = 'https://www.tiktok.com/@bikerfuntiktok';
+const TIKTOK_URL       = 'https://www.tiktok.com/@bikerfuntiktok';
+const GOOGLE_MAPS_URL  = 'https://www.google.com/maps/place/Bikerfun/@51.0528,5.8669,17z';
 
 const ADDRESS = {
   '@type': 'PostalAddress',
@@ -56,7 +57,7 @@ export function getOrganizationSchema() {
       contactType:         'customer service',
       availableLanguage:   'Dutch',
     },
-    sameAs: [TIKTOK_URL],
+    sameAs: [TIKTOK_URL, GOOGLE_MAPS_URL],
   };
 }
 
@@ -73,10 +74,17 @@ export function getLocalBusinessSchema() {
     email:       EMAIL,
     address:     ADDRESS,
     geo:         GEO,
-    hasMap:      `https://www.google.com/maps/search/Rafaëlweg+23+Susteren`,
+    hasMap:      GOOGLE_MAPS_URL,
     openingHoursSpecification: HOURS,
     priceRange:  '€€',
-    sameAs:      [TIKTOK_URL],
+    sameAs:      [TIKTOK_URL, GOOGLE_MAPS_URL],
+    aggregateRating: {
+      '@type':       'AggregateRating',
+      ratingValue:   '5',
+      reviewCount:   '6',
+      bestRating:    '5',
+      worstRating:   '1',
+    },
     areaServed: {
       '@type': 'AdministrativeArea',
       name: 'Nederland',

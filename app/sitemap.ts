@@ -126,9 +126,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Dynamic product pages (only those with valid slugs)
+  // Dynamic product pages — exclude slugs that are also category slugs (category takes priority in routing)
+  const categorySlugs = new Set(categoriesData.map((c) => c.slug));
   const productPages: MetadataRoute.Sitemap = productsData
-    .filter((product) => product.slug && product.slug.trim() !== '')
+    .filter((product) => product.slug && product.slug.trim() !== '' && !categorySlugs.has(product.slug))
     .map((product) => ({
       url: `${baseUrl}/products/${product.slug}`,
       lastModified: new Date(product.updated_at || new Date()),

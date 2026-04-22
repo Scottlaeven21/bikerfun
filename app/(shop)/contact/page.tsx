@@ -4,9 +4,39 @@ import { getContactMetadata } from '@/lib/seo/metadata';
 
 export const metadata = getContactMetadata();
 
+const contactPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ContactPage',
+  name: 'Contact – Bikerfun',
+  url: 'https://bikerfun.nl/contact',
+  description: 'Neem contact op met Bikerfun voor vragen over occasions, motorkleding of een proefrit.',
+  mainEntity: {
+    '@type': 'LocalBusiness',
+    name: 'Bikerfun',
+    telephone: '+31-6-15452108',
+    email: 'bikerfun.info@gmail.com',
+    address: {
+      '@type': 'PostalAddress',
+      streetAddress: 'Rafaëlweg 23',
+      postalCode: '6114BX',
+      addressLocality: 'Susteren',
+      addressRegion: 'Limburg',
+      addressCountry: 'NL',
+    },
+    openingHoursSpecification: [
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '07:00', closes: '17:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '12:00', closes: '17:00' },
+    ],
+  },
+};
+
 export default function ContactPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(contactPageSchema) }}
+      />
       {/* Hero Section with Video */}
       <section className="relative h-[50vh] overflow-hidden">
         {/* Video Background */}

@@ -11,11 +11,11 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const supabase = await createClient();
   const { data: occasion } = await supabase
     .from('occasions')
-    .select('brand, model, year, description, main_image, price')
+    .select('brand, model, year, description, main_image, price, status, mileage')
     .eq('id', id)
     .single();
 
-  const occasionData = occasion as Pick<Occasion, 'brand' | 'model' | 'year' | 'description' | 'main_image' | 'price'> | null;
+  const occasionData = occasion as Pick<Occasion, 'brand' | 'model' | 'year' | 'description' | 'main_image' | 'price' | 'status' | 'mileage'> | null;
 
   if (!occasionData) {
     return {
@@ -26,7 +26,17 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
   const pageUrl = `${baseUrl}/occasions/${id}`;
   const title = `${occasionData.brand} ${occasionData.model} (${occasionData.year}) | Bikerfun`;
-  const description = occasionData.description || `${occasionData.brand} ${occasionData.model} uit ${occasionData.year} - Nu te koop bij Bikerfun voor €${occasionData.price?.toLocaleString('nl-NL')}`;
+
+  const statusLabel =
+    occasionData.status === 'sold'
+      ? 'Verkocht'
+      : occasionData.status === 'reserved'
+      ? 'Gereserveerd – Interesse? Zet je in de wachtrij'
+      : `Te koop bij Bikerfun voor €${occasionData.price?.toLocaleString('nl-NL')}`;
+
+  const description =
+    occasionData.description ||
+    `${occasionData.brand} ${occasionData.model} uit ${occasionData.year}${occasionData.mileage ? ` | ${occasionData.mileage.toLocaleString('nl-NL')} km` : ''} – ${statusLabel}.`;
 
   return {
     title,

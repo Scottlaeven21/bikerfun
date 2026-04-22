@@ -50,14 +50,14 @@ export const metadata: Metadata = {
     locale: "nl_NL",
     url: "https://bikerfun.nl",
     siteName: "Bikerfun",
-    title: "Bikerfun - Motor & Biker Lifestyle Shop",
-    description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
+    title: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
+    description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
     images: ['/bikerfun-new-logo.png'],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bikerfun - Motor & Biker Lifestyle Shop",
-    description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
+    title: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
+    description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
     images: ['/bikerfun-new-logo.png'],
   },
 };

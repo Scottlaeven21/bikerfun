@@ -99,7 +99,7 @@ export default async function HomePage() {
                 style={{ fontFamily: 'var(--font-montserrat)' }}
                 className="text-sm md:text-base text-white/70 mb-12 tracking-widest uppercase font-light"
               >
-                Bikerfun
+                Motoroccasions &amp; Accessoires · Susteren, Limburg
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -548,7 +548,7 @@ export default async function HomePage() {
               Bekijk al onze reviews op Google
             </p>
             <a
-              href="https://www.google.com/search?q=bikerfun+reviews"
+              href="https://www.google.com/maps/place/Bikerfun/@51.0528,5.8669,17z"
               target="_blank"
               rel="noopener noreferrer"
               style={{ fontFamily: 'var(--font-montserrat)' }}
