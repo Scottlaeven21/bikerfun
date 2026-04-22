@@ -9,6 +9,47 @@ import { BusinessStructuredData } from '@/components/seo/business-structured-dat
 import { getHomeMetadata } from '@/lib/seo/metadata';
 import { StructuredData } from '@/components/seo/structured-data';
 import { getWebsiteSchema } from '@/lib/seo/structured-data';
+import { FAQAccordion } from '@/components/faq/faq-accordion';
+
+const homeFAQ = [
+  {
+    question: 'Kan ik een occasion komen bezichtigen?',
+    answer: 'Ja, natuurlijk! We werken graag op afspraak om ervoor te zorgen dat we voldoende tijd voor je hebben. Bel ons op 06 15 45 21 08 of gebruik het contactformulier om een afspraak te maken.',
+  },
+  {
+    question: 'Bieden jullie garantie op occasions?',
+    answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geïnteresseerd bent.',
+  },
+  {
+    question: 'Kan ik mijn huidige motor inruilen?',
+    answer: "Absoluut! We kopen graag jouw huidige motor in. Stuur ons foto's en specificaties via het contactformulier of WhatsApp, dan maken we een eerlijke offerte.",
+  },
+  {
+    question: 'Is financiering mogelijk?',
+    answer: 'Ja, we kunnen je helpen met verschillende financieringsmogelijkheden. Neem contact met ons op om de opties te bespreken die het beste bij jouw situatie passen.',
+  },
+  {
+    question: 'Kan ik een proefrit maken?',
+    answer: 'Ja, na een korte kennismaking en verificatie van je rijbewijs kun je een proefrit maken. We willen er zeker van zijn dat de motor aan je verwachtingen voldoet!',
+  },
+  {
+    question: 'Hoe snel kan ik de motor meenemen?',
+    answer: 'Als alle papieren in orde zijn, kun je de motor vaak direct meenemen. We houden je altijd op de hoogte van de verwachte levertijd.',
+  },
+];
+
+const homeFAQSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: homeFAQ.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
 
 export const metadata = getHomeMetadata();
 
@@ -31,6 +72,7 @@ export default async function HomePage() {
     <>
       <BusinessStructuredData />
       <StructuredData data={getWebsiteSchema()} />
+      <StructuredData data={homeFAQSchema} />
       <div className="overflow-x-hidden">
       {/* Hero Section with Video Background */}
       <section className="relative h-screen overflow-hidden">
@@ -514,6 +556,33 @@ export default async function HomePage() {
             >
               MEER REVIEWS OP GOOGLE
             </a>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-20 bg-biker-dark noise-overlay border-y border-biker-gray/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Header */}
+          <div className="text-center mb-16">
+            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+              Veelgestelde <span className="text-biker-yellow">Vragen</span>
+            </h2>
+            <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
+              Heb je een vraag over onze occasions, garantie of inruil? Hier vind je snel antwoord.
+            </p>
+          </div>
+
+          <FAQAccordion items={homeFAQ} />
+
+          <div className="text-center mt-12">
+            <Link
+              href="/faq"
+              style={{ fontFamily: 'var(--font-montserrat)' }}
+              className="btn-secondary inline-block bg-transparent text-white px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 border-2 border-white hover:bg-white hover:text-black"
+            >
+              BEKIJK ALLE VRAGEN
+            </Link>
           </div>
         </div>
       </section>
