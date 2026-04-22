@@ -6,6 +6,20 @@ export const metadata: Metadata = {
   title: 'Veelgestelde Vragen (FAQ) | Bikerfun',
   description: 'Vind antwoorden op veelgestelde vragen over onze occasions, financiering, garantie en meer.',
   keywords: ['faq', 'veelgestelde vragen', 'motor kopen', 'occasions', 'garantie', 'financiering'],
+  alternates: { canonical: 'https://bikerfun.nl/faq' },
+  openGraph: {
+    title: 'Veelgestelde Vragen | Bikerfun',
+    description: 'Vind antwoorden op veelgestelde vragen over onze occasions, webshop en diensten.',
+    url: 'https://bikerfun.nl/faq',
+    siteName: 'Bikerfun',
+    locale: 'nl_NL',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: 'Veelgestelde Vragen | Bikerfun',
+    description: 'Antwoorden op de meest gestelde vragen over Bikerfun.',
+  },
 };
 
 const faqData = [
@@ -86,9 +100,26 @@ const webshopFAQ = [
   },
 ];
 
+const faqJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: [...faqData, ...webshopFAQ].map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
 export default function FAQPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-b from-biker-dark to-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">

@@ -8,9 +8,10 @@ import { useCart } from '@/contexts/cart-context';
 
 interface SupabaseProductCardProps {
   product: SupabaseProduct;
+  priority?: boolean;
 }
 
-export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
+export function SupabaseProductCard({ product, priority = false }: SupabaseProductCardProps) {
   const { addToCart } = useCart();
   const [isAdding, setIsAdding] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -72,7 +73,8 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
               fill
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
               className="object-contain p-6 opacity-40 filter grayscale"
-              loading="lazy"
+              priority={priority}
+              loading={priority ? undefined : 'lazy'}
               unoptimized={true}
               onError={() => setImageError(true)}
             />
@@ -119,7 +121,8 @@ export function SupabaseProductCard({ product }: SupabaseProductCardProps) {
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-contain p-6 group-hover:scale-105 transition-transform duration-300"
-            loading="lazy"
+            priority={priority}
+            loading={priority ? undefined : 'lazy'}
             unoptimized={true}
             onError={() => {
               console.error('Failed to load image:', imageUrl);

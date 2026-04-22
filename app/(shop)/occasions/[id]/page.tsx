@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Occasion } from '@/types';
 import { OccasionDetailClient } from '@/components/occasions/occasion-detail-client';
 import { OccasionStructuredData } from '@/components/seo/occasion-structured-data';
+import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
 
 export async function generateMetadata({ params }: { params: Promise<{ id: string }> }): Promise<Metadata> {
   const { id } = await params;
@@ -72,9 +73,19 @@ export default async function OccasionDetailPage({ params }: { params: Promise<{
     notFound();
   }
 
+  const breadcrumbJsonLd = getBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Occasions', url: '/occasions' },
+    { name: `${occasionData.brand} ${occasionData.model} (${occasionData.year})`, url: `/occasions/${id}` },
+  ]);
+
   return (
     <>
       <OccasionStructuredData occasion={occasionData} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <OccasionDetailClient occasion={occasionData} />
     </>
   );

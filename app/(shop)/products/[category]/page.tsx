@@ -16,6 +16,7 @@ import { ProductsFilter } from '@/components/products/products-filter';
 import { AddToCartButton } from '@/components/products/add-to-cart-button';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 import { sanitizeHtmlDescription } from '@/lib/utils/sanitize-html';
+import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
 
 export const revalidate = 300;
 
@@ -151,11 +152,21 @@ export default async function ProductOrCategoryPage({
       },
     };
 
+    const breadcrumbJsonLd = getBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Webshop', url: '/products' },
+      { name: product.name, url: `/products/${slug}` },
+    ]);
+
     return (
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
@@ -334,8 +345,18 @@ export default async function ProductOrCategoryPage({
   const products = await getAllProducts(200);
   const categoryProducts = products.filter((p) => p.categories?.includes(currentCategory));
 
+  const categoryBreadcrumb = getBreadcrumbSchema([
+    { name: 'Home', url: '/' },
+    { name: 'Webshop', url: '/products' },
+    { name: currentCategory!, url: `/products/${slug}` },
+  ]);
+
   return (
     <WhiteBackgroundWrapper>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryBreadcrumb) }}
+      />
       <div className="min-h-screen bg-white pt-32 pb-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center">
