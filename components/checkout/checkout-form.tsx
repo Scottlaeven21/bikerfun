@@ -97,7 +97,11 @@ export function CheckoutForm() {
 
       const { orderId, paymentUrl } = await response.json();
 
-      // Clear cart
+      // Save cart to sessionStorage BEFORE clearing, so it can be restored if payment fails
+      sessionStorage.setItem('bikerfun_cart_backup', JSON.stringify(cart));
+      sessionStorage.setItem('bikerfun_pending_order', orderId);
+
+      // Clear cart now that the order is safely created
       clearCart();
 
       // Redirect to Mollie payment

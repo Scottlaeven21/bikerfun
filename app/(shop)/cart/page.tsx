@@ -6,21 +6,17 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 
-const SHIPPING_COST = 7.50;
-const FREE_SHIPPING_THRESHOLD = 75;
-const TAX_RATE = 0.21;
-
 export default function CartPage() {
-  const { cart, removeFromCart, updateQuantity, total: cartTotal } = useCart();
+  const { cart, removeFromCart, updateQuantity } = useCart();
 
+  // Prices from WooCommerce already include 21% BTW — no extra tax calculation needed.
+  // NL shipping is always free; other countries are calculated at checkout.
   const subtotal = cart.reduce((sum, item) => {
     const price = parseFloat(item.product.price || '0');
     return sum + (price * item.quantity);
   }, 0);
 
-  const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
-  const tax = subtotal * TAX_RATE;
-  const total = subtotal + shipping + tax;
+  const total = subtotal; // shipping calculated at checkout
 
   if (cart.length === 0) {
     return (
@@ -158,17 +154,14 @@ export default function CartPage() {
                   <span className="font-semibold text-biker-black">€{subtotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-gray-600">
-                  <span>Verzending (NL)</span>
-                  <span className="font-semibold text-green-600">Gratis</span>
-                </div>
-                <div className="flex justify-between text-gray-600">
-                  <span>BTW (21%)</span>
-                  <span className="font-semibold text-biker-black">€{tax.toFixed(2)}</span>
+                  <span>Verzending</span>
+                  <span className="font-semibold text-gray-500 text-sm">Berekend bij afrekenen</span>
                 </div>
                 <div className="border-t-2 border-gray-200 pt-4 flex justify-between text-xl font-bold text-biker-black">
                   <span>Totaal</span>
                   <span className="text-biker-yellow">€{total.toFixed(2)}</span>
                 </div>
+                <p className="text-xs text-gray-400">Alle prijzen zijn incl. 21% BTW</p>
               </div>
 
               <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-4">
@@ -177,7 +170,7 @@ export default function CartPage() {
                 </p>
               </div>
               <p className="text-xs text-gray-500 mb-6">
-                België: Verzendkosten worden berekend bij afrekenen
+                België &amp; Duitsland: verzendkosten worden berekend bij afrekenen
               </p>
 
               <Link

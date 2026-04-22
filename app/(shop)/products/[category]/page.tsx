@@ -39,15 +39,35 @@ export async function generateMetadata({
   const product = await getProductBySlug(slug);
   if (product) {
     const pageUrl = `${baseUrl}/products/${slug}`;
+    const productImages = (product.images ?? []).filter(img => img?.src);
+    const ogImages = productImages.slice(0, 3).map(img => ({
+      url: img.src,
+      width: 1200,
+      height: 630,
+      alt: product.name,
+    }));
+    const description = (product.short_description || product.description || `Koop ${product.name} bij Bikerfun – motor gear & accessoires`).slice(0, 160);
+    const categoryKeywords = (product.categories ?? []).join(', ');
+
     return {
       title: `${product.name} | Bikerfun Webshop`,
-      description: product.short_description || product.description || `Koop ${product.name} bij Bikerfun`,
+      description,
+      keywords: [product.name, categoryKeywords, 'motor accessoires', 'bikerfun', 'Susteren', 'Limburg', product.sku ?? ''].filter(Boolean).join(', '),
       alternates: { canonical: pageUrl },
       openGraph: {
-        title: product.name,
-        description: product.short_description || product.description || '',
+        title: `${product.name} | Bikerfun`,
+        description,
         url: pageUrl,
-        images: (product.images ?? []).filter(img => img?.src).slice(0, 1).map(img => img.src),
+        siteName: 'Bikerfun',
+        locale: 'nl_NL',
+        type: 'website',
+        images: ogImages.length ? ogImages : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${product.name} | Bikerfun`,
+        description,
+        images: productImages[0]?.src ? [productImages[0].src] : undefined,
       },
     };
   }
@@ -59,15 +79,23 @@ export async function generateMetadata({
   );
   if (categoryName) {
     const pageUrl = `${baseUrl}/products/${slug}`;
+    const description = `Ontdek onze collectie ${categoryName.toLowerCase()} – premium motor gear en accessoires bij Bikerfun in Susteren, Limburg.`;
     return {
       title: `${categoryName} | Bikerfun Webshop`,
-      description: `Ontdek onze collectie ${categoryName.toLowerCase()} - Premium motor gear en accessoires`,
+      description,
       alternates: { canonical: pageUrl },
       openGraph: {
         title: `${categoryName} | Bikerfun`,
-        description: `Ontdek onze collectie ${categoryName.toLowerCase()}`,
+        description,
         url: pageUrl,
+        siteName: 'Bikerfun',
+        locale: 'nl_NL',
         type: 'website',
+      },
+      twitter: {
+        card: 'summary',
+        title: `${categoryName} | Bikerfun`,
+        description,
       },
     };
   }

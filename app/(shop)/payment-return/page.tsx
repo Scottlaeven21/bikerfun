@@ -3,15 +3,19 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { useCart } from '@/contexts/cart-context';
 
 export default function PaymentReturnPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { restoreCart } = useCart();
   const [status, setStatus] = useState<'loading' | 'success' | 'failed'>('loading');
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
   useEffect(() => {
+    let attempts = 0;
+
     const checkPaymentStatus = async () => {
       const orderIdParam = searchParams.get('order');
       
@@ -23,25 +27,37 @@ export default function PaymentReturnPage() {
       setOrderId(orderIdParam);
 
       try {
-        // Fetch order status from Supabase
         const response = await fetch(`/api/orders/${orderIdParam}`);
         
         if (!response.ok) {
           setStatus('failed');
+          tryRestoreCart();
           return;
         }
 
         const { order } = await response.json();
         setOrderNumber(order.order_number);
 
-        // Check payment status
         if (order.payment_status === 'paid') {
+          // Payment confirmed — clear the backup and go to confirmation
+          sessionStorage.removeItem('bikerfun_cart_backup');
+          sessionStorage.removeItem('bikerfun_pending_order');
           setStatus('success');
-        } else if (order.payment_status === 'failed' || order.payment_status === 'canceled' || order.payment_status === 'expired') {
+        } else if (
+          order.payment_status === 'failed' ||
+          order.payment_status === 'canceled' ||
+          order.payment_status === 'expired'
+        ) {
+          tryRestoreCart();
           setStatus('failed');
         } else {
-          // Still pending, check again in 2 seconds
-          setTimeout(checkPaymentStatus, 2000);
+          // Still pending — poll up to 10 times (20 s)
+          attempts++;
+          if (attempts < 10) {
+            setTimeout(checkPaymentStatus, 2000);
+          } else {
+            setStatus('failed');
+          }
         }
       } catch (error) {
         console.error('Error checking payment status:', error);
@@ -50,7 +66,29 @@ export default function PaymentReturnPage() {
     };
 
     checkPaymentStatus();
-  }, [searchParams]);
+  }, [searchParams]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Restore cart from sessionStorage backup after a failed/cancelled payment
+  const tryRestoreCart = () => {
+    try {
+      const backup = sessionStorage.getItem('bikerfun_cart_backup');
+      if (backup) {
+        const items = JSON.parse(backup);
+        if (typeof restoreCart === 'function') restoreCart(items);
+        sessionStorage.removeItem('bikerfun_cart_backup');
+        sessionStorage.removeItem('bikerfun_pending_order');
+      }
+    } catch {
+      // ignore
+    }
+  };
+
+  // Redirect to order confirmation once status is confirmed as success
+  useEffect(() => {
+    if (status === 'success' && orderId) {
+      router.push(`/order-confirmation/${orderId}`);
+    }
+  }, [status, orderId, router]);
 
   if (status === 'loading') {
     return (
@@ -138,11 +176,6 @@ export default function PaymentReturnPage() {
         </div>
       </div>
     );
-  }
-
-  // Success - redirect to order confirmation
-  if (orderId) {
-    router.push(`/order-confirmation/${orderId}`);
   }
 
   return null;

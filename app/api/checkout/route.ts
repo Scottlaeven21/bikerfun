@@ -117,29 +117,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Update product stock quantities
-    for (const cartItem of cartItems) {
-      const product = await supabase
-        .from('webshop_products')
-        .select('stock_quantity, manage_stock')
-        .eq('id', cartItem.product.id)
-        .single();
-
-      if (product.data && product.data.manage_stock && product.data.stock_quantity !== null) {
-        const newStock = Math.max(0, product.data.stock_quantity - cartItem.quantity);
-        
-        await supabase
-          .from('webshop_products')
-          .update({ 
-            stock_quantity: newStock,
-            stock_status: newStock > 0 ? 'instock' : 'outofstock'
-          })
-          .eq('id', cartItem.product.id);
-        
-        console.log(`✅ Updated stock for product ${cartItem.product.id}: ${product.data.stock_quantity} → ${newStock}`);
-      }
-    }
-
     // Create Mollie payment
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
     const payment = await createMolliePayment({
