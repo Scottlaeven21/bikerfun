@@ -197,7 +197,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               {allImages.length > 0 && (
                 <div className="mb-8">
                   {/* Large Current Image */}
-                  <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray">
+                  <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray group">
                     <Image
                       src={allImages[currentImageIndex]}
                       alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
@@ -207,6 +207,39 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                       unoptimized
                       sizes="(max-width: 1024px) 100vw, 66vw"
                     />
+
+                    {/* Prev arrow */}
+                    {allImages.length > 1 && (
+                      <button
+                        onClick={() => setCurrentImageIndex((currentImageIndex - 1 + allImages.length) % allImages.length)}
+                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                        aria-label="Vorige afbeelding"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                    )}
+
+                    {/* Next arrow */}
+                    {allImages.length > 1 && (
+                      <button
+                        onClick={() => setCurrentImageIndex((currentImageIndex + 1) % allImages.length)}
+                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                        aria-label="Volgende afbeelding"
+                      >
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    )}
+
+                    {/* Counter */}
+                    {allImages.length > 1 && (
+                      <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                        {currentImageIndex + 1} / {allImages.length}
+                      </div>
+                    )}
                   </div>
 
                   {/* Thumbnails */}
