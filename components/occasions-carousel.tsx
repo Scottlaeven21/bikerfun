@@ -204,8 +204,10 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
 
               {/* Pricing */}
               <div className="mb-4 pb-4 border-b border-biker-gray">
-                <div className="text-white font-bold text-2xl">
-                  € {occasion.price.toLocaleString('nl-NL')},-
+                <div className="text-biker-yellow font-bold text-2xl">
+                  {occasion.price > 0
+                    ? `€ ${occasion.price.toLocaleString('nl-NL')},-`
+                    : 'Prijs op aanvraag'}
                 </div>
               </div>
 

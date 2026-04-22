@@ -392,13 +392,26 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 
                 {/* Year Badge */}
                 {occasion.year && occasion.year > 1900 && (
-                  <div className="inline-block bg-biker-yellow text-biker-black px-4 py-1 rounded-full text-sm font-bold mb-6">
+                  <div className="inline-block bg-biker-yellow text-biker-black px-4 py-1 rounded-full text-sm font-bold mb-4">
                     {occasion.year}
                   </div>
                 )}
+
+                {/* Price */}
+                <div className="mb-6 mt-2">
+                  {occasion.price > 0 ? (
+                    <div className="text-3xl font-black text-biker-yellow tracking-tight">
+                      € {occasion.price.toLocaleString('nl-NL')}
+                    </div>
+                  ) : (
+                    <div className="text-xl font-bold text-biker-yellow">
+                      Prijs op aanvraag
+                    </div>
+                  )}
+                </div>
                 
                 {/* Header */}
-                <h2 className="text-xl font-bold text-white mb-6 mt-6">INFORMATIE</h2>
+                <h2 className="text-xl font-bold text-white mb-6">INFORMATIE</h2>
 
                 {/* Info List */}
                 <div className="space-y-0 mb-8">

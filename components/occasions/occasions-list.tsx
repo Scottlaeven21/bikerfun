@@ -211,7 +211,9 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
 
                   {/* Price - prominent yellow */}
                   <div className="text-biker-yellow font-bold text-2xl mb-4">
-                    € {occasion.price.toLocaleString('nl-NL')}
+                    {occasion.price > 0
+                      ? `€ ${occasion.price.toLocaleString('nl-NL')}`
+                      : 'Prijs op aanvraag'}
                   </div>
 
                   {/* Specs */}
