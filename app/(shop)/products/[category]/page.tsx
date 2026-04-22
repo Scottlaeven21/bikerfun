@@ -36,44 +36,7 @@ export async function generateMetadata({
   const { category: slug } = await params;
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 
-  // Try product first
-  const product = await getProductBySlug(slug);
-  if (product) {
-    const pageUrl = `${baseUrl}/products/${slug}`;
-    const productImages = (product.images ?? []).filter(img => img?.src);
-    const ogImages = productImages.slice(0, 3).map(img => ({
-      url: img.src,
-      width: 1200,
-      height: 630,
-      alt: product.name,
-    }));
-    const description = (product.short_description || product.description || `Koop ${product.name} bij Bikerfun – motor gear & accessoires`).slice(0, 160);
-    const categoryKeywords = (product.categories ?? []).join(', ');
-
-    return {
-      title: `${product.name} | Bikerfun Webshop`,
-      description,
-      keywords: [product.name, categoryKeywords, 'motor accessoires', 'bikerfun', 'Susteren', 'Limburg', product.sku ?? ''].filter(Boolean).join(', '),
-      alternates: { canonical: pageUrl },
-      openGraph: {
-        title: `${product.name} | Bikerfun`,
-        description,
-        url: pageUrl,
-        siteName: 'Bikerfun',
-        locale: 'nl_NL',
-        type: 'website',
-        images: ogImages.length ? ogImages : undefined,
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: `${product.name} | Bikerfun`,
-        description,
-        images: productImages[0]?.src ? [productImages[0].src] : undefined,
-      },
-    };
-  }
-
-  // Fall back to category
+  // Check categories FIRST — same priority as the page render
   const categories = await getCategories();
   const categoryName = categories.find(
     (c) => c.toLowerCase().replace(/\s+/g, '-') === slug || c.toLowerCase() === slug
@@ -101,6 +64,42 @@ export async function generateMetadata({
     };
   }
 
+  // Fall back to product lookup
+  const product = await getProductBySlug(slug);
+  if (product) {
+    const pageUrl = `${baseUrl}/products/${slug}`;
+    const productImages = (product.images ?? []).filter(img => img?.src);
+    const ogImages = productImages.slice(0, 3).map(img => ({
+      url: img.src,
+      width: 1200,
+      height: 630,
+      alt: product.name,
+    }));
+    const description = (product.short_description || product.description || `Koop ${product.name} bij Bikerfun – motor gear & accessoires`).slice(0, 160);
+    const categoryKeywords = (product.categories ?? []).join(', ');
+    return {
+      title: `${product.name} | Bikerfun Webshop`,
+      description,
+      keywords: [product.name, categoryKeywords, 'motor accessoires', 'bikerfun', 'Susteren', 'Limburg', product.sku ?? ''].filter(Boolean).join(', '),
+      alternates: { canonical: pageUrl },
+      openGraph: {
+        title: `${product.name} | Bikerfun`,
+        description,
+        url: pageUrl,
+        siteName: 'Bikerfun',
+        locale: 'nl_NL',
+        type: 'website',
+        images: ogImages.length ? ogImages : undefined,
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: `${product.name} | Bikerfun`,
+        description,
+        images: productImages[0]?.src ? [productImages[0].src] : undefined,
+      },
+    };
+  }
+
   return { title: 'Niet gevonden | Bikerfun' };
 }
 
@@ -111,7 +110,60 @@ export default async function ProductOrCategoryPage({
 }) {
   const { category: slug } = await params;
 
-  // ── 1. Try to find a product with this slug ──────────────────────────────
+  // ── 1. Category check FIRST ───────────────────────────────────────────────
+  // Categories take priority so /products/helmcovers always shows the category
+  // page, even if a product happens to have the same slug.
+  const allCategoriesEarly = await getCategories();
+  const matchedCategory = allCategoriesEarly.find(
+    (c) => c.toLowerCase().replace(/\s+/g, '-') === slug || c.toLowerCase() === slug
+  );
+
+  if (matchedCategory) {
+    const categoryBreadcrumb = getBreadcrumbSchema([
+      { name: 'Home', url: '/' },
+      { name: 'Webshop', url: '/products' },
+      { name: matchedCategory, url: `/products/${slug}` },
+    ]);
+    const categoryProducts = (await getAllProducts(200)).filter((p) =>
+      p.categories?.includes(matchedCategory)
+    );
+
+    return (
+      <WhiteBackgroundWrapper>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryBreadcrumb) }}
+        />
+        <div className="min-h-screen bg-white pt-32 pb-12">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="mb-12 text-center">
+              <h1
+                style={{ fontFamily: 'var(--font-inter)' }}
+                className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
+              >
+                <span className="text-biker-yellow">{matchedCategory}</span>
+              </h1>
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
+                Ontdek onze collectie {matchedCategory.toLowerCase()}
+              </p>
+
+              <div className="flex items-center justify-center gap-2 mt-6 text-sm text-gray-500">
+                <Link href="/" className="hover:text-biker-yellow transition-colors">Home</Link>
+                <span>/</span>
+                <Link href="/products" className="hover:text-biker-yellow transition-colors">Webshop</Link>
+                <span>/</span>
+                <span className="text-biker-yellow font-medium">{matchedCategory}</span>
+              </div>
+            </div>
+
+            <ProductsFilter products={categoryProducts} categories={allCategoriesEarly} />
+          </div>
+        </div>
+      </WhiteBackgroundWrapper>
+    );
+  }
+
+  // ── 2. Try to find a product with this slug ──────────────────────────────
   const product = await getProductBySlug(slug);
 
   if (product) {
@@ -332,60 +384,6 @@ export default async function ProductOrCategoryPage({
     );
   }
 
-  // ── 2. Try to find a matching category ──────────────────────────────────
-  const allCategories = await getCategories();
-  const currentCategory = allCategories.find(
-    (c) => c.toLowerCase().replace(/\s+/g, '-') === slug || c.toLowerCase() === slug
-  );
-
-  if (!currentCategory) {
-    notFound();
-  }
-
-  const products = await getAllProducts(200);
-  const categoryProducts = products.filter((p) => p.categories?.includes(currentCategory));
-
-  const categoryBreadcrumb = getBreadcrumbSchema([
-    { name: 'Home', url: '/' },
-    { name: 'Webshop', url: '/products' },
-    { name: currentCategory!, url: `/products/${slug}` },
-  ]);
-
-  return (
-    <WhiteBackgroundWrapper>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryBreadcrumb) }}
-      />
-      <div className="min-h-screen bg-white pt-32 pb-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="mb-12 text-center">
-            <h1
-              style={{ fontFamily: 'var(--font-inter)' }}
-              className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
-            >
-              <span className="text-biker-yellow">{currentCategory}</span>
-            </h1>
-            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-              Ontdek onze collectie {currentCategory.toLowerCase()}
-            </p>
-
-            <div className="flex items-center justify-center gap-2 mt-6 text-sm text-gray-500">
-              <Link href="/" className="hover:text-biker-yellow transition-colors">
-                Home
-              </Link>
-              <span>/</span>
-              <Link href="/products" className="hover:text-biker-yellow transition-colors">
-                Webshop
-              </Link>
-              <span>/</span>
-              <span className="text-biker-yellow font-medium">{currentCategory}</span>
-            </div>
-          </div>
-
-          <ProductsFilter products={categoryProducts} categories={allCategories} />
-        </div>
-      </div>
-    </WhiteBackgroundWrapper>
-  );
+  // No category and no product found
+  notFound();
 }
