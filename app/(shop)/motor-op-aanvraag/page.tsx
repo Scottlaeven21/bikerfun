@@ -1,12 +1,9 @@
-import { Metadata } from 'next';
 import Link from 'next/link';
 import { Suspense } from 'react';
 import { MotorAanvraagFormClient } from '@/components/forms/motor-aanvraag-form-client';
+import { getAanvraagMetadata } from '@/lib/seo/metadata';
 
-export const metadata: Metadata = {
-  title: 'Motor Op Aanvraag | Bikerfun',
-  description: 'Zoek je een specifieke motor? Wij gaan voor jou op zoek naar je droommodel.',
-};
+export const metadata = getAanvraagMetadata();
 
 export default function AanvraagPage() {
   return (

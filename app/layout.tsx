@@ -26,11 +26,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl'),
   title: {
-    default: "Bikerfun - Motor & Biker Lifestyle Shop",
+    default: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
     template: "%s | Bikerfun",
   },
-  description: "Premium motor gear en biker lifestyle producten voor echte motorliefhebbers.",
-  keywords: ["motor", "biker", "motorkleding", "motorgear", "lifestyle"],
+  description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
+  keywords: ["motoroccasions", "motor dealer", "motorkleding", "motorgear", "Susteren", "Limburg", "bikerfun"],
   authors: [{ name: "Bikerfun" }],
   icons: {
     icon: [
@@ -99,6 +99,13 @@ export default function RootLayout({
         />
         
         <meta name="theme-color" content="#000000" />
+
+        {/* Geo / Local SEO */}
+        <meta name="geo.region"       content="NL-LI" />
+        <meta name="geo.placename"    content="Susteren" />
+        <meta name="geo.position"     content="51.0528;5.8669" />
+        <meta name="ICBM"             content="51.0528, 5.8669" />
+        <meta name="DC.title"         content="Bikerfun – Motoroccasions Susteren" />
       </head>
       <body className="antialiased overflow-x-hidden bg-black">
         <GoogleAnalytics />

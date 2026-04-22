@@ -23,6 +23,17 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '2mb',
     },
   },
+  // Redirect duplicate privacy URL to canonical
+  async redirects() {
+    return [
+      {
+        source:      '/privacy',
+        destination: '/privacy-policy',
+        permanent:   true,
+      },
+    ];
+  },
+
   // Security headers
   async headers() {
     return [

@@ -3,6 +3,8 @@ import { Metadata } from 'next';
 export const metadata: Metadata = {
   title: 'Privacy Beleid | Bikerfun',
   description: 'Lees het privacy beleid van Bikerfun en hoe wij omgaan met jouw gegevens.',
+  robots: { index: false, follow: false },
+  alternates: { canonical: `${process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl'}/privacy-policy` },
 };
 
 export default function PrivacyPage() {

@@ -2,12 +2,43 @@ import { Occasion } from '@/types';
 
 const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 
-// Canonical contact details — update here if they change
-const PHONE = '+31-6-15452108';        // 06 15 45 21 08
-const EMAIL = 'bikerfun.info@gmail.com';
-const LOGO  = `${baseUrl}/bikerfun-new-logo.png`;
+// ── Canonical business details ────────────────────────────────────────────────
+const PHONE       = '+31-6-15452108';
+const EMAIL       = 'bikerfun.info@gmail.com';
+const LOGO        = `${baseUrl}/bikerfun-new-logo.png`;
+const TIKTOK_URL  = 'https://www.tiktok.com/@bikerfuntiktok';
 
-// Organization Schema
+const ADDRESS = {
+  '@type': 'PostalAddress',
+  streetAddress:    'Rafaëlweg 23',
+  postalCode:       '6114BX',
+  addressLocality:  'Susteren',
+  addressRegion:    'Limburg',
+  addressCountry:   'NL',
+};
+
+const GEO = {
+  '@type':    'GeoCoordinates',
+  latitude:   51.0528,
+  longitude:  5.8669,
+};
+
+const HOURS = [
+  {
+    '@type':    'OpeningHoursSpecification',
+    dayOfWeek:  ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens:      '07:00',
+    closes:     '17:00',
+  },
+  {
+    '@type':    'OpeningHoursSpecification',
+    dayOfWeek:  ['Saturday'],
+    opens:      '12:00',
+    closes:     '17:00',
+  },
+];
+
+// ── Organization Schema ───────────────────────────────────────────────────────
 export function getOrganizationSchema() {
   return {
     '@context': 'https://schema.org',
@@ -16,58 +47,44 @@ export function getOrganizationSchema() {
     url: baseUrl,
     logo: LOGO,
     image: LOGO,
-    description: 'Specialist in motoren, occasions en motoraccessoires',
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Nederland',
-      addressCountry: 'NL',
-    },
+    description: 'Specialist in motoroccasions en motoraccessoires in Susteren, Limburg.',
+    address: ADDRESS,
     contactPoint: {
-      '@type': 'ContactPoint',
-      telephone: PHONE,
-      email: EMAIL,
-      contactType: 'customer service',
-      availableLanguage: 'Dutch',
+      '@type':             'ContactPoint',
+      telephone:           PHONE,
+      email:               EMAIL,
+      contactType:         'customer service',
+      availableLanguage:   'Dutch',
     },
-    sameAs: [],
+    sameAs: [TIKTOK_URL],
   };
 }
 
-// Local Business Schema
+// ── Local Business Schema ─────────────────────────────────────────────────────
 export function getLocalBusinessSchema() {
   return {
     '@context': 'https://schema.org',
-    '@type': 'AutomotiveBusiness',
-    name: 'Bikerfun',
-    url: baseUrl,
-    logo: LOGO,
-    image: LOGO,
-    telephone: PHONE,
-    email: EMAIL,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'Nederland',
-      addressCountry: 'NL',
+    '@type': ['AutomotiveBusiness', 'LocalBusiness'],
+    name:        'Bikerfun',
+    url:         baseUrl,
+    logo:        LOGO,
+    image:       LOGO,
+    telephone:   PHONE,
+    email:       EMAIL,
+    address:     ADDRESS,
+    geo:         GEO,
+    hasMap:      `https://www.google.com/maps/search/Rafaëlweg+23+Susteren`,
+    openingHoursSpecification: HOURS,
+    priceRange:  '€€',
+    sameAs:      [TIKTOK_URL],
+    areaServed: {
+      '@type': 'AdministrativeArea',
+      name: 'Nederland',
     },
-    openingHoursSpecification: [
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-        opens: '09:00',
-        closes: '18:00',
-      },
-      {
-        '@type': 'OpeningHoursSpecification',
-        dayOfWeek: ['Saturday'],
-        opens: '10:00',
-        closes: '16:00',
-      },
-    ],
-    priceRange: '€€',
   };
 }
 
-// Product Schema (Occasion)
+// ── Occasion / Vehicle Schema ─────────────────────────────────────────────────
 export function getOccasionSchema(occasion: Occasion) {
   return {
     '@context': 'https://schema.org',
@@ -78,87 +95,88 @@ export function getOccasionSchema(occasion: Occasion) {
       '@type': 'Brand',
       name: occasion.brand,
     },
-    model: occasion.model,
+    model:            occasion.model,
     vehicleModelDate: occasion.year,
     mileageFromOdometer: {
-      '@type': 'QuantitativeValue',
-      value: occasion.mileage,
-      unitCode: 'KMT',
+      '@type':    'QuantitativeValue',
+      value:      occasion.mileage,
+      unitCode:   'KMT',
     },
     fuelType: occasion.fuel,
     offers: {
-      '@type': 'Offer',
-      price: occasion.price,
-      priceCurrency: 'EUR',
-      availability: occasion.status === 'available'
-        ? 'https://schema.org/InStock'
-        : occasion.status === 'reserved'
-        ? 'https://schema.org/LimitedAvailability'
-        : 'https://schema.org/OutOfStock',
-      seller: {
-        '@type': 'Organization',
-        name: 'Bikerfun',
-      },
+      '@type':        'Offer',
+      price:          occasion.price,
+      priceCurrency:  'EUR',
+      availability:
+        occasion.status === 'available'
+          ? 'https://schema.org/InStock'
+          : occasion.status === 'reserved'
+          ? 'https://schema.org/LimitedAvailability'
+          : 'https://schema.org/OutOfStock',
+      seller: { '@type': 'Organization', name: 'Bikerfun' },
+      url: `${baseUrl}/occasions/${occasion.id}`,
     },
     image: occasion.main_image || undefined,
-    url: `${baseUrl}/occasions/${occasion.id}`,
+    url:   `${baseUrl}/occasions/${occasion.id}`,
   };
 }
 
-// Breadcrumb Schema
+// ── Breadcrumb Schema ─────────────────────────────────────────────────────────
 export function getBreadcrumbSchema(items: { name: string; url: string }[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: items.map((item, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
-      name: item.name,
-      item: `${baseUrl}${item.url}`,
+      '@type':    'ListItem',
+      position:   index + 1,
+      name:       item.name,
+      item:       `${baseUrl}${item.url}`,
     })),
   };
 }
 
-// WebSite Schema with Search
+// ── WebSite Schema with SearchAction ─────────────────────────────────────────
 export function getWebsiteSchema() {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     name: 'Bikerfun',
     url: baseUrl,
+    description: 'Specialist in motoroccasions en motoraccessoires in Susteren, Limburg.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
-        '@type': 'EntryPoint',
-        urlTemplate: `${baseUrl}/occasions?search={search_term_string}`,
+        '@type':       'EntryPoint',
+        urlTemplate:   `${baseUrl}/occasions?search={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },
   };
 }
 
-// ItemList Schema (for occasions overview)
+// ── ItemList Schema (occasions overview) ──────────────────────────────────────
 export function getItemListSchema(occasions: Occasion[]) {
   return {
     '@context': 'https://schema.org',
     '@type': 'ItemList',
     itemListElement: occasions.map((occasion, index) => ({
-      '@type': 'ListItem',
-      position: index + 1,
+      '@type':    'ListItem',
+      position:   index + 1,
       item: {
         '@type': 'Vehicle',
-        name: `${occasion.brand} ${occasion.model}`,
-        url: `${baseUrl}/occasions/${occasion.id}`,
-        image: occasion.main_image,
+        name:    `${occasion.brand} ${occasion.model}`,
+        url:     `${baseUrl}/occasions/${occasion.id}`,
+        image:   occasion.main_image,
         offers: {
-          '@type': 'Offer',
-          price: occasion.price,
-          priceCurrency: 'EUR',
-          availability: occasion.status === 'available'
-            ? 'https://schema.org/InStock'
-            : occasion.status === 'reserved'
-            ? 'https://schema.org/LimitedAvailability'
-            : 'https://schema.org/OutOfStock',
+          '@type':        'Offer',
+          price:          occasion.price,
+          priceCurrency:  'EUR',
+          availability:
+            occasion.status === 'available'
+              ? 'https://schema.org/InStock'
+              : occasion.status === 'reserved'
+              ? 'https://schema.org/LimitedAvailability'
+              : 'https://schema.org/OutOfStock',
         },
       },
     })),
