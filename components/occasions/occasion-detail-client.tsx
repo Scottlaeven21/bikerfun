@@ -415,9 +415,8 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             {/* Right Column - Details & CTA */}
             <div className="lg:col-span-1">
               {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray sticky top-24 max-h-[calc(100vh-7rem)] flex flex-col overflow-hidden">
-                {/* ── Scrollable top section: title + specs ── */}
-                <div className="flex-1 overflow-y-auto p-8 pb-4 scrollbar-hide">
+              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray sticky top-24">
+                <div className="p-8 pb-4">
                 {/* Main Title */}
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
                   {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
@@ -494,8 +493,8 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
 
                 </div>{/* end scrollable section */}
 
-                {/* ── Fixed bottom section: buttons + checklist (always visible) ── */}
-                <div className="flex-shrink-0 px-8 pb-8 pt-4 border-t border-gray-800">
+                {/* CTA buttons + checklist */}
+                <div className="px-8 pb-8 pt-4 border-t border-gray-800">
                 {/* CTA Buttons - Conditional based on status */}
                 {occasion.status === 'sold' ? (
                   <div className="mb-8">
