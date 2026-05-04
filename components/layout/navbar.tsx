@@ -29,11 +29,11 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           ? 'bg-white md:bg-gradient-to-b md:from-black/50 md:to-transparent text-biker-black md:text-white' 
           : 'bg-gradient-to-b from-black/50 to-transparent text-white'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-28">
+        <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+          <div className="flex items-center justify-between min-h-[5.5rem] md:h-28 py-2 md:py-0 gap-2">
           {/* Logo + Brand - Links */}
-          <Link href="/" className="flex items-center space-x-3 group">
-            <div className="relative w-20 h-16 transition-transform group-hover:scale-110">
+          <Link href="/" className="flex items-center space-x-3 group shrink-0 min-w-0">
+            <div className="relative w-16 h-12 sm:w-20 sm:h-16 transition-transform group-hover:scale-110">
               <Image
                 src="/bikerfun-new-logo.png"
                 alt="Bikerfun Logo"
@@ -45,7 +45,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           </Link>
 
             {/* Desktop Navigation - Rechts */}
-            <div className="flex items-center space-x-2 md:space-x-3">
+            <div className="flex items-center justify-end gap-1 sm:gap-2 md:space-x-3 shrink-0">
               {/* Cart & Account Icons - Only on Webshop Pages */}
               {showShopIcons && (
                 <>
@@ -57,7 +57,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                   {/* Account Icon */}
                   <Link
                     href={user ? "/account" : "/login?redirect=/account"}
-                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-2.5 sm:p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -80,10 +80,10 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
               {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider flex items-center space-x-2 transition-all duration-300"
+                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-3.5 sm:px-6 md:px-8 py-2.5 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-1.5 sm:space-x-2 transition-all duration-300"
               >
                 <span>MENU</span>
-                <svg className="w-4 h-4 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <svg className="w-4 h-4 shrink-0 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
@@ -95,13 +95,13 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
       {/* Overlay */}
       {menuOpen && (
         <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 transition-opacity"
+          className="fixed inset-0 bg-black/50 z-[55] transition-opacity"
           onClick={() => setMenuOpen(false)}
         />
       )}
 
       {/* Slide-in Menu van Rechts */}
-      <div className={`fixed top-0 right-0 h-full w-96 shadow-2xl transform transition-transform duration-300 ease-in-out z-50 ${
+      <div className={`fixed top-0 right-0 h-full w-full max-w-md shadow-2xl transform transition-transform duration-300 ease-in-out z-[60] ${
         menuOpen ? 'translate-x-0' : 'translate-x-full'
       } ${
         showShopIcons 
@@ -123,46 +123,46 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
         {/* Menu Items */}
         <nav 
           style={{ fontFamily: 'var(--font-inter)' }}
-          className="flex flex-col justify-center h-full px-12 space-y-1"
+          className="flex flex-col justify-center min-h-0 h-full overflow-y-auto px-6 sm:px-10 md:px-12 pt-20 pb-[max(1.5rem,env(safe-area-inset-bottom))] space-y-0.5"
         >
           <Link
             href="/"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Home
           </Link>
           <Link
             href="/occasions"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Occasions
           </Link>
           <Link
             href="/over-ons"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Over Ons
           </Link>
           <Link
             href="/products"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Webshop
           </Link>
           <Link
             href="/motor-op-aanvraag"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Aanvraag
           </Link>
           <Link
             href="/contact"
-            className="py-3 text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
           >
             Contact

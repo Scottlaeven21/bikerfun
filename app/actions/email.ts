@@ -4,7 +4,13 @@
 
 import { headers } from 'next/headers';
 import { createClient } from '@/lib/supabase/server';
-import { sendEmail, getToEmail, isEmailConfigured } from '@/lib/email/client';
+import {
+  sendEmail,
+  getToEmail,
+  isEmailConfigured,
+  isContactFormAutoreplyEnabled,
+  isMotorFormsAutoreplyEnabled,
+} from '@/lib/email/client';
 import {
   contactFormEmail,
   motorAanvraagEmail,
@@ -108,13 +114,19 @@ export async function sendContactEmail({
       };
     }
 
-    // Send auto-reply to customer
-    const autoReply = contactAutoReplyEmail(name);
-    await sendEmail({
-      to: email,
-      subject: autoReply.subject,
-      html: autoReply.html,
-    });
+    // Optioneel: bevestiging naar klant (standaard aan; zet CONTACT_FORM_AUTOREPLY=false om uit te zetten)
+    if (isContactFormAutoreplyEnabled()) {
+      try {
+        const autoReply = contactAutoReplyEmail(name);
+        await sendEmail({
+          to: email,
+          subject: autoReply.subject,
+          html: autoReply.html,
+        });
+      } catch (e) {
+        console.error('Contact auto-reply failed (non-critical):', e);
+      }
+    }
 
     return {
       success: true,
@@ -209,16 +221,17 @@ export async function sendMotorAanvraagEmail({
       };
     }
 
-    // Send auto-reply to customer
-    try {
-      const autoReply = contactAutoReplyEmail(name);
-      await sendEmail({
-        to: email,
-        subject: autoReply.subject,
-        html: autoReply.html,
-      });
-    } catch (autoReplyError) {
-      console.error('Auto-reply failed (non-critical):', autoReplyError);
+    if (isMotorFormsAutoreplyEnabled()) {
+      try {
+        const autoReply = contactAutoReplyEmail(name);
+        await sendEmail({
+          to: email,
+          subject: autoReply.subject,
+          html: autoReply.html,
+        });
+      } catch (autoReplyError) {
+        console.error('Auto-reply failed (non-critical):', autoReplyError);
+      }
     }
 
     return {
@@ -229,7 +242,7 @@ export async function sendMotorAanvraagEmail({
     console.error('Motor aanvraag error:', error);
     return {
       success: false,
-      error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 16 29 86 84',
+      error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 15 45 21 08',
     };
   }
 }
@@ -316,11 +329,13 @@ export async function submitMotorAanvraagForm(formData: {
         subject: emailContent.subject,
         html: emailContent.html,
       });
-      try {
-        const autoReply = contactAutoReplyEmail(formData.name);
-        await sendEmail({ to: formData.email, subject: autoReply.subject, html: autoReply.html });
-      } catch {
-        // Non-critical
+      if (isMotorFormsAutoreplyEnabled()) {
+        try {
+          const autoReply = contactAutoReplyEmail(formData.name);
+          await sendEmail({ to: formData.email, subject: autoReply.subject, html: autoReply.html });
+        } catch {
+          // Non-critical
+        }
       }
     }
 
@@ -330,6 +345,6 @@ export async function submitMotorAanvraagForm(formData: {
     };
   } catch (error) {
     console.error('Motor aanvraag form error:', error);
-    return { success: false, error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 16 29 86 84' };
+    return { success: false, error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 15 45 21 08' };
   }
 }

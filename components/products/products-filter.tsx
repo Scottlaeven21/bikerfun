@@ -1,26 +1,56 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
 import { SupabaseProductCard } from './supabase-product-card';
 import { SupabaseProduct } from '@/lib/supabase/products';
 
 interface ProductsFilterProps {
   products: SupabaseProduct[];
   categories: string[];
+  /** When set (e.g. on /products/helmcovers), preselect this category but keep full catalog so other pills still work */
+  initialSelectedCategory?: string;
+  /** Called when the user changes category via pills or reset (for dynamic page title on category routes) */
+  onSelectedCategoryChange?: (category: string) => void;
 }
 
-export function ProductsFilter({ products, categories }: ProductsFilterProps) {
+export function ProductsFilter({
+  products,
+  categories,
+  initialSelectedCategory = '',
+  onSelectedCategoryChange,
+}: ProductsFilterProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialSelectedCategory);
+
+  const updateSelectedCategory = useCallback(
+    (next: string) => {
+      setSelectedCategory(next);
+      onSelectedCategoryChange?.(next);
+    },
+    [onSelectedCategoryChange]
+  );
+
+  // Alleen syncen wanneer de URL-categorie wijzigt (navigatie). Niet op elke parent-render:
+  // anders kan selectedCategory terug naar de startcategorie springen na ALLE of een andere pill.
+  useEffect(() => {
+    setSelectedCategory(initialSelectedCategory);
+  }, [initialSelectedCategory]);
+
+  const maxPrice = useMemo(() => {
+    if (!products.length) return 500;
+    const m = Math.max(0, ...products.map((p) => p.price || 0));
+    return Math.max(m, 1);
+  }, [products]);
+
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500]);
+
+  // Prijs-slider moet over de volledige catalogus gaan (anders verdwijnen dure items bij "ALLE")
+  useEffect(() => {
+    setPriceRange([0, maxPrice]);
+  }, [maxPrice]);
   const [sortBy, setSortBy] = useState<'name' | 'price-low' | 'price-high'>('name');
   const [inStock, setInStock] = useState(false);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-
-  // Calculate max price from products
-  const maxPrice = useMemo(() => {
-    return Math.max(...products.map(p => p.price || 0), 500);
-  }, [products]);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -35,10 +65,11 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       );
     }
 
-    // Category filter
+    // Category filter (case-insensitive: DB en pills kunnen qua casing verschillen)
     if (selectedCategory) {
-      filtered = filtered.filter(product => 
-        product.categories?.includes(selectedCategory)
+      const sel = selectedCategory.trim().toLowerCase();
+      filtered = filtered.filter((product) =>
+        product.categories?.some((c) => c.trim().toLowerCase() === sel)
       );
     }
 
@@ -71,7 +102,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
 
   const resetFilters = () => {
     setSearchQuery('');
-    setSelectedCategory('');
+    updateSelectedCategory('');
     setPriceRange([0, maxPrice]);
     setSortBy('name');
     setInStock(false);
@@ -81,13 +112,13 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
     <div>
       {/* Search Bar */}
       <div className="mb-8">
-        <div className="relative max-w-2xl mx-auto">
+        <div className="relative max-w-2xl mx-auto w-full min-w-0">
           <input
             type="text"
             placeholder="Zoek producten..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full px-6 py-4 pl-12 text-lg border-2 border-gray-300 rounded-full focus:border-biker-yellow focus:outline-none focus:ring-2 focus:ring-biker-yellow/20 transition-all"
+            className="w-full min-w-0 px-5 sm:px-6 py-3.5 sm:py-4 pl-11 sm:pl-12 text-base sm:text-lg border-2 border-gray-300 rounded-full focus:border-biker-yellow focus:outline-none focus:ring-2 focus:ring-biker-yellow/20 transition-all"
           />
           <svg 
             className="absolute left-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400"
@@ -111,10 +142,11 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       </div>
 
       {/* Category Pills */}
-      <div className="mb-8 grid grid-cols-2 md:flex md:flex-wrap items-center justify-center gap-2 md:gap-3 px-2">
+      <div className="mb-8 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center justify-center gap-2 md:gap-3 px-0 sm:px-2">
         <button
-          onClick={() => setSelectedCategory('')}
-          className={`px-4 py-2.5 rounded-full font-bold uppercase text-xs tracking-wider transition-all text-center ${
+          type="button"
+          onClick={() => updateSelectedCategory('')}
+          className={`px-3 sm:px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-[10px] sm:text-xs tracking-wider transition-all text-center leading-tight break-words hyphens-auto ${
             selectedCategory === ''
               ? 'bg-biker-yellow text-biker-black'
               : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
@@ -125,8 +157,9 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
         {categories.map((category) => (
           <button
             key={category}
-            onClick={() => setSelectedCategory(category)}
-            className={`px-4 py-2.5 rounded-full font-bold uppercase text-xs tracking-wider transition-all text-center ${
+            type="button"
+            onClick={() => updateSelectedCategory(category)}
+            className={`px-3 sm:px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-[10px] sm:text-xs tracking-wider transition-all text-center leading-tight break-words hyphens-auto ${
               selectedCategory === category
                 ? 'bg-biker-yellow text-biker-black'
                 : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
@@ -139,16 +172,17 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
       </div>
 
       {/* Filter Button */}
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <button
+          type="button"
           onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="flex items-center gap-2 px-4 py-2 bg-white border-2 border-gray-300 rounded-lg hover:border-biker-yellow transition-all shadow-sm"
+          className="flex items-center justify-center sm:justify-start gap-2 px-4 py-3 min-h-[44px] w-full sm:w-auto bg-white border-2 border-gray-300 rounded-lg hover:border-biker-yellow transition-all shadow-sm touch-manipulation"
         >
-          <svg className="w-4 h-4 text-biker-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4 text-biker-black shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
-          <span className="font-bold text-biker-black uppercase text-xs tracking-wider">
-            Filters & Sortering
+          <span className="font-bold text-biker-black uppercase text-xs tracking-wider text-left">
+            Filters & sortering
           </span>
           <svg 
             className={`w-5 h-5 text-biker-black transition-transform ${isFilterOpen ? 'rotate-180' : ''}`}
@@ -160,14 +194,15 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
           </svg>
         </button>
         
-        <p className="text-sm text-gray-600 text-right ml-4">
-          <span className="font-bold text-biker-yellow">{filteredProducts.length}</span> {filteredProducts.length === 1 ? 'product' : 'producten'} gevonden
+        <p className="text-sm text-gray-600 text-center sm:text-right sm:ml-4 shrink-0">
+          <span className="font-bold text-biker-yellow">{filteredProducts.length}</span>{' '}
+          {filteredProducts.length === 1 ? 'product' : 'producten'} gevonden
         </p>
       </div>
 
       {/* Filter Bar - Collapsible */}
       {isFilterOpen && (
-        <div className="mb-8 bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6">
+        <div className="mb-8 bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-4 sm:p-6">
           <div className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {/* Sort */}
@@ -194,10 +229,10 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
               <input
                 type="range"
                 min="0"
-                max={maxPrice}
+                max={Math.max(maxPrice, priceRange[1])}
                 step="10"
-                value={priceRange[1]}
-                onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value)])}
+                value={Math.min(priceRange[1], maxPrice)}
+                onChange={(e) => setPriceRange([priceRange[0], parseInt(e.target.value, 10)])}
                 className="w-full accent-biker-yellow"
               />
             </div>
@@ -233,7 +268,7 @@ export function ProductsFilter({ products, categories }: ProductsFilterProps) {
 
       {/* Products Grid */}
       {filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
           {filteredProducts.map((product, index) => (
             <SupabaseProductCard key={product.id} product={product} priority={index < 4} />
           ))}

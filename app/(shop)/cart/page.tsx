@@ -21,7 +21,7 @@ export default function CartPage() {
   if (cart.length === 0) {
     return (
       <WhiteBackgroundWrapper>
-      <div className="min-h-screen bg-white pt-32 pb-20">
+      <div className="min-h-screen bg-white pt-28 sm:pt-32 pb-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="text-8xl mb-6">🛒</div>
@@ -46,9 +46,9 @@ export default function CartPage() {
 
   return (
     <WhiteBackgroundWrapper>
-    <div className="min-h-screen bg-white pt-32 pb-20">
+    <div className="min-h-screen bg-white pt-28 sm:pt-32 pb-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-biker-black mb-8 uppercase tracking-tight">
+        <h1 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl sm:text-4xl md:text-5xl font-bold text-biker-black mb-6 sm:mb-8 uppercase tracking-tight">
           Winkel<span className="text-biker-yellow">wagen</span>
         </h1>
 
@@ -63,9 +63,9 @@ export default function CartPage() {
                   const imageUrl = item.product.images?.[0]?.src;
                   
                   return (
-                    <div key={item.product.id} className="p-6 flex gap-6">
+                    <div key={item.product.id} className="p-4 sm:p-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:gap-6">
                       {/* Product Image */}
-                      <div className="relative w-24 h-24 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden">
+                      <div className="relative w-24 h-24 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden self-start sm:self-auto">
                         {imageUrl ? (
                           <Image
                             src={imageUrl}
@@ -81,16 +81,21 @@ export default function CartPage() {
                       </div>
 
                       {/* Product Info */}
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-biker-black mb-2 text-lg">
-                          {item.product.name}
-                        </h3>
+                      <div className="flex-1 min-w-0 w-full">
+                        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                          <h3 className="font-bold text-biker-black mb-2 text-base sm:text-lg leading-snug">
+                            {item.product.name}
+                          </h3>
+                          <p className="text-xl font-bold text-biker-black tabular-nums sm:hidden shrink-0 text-right sm:text-left">
+                            {formatPrice(itemTotal)}
+                          </p>
+                        </div>
                         <p className="text-gray-600 text-sm mb-3">
                           {formatPrice(itemPrice)} per stuk
                         </p>
 
                         {/* Quantity Controls */}
-                        <div className="flex items-center gap-4">
+                        <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                           <div className="flex items-center border-2 border-gray-200 rounded-lg">
                             <button
                               onClick={() => updateQuantity(item.product.id, Math.max(1, item.quantity - 1))}
@@ -116,9 +121,9 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      {/* Item Total */}
-                      <div className="text-right">
-                        <p className="text-2xl font-bold text-biker-black">
+                      {/* Item Total — desktop */}
+                      <div className="hidden sm:block text-right shrink-0 pt-1">
+                        <p className="text-2xl font-bold text-biker-black tabular-nums whitespace-nowrap">
                           {formatPrice(itemTotal)}
                         </p>
                       </div>
@@ -143,7 +148,7 @@ export default function CartPage() {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-6 sticky top-32">
+            <div className="bg-white rounded-2xl border-2 border-gray-200 shadow-lg p-5 sm:p-6 lg:sticky lg:top-28 xl:top-32">
               <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-2xl font-bold text-biker-black mb-6 uppercase tracking-tight">
                 Overzicht
               </h2>

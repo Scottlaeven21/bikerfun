@@ -19,19 +19,19 @@ export default async function ProductsPage({
   const allCategories = await getCategories();
   
   // Fetch all products - filtering will happen client-side
-  const products = await getAllProducts(200);
+  const products = await getAllProducts(500);
   
   console.log(`Loaded ${products.length} products from Supabase`);
 
   return (
     <WhiteBackgroundWrapper>
-    <div className="min-h-screen bg-white pt-32 pb-12">
+    <div className="min-h-screen bg-white pt-28 sm:pt-32 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
           <h1 
             style={{ fontFamily: 'var(--font-inter)' }}
-            className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
+            className="text-3xl sm:text-4xl md:text-5xl font-bold text-biker-black mb-4 sm:mb-6 uppercase tracking-tight px-1"
           >
             Onze <span className="text-biker-yellow">Webshop</span>
           </h1>

@@ -30,6 +30,30 @@ export function getToEmail(): string {
   return process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl';
 }
 
+/** Eén of meerdere beheerders voor order-notificaties (komma-gescheiden). Valt terug op SMTP_TO_EMAIL. */
+export function getAdminOrderNotificationRecipients(): string[] {
+  const extra = process.env.SMTP_ADMIN_ORDER_EMAILS?.trim();
+  if (extra) {
+    return extra.split(',').map((e) => e.trim()).filter(Boolean);
+  }
+  return [getToEmail()];
+}
+
+/** Standaard aan. Zet op "false" om geen e-mail naar de klant te sturen na contactformulier. */
+export function isContactFormAutoreplyEnabled(): boolean {
+  return process.env.CONTACT_FORM_AUTOREPLY !== 'false';
+}
+
+/** Standaard aan. Zet op "false" om geen bevestiging naar de klant te sturen na motor-aanvraag. */
+export function isMotorFormsAutoreplyEnabled(): boolean {
+  return process.env.MOTOR_FORMS_AUTOREPLY !== 'false';
+}
+
+/** Standaard aan. E-mail naar beheerder bij eerste succesvolle betaling (Mollie). Klant krijgt geen dubbele shop-mail van SMTP. */
+export function isAdminOrderPaidNotificationEnabled(): boolean {
+  return process.env.ADMIN_ORDER_PAID_NOTIFICATION !== 'false';
+}
+
 /**
  * Create SMTP transporter
  */

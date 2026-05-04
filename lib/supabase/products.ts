@@ -30,6 +30,10 @@ export interface SupabaseProduct {
   images: Array<{ src: string; alt: string; id?: string }>;
   status: 'publish' | 'draft' | 'private';
   featured: boolean;
+  /** Synced from WooCommerce when available */
+  weight?: number | null;
+  dimensions?: { length?: number; width?: number; height?: number } | null;
+  shipping_class?: string | null;
   created_at: string;
   updated_at: string;
 }

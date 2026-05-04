@@ -50,13 +50,13 @@ function emailLayout(content: string): string {
                 Rafaëlweg 23, 6114BX Susteren
               </p>
               <p style="margin: 0 0 5px; color: #666; font-size: 13px;">
-                <a href="tel:+31616298684" style="color: ${BIKER_YELLOW}; text-decoration: none;">Tel: 06 16 29 86 84</a>
+                <a href="tel:+31615452108" style="color: ${BIKER_YELLOW}; text-decoration: none;">Tel: 06 15 45 21 08</a>
               </p>
               <p style="margin: 0 0 5px; color: #666; font-size: 13px;">
                 <a href="mailto:info@bikerfun.nl" style="color: ${BIKER_YELLOW}; text-decoration: none;">Email: info@bikerfun.nl</a>
               </p>
               <p style="margin: 15px 0 0; color: #666; font-size: 13px;">
-                <a href="https://wa.me/31616298684" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 12px; margin-top: 10px;">
+                <a href="https://wa.me/31615452108" style="display: inline-block; background-color: #25D366; color: #ffffff; padding: 8px 20px; border-radius: 25px; text-decoration: none; font-weight: bold; font-size: 12px; margin-top: 10px;">
                   WhatsApp Ons
                 </a>
               </p>
@@ -290,7 +290,7 @@ export function contactAutoReplyEmail(name: string): { subject: string; html: st
     
     <div style="background-color: #f9f9f9; padding: 20px; border-left: 3px solid ${BIKER_YELLOW}; border-radius: 4px; margin-bottom: 30px;">
       <p style="margin: 0 0 10px; color: #666; font-size: 14px;">
-        <strong>Telefoon:</strong> <a href="tel:0616298684" style="color: ${BIKER_YELLOW}; text-decoration: none;">06 16 29 86 84</a>
+        <strong>Telefoon:</strong> <a href="tel:+31615452108" style="color: ${BIKER_YELLOW}; text-decoration: none;">06 15 45 21 08</a>
       </p>
       <p style="margin: 0 0 10px; color: #666; font-size: 14px;">
         <strong>Email:</strong> <a href="mailto:info@bikerfun.nl" style="color: ${BIKER_YELLOW}; text-decoration: none;">info@bikerfun.nl</a>
@@ -310,4 +310,78 @@ export function contactAutoReplyEmail(name: string): { subject: string; html: st
     subject: 'Bedankt voor je bericht - Bikerfun',
     html: emailLayout(content),
   };
+}
+
+/** Notificatie naar beheerder: webshopbestelling betaald (klant krijgt WooCommerce-mail apart). */
+export function adminOrderPaidEmail(payload: {
+  orderNumber: string;
+  customerEmail: string;
+  customerName: string;
+  total: string;
+  lines: Array<{ name: string; qty: number; lineTotal: string }>;
+  adminOrderUrl: string;
+}): { subject: string; html: string } {
+  const rows = payload.lines
+    .map(
+      (l) => `
+    <tr>
+      <td style="padding: 8px; border-bottom: 1px solid #eee;">${escapeHtml(l.name)}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: center;">${l.qty}</td>
+      <td style="padding: 8px; border-bottom: 1px solid #eee; text-align: right;">${escapeHtml(l.lineTotal)}</td>
+    </tr>`
+    )
+    .join('');
+
+  const content = `
+    <h2 style="margin: 0 0 16px; color: ${BIKER_BLACK}; font-size: 22px;">
+      Nieuwe betaalde webshopbestelling
+    </h2>
+    <div style="background-color: ${BIKER_YELLOW}; padding: 3px; margin-bottom: 24px;"></div>
+    <p style="margin: 0 0 12px; color: #333; font-size: 15px;">
+      Bestelling <strong>${escapeHtml(payload.orderNumber)}</strong> is betaald via Mollie.
+      De klant ontvangt de orderbevestiging vanuit WooCommerce (indien sync gelukt is).
+    </p>
+    <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 16px 0;">
+      <tr>
+        <td style="padding: 6px 0; color: #555;"><strong>Klant</strong></td>
+        <td style="padding: 6px 0;">${escapeHtml(payload.customerName)}</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 0; color: #555;"><strong>E-mail</strong></td>
+        <td style="padding: 6px 0;"><a href="mailto:${escapeHtml(payload.customerEmail)}">${escapeHtml(payload.customerEmail)}</a></td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 0; color: #555;"><strong>Totaal</strong></td>
+        <td style="padding: 6px 0;"><strong>${escapeHtml(payload.total)}</strong></td>
+      </tr>
+    </table>
+    <table role="presentation" style="width: 100%; border-collapse: collapse; margin-top: 16px; font-size: 14px;">
+      <thead>
+        <tr style="background: #f5f5f5;">
+          <th style="padding: 8px; text-align: left;">Product</th>
+          <th style="padding: 8px; text-align: center;">Aantal</th>
+          <th style="padding: 8px; text-align: right;">Subtotaal</th>
+        </tr>
+      </thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p style="margin: 24px 0 0;">
+      <a href="${payload.adminOrderUrl}" style="display: inline-block; background: ${BIKER_YELLOW}; color: ${BIKER_BLACK}; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: bold;">
+        Bekijk in admin
+      </a>
+    </p>
+  `;
+
+  return {
+    subject: `Betaald: bestelling ${payload.orderNumber} — Bikerfun webshop`,
+    html: emailLayout(content),
+  };
+}
+
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
 }

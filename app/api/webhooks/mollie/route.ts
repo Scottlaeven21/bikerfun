@@ -46,6 +46,14 @@ export async function POST(request: NextRequest) {
       orderStatus = 'failed';
     }
 
+    const { data: orderBeforeUpdate } = await supabase
+      .from('webshop_orders')
+      .select('status')
+      .eq('id', orderId)
+      .single();
+
+    const wasPending = orderBeforeUpdate?.status === 'pending';
+
     const { error: updateError } = await supabase
       .from('webshop_orders')
       .update({
@@ -69,6 +77,13 @@ export async function POST(request: NextRequest) {
     }
 
     console.log(`Order ${orderId} updated to status: ${orderStatus}`);
+
+    // Beheerder informeren bij eerste betaalde betaling (geen dubbele klant-mail: WooCommerce doet dat na sync)
+    if (payment.status === 'paid' && wasPending) {
+      import('@/lib/email/notify-admin-order-paid')
+        .then(({ notifyAdminOrderPaid }) => notifyAdminOrderPaid(supabase, orderId))
+        .catch((e) => console.error('Admin order notification failed:', e));
+    }
     
     // Log payment status update
     await logAuditEvent({

@@ -12,8 +12,9 @@ import Image from 'next/image';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllProducts, getCategories, getProductBySlug } from '@/lib/supabase/products';
-import { ProductsFilter } from '@/components/products/products-filter';
+import { CategoryWebshopView } from '@/components/products/category-webshop-view';
 import { AddToCartButton } from '@/components/products/add-to-cart-button';
+import { ProductDetailSections } from '@/components/products/product-detail-sections';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 import { sanitizeHtmlDescription } from '@/lib/utils/sanitize-html';
 import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
@@ -124,9 +125,8 @@ export default async function ProductOrCategoryPage({
       { name: 'Webshop', url: '/products' },
       { name: matchedCategory, url: `/products/${slug}` },
     ]);
-    const categoryProducts = (await getAllProducts(200)).filter((p) =>
-      p.categories?.includes(matchedCategory)
-    );
+    // Full catalog: client filter must see all products so users can switch category pills after landing from footer
+    const allProducts = await getAllProducts(500);
 
     return (
       <WhiteBackgroundWrapper>
@@ -134,29 +134,14 @@ export default async function ProductOrCategoryPage({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(categoryBreadcrumb) }}
         />
-        <div className="min-h-screen bg-white pt-32 pb-12">
+        <div className="min-h-screen bg-white pt-28 sm:pt-32 pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="mb-12 text-center">
-              <h1
-                style={{ fontFamily: 'var(--font-inter)' }}
-                className="text-4xl md:text-5xl font-bold text-biker-black mb-6 uppercase tracking-tight"
-              >
-                <span className="text-biker-yellow">{matchedCategory}</span>
-              </h1>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">
-                Ontdek onze collectie {matchedCategory.toLowerCase()}
-              </p>
-
-              <div className="flex items-center justify-center gap-2 mt-6 text-sm text-gray-500">
-                <Link href="/" className="hover:text-biker-yellow transition-colors">Home</Link>
-                <span>/</span>
-                <Link href="/products" className="hover:text-biker-yellow transition-colors">Webshop</Link>
-                <span>/</span>
-                <span className="text-biker-yellow font-medium">{matchedCategory}</span>
-              </div>
-            </div>
-
-            <ProductsFilter products={categoryProducts} categories={allCategoriesEarly} />
+            <CategoryWebshopView
+              key={slug}
+              initialCategoryName={matchedCategory}
+              products={allProducts}
+              categories={allCategoriesEarly}
+            />
           </div>
         </div>
       </WhiteBackgroundWrapper>
@@ -211,7 +196,7 @@ export default async function ProductOrCategoryPage({
     ]);
 
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-32 pb-12">
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-28 sm:pt-32 pb-12">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
@@ -222,16 +207,25 @@ export default async function ProductOrCategoryPage({
         />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Breadcrumb */}
-          <nav className="flex items-center gap-2 text-sm text-gray-600 mb-8">
-            <Link href="/" className="hover:text-biker-yellow transition-colors">
+          <nav
+            aria-label="Broodkruimelpad"
+            className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600 mb-6 sm:mb-8"
+          >
+            <Link href="/" className="hover:text-biker-yellow transition-colors shrink-0">
               Home
             </Link>
-            <span>/</span>
-            <Link href="/products" className="hover:text-biker-yellow transition-colors">
+            <span className="text-gray-400 shrink-0" aria-hidden>
+              /
+            </span>
+            <Link href="/products" className="hover:text-biker-yellow transition-colors shrink-0">
               Webshop
             </Link>
-            <span>/</span>
-            <span className="text-biker-black font-medium">{product.name}</span>
+            <span className="text-gray-400 shrink-0" aria-hidden>
+              /
+            </span>
+            <span className="text-biker-black font-medium min-w-0 break-words line-clamp-2 sm:line-clamp-none">
+              {product.name}
+            </span>
           </nav>
 
           <div className="grid md:grid-cols-2 gap-12">
@@ -306,7 +300,7 @@ export default async function ProductOrCategoryPage({
               </div>
 
               {product.short_description && (
-                <div className="text-gray-700 text-lg leading-relaxed">
+                <div className="rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white px-5 py-4 text-lg leading-relaxed text-gray-800 shadow-sm [&_p:last-child]:mb-0 [&_p]:mb-3">
                   <div
                     dangerouslySetInnerHTML={{
                       __html: sanitizeHtmlDescription(product.short_description),
@@ -332,36 +326,15 @@ export default async function ProductOrCategoryPage({
               <div className="pt-4">
                 <AddToCartButton product={product} disabled={product.stock_status !== 'instock'} />
               </div>
-
-              {product.sku && (
-                <div className="text-sm text-gray-600">
-                  SKU: <span className="font-mono">{product.sku}</span>
-                </div>
-              )}
-
-              {tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 pt-4 border-t border-gray-200">
-                  <span className="text-sm text-gray-600">Tags:</span>
-                  {tags.map((tag) => (
-                    <span key={tag} className="text-sm bg-gray-100 text-gray-700 px-2 py-1 rounded">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
-          {product.description && (
-            <div className="mt-16 max-w-4xl">
-              <h2 className="text-2xl font-bold text-biker-black mb-6">Productinformatie</h2>
-              <div className="prose prose-lg max-w-none text-gray-700">
-                <div
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtmlDescription(product.description) }}
-                />
-              </div>
-            </div>
-          )}
+          <ProductDetailSections
+            product={product}
+            descriptionHtml={product.description ? sanitizeHtmlDescription(product.description) : ''}
+            categories={categories}
+            tags={tags}
+          />
 
           <div className="mt-12 text-center">
             <Link

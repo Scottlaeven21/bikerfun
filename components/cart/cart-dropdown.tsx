@@ -4,8 +4,6 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/cart-context';
-import { redirectToCheckout } from '@/lib/woocommerce/cart';
-
 export function CartDropdown() {
   const { cart, itemCount, total, removeFromCart, updateQuantity } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +41,7 @@ export function CartDropdown() {
       {/* Cart Icon Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-3 hover:bg-biker-gray/10 rounded-full transition-colors text-biker-black md:text-white"
+        className="relative p-2.5 sm:p-3 hover:bg-biker-gray/10 rounded-full transition-colors text-biker-black md:text-white touch-manipulation"
         aria-label="Winkelwagen"
       >
         <svg
@@ -68,8 +66,8 @@ export function CartDropdown() {
 
       {/* Dropdown */}
       {isOpen && (
-        <div className="fixed md:absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto right-auto md:right-0 top-20 md:top-auto mt-0 md:mt-2 w-[90vw] max-w-sm md:w-96 -ml-1 md:ml-0 bg-white rounded-lg shadow-2xl z-50 border-2 border-white md:border-gray-200">
-          <div className="p-4 border-b-2 border-gray-100">
+        <div className="fixed md:absolute left-1/2 -translate-x-1/2 md:translate-x-0 md:left-auto right-auto md:right-0 top-[calc(5rem+env(safe-area-inset-top,0px))] md:top-auto mt-0 md:mt-2 w-[min(100vw-1rem,24rem)] max-w-sm md:w-96 mx-auto md:mx-0 bg-white rounded-lg shadow-2xl z-[70] border-2 border-gray-200 max-h-[min(70vh,32rem)] flex flex-col">
+          <div className="p-4 border-b-2 border-gray-100 shrink-0">
             <h3 className="font-bold text-lg text-biker-black">
               Winkelwagen ({itemCount})
             </h3>
@@ -89,7 +87,7 @@ export function CartDropdown() {
           ) : (
             <>
               {/* Cart Items */}
-              <div className="max-h-96 overflow-y-auto">
+              <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
                 {cart.map((item) => (
                   <div
                     key={item.product.id}
@@ -122,10 +120,11 @@ export function CartDropdown() {
                         </p>
 
                         {/* Quantity Controls */}
-                        <div className="flex items-center gap-2 mt-2">
+                        <div className="flex flex-wrap items-center gap-2 mt-2">
                           <button
+                            type="button"
                             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm font-bold"
+                            className="w-8 h-8 min-w-[2rem] rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm font-bold touch-manipulation"
                           >
                             -
                           </button>
@@ -133,14 +132,16 @@ export function CartDropdown() {
                             {item.quantity}
                           </span>
                           <button
+                            type="button"
                             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="w-6 h-6 rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm font-bold"
+                            className="w-8 h-8 min-w-[2rem] rounded bg-gray-200 hover:bg-gray-300 flex items-center justify-center text-sm font-bold touch-manipulation"
                           >
                             +
                           </button>
                           <button
+                            type="button"
                             onClick={() => removeFromCart(item.product.id)}
-                            className="ml-auto text-red-500 hover:text-red-700 text-sm font-semibold"
+                            className="text-red-500 hover:text-red-700 text-sm font-semibold touch-manipulation"
                           >
                             Verwijder
                           </button>

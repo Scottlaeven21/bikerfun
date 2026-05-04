@@ -89,9 +89,9 @@ export function SupabaseProductCard({ product, priority = false }: SupabaseProdu
           </div>
         </div>
 
-        <div className="p-5 bg-gray-50 border-t-2 border-gray-200 flex flex-col flex-1">
+        <div className="p-3 sm:p-5 bg-gray-50 border-t-2 border-gray-200 flex flex-col flex-1">
           <Link href={`/products/${productSlug}`}>
-            <h3 className="font-bold text-gray-600 mb-3 line-clamp-2 text-base hover:text-biker-yellow transition-colors cursor-pointer">
+            <h3 className="font-bold text-gray-600 mb-2 sm:mb-3 line-clamp-2 text-sm sm:text-base hover:text-biker-yellow transition-colors cursor-pointer">
               {product.name}
             </h3>
           </Link>
@@ -138,20 +138,20 @@ export function SupabaseProductCard({ product, priority = false }: SupabaseProdu
         )}
       </Link>
 
-      <div className="p-5 bg-white border-t-2 border-gray-100 flex flex-col flex-1">
-        <div className="flex-1">
+      <div className="p-3 sm:p-5 bg-white border-t-2 border-gray-100 flex flex-col flex-1 min-w-0">
+        <div className="flex-1 min-w-0">
           <Link href={`/products/${productSlug}`}>
-            <h3 className="font-bold text-biker-black mb-3 line-clamp-2 text-base hover:text-biker-yellow transition-colors cursor-pointer">
+            <h3 className="font-bold text-biker-black mb-2 sm:mb-3 line-clamp-2 text-sm sm:text-base hover:text-biker-yellow transition-colors cursor-pointer">
               {product.name}
             </h3>
           </Link>
 
-          <div className="flex items-baseline space-x-2 mb-3">
-            <span className="text-2xl font-bold text-biker-black">
+          <div className="flex flex-wrap items-baseline gap-x-2 gap-y-0.5 mb-2 sm:mb-3">
+            <span className="text-lg sm:text-2xl font-bold text-biker-black tabular-nums">
               € {displayPrice.toFixed(2)}
             </span>
             {hasDiscount && (
-              <span className="text-sm text-gray-400 line-through">
+              <span className="text-xs sm:text-sm text-gray-400 line-through tabular-nums">
                 € {product.regular_price.toFixed(2)}
               </span>
             )}
@@ -173,7 +173,7 @@ export function SupabaseProductCard({ product, priority = false }: SupabaseProdu
         <button
           onClick={handleAddToCart}
           disabled={isAdding}
-          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-3 rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl flex items-center justify-center"
+          className="btn-primary w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow font-bold py-2.5 sm:py-3 text-xs sm:text-sm rounded-full transition-all disabled:opacity-50 disabled:cursor-not-allowed uppercase tracking-wide shadow-lg hover:shadow-xl flex items-center justify-center touch-manipulation min-h-[44px]"
         >
           {isAdding ? '✓ Toegevoegd' : 'Toevoegen'}
         </button>
