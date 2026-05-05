@@ -73,7 +73,7 @@ export function ProductDetailSections({ product, descriptionHtml, categories, ta
           </div>
         )}
 
-        <div className={showDescription ? 'lg:col-span-5' : 'lg:col-span-12 lg:mx-auto lg:max-w-2xl'}>
+        <div className={showDescription ? 'lg:col-span-5' : 'lg:col-span-12 lg:mx-auto lg:max-w-4xl'}>
           <div className="overflow-hidden rounded-2xl border-2 border-biker-yellow/30 bg-gradient-to-b from-white to-gray-50/90 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] lg:sticky lg:top-28">
             <KenmerkenHeader />
             <dl className="divide-y divide-gray-100">

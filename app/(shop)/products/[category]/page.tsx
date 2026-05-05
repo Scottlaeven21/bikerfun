@@ -8,13 +8,16 @@
  */
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getAllProducts, getCategories, getProductBySlug } from '@/lib/supabase/products';
+import { getAllProducts, getCategories, getProductBySlug, getProductRecommendations } from '@/lib/supabase/products';
 import { CategoryWebshopView } from '@/components/products/category-webshop-view';
 import { AddToCartButton } from '@/components/products/add-to-cart-button';
 import { ProductDetailSections } from '@/components/products/product-detail-sections';
+import { ProductImageGallery } from '@/components/products/product-image-gallery';
+import { ProductDetailAccordions } from '@/components/products/product-detail-accordions';
+import { ProductRecommendations } from '@/components/products/product-recommendations';
+import { ProductShopTrustStrip } from '@/components/products/product-shop-trust-strip';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
 import { sanitizeHtmlDescription } from '@/lib/utils/sanitize-html';
 import { getBreadcrumbSchema } from '@/lib/seo/structured-data';
@@ -155,7 +158,6 @@ export default async function ProductOrCategoryPage({
     const images = (product.images ?? []).filter(img => img?.src);
     const categories = product.categories ?? [];
     const tags = product.tags ?? [];
-    const mainImage = images[0] ?? { src: '/placeholder-product.png', alt: product.name };
     const formattedPrice = new Intl.NumberFormat('nl-NL', {
       style: 'currency',
       currency: 'EUR',
@@ -166,6 +168,13 @@ export default async function ProductOrCategoryPage({
             product.regular_price
           )
         : null;
+    const discountPercent =
+      product.on_sale && product.regular_price > 0 && product.price < product.regular_price
+        ? Math.round(((product.regular_price - product.price) / product.regular_price) * 100)
+        : null;
+
+    const descriptionSanitized = product.description ? sanitizeHtmlDescription(product.description) : '';
+    const { related, crossSell } = await getProductRecommendations(product.id, categories, 4, 4);
 
     const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
     const productJsonLd = {
@@ -195,8 +204,30 @@ export default async function ProductOrCategoryPage({
       { name: product.name, url: `/products/${slug}` },
     ]);
 
+    const galleryBadges = (
+      <>
+        {product.featured && (
+          <div className="absolute left-4 top-4 z-10 rounded-full bg-biker-yellow px-3 py-1 text-xs font-bold uppercase tracking-wide text-biker-black shadow-md">
+            Uitgelicht
+          </div>
+        )}
+        {product.on_sale && (
+          <div
+            className={`absolute ${product.featured ? 'left-4 top-14' : 'left-4 top-4'} z-10 rounded-full bg-red-600 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-md`}
+          >
+            Sale
+          </div>
+        )}
+        {product.stock_status === 'outofstock' && (
+          <div className="absolute right-4 top-4 z-10 rounded-full bg-gray-900 px-3 py-1 text-xs font-bold uppercase tracking-wide text-white shadow-md">
+            Uitverkocht
+          </div>
+        )}
+      </>
+    );
+
     return (
-      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white pt-28 sm:pt-32 pb-12">
+      <div className="min-h-screen bg-[#f7f5f0] pt-28 sm:pt-32 pb-16">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
@@ -205,143 +236,131 @@ export default async function ProductOrCategoryPage({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
         />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Breadcrumb */}
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav
             aria-label="Broodkruimelpad"
-            className="flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600 mb-6 sm:mb-8"
+            className="mb-6 flex flex-wrap items-center gap-x-2 gap-y-1 text-sm text-gray-600 sm:mb-8"
           >
-            <Link href="/" className="hover:text-biker-yellow transition-colors shrink-0">
+            <Link href="/" className="shrink-0 transition-colors hover:text-biker-yellow">
               Home
             </Link>
-            <span className="text-gray-400 shrink-0" aria-hidden>
+            <span className="shrink-0 text-gray-400" aria-hidden>
               /
             </span>
-            <Link href="/products" className="hover:text-biker-yellow transition-colors shrink-0">
+            <Link href="/products" className="shrink-0 transition-colors hover:text-biker-yellow">
               Webshop
             </Link>
-            <span className="text-gray-400 shrink-0" aria-hidden>
+            <span className="shrink-0 text-gray-400" aria-hidden>
               /
             </span>
-            <span className="text-biker-black font-medium min-w-0 break-words line-clamp-2 sm:line-clamp-none">
+            <span className="line-clamp-2 min-w-0 break-words font-medium text-biker-black sm:line-clamp-none">
               {product.name}
             </span>
           </nav>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* Product Images */}
-            <div className="space-y-4">
-              <div className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-lg">
-                <Image
-                  src={mainImage.src}
-                  alt={mainImage.alt || product.name}
-                  fill
-                  className="object-contain p-8"
-                  priority
-                />
-                {product.on_sale && (
-                  <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    SALE
-                  </div>
-                )}
-                {product.stock_status === 'outofstock' && (
-                  <div className="absolute top-4 right-4 bg-gray-800 text-white px-3 py-1 rounded-full text-sm font-bold">
-                    UITVERKOCHT
-                  </div>
-                )}
-              </div>
+          <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
+            <ProductImageGallery
+              images={images.map((img) => ({ src: img.src, alt: img.alt || product.name }))}
+              productName={product.name}
+              badges={galleryBadges}
+            />
 
-              {images.length > 1 && (
-                <div className="grid grid-cols-4 gap-2">
-                  {images.slice(1, 5).map((image, index) => (
-                    <div
-                      key={index}
-                      className="relative aspect-square bg-white rounded-lg overflow-hidden shadow-sm"
+            <div className="rounded-2xl bg-gradient-to-b from-gray-900 via-gray-950 to-biker-black p-6 text-white shadow-[0_24px_60px_-20px_rgba(0,0,0,0.55)] ring-1 ring-white/10 sm:p-8">
+              {categories.length > 0 && (
+                <div className="mb-3 flex flex-wrap gap-2">
+                  {categories.map((category) => (
+                    <Link
+                      key={category}
+                      href={`/products/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                      className="text-xs font-semibold uppercase tracking-wide text-biker-yellow/90 transition hover:text-biker-yellow"
                     >
-                      <Image
-                        src={image.src}
-                        alt={image.alt || `${product.name} ${index + 2}`}
-                        fill
-                        className="object-contain p-2"
-                      />
-                    </div>
+                      {category}
+                    </Link>
                   ))}
                 </div>
               )}
-            </div>
 
-            {/* Product Info */}
-            <div className="space-y-6">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-biker-black mb-2">
-                  {product.name}
-                </h1>
+              <h1 className="text-balance text-2xl font-bold uppercase leading-tight tracking-tight text-white sm:text-3xl">
+                {product.name}
+              </h1>
 
-                {categories.length > 0 && (
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {categories.map((category) => (
-                      <Link
-                        key={category}
-                        href={`/products/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                        className="text-sm text-gray-600 hover:text-biker-yellow transition-colors"
-                      >
-                        #{category}
-                      </Link>
-                    ))}
-                  </div>
+              <div className="mt-6 flex flex-wrap items-baseline gap-3 gap-y-2">
+                <span className="text-4xl font-bold tabular-nums text-white">{formattedPrice}</span>
+                {formattedRegularPrice && (
+                  <span className="text-xl text-gray-500 line-through tabular-nums">{formattedRegularPrice}</span>
                 )}
-
-                <div className="flex items-baseline gap-3 mb-6">
-                  <span className="text-4xl font-bold text-biker-black">{formattedPrice}</span>
-                  {formattedRegularPrice && (
-                    <span className="text-2xl text-gray-400 line-through">{formattedRegularPrice}</span>
-                  )}
-                </div>
+                {discountPercent != null && discountPercent > 0 && (
+                  <span className="rounded-full bg-biker-yellow px-2.5 py-1 text-sm font-bold text-biker-black">
+                    {discountPercent}% voordeel
+                  </span>
+                )}
               </div>
 
-              {product.short_description && (
-                <div className="rounded-xl border border-gray-100 bg-gradient-to-br from-gray-50 to-white px-5 py-4 text-lg leading-relaxed text-gray-800 shadow-sm [&_p:last-child]:mb-0 [&_p]:mb-3">
+              {product.short_description ? (
+                <div className="mt-6 border-l-2 border-biker-yellow/60 pl-4 text-sm leading-relaxed text-gray-300 [&_p:last-child]:mb-0 [&_p]:mb-3">
                   <div
                     dangerouslySetInnerHTML={{
                       __html: sanitizeHtmlDescription(product.short_description),
                     }}
                   />
                 </div>
-              )}
+              ) : null}
 
-              <div className="flex items-center gap-2">
-                <div
-                  className={`w-3 h-3 rounded-full ${
-                    product.stock_status === 'instock' ? 'bg-green-500' : 'bg-red-500'
+              <div className="mt-6 flex items-center gap-2 text-sm">
+                <span
+                  className={`inline-flex h-2.5 w-2.5 shrink-0 rounded-full ${
+                    product.stock_status === 'instock'
+                      ? 'bg-emerald-400'
+                      : product.stock_status === 'onbackorder'
+                        ? 'bg-amber-400'
+                        : 'bg-red-500'
                   }`}
+                  aria-hidden
                 />
-                <span className="text-sm font-medium">
-                  {product.stock_status === 'instock' ? 'Op voorraad' : 'Niet op voorraad'}
-                  {product.manage_stock && product.stock_quantity > 0 && (
-                    <span className="text-gray-600"> ({product.stock_quantity} stuks)</span>
-                  )}
+                <span className="font-medium text-gray-200">
+                  {product.stock_status === 'instock'
+                    ? 'Op voorraad'
+                    : product.stock_status === 'onbackorder'
+                      ? 'Nabestelling mogelijk'
+                      : 'Niet op voorraad'}
+                  {product.manage_stock && product.stock_quantity > 0 ? (
+                    <span className="text-gray-400"> ({product.stock_quantity} stuks)</span>
+                  ) : null}
                 </span>
               </div>
 
-              <div className="pt-4">
-                <AddToCartButton product={product} disabled={product.stock_status !== 'instock'} />
+              <div className="mt-8">
+                <AddToCartButton
+                  product={product}
+                  disabled={product.stock_status !== 'instock'}
+                  variant="dark"
+                />
               </div>
+
+              <ProductDetailAccordions
+                descriptionHtml={descriptionSanitized}
+                hasShortDescriptionAbove={Boolean(product.short_description)}
+              />
             </div>
           </div>
 
           <ProductDetailSections
             product={product}
-            descriptionHtml={product.description ? sanitizeHtmlDescription(product.description) : ''}
+            descriptionHtml=""
             categories={categories}
             tags={tags}
           />
 
+          <ProductRecommendations related={related} crossSell={crossSell} />
+
+          <ProductShopTrustStrip />
+
           <div className="mt-12 text-center">
             <Link
               href="/products"
-              className="inline-flex items-center gap-2 text-biker-yellow hover:text-biker-yellowHover font-bold transition-colors"
+              className="inline-flex items-center gap-2 font-bold text-biker-yellow transition-colors hover:text-biker-yellowHover"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"

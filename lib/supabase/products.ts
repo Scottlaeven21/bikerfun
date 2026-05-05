@@ -238,3 +238,63 @@ export async function getProductCount(): Promise<number> {
   
   return count || 0;
 }
+
+function filterShopProducts(products: SupabaseProduct[]): SupabaseProduct[] {
+  return products.filter((product) => {
+    const isOccasion = product.price > 1000;
+    const hasMotorCategory = product.categories?.some((cat: string) =>
+      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
+    );
+    return !isOccasion && !hasMotorCategory;
+  });
+}
+
+/**
+ * Related products (same categories) + cross-sell pool (featured), excluding current product.
+ */
+export async function getProductRecommendations(
+  excludeProductId: string,
+  categories: string[],
+  relatedLimit = 4,
+  crossSellLimit = 4
+): Promise<{ related: SupabaseProduct[]; crossSell: SupabaseProduct[] }> {
+  const pool = filterShopProducts(await getAllProducts(400));
+
+  const others = pool.filter((p) => p.id !== excludeProductId);
+
+  const scored = others
+    .map((p) => ({
+      product: p,
+      score: p.categories.filter((c) => categories.includes(c)).length,
+    }))
+    .sort((a, b) => b.score - a.score || (b.product.featured ? 1 : 0) - (a.product.featured ? 1 : 0));
+
+  const related: SupabaseProduct[] = [];
+  const seen = new Set<string>();
+
+  for (const { product } of scored) {
+    if (related.length >= relatedLimit) break;
+    if (seen.has(product.id)) continue;
+    related.push(product);
+    seen.add(product.id);
+  }
+
+  const featuredPool = others.filter((p) => p.featured && !seen.has(p.id));
+  const crossSell: SupabaseProduct[] = [];
+  for (const p of featuredPool) {
+    if (crossSell.length >= crossSellLimit) break;
+    crossSell.push(p);
+    seen.add(p.id);
+  }
+
+  if (crossSell.length < crossSellLimit) {
+    for (const { product } of scored) {
+      if (crossSell.length >= crossSellLimit) break;
+      if (seen.has(product.id)) continue;
+      crossSell.push(product);
+      seen.add(product.id);
+    }
+  }
+
+  return { related, crossSell };
+}

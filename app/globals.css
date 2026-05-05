@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  /* Tablet landscape t/m normale desktop: iets compactere schaal (≈ 90% browserzoom) */
+  @media (min-width: 768px) and (max-width: 1920px) {
+    html {
+      font-size: 90%;
+    }
+  }
+}
+
 @layer utilities {
   .noise-overlay {
     position: relative;

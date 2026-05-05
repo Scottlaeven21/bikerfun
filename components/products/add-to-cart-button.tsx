@@ -8,9 +8,12 @@ import { WooCommerceProduct } from '@/types/woocommerce';
 interface AddToCartButtonProps {
   product: SupabaseProduct;
   disabled?: boolean;
+  /** Donkere productkaart (witte randen, grijze quantity) */
+  variant?: 'default' | 'dark';
 }
 
-export function AddToCartButton({ product, disabled = false }: AddToCartButtonProps) {
+export function AddToCartButton({ product, disabled = false, variant = 'default' }: AddToCartButtonProps) {
+  const isDark = variant === 'dark';
   const [quantity, setQuantity] = useState(1);
   const [isAdding, setIsAdding] = useState(false);
   const { addToCart } = useCart();
@@ -96,22 +99,46 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
   return (
     <div className="space-y-4">
       {/* Quantity Selector */}
-      <div className="flex items-center gap-4">
-        <label className="text-sm font-medium text-gray-700">Aantal:</label>
-        <div className="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+      <div className="flex flex-wrap items-center gap-4">
+        <label
+          className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
+        >
+          Aantal:
+        </label>
+        <div
+          className={`flex items-center overflow-hidden rounded-lg border ${
+            isDark
+              ? 'border-gray-600 bg-gray-900/60'
+              : 'border-gray-300 bg-white'
+          }`}
+        >
           <button
+            type="button"
             onClick={() => setQuantity(Math.max(1, quantity - 1))}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-colors"
+            className={`px-4 py-2.5 transition-colors ${
+              isDark
+                ? 'bg-gray-800 text-white hover:bg-gray-700 disabled:text-gray-500'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
             disabled={disabled || quantity <= 1}
           >
             -
           </button>
-          <span className="px-6 py-2 font-semibold min-w-[60px] text-center">
+          <span
+            className={`min-w-[56px] px-5 py-2.5 text-center font-semibold tabular-nums ${
+              isDark ? 'text-white' : 'text-biker-black'
+            }`}
+          >
             {quantity}
           </span>
           <button
+            type="button"
             onClick={() => setQuantity(quantity + 1)}
-            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 transition-colors"
+            className={`px-4 py-2.5 transition-colors ${
+              isDark
+                ? 'bg-gray-800 text-white hover:bg-gray-700 disabled:text-gray-500'
+                : 'bg-gray-100 hover:bg-gray-200'
+            }`}
             disabled={disabled}
           >
             +
@@ -121,14 +148,15 @@ export function AddToCartButton({ product, disabled = false }: AddToCartButtonPr
 
       {/* Add to Cart Button */}
       <button
+        type="button"
         onClick={handleAddToCart}
         disabled={disabled || isAdding}
-        className={`btn-primary w-full py-4 rounded-lg font-bold text-lg transition-all ${
+        className={`btn-primary w-full rounded-xl py-4 text-lg font-bold uppercase tracking-wide transition-all ${
           disabled
-            ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ? 'cursor-not-allowed bg-gray-600 text-gray-400'
             : isAdding
-            ? 'bg-green-600 text-white'
-            : 'bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow shadow-lg hover:shadow-xl'
+              ? 'bg-emerald-600 text-white'
+              : 'border-2 border-biker-yellow bg-biker-yellow text-biker-black shadow-lg hover:bg-biker-black hover:text-biker-yellow hover:shadow-xl'
         }`}
       >
         {disabled ? (
