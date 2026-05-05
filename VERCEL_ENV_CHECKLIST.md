@@ -26,12 +26,24 @@ WOOCOMMERCE_CONSUMER_SECRET=cs_[YOUR_CONSUMER_SECRET]
 NEXT_PUBLIC_APP_URL=https://bikerfun.nl
 ```
 
-### 5. Resend Email (⚠️ API Key Ontbreekt!)
+### 5. SMTP-mail (Next.js / Nodemailer — niet Resend)
+
+Zonder deze vijf wordt **geen** mail verstuurd (`lib/email/client.ts`):
+
 ```
-RESEND_API_KEY=(nog toe te voegen)
-RESEND_FROM_EMAIL=info@bikerfun.nl
-RESEND_TO_EMAIL=info@bikerfun.nl
+SMTP_HOST=smtp.stackmail.com
+SMTP_PORT=465
+SMTP_SECURE=true
+SMTP_USER=info@bikerfun.nl
+SMTP_PASSWORD=(mailbox-wachtwoord)
+SMTP_FROM_EMAIL=info@bikerfun.nl
 ```
+
+**Waar komen notificaties binnen:** `SMTP_TO_EMAIL` (default in code: `info@bikerfun.nl`). Zet hier het adres waar jij notificaties wilt ontvangen.
+
+**Optioneel:** `SMTP_ADMIN_ORDER_EMAILS` — komma-gescheiden extra adressen voor “bestelling betaald”; anders alleen `SMTP_TO_EMAIL`.
+
+**Optioneel gedrag:** `CONTACT_FORM_AUTOREPLY`, `MOTOR_FORMS_AUTOREPLY`, `ADMIN_ORDER_PAID_NOTIFICATION` (= `false` om uit te zetten).
 
 ---
 
@@ -119,9 +131,9 @@ Als het niet werkt: zie je een error
 - [ ] **WOOCOMMERCE_CONSUMER_KEY** ⚠️ KRITIEK VOOR AFBEELDINGEN
 - [ ] **WOOCOMMERCE_CONSUMER_SECRET** ⚠️ KRITIEK VOOR AFBEELDINGEN
 - [ ] NEXT_PUBLIC_APP_URL
-- [ ] RESEND_API_KEY (optioneel, voor contact formulier)
-- [ ] RESEND_FROM_EMAIL
-- [ ] RESEND_TO_EMAIL
+- [ ] **SMTP_HOST**, **SMTP_PORT**, **SMTP_SECURE**, **SMTP_USER**, **SMTP_PASSWORD**, **SMTP_FROM_EMAIL** (verplicht voor verzenden)
+- [ ] **SMTP_TO_EMAIL** (bv. info@bikerfun.nl)
+- [ ] SMTP_ADMIN_ORDER_EMAILS (optioneel)
 
 ### Na Toevoegen:
 

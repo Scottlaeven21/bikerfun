@@ -25,6 +25,7 @@ export function getFromEmail(): string {
 
 /**
  * Get configured "to" email address (for receiving notifications)
+ * Default: admin inbox voor formulieren en — als SMTP_ADMIN_ORDER_EMAILS leeg is — betaalde orders.
  */
 export function getToEmail(): string {
   return process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl';

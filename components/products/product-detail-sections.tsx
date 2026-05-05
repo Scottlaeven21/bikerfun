@@ -53,7 +53,7 @@ export function ProductDetailSections({ product, descriptionHtml, categories, ta
     <section className="mt-10 sm:mt-14" aria-labelledby="product-info-heading">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 lg:items-start">
         {showDescription && (
-          <div className="lg:col-span-7">
+          <div className="lg:col-span-12">
             <div className="overflow-hidden rounded-2xl border border-gray-200/90 bg-white shadow-[0_8px_40px_-12px_rgba(0,0,0,0.12)]">
               <div className="border-b border-gray-100 bg-gradient-to-r from-biker-black via-gray-900 to-gray-900 px-6 py-4 sm:px-8">
                 <h2
@@ -73,10 +73,10 @@ export function ProductDetailSections({ product, descriptionHtml, categories, ta
           </div>
         )}
 
-        <div className={showDescription ? 'lg:col-span-5' : 'lg:col-span-12 lg:mx-auto lg:max-w-4xl'}>
-          <div className="overflow-hidden rounded-2xl border-2 border-biker-yellow/30 bg-gradient-to-b from-white to-gray-50/90 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] lg:sticky lg:top-28">
+        <div className="lg:col-span-12">
+          <div className="overflow-hidden rounded-2xl border-2 border-biker-yellow/30 bg-gradient-to-b from-white to-gray-50/90 shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)]">
             <KenmerkenHeader />
-            <dl className="divide-y divide-gray-100">
+            <dl className="divide-y divide-gray-100 sm:grid sm:grid-cols-2 sm:gap-x-0 sm:gap-y-0 sm:divide-y-0">
               <SpecRow label="Voorraad">
                 <span className="flex flex-wrap items-center gap-2">
                   <span
@@ -186,7 +186,7 @@ function KenmerkenHeader() {
 
 function SpecRow({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <div className="grid grid-cols-1 gap-1 px-5 py-3.5 sm:grid-cols-[minmax(7.5rem,10rem)_1fr] sm:gap-4 sm:items-start odd:bg-white/80 even:bg-gray-50/70 sm:px-6">
+    <div className="grid grid-cols-1 gap-1 px-5 py-3.5 sm:grid-cols-[minmax(7.5rem,10rem)_1fr] sm:gap-4 sm:items-start sm:border-b sm:border-gray-100 sm:px-6 [&:nth-child(odd)]:sm:border-r [&:nth-child(odd)]:sm:border-r-gray-100">
       <dt className="text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</dt>
       <dd className="min-w-0 text-sm leading-relaxed text-gray-900">{children}</dd>
     </div>
