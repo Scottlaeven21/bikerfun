@@ -227,7 +227,7 @@ export default async function ProductOrCategoryPage({
     );
 
     return (
-      <div className="min-h-screen bg-[#f7f5f0] pt-28 sm:pt-32 pb-16">
+      <div className="min-h-screen bg-white pt-28 sm:pt-32 pb-16">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
@@ -258,89 +258,89 @@ export default async function ProductOrCategoryPage({
             </span>
           </nav>
 
-          <div className="grid items-start gap-8 lg:grid-cols-2 lg:gap-12 xl:gap-16">
-            <ProductImageGallery
-              images={images.map((img) => ({ src: img.src, alt: img.alt || product.name }))}
-              productName={product.name}
-              badges={galleryBadges}
-            />
-
-            <div className="rounded-2xl bg-gradient-to-b from-gray-900 via-gray-950 to-biker-black p-6 text-white shadow-[0_24px_60px_-20px_rgba(0,0,0,0.55)] ring-1 ring-white/10 sm:p-8">
-              {categories.length > 0 && (
-                <div className="mb-3 flex flex-wrap gap-2">
-                  {categories.map((category) => (
-                    <Link
-                      key={category}
-                      href={`/products/${category.toLowerCase().replace(/\s+/g, '-')}`}
-                      className="text-xs font-semibold uppercase tracking-wide text-biker-yellow/90 transition hover:text-biker-yellow"
-                    >
-                      {category}
-                    </Link>
-                  ))}
-                </div>
-              )}
-
-              <h1 className="text-balance text-2xl font-bold uppercase leading-tight tracking-tight text-white sm:text-3xl">
-                {product.name}
-              </h1>
-
-              <div className="mt-6 flex flex-wrap items-baseline gap-3 gap-y-2">
-                <span className="text-4xl font-bold tabular-nums text-white">{formattedPrice}</span>
-                {formattedRegularPrice && (
-                  <span className="text-xl text-gray-500 line-through tabular-nums">{formattedRegularPrice}</span>
-                )}
-                {discountPercent != null && discountPercent > 0 && (
-                  <span className="rounded-full bg-biker-yellow px-2.5 py-1 text-sm font-bold text-biker-black">
-                    {discountPercent}% voordeel
-                  </span>
-                )}
+          <div className="overflow-hidden rounded-3xl border border-gray-200/90 bg-white shadow-[0_16px_48px_-12px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.03]">
+            <div className="grid items-stretch lg:grid-cols-2 lg:divide-x lg:divide-gray-100">
+              <div className="bg-gray-50/40 p-6 sm:p-8 lg:p-10">
+                <ProductImageGallery
+                  images={images.map((img) => ({ src: img.src, alt: img.alt || product.name }))}
+                  productName={product.name}
+                  badges={galleryBadges}
+                />
               </div>
 
-              {product.short_description ? (
-                <div className="mt-6 border-l-2 border-biker-yellow/60 pl-4 text-sm leading-relaxed text-gray-300 [&_p:last-child]:mb-0 [&_p]:mb-3">
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: sanitizeHtmlDescription(product.short_description),
-                    }}
+              <div className="flex flex-col bg-white p-6 sm:p-8 lg:p-10">
+                {categories.length > 0 && (
+                  <div className="mb-3 flex flex-wrap gap-x-3 gap-y-1">
+                    {categories.map((category) => (
+                      <Link
+                        key={category}
+                        href={`/products/${category.toLowerCase().replace(/\s+/g, '-')}`}
+                        className="text-xs font-semibold uppercase tracking-wide text-gray-500 transition hover:text-biker-yellow"
+                      >
+                        {category}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+
+                <h1 className="text-balance text-2xl font-bold leading-tight tracking-tight text-biker-black sm:text-3xl">
+                  {product.name}
+                </h1>
+
+                <div className="mt-6 flex flex-wrap items-baseline gap-3 gap-y-2">
+                  <span className="text-4xl font-bold tabular-nums text-biker-black">{formattedPrice}</span>
+                  {formattedRegularPrice && (
+                    <span className="text-xl text-gray-400 line-through tabular-nums">{formattedRegularPrice}</span>
+                  )}
+                  {discountPercent != null && discountPercent > 0 && (
+                    <span className="rounded-full bg-biker-yellow px-2.5 py-1 text-sm font-bold text-biker-black">
+                      {discountPercent}% voordeel
+                    </span>
+                  )}
+                </div>
+
+                {product.short_description ? (
+                  <div className="mt-6 rounded-xl border border-gray-100 bg-gray-50/80 px-4 py-3 text-sm leading-relaxed text-gray-700 [&_p:last-child]:mb-0 [&_p]:mb-3">
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: sanitizeHtmlDescription(product.short_description),
+                      }}
+                    />
+                  </div>
+                ) : null}
+
+                <div className="mt-6 flex items-center gap-2 text-sm">
+                  <span
+                    className={`inline-flex h-2.5 w-2.5 shrink-0 rounded-full ${
+                      product.stock_status === 'instock'
+                        ? 'bg-emerald-500'
+                        : product.stock_status === 'onbackorder'
+                          ? 'bg-amber-500'
+                          : 'bg-red-500'
+                    }`}
+                    aria-hidden
                   />
-                </div>
-              ) : null}
-
-              <div className="mt-6 flex items-center gap-2 text-sm">
-                <span
-                  className={`inline-flex h-2.5 w-2.5 shrink-0 rounded-full ${
-                    product.stock_status === 'instock'
-                      ? 'bg-emerald-400'
+                  <span className="font-medium text-gray-700">
+                    {product.stock_status === 'instock'
+                      ? 'Op voorraad'
                       : product.stock_status === 'onbackorder'
-                        ? 'bg-amber-400'
-                        : 'bg-red-500'
-                  }`}
-                  aria-hidden
-                />
-                <span className="font-medium text-gray-200">
-                  {product.stock_status === 'instock'
-                    ? 'Op voorraad'
-                    : product.stock_status === 'onbackorder'
-                      ? 'Nabestelling mogelijk'
-                      : 'Niet op voorraad'}
-                  {product.manage_stock && product.stock_quantity > 0 ? (
-                    <span className="text-gray-400"> ({product.stock_quantity} stuks)</span>
-                  ) : null}
-                </span>
-              </div>
+                        ? 'Nabestelling mogelijk'
+                        : 'Niet op voorraad'}
+                    {product.manage_stock && product.stock_quantity > 0 ? (
+                      <span className="text-gray-500"> ({product.stock_quantity} stuks)</span>
+                    ) : null}
+                  </span>
+                </div>
 
-              <div className="mt-8">
-                <AddToCartButton
-                  product={product}
-                  disabled={product.stock_status !== 'instock'}
-                  variant="dark"
+                <div className="mt-8">
+                  <AddToCartButton product={product} disabled={product.stock_status !== 'instock'} />
+                </div>
+
+                <ProductDetailAccordions
+                  descriptionHtml={descriptionSanitized}
+                  hasShortDescriptionAbove={Boolean(product.short_description)}
                 />
               </div>
-
-              <ProductDetailAccordions
-                descriptionHtml={descriptionSanitized}
-                hasShortDescriptionAbove={Boolean(product.short_description)}
-              />
             </div>
           </div>
 

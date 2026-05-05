@@ -28,7 +28,7 @@ export function ProductImageGallery({ images, productName, badges }: Props) {
 
   return (
     <div className="space-y-4">
-      <div className="relative aspect-square overflow-hidden rounded-2xl bg-white shadow-[0_12px_40px_-12px_rgba(0,0,0,0.18)] ring-1 ring-black/5">
+      <div className="relative aspect-square overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-gray-200/80">
         <Image
           src={main.src}
           alt={main.alt || productName}
@@ -77,7 +77,7 @@ export function ProductImageGallery({ images, productName, badges }: Props) {
                 onClick={() => setActive(index)}
                 className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-white ring-2 transition sm:h-20 sm:w-20 ${
                   isActive
-                    ? 'ring-biker-yellow ring-offset-2 ring-offset-stone-50'
+                    ? 'ring-biker-yellow ring-offset-2 ring-offset-gray-50'
                     : 'ring-gray-200 hover:ring-gray-300'
                 }`}
                 aria-label={`Afbeelding ${index + 1}`}

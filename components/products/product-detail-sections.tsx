@@ -50,7 +50,7 @@ export function ProductDetailSections({ product, descriptionHtml, categories, ta
   const showDescription = Boolean(descriptionHtml?.trim());
 
   return (
-    <section className="mt-14 sm:mt-20" aria-labelledby="product-info-heading">
+    <section className="mt-10 sm:mt-14" aria-labelledby="product-info-heading">
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10 lg:items-start">
         {showDescription && (
           <div className="lg:col-span-7">
