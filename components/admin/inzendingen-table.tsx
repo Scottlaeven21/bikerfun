@@ -1,8 +1,10 @@
 'use client';
 
-import { useState, Fragment } from 'react';
+import { useState, Fragment, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { format } from 'date-fns';
 import { nl } from 'date-fns/locale';
+import { deleteFormSubmission } from '@/app/actions/inzendingen';
 
 const URGENCY_LABELS: Record<string, string> = {
   asap: 'Zo snel mogelijk',
@@ -82,10 +84,39 @@ function renderRowCells(sub: FormSubmission, type: 'contact' | 'motor_aanvraag' 
 }
 
 export function InzendingenTable({ submissions, type, columns }: InzendingenTableProps) {
+  const router = useRouter();
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const [isPending, startTransition] = useTransition();
 
   const toggleExpand = (id: string) => {
     setExpandedId((prev) => (prev === id ? null : id));
+  };
+
+  const handleDelete = (sub: FormSubmission) => {
+    const label = sub.name ? `de inzending van ${sub.name}` : 'deze inzending';
+    if (!confirm(`Weet je zeker dat je ${label} wilt verwijderen? Dit kan niet ongedaan worden gemaakt.`)) {
+      return;
+    }
+
+    setDeleteError(null);
+    setDeletingId(sub.id);
+
+    startTransition(async () => {
+      const result = await deleteFormSubmission(sub.id);
+      if (!result.success) {
+        setDeleteError(result.error || 'Verwijderen mislukt');
+        setDeletingId(null);
+        return;
+      }
+
+      if (expandedId === sub.id) {
+        setExpandedId(null);
+      }
+      setDeletingId(null);
+      router.refresh();
+    });
   };
 
   const getSubmissionDetail = (sub: FormSubmission) => {
@@ -137,6 +168,11 @@ export function InzendingenTable({ submissions, type, columns }: InzendingenTabl
 
   return (
     <div className="overflow-x-auto">
+      {deleteError && (
+        <div className="m-4 p-3 bg-red-50 border border-red-200 rounded-lg text-sm text-red-700">
+          {deleteError}
+        </div>
+      )}
       {submissions.length === 0 ? (
         <div className="p-12 text-center text-gray-500">Nog geen inzendingen</div>
       ) : (
@@ -148,8 +184,8 @@ export function InzendingenTable({ submissions, type, columns }: InzendingenTabl
                   {col}
                 </th>
               ))}
-              <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-24">
-                Actie
+              <th className="px-6 py-4 text-right text-xs font-bold text-gray-600 uppercase tracking-wider w-40">
+                Acties
               </th>
             </tr>
           </thead>
@@ -163,13 +199,24 @@ export function InzendingenTable({ submissions, type, columns }: InzendingenTabl
                 >
                   {renderRowCells(sub, type)}
                   <td className="px-6 py-4 text-right" onClick={(e) => e.stopPropagation()}>
-                    <button
-                      type="button"
-                      onClick={() => toggleExpand(sub.id)}
-                      className="px-3 py-1.5 bg-biker-yellow text-biker-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors"
-                    >
-                      {expandedId === sub.id ? 'Sluiten' : 'Bekijk'}
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(sub.id)}
+                        className="px-3 py-1.5 bg-biker-yellow text-biker-black text-xs font-bold rounded-lg hover:bg-yellow-400 transition-colors"
+                      >
+                        {expandedId === sub.id ? 'Sluiten' : 'Bekijk'}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(sub)}
+                        disabled={isPending && deletingId === sub.id}
+                        title="Inzending verwijderen"
+                        className="px-3 py-1.5 bg-red-50 text-red-700 text-xs font-bold rounded-lg border border-red-200 hover:bg-red-100 hover:border-red-300 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isPending && deletingId === sub.id ? 'Bezig…' : 'Verwijder'}
+                      </button>
+                    </div>
                   </td>
                 </tr>
                 {expandedId === sub.id && (

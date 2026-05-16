@@ -47,6 +47,11 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
       }
     });
 
+  // "Op voorraad" telt alleen niet-verkochte motoren. Verkochte motoren blijven
+  // wel zichtbaar in de grid (met VERKOCHT-sticker), maar tellen niet mee in
+  // het voorraad-aantal in de header.
+  const inStockCount = filteredOccasions.filter(occ => occ.status !== 'sold').length;
+
   return (
     <div className="py-12 md:py-16 bg-black noise-overlay">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,7 +62,7 @@ export function OccasionsList({ occasions }: OccasionsListProps) {
               COLLECTIE
             </h2>
             <p className="text-biker-yellow text-sm md:text-base font-medium mt-1">
-              {filteredOccasions.length} occasions op voorraad
+              {inStockCount} occasions op voorraad
             </p>
           </div>
           <div className="flex flex-nowrap items-center gap-2 sm:gap-3">

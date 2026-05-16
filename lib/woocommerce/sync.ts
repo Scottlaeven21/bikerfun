@@ -7,6 +7,24 @@ import { WooCommerceClient } from './client';
 
 const wooClient = new WooCommerceClient();
 
+// Nederlandse standaard: alle webshopprijzen op bikerfun.nl zijn INCLUSIEF 21% BTW.
+// We sturen daarom expliciete netto + BTW bedragen mee, zodat WooCommerce niet
+// nogmaals BTW op de (incl) prijs gooit — ongeacht de "Prices entered with tax"
+// instelling in WooCommerce → Settings → Tax.
+const VAT_RATE = 0.21;
+
+function round2(value: number): number {
+  return Math.round(value * 100) / 100;
+}
+
+/** Splits een inc-BTW bedrag in (netto, btw). De som blijft exact gelijk aan het ingangsbedrag. */
+function splitInclVat(amountIncl: number): { net: number; tax: number } {
+  const safe = Number.isFinite(amountIncl) ? amountIncl : 0;
+  const net = round2(safe / (1 + VAT_RATE));
+  const tax = round2(safe - net);
+  return { net, tax };
+}
+
 interface OrderItem {
   product_id: number | null;
   product_name: string;
@@ -64,34 +82,66 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
       country: order.shipping_address?.country || order.billing_address?.country || 'NL',
     };
 
-    // Prepare line items
-    // Note: product_id is omitted when null/0 to avoid WooCommerce validation errors
-    // WooCommerce accepts line items with just name + price for custom products
+    // ── Line items met expliciete netto/BTW breakdown ─────────────────────────
+    // De `price` op een product is incl. BTW (Nederlandse standaard).
+    // WooCommerce verwacht `subtotal` / `total` EXCL. BTW als losse strings, plus
+    // `subtotal_tax` / `total_tax` voor het BTW-deel. Door beide expliciet mee
+    // te sturen voorkomen we dat WooCommerce zelf nogmaals 21% bovenop de
+    // incl-prijs zet (het probleem dat de klant zag bij €34,95 → ~€42,29).
+    let itemsTaxTotal = 0;
     const lineItems = order.items.map(item => {
+      const lineTotalIncl = round2((Number(item.subtotal) || (item.price * item.quantity)));
+      const { net: lineNet, tax: lineTax } = splitInclVat(lineTotalIncl);
+      itemsTaxTotal = round2(itemsTaxTotal + lineTax);
+
       const lineItem: any = {
         name: item.product_name,
         quantity: item.quantity,
-        price: item.price.toString(),
-        total: item.subtotal.toString(),
+        subtotal: lineNet.toFixed(2),
+        subtotal_tax: lineTax.toFixed(2),
+        total: lineNet.toFixed(2),
+        total_tax: lineTax.toFixed(2),
+        tax_class: '',
       };
-      
-      // Only add product_id if it's a valid WooCommerce product ID
+
+      // Alleen product_id meesturen als het een echte WooCommerce product ID is
       if (item.product_id && item.product_id > 0) {
         lineItem.product_id = item.product_id;
       }
-      
+
       return lineItem;
     });
 
-    // Prepare shipping lines
-    const shippingLines = order.shipping_cost > 0 ? [{
-      method_id: 'flat_rate',
-      method_title: 'Standaard verzending',
-      total: order.shipping_cost.toString(),
-    }] : [];
+    // ── Verzendkosten met expliciete BTW-split ────────────────────────────────
+    // Verzendkosten op bikerfun.nl worden incl. BTW getoond, dus zelfde aanpak.
+    let shippingTaxTotal = 0;
+    const shippingLines: any[] = [];
+    if (order.shipping_cost > 0) {
+      const { net: shipNet, tax: shipTax } = splitInclVat(round2(order.shipping_cost));
+      shippingTaxTotal = shipTax;
+      shippingLines.push({
+        method_id: 'flat_rate',
+        method_title: 'Standaard verzending',
+        total: shipNet.toFixed(2),
+        total_tax: shipTax.toFixed(2),
+      });
+    }
+
+    // ── Tax line zodat WooCommerce de BTW correct boekt in de admin ──────────
+    const totalTax = round2(itemsTaxTotal + shippingTaxTotal);
+    const taxLines = totalTax > 0
+      ? [{
+          rate_code: 'NL-BTW-21',
+          rate_id: 0,
+          label: 'BTW (21%)',
+          compound: false,
+          tax_total: itemsTaxTotal.toFixed(2),
+          shipping_tax_total: shippingTaxTotal.toFixed(2),
+        }]
+      : [];
 
     // Create order in WooCommerce
-    const wooOrder = {
+    const wooOrder: any = {
       status: 'processing',
       customer_id: 0,
       billing,
@@ -123,11 +173,15 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
       ],
     };
 
+    if (taxLines.length > 0) {
+      wooOrder.tax_lines = taxLines;
+    }
+
     const wooOrderResponse = await wooClient.createOrder(wooOrder);
     const wooOrderId = wooOrderResponse.id;
-    
+
     console.log(`✅ Order synced to WooCommerce! WooCommerce Order ID: ${wooOrderId}`);
-    
+
     return wooOrderId;
 
   } catch (error) {
