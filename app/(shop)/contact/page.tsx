@@ -14,7 +14,7 @@ const contactPageSchema = {
     '@type': 'LocalBusiness',
     name: 'Bikerfun',
     telephone: '+31-6-15452108',
-    email: 'bikerfun.info@gmail.com',
+    email: 'info@bikerfun.nl',
     address: {
       '@type': 'PostalAddress',
       streetAddress: 'Rafaëlweg 23',
@@ -137,8 +137,8 @@ export default function ContactPage() {
                   <div>
                     <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">E-mail</h3>
                     <p className="text-biker-light">
-                      <a href="mailto:bikerfun.info@gmail.com" className="hover:text-biker-yellow transition-colors">
-                        bikerfun.info@gmail.com
+                      <a href="mailto:info@bikerfun.nl" className="hover:text-biker-yellow transition-colors">
+                        info@bikerfun.nl
                       </a>
                     </p>
                     <p className="text-sm text-biker-muted mt-1">

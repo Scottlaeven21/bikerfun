@@ -275,9 +275,13 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 <div className="text-biker-light leading-relaxed whitespace-pre-line">
                   {occasion.description
                     ?.replace(/\\n/g, '\n')
+                    .replace(/<br\s*\/?>/gi, '\n')
+                    .replace(/<\/p>/gi, '\n\n')
+                    .replace(/<\/(li|div|h[1-6])>/gi, '\n')
                     .replace(/<[^>]*>/g, '')
                     .replace(/&amp;/g, '&')
                     .replace(/&nbsp;/g, ' ')
+                    .replace(/\n{3,}/g, '\n\n')
                     .trim()}
                 </div>
               </div>

@@ -226,7 +226,7 @@ export default function PrivacyPage() {
                   Neem dan contact met ons op:
                 </p>
                 <div className="bg-biker-black rounded-lg p-4 mt-4">
-                  <p><strong>E-mail:</strong> bikerfun.info@gmail.com</p>
+                  <p><strong>E-mail:</strong> info@bikerfun.nl</p>
                   <p><strong>Telefoon:</strong> 06 15 45 21 08</p>
                   <p><strong>Adres:</strong> Rafaëlweg 23, 6114BX Susteren</p>
                   <p><strong>Openingstijden:</strong> Ma-Vr: 07:00 - 17:00, Za: 12:00 - 17:00</p>

@@ -187,8 +187,8 @@ export default function VerzendingPage() {
                 <p>
                   <strong className="text-white">Tip:</strong> Heb je geen Track & Trace ontvangen? 
                   Check je spam-folder of neem contact met ons op via{' '}
-                  <a href="mailto:bikerfun.info@gmail.com" className="text-biker-yellow hover:underline">
-                    bikerfun.info@gmail.com
+                  <a href="mailto:info@bikerfun.nl" className="text-biker-yellow hover:underline">
+                    info@bikerfun.nl
                   </a>
                 </p>
               </div>
@@ -241,8 +241,8 @@ export default function VerzendingPage() {
                   </div>
                   <div className="bg-biker-black rounded-lg p-4 border border-biker-gray">
                     <p className="text-sm text-biker-muted mb-1">E-mail</p>
-                    <a href="mailto:bikerfun.info@gmail.com" className="text-biker-yellow hover:underline font-bold">
-                      bikerfun.info@gmail.com
+                    <a href="mailto:info@bikerfun.nl" className="text-biker-yellow hover:underline font-bold">
+                      info@bikerfun.nl
                     </a>
                   </div>
                 </div>

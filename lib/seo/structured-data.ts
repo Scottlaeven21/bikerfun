@@ -4,7 +4,7 @@ const baseUrl = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 
 // ── Canonical business details ────────────────────────────────────────────────
 const PHONE       = '+31-6-15452108';
-const EMAIL       = 'bikerfun.info@gmail.com';
+const EMAIL       = 'info@bikerfun.nl';
 const LOGO        = `${baseUrl}/bikerfun-new-logo.png`;
 const TIKTOK_URL       = 'https://www.tiktok.com/@bikerfuntiktok';
 const GOOGLE_MAPS_URL  = 'https://www.google.com/maps/place/Bikerfun/@51.0528,5.8669,17z';
