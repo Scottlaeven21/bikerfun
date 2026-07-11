@@ -59,6 +59,41 @@ export interface Database {
           updated_at?: string;
         };
       };
+      site_banners: {
+        Row: {
+          id: string;
+          title: string | null;
+          message: string;
+          is_active: boolean;
+          start_date: string | null;
+          end_date: string | null;
+          variant: 'info' | 'warning' | 'success';
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title?: string | null;
+          message: string;
+          is_active?: boolean;
+          start_date?: string | null;
+          end_date?: string | null;
+          variant?: 'info' | 'warning' | 'success';
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string | null;
+          message?: string;
+          is_active?: boolean;
+          start_date?: string | null;
+          end_date?: string | null;
+          variant?: 'info' | 'warning' | 'success';
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       products: {
         Row: {
           id: string;
@@ -430,3 +465,6 @@ export type OccasionUpdate = Database['public']['Tables']['occasions']['Update']
 export type PageView = Database['public']['Tables']['page_views']['Row'];
 export type AnalyticsEvent = Database['public']['Tables']['analytics_events']['Row'];
 export type OccasionView = Database['public']['Tables']['occasion_views']['Row'];
+export type SiteBanner = Database['public']['Tables']['site_banners']['Row'];
+export type SiteBannerInsert = Database['public']['Tables']['site_banners']['Insert'];
+export type SiteBannerUpdate = Database['public']['Tables']['site_banners']['Update'];
