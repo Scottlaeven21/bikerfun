@@ -27,15 +27,9 @@ const GEO = {
 const HOURS = [
   {
     '@type':    'OpeningHoursSpecification',
-    dayOfWeek:  ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
-    opens:      '07:00',
-    closes:     '17:00',
-  },
-  {
-    '@type':    'OpeningHoursSpecification',
-    dayOfWeek:  ['Saturday'],
-    opens:      '12:00',
-    closes:     '17:00',
+    dayOfWeek:  ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
+    opens:      '08:00',
+    closes:     '21:00',
   },
 ];
 

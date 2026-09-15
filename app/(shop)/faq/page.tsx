@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Veelgestelde Vragen (FAQ) | Bikerfun',
-  description: 'Vind antwoorden op veelgestelde vragen over onze occasions, financiering, garantie en meer.',
-  keywords: ['faq', 'veelgestelde vragen', 'motor kopen', 'occasions', 'garantie', 'financiering'],
+  description: 'Vind antwoorden op veelgestelde vragen over onze occasions, garantie en meer.',
+  keywords: ['faq', 'veelgestelde vragen', 'motor kopen', 'occasions', 'garantie'],
   alternates: { canonical: 'https://bikerfun.nl/faq' },
   openGraph: {
     title: 'Veelgestelde Vragen | Bikerfun',
@@ -30,10 +30,6 @@ const faqData = [
   {
     question: 'Bieden jullie garantie op occasions?',
     answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geïnteresseerd bent.',
-  },
-  {
-    question: 'Is financiering mogelijk?',
-    answer: 'Ja, we kunnen je helpen met verschillende financieringsmogelijkheden. Neem contact met ons op om de opties te bespreken die het beste bij jouw situatie passen.',
   },
   {
     question: 'Kan ik mijn huidige motor inruilen?',

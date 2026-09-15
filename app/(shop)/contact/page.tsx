@@ -24,8 +24,7 @@ const contactPageSchema = {
       addressCountry: 'NL',
     },
     openingHoursSpecification: [
-      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday'], opens: '07:00', closes: '17:00' },
-      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Saturday'], opens: '12:00', closes: '17:00' },
+      { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], opens: '08:00', closes: '21:00' },
     ],
   },
 };
@@ -99,6 +98,9 @@ export default function ContactPage() {
                       Rafaëlweg 23<br />
                       6114BX Susteren
                     </p>
+                    <p className="text-sm text-biker-muted mt-2">
+                      Enkel op afspraak
+                    </p>
                   </div>
                 </div>
               </div>
@@ -119,8 +121,8 @@ export default function ContactPage() {
                       </a>
                     </p>
                     <p className="text-sm text-biker-muted mt-1">
-                      Ma-Vr: 07:00 - 17:00<br />
-                      Za: 12:00 - 17:00
+                      Telefonisch bereikbaar van 8:00 tot 21:00<br />
+                      Ook op zondag
                     </p>
                   </div>
                 </div>

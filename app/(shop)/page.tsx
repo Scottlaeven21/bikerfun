@@ -25,10 +25,6 @@ const homeFAQ = [
     answer: "Absoluut! We kopen graag jouw huidige motor in. Stuur ons foto's en specificaties via het contactformulier of WhatsApp, dan maken we een eerlijke offerte.",
   },
   {
-    question: 'Is financiering mogelijk?',
-    answer: 'Ja, we kunnen je helpen met verschillende financieringsmogelijkheden. Neem contact met ons op om de opties te bespreken die het beste bij jouw situatie passen.',
-  },
-  {
     question: 'Kan ik een proefrit maken?',
     answer: 'Ja, na een korte kennismaking en verificatie van je rijbewijs kun je een proefrit maken. We willen er zeker van zijn dat de motor aan je verwachtingen voldoet!',
   },

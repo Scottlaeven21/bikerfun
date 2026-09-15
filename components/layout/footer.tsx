@@ -136,10 +136,10 @@ export function Footer() {
                 </a>
               </li>
               <li className="text-sm">
-                Ma-Vr: 07:00 - 17:00
+                Enkel op afspraak
               </li>
               <li className="text-sm">
-                Za: 12:00 - 17:00
+                Telefonisch bereikbaar 8:00 - 21:00 (ook op zondag)
               </li>
             </ul>
           </div>

@@ -247,7 +247,7 @@ export default function VerzendingPage() {
                   </div>
                 </div>
                 <p className="text-sm text-biker-muted mt-4">
-                  Bereikbaar: Ma-Vr 07:00 - 17:00 | Za 12:00 - 17:00
+                  Telefonisch bereikbaar: 8:00 - 21:00 (ook op zondag) | Enkel op afspraak
                 </p>
               </div>
             </div>

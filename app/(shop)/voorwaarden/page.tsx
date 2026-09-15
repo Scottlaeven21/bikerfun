@@ -240,7 +240,7 @@ export default function VoorwaardenPage() {
                 <p><strong>Adres:</strong> Rafaëlweg 23, 6114BX Susteren</p>
                 <p><strong>E-mail:</strong> info@bikerfun.nl</p>
                 <p><strong>Telefoon:</strong> 06 15 45 21 08</p>
-                <p><strong>Openingstijden:</strong> Ma-Vr: 07:00 - 17:00, Za: 12:00 - 17:00</p>
+                <p><strong>Bereikbaarheid:</strong> Telefonisch 8:00 - 21:00, ook op zondag (enkel op afspraak)</p>
               </div>
             </div>
           </div>
