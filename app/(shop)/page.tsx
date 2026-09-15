@@ -544,7 +544,7 @@ export default async function HomePage() {
               Bekijk al onze reviews op Google
             </p>
             <a
-              href="https://www.google.com/maps/place/Bikerfun/@51.0528,5.8669,17z"
+              href="https://www.google.nl/search?q=bikerfun&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_8gyC0rTtSmLJNjwf_0P8Zgv-oK4ZO2iIPyAWdfc7vGBuzmS2kjxSKeonGahwLRn4sRgIqs%3D&uds=AJ5uw1-CsN_VmOWvV4nQCD6b3IOKEoAIaIAYgoXXwOoqSRP6Qe-Vwn507Kk-kQ8kzV7WWE_fjN6hbQI9Ju4wJhmSX57fw0RtAXvWLjTWH4NTUJZjxHxlR5U&sa=X"
               target="_blank"
               rel="noopener noreferrer"
               style={{ fontFamily: 'var(--font-montserrat)' }}
