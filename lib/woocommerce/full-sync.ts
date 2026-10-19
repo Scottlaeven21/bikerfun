@@ -5,6 +5,7 @@
 
 import { wooCommerce } from '@/lib/woocommerce/client';
 import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
+import { isTestProduct } from '@/lib/shop/test-products';
 
 export interface WooCommerceFullSyncResult {
   success: boolean;
@@ -345,7 +346,9 @@ export async function syncProducts(supabase: any): Promise<WooCommerceFullSyncRe
 
     const products = allProducts.filter((p) => {
       const price = parseFloat(p.price || '0');
-      return price > 0;
+      if (price <= 0) return false;
+      if (isTestProduct({ name: p.name, slug: p.slug, sku: p.sku, id: p.id })) return false;
+      return true;
     });
 
     console.log(`Found ${products.length} products in WooCommerce (excluding Motoren category)`);

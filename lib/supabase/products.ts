@@ -4,6 +4,7 @@
  */
 
 import { createClient } from '@supabase/supabase-js';
+import { isTestProduct } from '@/lib/shop/test-products';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
@@ -54,16 +55,7 @@ export async function getAllProducts(limit: number = 100): Promise<SupabaseProdu
     return [];
   }
   
-  // Filter out occasions/motors (high price products)
-  const filtered = data?.filter(product => {
-    const isOccasion = product.price > 1000;
-    const hasMotorCategory = product.categories?.some((cat: string) => 
-      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
-    );
-    return !isOccasion && !hasMotorCategory;
-  }) || [];
-  
-  return filtered;
+  return filterShopProducts(data || []);
 }
 
 /**
@@ -78,7 +70,7 @@ export async function getProductBySlug(slug: string): Promise<SupabaseProduct | 
     .eq('slug', slug)
     .eq('status', 'publish')
     .limit(1);
-  if (exact && exact.length > 0) return exact[0];
+  if (exact && exact.length > 0 && !isTestProduct(exact[0])) return exact[0];
 
   // 2. Case-insensitive slug match
   const { data: ilike } = await supabase
@@ -87,7 +79,7 @@ export async function getProductBySlug(slug: string): Promise<SupabaseProduct | 
     .ilike('slug', slug)
     .eq('status', 'publish')
     .limit(1);
-  if (ilike && ilike.length > 0) return ilike[0];
+  if (ilike && ilike.length > 0 && !isTestProduct(ilike[0])) return ilike[0];
 
   // 3. Name-based match (for products where slug is null in DB)
   //    The card generates: name.toLowerCase().replace(/\s+/g, '-')
@@ -99,7 +91,7 @@ export async function getProductBySlug(slug: string): Promise<SupabaseProduct | 
     .ilike('name', namePattern)
     .eq('status', 'publish')
     .limit(1);
-  if (byName && byName.length > 0) return byName[0];
+  if (byName && byName.length > 0 && !isTestProduct(byName[0])) return byName[0];
 
   // 4. UUID match (if the card used product.id as fallback)
   if (/^[0-9a-f-]{36}$/i.test(slug)) {
@@ -109,7 +101,7 @@ export async function getProductBySlug(slug: string): Promise<SupabaseProduct | 
       .eq('id', slug)
       .eq('status', 'publish')
       .limit(1);
-    if (byId && byId.length > 0) return byId[0];
+    if (byId && byId.length > 0 && !isTestProduct(byId[0])) return byId[0];
   }
 
   return null;
@@ -132,16 +124,7 @@ export async function getProductsByCategory(category: string, limit: number = 10
     return [];
   }
   
-  // Filter out occasions/motors
-  const filtered = data?.filter(product => {
-    const isOccasion = product.price > 1000;
-    const hasMotorCategory = product.categories?.some((cat: string) => 
-      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
-    );
-    return !isOccasion && !hasMotorCategory;
-  }) || [];
-  
-  return filtered;
+  return filterShopProducts(data || []);
 }
 
 /**
@@ -161,16 +144,7 @@ export async function getFeaturedProducts(limit: number = 8): Promise<SupabasePr
     return [];
   }
   
-  // Filter out occasions/motors
-  const filtered = data?.filter(product => {
-    const isOccasion = product.price > 1000;
-    const hasMotorCategory = product.categories?.some((cat: string) => 
-      ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
-    );
-    return !isOccasion && !hasMotorCategory;
-  }) || [];
-  
-  return filtered;
+  return filterShopProducts(data || []);
 }
 
 /**
@@ -219,7 +193,7 @@ export async function searchProducts(query: string, limit: number = 50): Promise
     return [];
   }
   
-  return data || [];
+  return filterShopProducts(data || []);
 }
 
 /**
@@ -241,6 +215,7 @@ export async function getProductCount(): Promise<number> {
 
 function filterShopProducts(products: SupabaseProduct[]): SupabaseProduct[] {
   return products.filter((product) => {
+    if (isTestProduct(product)) return false;
     const isOccasion = product.price > 1000;
     const hasMotorCategory = product.categories?.some((cat: string) =>
       ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)

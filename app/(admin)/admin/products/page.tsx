@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { createClient } from '@/lib/supabase/server';
 import { SupabaseProduct } from '@/lib/supabase/products';
 import { ProductsTable } from '@/components/admin/products-table';
+import { isTestProduct } from '@/lib/shop/test-products';
 
 export const metadata: Metadata = {
   title: 'Producten Beheer',
@@ -24,7 +25,7 @@ export default async function AdminProductsPage() {
     const hasMotorCategory = product.categories?.some((cat: string) => 
       ['Motoren', 'Motors', 'Occasions', 'Bikes'].includes(cat)
     );
-    return !isOccasion && !hasMotorCategory;
+    return !isOccasion && !hasMotorCategory && !isTestProduct(product);
   }) || null;
 
   return (
