@@ -5,6 +5,13 @@ import * as React from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { useCart } from '@/contexts/cart-context';
+import Link from 'next/link';
+import {
+  NL_FREE_SHIPPING_MIN,
+  SLEUTELHANGERS_PATH,
+  formatEuro,
+  remainingToFreeNlShipping,
+} from '@/lib/shipping/nl-free';
 
 interface CheckoutFormData {
   // Billing info
@@ -32,7 +39,6 @@ export function CheckoutForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [shippingCost, setShippingCost] = useState<number>(0); // Default to 0
-  const [freeShippingThreshold, setFreeShippingThreshold] = useState<number | null>(null); // null = no threshold
   const [loadingShipping, setLoadingShipping] = useState(true); // Start as loading
   
   // Calculate total with shipping
@@ -138,7 +144,6 @@ export function CheckoutForm() {
       if (response.ok) {
         const data = await response.json();
         setShippingCost(typeof data.shipping_cost === 'number' ? data.shipping_cost : 0);
-        setFreeShippingThreshold(null);
       }
     } catch (error) {
       console.error('Failed to fetch shipping cost:', error);
@@ -398,12 +403,16 @@ export function CheckoutForm() {
               </span>
             </div>
             {/* Only show "free shipping threshold" message if threshold exists and not met */}
-            {!loadingShipping && 
-             freeShippingThreshold !== null && 
-             shippingCost > 0 && 
-             subtotal < freeShippingThreshold && (
-              <div className="text-xs text-gray-500 -mt-2">
-                Nog €{((freeShippingThreshold || 0) - (subtotal || 0)).toFixed(2)} tot gratis verzending
+            {!loadingShipping &&
+             formData.country === 'NL' &&
+             shippingCost > 0 &&
+             remainingToFreeNlShipping(subtotal) > 0 && (
+              <div className="text-xs text-gray-600 -mt-2">
+                Nog {formatEuro(remainingToFreeNlShipping(subtotal))} tot gratis verzending in NL
+                (vanaf {formatEuro(NL_FREE_SHIPPING_MIN)}).{' '}
+                <Link href={SLEUTELHANGERS_PATH} className="font-semibold text-biker-yellow hover:underline">
+                  Gooi er een sleutelhanger bij
+                </Link>
               </div>
             )}
             <div className="h-px bg-gray-300 my-3"></div>

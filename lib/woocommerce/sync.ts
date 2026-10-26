@@ -191,6 +191,40 @@ export async function syncOrderToWooCommerce(order: OrderData): Promise<number> 
 }
 
 /**
+ * Kopieer actuele Woo-voorraad naar de site.
+ * Vercel is geen voorraadbaas: Stockpilot schrijft naar Woo, wij lezen alleen.
+ */
+export async function refreshSupabaseStockFromWoo(
+  supabase: any,
+  wooProductIds: number[]
+): Promise<void> {
+  const ids = [...new Set(wooProductIds.filter((id) => Number(id) > 0))];
+  if (ids.length === 0) return;
+
+  for (const id of ids) {
+    try {
+      const product = await wooClient.getProduct(id);
+      const quantity = product.stock_quantity ?? 0;
+      const { error } = await supabase
+        .from('webshop_products')
+        .update({
+          stock_quantity: quantity,
+          stock_status: product.stock_status || (quantity > 0 ? 'instock' : 'outofstock'),
+        })
+        .eq('woo_product_id', id);
+
+      if (error) {
+        console.error(`Stock refresh DB error for Woo product ${id}:`, error.message);
+      } else {
+        console.log(`📦 Stock from Woo #${id}: ${quantity} (${product.stock_status})`);
+      }
+    } catch (error) {
+      console.error(`Stock refresh failed for Woo product ${id}:`, error);
+    }
+  }
+}
+
+/**
  * Check if order already exists in WooCommerce
  */
 export async function checkOrderExists(supabaseOrderId: string): Promise<number | null> {

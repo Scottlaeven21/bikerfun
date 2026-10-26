@@ -22,6 +22,20 @@ export interface EventStats {
   count: number;
 }
 
+export async function fetchAllRows<T>(
+  query: (from: number, to: number) => PromiseLike<{ data: T[] | null }>
+): Promise<T[]> {
+  const pageSize = 1000;
+  const rows: T[] = [];
+  for (let from = 0; from < 200_000; from += pageSize) {
+    const { data } = await query(from, from + pageSize - 1);
+    if (!data?.length) break;
+    rows.push(...data);
+    if (data.length < pageSize) break;
+  }
+  return rows;
+}
+
 export interface DetailedAnalytics {
   dailyStats: DailyStats[];
   topPages: PageStats[];
@@ -65,13 +79,26 @@ export async function getDetailedAnalytics(
 
   const dailyStats: DailyStats[] = dailyData || [];
 
-  // Get page views grouped by page - removed row limit
-  const { data: pageViewsData } = await (supabase as any)
+  const { count: exactViewCount } = await (supabase as any)
     .from('page_views')
-    .select('page_path, ip_address')
+    .select('*', { count: 'exact', head: true })
     .gte('created_at', start)
-    .lte('created_at', end)
-    .limit(100000); // Increase limit to handle more data
+    .lte('created_at', end);
+
+  const { data: totalsRows } = await (supabase as any).rpc('get_analytics_totals', {
+    start_date: start,
+    end_date: end,
+  });
+  const totalsRow = Array.isArray(totalsRows) ? totalsRows[0] : totalsRows;
+
+  const pageViewsData = await fetchAllRows<any>((from, to) =>
+    (supabase as any)
+      .from('page_views')
+      .select('page_path, ip_address, device_type, referrer')
+      .gte('created_at', start)
+      .lte('created_at', end)
+      .range(from, to)
+  );
 
   const pageViewsMap = new Map<string, Set<string>>();
   pageViewsData?.forEach((view: any) => {
@@ -83,12 +110,14 @@ export async function getDetailedAnalytics(
     }
   });
 
-  const { data: eventsData } = await (supabase as any)
-    .from('analytics_events')
-    .select('event_name, event_data, page_path')
-    .gte('created_at', start)
-    .lte('created_at', end)
-    .limit(100000);
+  const eventsData = await fetchAllRows<any>((from, to) =>
+    (supabase as any)
+      .from('analytics_events')
+      .select('event_name, event_data, page_path')
+      .gte('created_at', start)
+      .lte('created_at', end)
+      .range(from, to)
+  );
 
   const durationTotals = new Map<string, { total: number; count: number }>();
   eventsData
@@ -125,30 +154,14 @@ export async function getDetailedAnalytics(
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
-  // Get device breakdown
-  const { data: deviceData } = await (supabase as any)
-    .from('page_views')
-    .select('device_type')
-    .gte('created_at', start)
-    .lte('created_at', end)
-    .limit(100000); // Increase limit to handle more data
-
   const deviceBreakdown = {
-    mobile: deviceData?.filter((d: any) => d.device_type === 'mobile').length || 0,
-    desktop: deviceData?.filter((d: any) => d.device_type === 'desktop').length || 0,
-    tablet: deviceData?.filter((d: any) => d.device_type === 'tablet').length || 0,
+    mobile: pageViewsData.filter((d: any) => d.device_type === 'mobile').length,
+    desktop: pageViewsData.filter((d: any) => d.device_type === 'desktop').length,
+    tablet: pageViewsData.filter((d: any) => d.device_type === 'tablet').length,
   };
 
-  // Get referrer stats
-  const { data: referrerData } = await (supabase as any)
-    .from('page_views')
-    .select('referrer')
-    .gte('created_at', start)
-    .lte('created_at', end)
-    .limit(100000); // Increase limit to handle more data
-
   const referrerCounts = new Map<string, number>();
-  referrerData?.forEach((r: any) => {
+  pageViewsData.forEach((r: any) => {
     const ref = normalizeTrafficSource(r.referrer);
     referrerCounts.set(ref, (referrerCounts.get(ref) || 0) + 1);
   });
@@ -158,19 +171,11 @@ export async function getDetailedAnalytics(
     .sort((a, b) => b.count - a.count)
     .slice(0, 10);
 
-  // Calculate total stats with better unique visitor tracking
-  const totalViews = pageViewsData?.length || 0;
-  const uniqueIPs = pageViewsData?.map((v: any) => v.ip_address).filter(Boolean) || [];
-  const uniqueVisitors = new Set(uniqueIPs).size;
-  
-  console.log('Analytics Debug:', {
-    totalViews,
-    uniqueIPsCount: uniqueIPs.length,
-    uniqueVisitors,
-    sampleIPs: uniqueIPs.slice(0, 5)
-  });
-  
-  const totalEvents = eventsData?.length || 0;
+  const totalViews = Number(totalsRow?.total_views ?? exactViewCount ?? pageViewsData.length) || 0;
+  const uniqueIPs = pageViewsData.map((v: any) => v.ip_address).filter(Boolean);
+  const uniqueVisitors = Number(totalsRow?.unique_visitors) || new Set(uniqueIPs).size;
+
+  const totalEvents = eventsData.length || 0;
   const conversionEvents = eventsData?.filter((e: any) => 
     e.event_name.includes('contact') || e.event_name.includes('motor_request')
   ).length || 0;

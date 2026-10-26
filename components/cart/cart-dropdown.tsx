@@ -4,6 +4,12 @@ import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useCart } from '@/contexts/cart-context';
+import {
+  NL_FREE_SHIPPING_MIN,
+  SLEUTELHANGERS_PATH,
+  formatEuro,
+  remainingToFreeNlShipping,
+} from '@/lib/shipping/nl-free';
 export function CartDropdown() {
   const { cart, itemCount, total, removeFromCart, updateQuantity } = useCart();
   const [isOpen, setIsOpen] = useState(false);
@@ -166,9 +172,23 @@ export function CartDropdown() {
                 >
                   Naar Checkout
                 </button>
-                <p className="text-xs text-gray-500 text-center mt-2">
-                  Verzendkosten worden berekend bij checkout
-                </p>
+                {remainingToFreeNlShipping(total) > 0 ? (
+                  <p className="text-xs text-gray-600 text-center mt-2">
+                    Nog {formatEuro(remainingToFreeNlShipping(total))} tot gratis verzending in NL
+                    (vanaf {formatEuro(NL_FREE_SHIPPING_MIN)}).{' '}
+                    <Link
+                      href={SLEUTELHANGERS_PATH}
+                      onClick={() => setIsOpen(false)}
+                      className="font-semibold text-biker-yellow hover:underline"
+                    >
+                      Sleutelhanger erbij?
+                    </Link>
+                  </p>
+                ) : (
+                  <p className="text-xs text-gray-500 text-center mt-2">
+                    Gratis verzending binnen Nederland vanaf {formatEuro(NL_FREE_SHIPPING_MIN)}
+                  </p>
+                )}
               </div>
             </>
           )}

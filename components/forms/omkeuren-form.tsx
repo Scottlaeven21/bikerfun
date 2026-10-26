@@ -10,6 +10,12 @@ const emptyForm = {
   email: '',
   phone: '',
   company: '',
+  location: '',
+  kvk: '',
+  vatNumber: '',
+  rdwRecognized: '',
+  hasWorkshop: '',
+  estimatedOmkeuren: '',
   brand: '',
   model: '',
   generation: '',
@@ -29,7 +35,9 @@ export function OmkeurenForm() {
   const [formData, setFormData] = useState(emptyForm);
   const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
@@ -98,7 +106,7 @@ export function OmkeurenForm() {
             </h2>
             <p className="text-biker-light mb-8">
               {isDealer
-                ? 'Vul je gegevens in, dan nemen wij contact met je op.'
+                ? 'Vul de gegevens van je motorzaak in, dan nemen wij contact met je op.'
                 : 'Vul je gegevens en motorgegevens in. We nemen zo snel mogelijk contact met je op.'}
             </p>
 
@@ -140,12 +148,14 @@ export function OmkeurenForm() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              <h3 className="text-xl font-bold uppercase tracking-tight">Jouw gegevens</h3>
+              <h3 className="text-xl font-bold uppercase tracking-tight">
+                {isDealer ? 'Contactgegevens' : 'Jouw gegevens'}
+              </h3>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label htmlFor="name" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Naam *
+                    {isDealer ? 'Contactpersoon *' : 'Naam *'}
                   </label>
                   <input
                     type="text"
@@ -156,7 +166,7 @@ export function OmkeurenForm() {
                     value={formData.name}
                     onChange={handleChange}
                     className={inputClass}
-                    placeholder="Je volledige naam"
+                    placeholder={isDealer ? 'Naam contactpersoon' : 'Je volledige naam'}
                   />
                 </div>
                 {isDealer && (
@@ -195,12 +205,13 @@ export function OmkeurenForm() {
                 </div>
                 <div>
                   <label htmlFor="phone" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                    Telefoon
+                    Telefoon{isDealer ? ' *' : ''}
                   </label>
                   <input
                     type="tel"
                     id="phone"
                     name="phone"
+                    required={isDealer}
                     disabled={isLoading}
                     value={formData.phone}
                     onChange={handleChange}
@@ -209,6 +220,118 @@ export function OmkeurenForm() {
                   />
                 </div>
               </div>
+
+              {isDealer && (
+                <div className="border-t-2 border-biker-gray pt-6 mt-2">
+                  <h3 className="text-xl font-bold mb-6 uppercase tracking-tight">Gegevens motorzaak</h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="location" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        Locatie *
+                      </label>
+                      <input
+                        type="text"
+                        id="location"
+                        name="location"
+                        required={isDealer}
+                        disabled={isLoading}
+                        value={formData.location}
+                        onChange={handleChange}
+                        className={inputClass}
+                        placeholder="Plaats of adres"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="kvk" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        KVK *
+                      </label>
+                      <input
+                        type="text"
+                        id="kvk"
+                        name="kvk"
+                        required={isDealer}
+                        disabled={isLoading}
+                        value={formData.kvk}
+                        onChange={handleChange}
+                        className={inputClass}
+                        placeholder="12345678"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="vatNumber" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        BTW-nummer
+                      </label>
+                      <input
+                        type="text"
+                        id="vatNumber"
+                        name="vatNumber"
+                        disabled={isLoading}
+                        value={formData.vatNumber}
+                        onChange={handleChange}
+                        className={inputClass}
+                        placeholder="NL123456789B01 (optioneel)"
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="estimatedOmkeuren" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        Geschatte omkeuringen *
+                      </label>
+                      <select
+                        id="estimatedOmkeuren"
+                        name="estimatedOmkeuren"
+                        required={isDealer}
+                        disabled={isLoading}
+                        value={formData.estimatedOmkeuren}
+                        onChange={handleChange}
+                        className={inputClass}
+                      >
+                        <option value="">Maak een keuze</option>
+                        <option value="1-5 per jaar">1–5 per jaar</option>
+                        <option value="6-20 per jaar">6–20 per jaar</option>
+                        <option value="21-50 per jaar">21–50 per jaar</option>
+                        <option value="50+ per jaar">Meer dan 50 per jaar</option>
+                        <option value="Nog niet zeker">Nog niet zeker</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="rdwRecognized" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        RDW-erkend? *
+                      </label>
+                      <select
+                        id="rdwRecognized"
+                        name="rdwRecognized"
+                        required={isDealer}
+                        disabled={isLoading}
+                        value={formData.rdwRecognized}
+                        onChange={handleChange}
+                        className={inputClass}
+                      >
+                        <option value="">Maak een keuze</option>
+                        <option value="Ja">Ja</option>
+                        <option value="Nee">Nee</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label htmlFor="hasWorkshop" className="block text-sm font-bold mb-2 uppercase tracking-wider">
+                        Werkplaats? *
+                      </label>
+                      <select
+                        id="hasWorkshop"
+                        name="hasWorkshop"
+                        required={isDealer}
+                        disabled={isLoading}
+                        value={formData.hasWorkshop}
+                        onChange={handleChange}
+                        className={inputClass}
+                      >
+                        <option value="">Maak een keuze</option>
+                        <option value="Ja">Ja</option>
+                        <option value="Nee">Nee</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {!isDealer && (
               <div className="border-t-2 border-biker-gray pt-6 mt-2">

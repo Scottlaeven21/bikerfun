@@ -37,7 +37,7 @@ const homeFAQ = [
   },
   {
     question: 'Kunnen jullie een motor omkeuren naar A2 / 35kW?',
-    answer: 'Ja. Bikerfun keurt motoren om naar A2 / 35kW voor particulieren en dealers. Wij regelen het papierwerk. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW. Meer info op de omkeuren-pagina.',
+    answer: 'Ja. Bikerfun keurt motoren om naar A2 / 35kW voor particulieren en dealers. Wij regelen het papierwerk, vaak ook op afstand. Duur meestal 5 tot 10 werkdagen. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW. Meer info op de omkeuren-pagina.',
   },
 ];
 
@@ -178,13 +178,13 @@ export default async function HomePage() {
                 Motor <span className="text-biker-yellow">Omkeuren</span>
               </h2>
               <p className="text-lg md:text-xl text-biker-light mb-8 max-w-xl">
-                Motor omkeuren naar A2 / 35kW? Wij nemen het papierwerk uit handen — voor particulieren én motorzaken.
+                Motor omkeuren naar A2 / 35kW? Wij nemen het papierwerk uit handen — vaak ook op afstand, voor particulieren én motorzaken.
               </p>
               <ul className="space-y-3 mb-10">
                 {[
-                  'Papierwerk volledig geregeld',
+                  'Meestal binnen 5 tot 10 werkdagen',
+                  'Vaak ook op afstand mogelijk',
                   'Voor particulier en dealer',
-                  'Adviesprijs inclusief afhandeling',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-white">
                     <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">

@@ -1,12 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { useCart } from '@/contexts/cart-context';
+import {
+  NL_FREE_SHIPPING_MIN,
+  SLEUTELHANGERS_PATH,
+  formatEuro,
+  remainingToFreeNlShipping,
+} from '@/lib/shipping/nl-free';
 
 function formatCost(cost: number | null): string {
   if (cost === null) return 'wordt berekend bij afrekenen';
   if (cost === 0) return 'gratis';
-  return `€ ${cost.toFixed(2)}`;
+  return formatEuro(cost);
 }
 
 export function ShippingNote() {
@@ -43,6 +50,9 @@ export function ShippingNote() {
       .finally(() => setLoading(false));
   }, [cart, total]);
 
+  const remaining = remainingToFreeNlShipping(total);
+  const showUpsell = !loading && nl !== null && nl > 0 && remaining > 0;
+
   return (
     <>
       <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-4">
@@ -51,6 +61,29 @@ export function ShippingNote() {
             ? 'Verzendkosten worden berekend…'
             : `Nederland: ${formatCost(nl)}`}
         </p>
+        {!loading && remaining <= 0 && (
+          <p className="text-sm text-biker-black mt-1 font-semibold">
+            Gratis verzending binnen Nederland vanaf {formatEuro(NL_FREE_SHIPPING_MIN)}.
+          </p>
+        )}
+        {showUpsell && (
+          <p className="text-sm text-biker-black mt-2 leading-relaxed">
+            Nog {formatEuro(remaining)} tot gratis verzending in Nederland
+            (vanaf {formatEuro(NL_FREE_SHIPPING_MIN)}).{' '}
+            <Link
+              href={SLEUTELHANGERS_PATH}
+              className="font-bold underline underline-offset-2 hover:text-biker-yellow"
+            >
+              Gooi er een sleutelhanger bij
+            </Link>
+            .
+          </p>
+        )}
+        {!loading && !showUpsell && remaining > 0 && (
+          <p className="text-xs text-gray-600 mt-2">
+            Vanaf {formatEuro(NL_FREE_SHIPPING_MIN)} geen verzendkosten binnen Nederland.
+          </p>
+        )}
       </div>
       <p className="text-xs text-gray-500 mb-6">
         België: {loading ? 'wordt berekend…' : formatCost(be)}

@@ -383,6 +383,12 @@ export function omkeurenEmail({
   email,
   phone,
   company,
+  location,
+  kvk,
+  vatNumber,
+  rdwRecognized,
+  hasWorkshop,
+  estimatedOmkeuren,
   isDealer,
   brand,
   model,
@@ -397,6 +403,12 @@ export function omkeurenEmail({
   email: string;
   phone?: string;
   company?: string;
+  location?: string;
+  kvk?: string;
+  vatNumber?: string;
+  rdwRecognized?: string;
+  hasWorkshop?: string;
+  estimatedOmkeuren?: string;
   isDealer: boolean;
   brand?: string;
   model?: string;
@@ -426,8 +438,14 @@ export function omkeurenEmail({
     <div style="background-color: ${BIKER_YELLOW}; padding: 3px; margin-bottom: 30px;"></div>
     <table role="presentation" style="width: 100%; border-collapse: collapse;">
       ${row('Type', isDealer ? 'Dealer / motorzaak' : 'Particulier')}
-      ${row('Naam', name)}
+      ${row('Contactpersoon', name)}
       ${row('Bedrijf', company)}
+      ${row('Locatie', location)}
+      ${row('KVK', kvk)}
+      ${row('BTW-nummer', vatNumber)}
+      ${row('RDW-erkend', rdwRecognized)}
+      ${row('Werkplaats', hasWorkshop)}
+      ${row('Geschatte omkeuringen', estimatedOmkeuren)}
       ${row('Email', email)}
       ${row('Telefoon', phone)}
       ${row('Merk', brand)}

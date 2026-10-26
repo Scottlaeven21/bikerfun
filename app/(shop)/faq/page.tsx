@@ -93,7 +93,7 @@ const webshopFAQ = [
   },
   {
     question: 'Bieden jullie gratis verzending?',
-    answer: 'Bij bestellingen boven een bepaald bedrag bieden we gratis verzending aan. Check de webshop voor actuele verzendkosten en acties.',
+    answer: 'Binnen Nederland is verzending gratis vanaf € 29,95. Zit je net daaronder? Gooi er een sleutelhanger of ander klein artikel bij. Voor België en andere landen zie je de kosten bij het afrekenen.',
   },
 ];
 

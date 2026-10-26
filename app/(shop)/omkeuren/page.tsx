@@ -50,7 +50,7 @@ export default function OmkeurenPage() {
               Motor <span className="text-biker-yellow">Omkeuren</span>
             </h1>
             <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto">
-              Motor omkeuren naar A2 / 35kW? Wij regelen het papierwerk voor je.
+              Motor omkeuren naar A2 / 35kW? Vaak op afstand, meestal 5 tot 10 werkdagen.
             </p>
           </div>
         </div>
@@ -76,9 +76,10 @@ export default function OmkeurenPage() {
               Bikerfun in Susteren (Limburg) regelt het papierwerk voor je.
             </p>
             <p>
-              Dat doen we voor particulieren én voor motorzaken. Vul het formulier in, dan nemen
-              wij contact met je op. Adviesprijs: € 495 onder 70 kW en € 695 boven 70 kW,
-              inclusief papierwerk.
+              Dat doen we voor particulieren én voor motorzaken. Het duurt meestal 5 tot 10
+              werkdagen. Vaak kan de omkeuring ook op afstand — je hoeft de motor dus niet
+              altijd langs te brengen. Vul het formulier in, dan nemen wij contact met je op.
+              Adviesprijs: € 495 onder 70 kW en € 695 boven 70 kW, inclusief papierwerk.
             </p>
           </div>
         </div>
@@ -150,7 +151,7 @@ export default function OmkeurenPage() {
               </div>
               <h3 className="text-2xl font-bold mb-4 uppercase tracking-tight">Wij regelen het</h3>
               <p className="text-biker-light">
-                Van aanvraag tot papieren: wij nemen het omkeuren naar 35kW voor je uit handen.
+                Van aanvraag tot papieren, vaak op afstand. Meestal klaar binnen 5 tot 10 werkdagen.
               </p>
             </div>
             <div className="text-center">
@@ -189,7 +190,7 @@ export default function OmkeurenPage() {
             Liever <span className="text-biker-yellow">Direct</span> Bellen?
           </h2>
           <p className="text-lg md:text-xl text-biker-light mb-10 max-w-3xl mx-auto">
-            We werken op afspraak. Bel of app ons, dan plannen we het omkeuren in.
+            Vragen? Bel of app ons. Omkeuren kan vaak op afstand — je hoeft de motor niet altijd langs te brengen.
           </p>
           <Link
             href="tel:+31615452108"

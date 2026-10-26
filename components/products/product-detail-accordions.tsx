@@ -29,8 +29,12 @@ export function ProductDetailAccordions({ descriptionHtml, hasShortDescriptionAb
 
       <AccordionItem title="Verzending & levering">
         <p className="text-sm leading-relaxed text-gray-600">
-          We verzenden met betrouwbare vervoerders. Levertijd en verzendkosten hangen af van je bestelling en
-          adres — alle details vind je op onze verzendpagina.
+          Binnen Nederland geen verzendkosten vanaf € 29,95. Zit je net daaronder? Gooi er een{' '}
+          <Link href="/products/sleutelhangers" className="font-semibold text-biker-yellow hover:underline">
+            sleutelhanger
+          </Link>{' '}
+          bij. Levertijd en het exacte tarief voor jouw bestelling zie je bij het afrekenen —
+          alle details staan op onze verzendpagina.
         </p>
         <Link
           href="/verzending"

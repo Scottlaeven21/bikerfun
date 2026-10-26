@@ -280,7 +280,7 @@ export function getAanvraagMetadata(): Metadata {
 // ── Omkeuren ──────────────────────────────────────────────────────────────────
 export function getOmkeurenMetadata(): Metadata {
   const desc =
-    'Motor omkeuren naar A2 / 35kW bij Bikerfun in Susteren. Papierwerk voor particulier en dealer. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW.';
+    'Motor omkeuren naar A2 / 35kW bij Bikerfun. Vaak op afstand, meestal 5 tot 10 werkdagen. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW.';
   return {
     ...getBaseMetadata(),
     title: 'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',

@@ -17,6 +17,11 @@ export const omkeurenFaq = [
   {
     question: 'Hoe lang duurt het omkeuren van een motor?',
     answer:
-      'Dat hangt af van merk, model en de papieren. Na je aanvraag laten we weten wat er nodig is en hoe lang het ongeveer duurt. We werken op afspraak in Susteren, Limburg.',
+      'Meestal 5 tot 10 werkdagen, afhankelijk van merk, model en de papieren. Na je aanvraag laten we weten wat er nodig is.',
+  },
+  {
+    question: 'Kan het omkeuren ook op afstand?',
+    answer:
+      'Ja, vaak wel. In veel gevallen regelen we de omkeuring op afstand, zonder dat je de motor naar Susteren hoeft te brengen. We laten na je aanvraag weten of dat bij jouw motor kan.',
   },
 ];

@@ -355,6 +355,12 @@ export async function submitOmkeurenForm(formData: {
   email: string;
   phone?: string;
   company?: string;
+  location?: string;
+  kvk?: string;
+  vatNumber?: string;
+  rdwRecognized?: string;
+  hasWorkshop?: string;
+  estimatedOmkeuren?: string;
   isDealer: boolean;
   brand?: string;
   model?: string;
@@ -370,8 +376,13 @@ export async function submitOmkeurenForm(formData: {
       return { success: false, error: 'Vul alle verplichte velden in.' };
     }
 
-    if (formData.isDealer && !formData.company) {
-      return { success: false, error: 'Vul je bedrijfsnaam in.' };
+    if (formData.isDealer) {
+      if (!formData.company || !formData.location || !formData.kvk || !formData.phone) {
+        return { success: false, error: 'Vul alle verplichte velden in.' };
+      }
+      if (!formData.rdwRecognized || !formData.hasWorkshop || !formData.estimatedOmkeuren) {
+        return { success: false, error: 'Vul alle verplichte velden in.' };
+      }
     }
 
     if (!formData.isDealer && (!formData.brand || !formData.model || !formData.year)) {
@@ -386,11 +397,17 @@ export async function submitOmkeurenForm(formData: {
     const messageParts = [
       formData.isDealer ? 'Type: Dealer-aanmelding' : 'Type: Particulier',
       formData.company && `Bedrijf: ${formData.company}`,
+      formData.location && `Locatie: ${formData.location}`,
+      formData.kvk && `KVK: ${formData.kvk}`,
+      formData.vatNumber && `BTW: ${formData.vatNumber}`,
+      formData.rdwRecognized && `RDW-erkend: ${formData.rdwRecognized}`,
+      formData.hasWorkshop && `Werkplaats: ${formData.hasWorkshop}`,
+      formData.estimatedOmkeuren && `Geschatte omkeuringen: ${formData.estimatedOmkeuren}`,
       (formData.brand || formData.model) && `Motor: ${[formData.brand, formData.model].filter(Boolean).join(' ')}`,
       formData.generation && `Generatie: ${formData.generation}`,
       formData.licensePlate && `Kenteken: ${formData.licensePlate}`,
       formData.typeApproval && `Typegoedkeuring: ${formData.typeApproval}`,
-      `Bouwjaar: ${formData.year}`,
+      formData.year && `Bouwjaar: ${formData.year}`,
       formData.vin && `Framenummer: ${formData.vin}`,
       formData.message && `\nBericht:\n${formData.message}`,
     ].filter(Boolean);
@@ -411,6 +428,12 @@ export async function submitOmkeurenForm(formData: {
         year: formData.year,
         vin: formData.vin,
         company: formData.company,
+        location: formData.location,
+        kvk: formData.kvk,
+        vatNumber: formData.vatNumber,
+        rdwRecognized: formData.rdwRecognized,
+        hasWorkshop: formData.hasWorkshop,
+        estimatedOmkeuren: formData.estimatedOmkeuren,
         isDealer: formData.isDealer,
       },
     });

@@ -151,14 +151,16 @@ export default async function VerzendingPage() {
                       </svg>
                     </div>
                     <p className="text-2xl font-bold text-biker-yellow">
-                      Zelfde tarieven als WooCommerce
+                      Gratis verzending in Nederland vanaf € 29,95
                     </p>
                   </div>
                   <p className="text-biker-light text-lg">
-                    De verzendkosten hangen af van je producten en land — bijvoorbeeld
-                    een sleutelhanger (briefpost) is goedkoper dan een helmcover (pakket).
-                    Bij het afrekenen rekenen we het bedrag live uit in WooCommerce,
-                    zodat je altijd hetzelfde tarief ziet als in de webshop.
+                    Bestel je voor € 29,95 of meer? Dan betaal je geen verzendkosten
+                    binnen Nederland. Mis je een paar euro? Gooi er een{' '}
+                    <Link href="/products/sleutelhangers" className="text-biker-yellow font-bold hover:underline">
+                      sleutelhanger
+                    </Link>{' '}
+                    bij.
                   </p>
                 </div>
 

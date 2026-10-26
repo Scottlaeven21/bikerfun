@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
 import { normalizeTrafficSource } from '@/lib/analytics/sources';
+import { fetchAllRows } from '@/lib/analytics/queries';
 
 // Track page view
 export async function trackPageView(pagePath: string, pageTitle?: string) {
@@ -184,30 +185,27 @@ export async function getAnalyticsData() {
         };
       });
 
-    // Device breakdown - increase limit to handle more data
-    const { data: deviceData } = await supabase
-      .from('page_views')
-      .select('device_type')
-      .gte('created_at', lastMonth.toISOString())
-      .limit(100000);
+    const monthViewsRows = await fetchAllRows<any>((from, to) =>
+      supabase
+        .from('page_views')
+        .select('page_path, referrer, device_type')
+        .gte('created_at', lastMonth.toISOString())
+        .range(from, to)
+    );
 
     const deviceBreakdown = {
-      mobile: deviceData?.filter((d: any) => d.device_type === 'mobile').length || 0,
-      desktop: deviceData?.filter((d: any) => d.device_type === 'desktop').length || 0,
-      tablet: deviceData?.filter((d: any) => d.device_type === 'tablet').length || 0,
+      mobile: monthViewsRows.filter((d: any) => d.device_type === 'mobile').length,
+      desktop: monthViewsRows.filter((d: any) => d.device_type === 'desktop').length,
+      tablet: monthViewsRows.filter((d: any) => d.device_type === 'tablet').length,
     };
 
-    const { data: monthViewsRows } = await supabase
-      .from('page_views')
-      .select('page_path, referrer')
-      .gte('created_at', lastMonth.toISOString())
-      .limit(100000);
-
-    const { data: monthEvents } = await supabase
-      .from('analytics_events')
-      .select('event_name, event_data, page_path')
-      .gte('created_at', lastMonth.toISOString())
-      .limit(100000);
+    const monthEvents = await fetchAllRows<any>((from, to) =>
+      supabase
+        .from('analytics_events')
+        .select('event_name, event_data, page_path')
+        .gte('created_at', lastMonth.toISOString())
+        .range(from, to)
+    );
 
     const referrerCounts = new Map<string, number>();
     monthViewsRows?.forEach((row: any) => {

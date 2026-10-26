@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getMolliePayment } from '@/lib/mollie/client';
 import { createClient } from '@supabase/supabase-js';
-import { syncOrderToWooCommerce, checkOrderExists } from '@/lib/woocommerce/sync';
+import { syncOrderToWooCommerce, refreshSupabaseStockFromWoo } from '@/lib/woocommerce/sync';
 import { logAuditEvent } from '@/lib/audit/logger';
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -98,42 +98,6 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    // Update stock quantities after confirmed payment
-    if (payment.status === 'paid') {
-      try {
-        const { data: orderItems } = await supabase
-          .from('webshop_order_items')
-          .select('woo_product_id, quantity')
-          .eq('order_id', orderId);
-
-        if (orderItems && orderItems.length > 0) {
-          for (const item of orderItems) {
-            if (!item.woo_product_id) continue;
-
-            const { data: product } = await supabase
-              .from('webshop_products')
-              .select('id, stock_quantity, manage_stock')
-              .eq('woo_product_id', item.woo_product_id)
-              .single();
-
-            if (product && product.manage_stock && product.stock_quantity !== null) {
-              const newStock = Math.max(0, product.stock_quantity - item.quantity);
-              await supabase
-                .from('webshop_products')
-                .update({
-                  stock_quantity: newStock,
-                  stock_status: newStock > 0 ? 'instock' : 'outofstock',
-                })
-                .eq('id', product.id);
-              console.log(`✅ Stock updated for woo_product_id ${item.woo_product_id}: ${product.stock_quantity} → ${newStock}`);
-            }
-          }
-        }
-      } catch (stockError) {
-        console.error('Stock update error (non-fatal):', stockError);
-      }
-    }
-
     // Sync to WooCommerce if payment is successful
     if (payment.status === 'paid') {
       console.log(`🎉 Payment successful for order ${orderId}! Starting WooCommerce sync...`);
@@ -217,6 +181,11 @@ export async function POST(request: NextRequest) {
             
             console.log(`✅ Order synced! WooCommerce Order ID: ${wooOrderId}`);
             console.log(`✅ WooCommerce will now send emails and handle shipping.`);
+
+            const soldIds = (fullOrder.items || [])
+              .map((item: any) => Number(item.woo_product_id))
+              .filter((id: number) => id > 0);
+            await refreshSupabaseStockFromWoo(supabase, soldIds);
             
             // Log successful sync
             await logAuditEvent({
