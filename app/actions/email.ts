@@ -356,22 +356,26 @@ export async function submitOmkeurenForm(formData: {
   phone?: string;
   company?: string;
   isDealer: boolean;
-  brand: string;
-  model: string;
+  brand?: string;
+  model?: string;
   generation?: string;
   licensePlate?: string;
   typeApproval?: string;
-  year: string;
+  year?: string;
   vin?: string;
   message?: string;
 }) {
   try {
-    if (!formData.name || !formData.email || !formData.brand || !formData.model || !formData.year) {
+    if (!formData.name || !formData.email) {
       return { success: false, error: 'Vul alle verplichte velden in.' };
     }
 
     if (formData.isDealer && !formData.company) {
       return { success: false, error: 'Vul je bedrijfsnaam in.' };
+    }
+
+    if (!formData.isDealer && (!formData.brand || !formData.model || !formData.year)) {
+      return { success: false, error: 'Vul alle verplichte velden in.' };
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -380,9 +384,9 @@ export async function submitOmkeurenForm(formData: {
     }
 
     const messageParts = [
-      formData.isDealer ? 'Type: Dealer / motorzaak' : 'Type: Particulier',
+      formData.isDealer ? 'Type: Dealer-aanmelding' : 'Type: Particulier',
       formData.company && `Bedrijf: ${formData.company}`,
-      `Motor: ${formData.brand} ${formData.model}`,
+      (formData.brand || formData.model) && `Motor: ${[formData.brand, formData.model].filter(Boolean).join(' ')}`,
       formData.generation && `Generatie: ${formData.generation}`,
       formData.licensePlate && `Kenteken: ${formData.licensePlate}`,
       formData.typeApproval && `Typegoedkeuring: ${formData.typeApproval}`,

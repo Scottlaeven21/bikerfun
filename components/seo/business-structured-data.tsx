@@ -1,6 +1,9 @@
 import { getOrganizationSchema, getLocalBusinessSchema } from '@/lib/seo/structured-data';
+import { getReviewSettings } from '@/lib/supabase/reviews';
 
-export function BusinessStructuredData() {
+export async function BusinessStructuredData() {
+  const settings = await getReviewSettings();
+
   return (
     <>
       <script
@@ -9,7 +12,14 @@ export function BusinessStructuredData() {
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(getLocalBusinessSchema()) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getLocalBusinessSchema({
+              ratingValue: settings.overall_score,
+              reviewCount: settings.review_count,
+            })
+          ),
+        }}
       />
     </>
   );

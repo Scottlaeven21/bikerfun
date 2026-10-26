@@ -1,4 +1,4 @@
-import Link from 'next/link';
+﻿import Link from 'next/link';
 import Image from 'next/image';
 import { TikTokGrid } from '@/components/tiktok-grid';
 import { OccasionsCarousel } from '@/components/occasions-carousel';
@@ -10,6 +10,8 @@ import { getHomeMetadata } from '@/lib/seo/metadata';
 import { StructuredData } from '@/components/seo/structured-data';
 import { getWebsiteSchema } from '@/lib/seo/structured-data';
 import { FAQAccordion } from '@/components/faq/faq-accordion';
+import { ReviewsSection } from '@/components/home/reviews-section';
+import { getActiveReviews, getReviewSettings } from '@/lib/supabase/reviews';
 
 const homeFAQ = [
   {
@@ -18,7 +20,7 @@ const homeFAQ = [
   },
   {
     question: 'Bieden jullie garantie op occasions?',
-    answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geïnteresseerd bent.',
+    answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geÃ¯nteresseerd bent.',
   },
   {
     question: 'Kan ik mijn huidige motor inruilen?',
@@ -64,6 +66,10 @@ export default async function HomePage() {
     .limit(8);
 
   const occasionsList = (occasions as Occasion[]) || [];
+  const [reviewSettings, reviews] = await Promise.all([
+    getReviewSettings(),
+    getActiveReviews(),
+  ]);
   return (
     <>
       <BusinessStructuredData />
@@ -95,7 +101,7 @@ export default async function HomePage() {
                 style={{ fontFamily: 'var(--font-montserrat)' }}
                 className="text-sm md:text-base text-white/70 mb-12 tracking-widest uppercase font-light"
               >
-                Motoroccasions &amp; Accessoires · Susteren, Limburg
+                Motoroccasions &amp; Accessoires Â· Susteren, Limburg
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
@@ -152,6 +158,35 @@ export default async function HomePage() {
               BEKIJK ALLE OCCASIONS
             </Link>
           </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-biker-dark noise-overlay border-y border-biker-gray/30">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
+            Motor <span className="text-biker-yellow">Omkeuren</span>
+          </h2>
+          <p className="text-base md:text-lg text-biker-light max-w-2xl mx-auto mb-8">
+            Motor omkeuren naar A2 / 35kW? Wij regelen het papierwerk. Ook voor motorzaken.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
+            <p className="text-white font-bold">
+              <span className="text-biker-yellow">â‚¬ 495</span>
+              <span className="text-biker-light font-normal"> onder 70 kW</span>
+            </p>
+            <span className="hidden sm:block text-biker-gray">Â·</span>
+            <p className="text-white font-bold">
+              <span className="text-biker-yellow">â‚¬ 695</span>
+              <span className="text-biker-light font-normal"> boven 70 kW</span>
+            </p>
+          </div>
+          <Link
+            href="/omkeuren"
+            style={{ fontFamily: 'var(--font-montserrat)' }}
+            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300"
+          >
+            Meer over omkeuren
+          </Link>
         </div>
       </section>
 
@@ -362,200 +397,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Reviews Section */}
-      <section className="py-20 bg-black noise-overlay border-t-2 border-biker-gray">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Section Header */}
-          <div className="text-center mb-16">
-            <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
-              Wat Klanten Over <span className="text-biker-yellow">Ons Zeggen</span>
-            </h2>
-            <p className="text-lg md:text-xl text-biker-light max-w-3xl mx-auto">
-              Lees de ervaringen van onze tevreden klanten. Echte reviews van Google.
-            </p>
-            <div className="flex items-center justify-center space-x-2 mt-4">
-              <div className="flex text-biker-yellow">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <span className="text-biker-light font-bold">4.8 uit 5 sterren</span>
-            </div>
-          </div>
-
-          {/* Reviews Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {/* Review 1 - Lars Gelissen */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">3 maanden geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Lars Gelissen</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                Ik heb onlangs een Yamaha R6 uit 2002 gekocht bij Bikerfun en ben ontzettend tevreden over de service! 
-                De motor kon ik voor een hele mooie prijs meenemen.
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-
-            {/* Review 2 - Duncan Boek */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">1 maand geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Duncan Boek</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                Afspraak maken ging makkelijk en was flexibel met zijn openingstijden. De verkoper weet echt waar hij 
-                het over heeft, communiceert snel en vriendelijk. Erg tevreden!
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-
-            {/* Review 3 - Kylian Bogers */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">3 maanden geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Kylian Bogers</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                3 maanden geleden hier mijn motor gekocht en ik ben op alle vlakken super tevreden. 
-                Super snelle en professionele service. Een paar weken geleden iets voor motor nodig gehad en werd direct geholpen!
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-
-            {/* Review 4 - Eelko ten Wolde */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">4 maanden geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Eelko ten Wolde</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                Ik kwam kijken voor een R6 voor mijn zoon en die heb ik ook gekocht 😍 De eigenaar is een ambitieuze 
-                jonge man die weet waar hij het over heeft. Mooie motoren voor een realistische prijs. Die gaat het nog ver schoppen!
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-
-            {/* Review 5 - Tim Wagner (Helmet Cover) */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">8 maanden geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Tim Wagner</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                Hier een helmcover besteld. Snel en netjes geholpen. Prima kwaliteit. 
-                Gewoon lekker mee cruisen, krijg je veel leuke interactie. Oja gebruik de instructies de eerste keer! Het past.
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-
-            {/* Review 6 - Boran */}
-            <div className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all">
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex text-biker-yellow">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                </div>
-                <span className="text-xs text-biker-muted">8 maanden geleden</span>
-              </div>
-              <h3 className="font-bold text-white mb-2">Boran</h3>
-              <p className="text-biker-light text-sm leading-relaxed">
-                Fantastische service bij BikerFun! Mijn Yamaha R6 laten omkeuren naar 35kW – alles is vlot verlopen 
-                en binnen 2 weken waren de papieren in orde. Zeker aan te raden, ook super goede A2 motoren te koop!
-              </p>
-              <div className="mt-4 flex items-center space-x-2">
-                <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Google Reviews Link */}
-          <div className="text-center mt-12">
-            <p className="text-biker-light mb-6">
-              Bekijk al onze reviews op Google
-            </p>
-            <a
-              href="https://www.google.nl/search?q=bikerfun&si=APenkKm7iecQ4G6P-TsbSMFKIQtv3EFIqRAFw-i8uEbk55Z-_8gyC0rTtSmLJNjwf_0P8Zgv-oK4ZO2iIPyAWdfc7vGBuzmS2kjxSKeonGahwLRn4sRgIqs%3D&uds=AJ5uw1-CsN_VmOWvV4nQCD6b3IOKEoAIaIAYgoXXwOoqSRP6Qe-Vwn507Kk-kQ8kzV7WWE_fjN6hbQI9Ju4wJhmSX57fw0RtAXvWLjTWH4NTUJZjxHxlR5U&sa=X"
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ fontFamily: 'var(--font-montserrat)' }}
-              className="btn-secondary inline-block bg-transparent text-white px-12 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 border-2 border-white"
-            >
-              MEER REVIEWS OP GOOGLE
-            </a>
-          </div>
-        </div>
-      </section>
-
+      <ReviewsSection settings={reviewSettings} reviews={reviews} />
       {/* FAQ Section */}
       <section className="py-20 bg-biker-dark noise-overlay border-y border-biker-gray/30">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

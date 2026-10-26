@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateShipping, getShippingZones } from '@/lib/woocommerce/shipping';
+import { calculateShipping, getCountryShippingInfo } from '@/lib/woocommerce/shipping';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
@@ -16,46 +16,18 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const shippingCost = await calculateShipping(subtotal, country);
-
-    // Try to get free shipping threshold dynamically from WooCommerce
-    let freeShippingThreshold = null;
-    
-    try {
-      const zones = await getShippingZones();
-      const countryUpper = country.toUpperCase();
-      
-      // Find zone for this country
-      const zone = zones.find(z => 
-        z.countries.includes(countryUpper) ||
-        z.name.toLowerCase().includes(country.toLowerCase())
-      );
-      
-      if (zone) {
-        // Find free shipping method with min amount
-        const freeShipping = zone.methods.find(
-          m => m.enabled && m.id === 'free_shipping' && m.minAmount
-        );
-        
-        if (freeShipping && freeShipping.minAmount) {
-          freeShippingThreshold = freeShipping.minAmount;
-        }
-      }
-    } catch (err) {
-      console.warn('Could not fetch dynamic threshold, using fallback');
-      // Fallback thresholds
-      const countryUpper = country.toUpperCase();
-      if (countryUpper === 'NL') freeShippingThreshold = 40;
-      else if (countryUpper === 'BE' || countryUpper === 'DE') freeShippingThreshold = 60;
-    }
+    const [shippingCost, info] = await Promise.all([
+      calculateShipping(subtotal, country),
+      getCountryShippingInfo(country),
+    ]);
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: freeShippingThreshold,
+      free_shipping_threshold: info.alwaysFree ? null : info.freeMin,
       country,
-      source: 'woocommerce', // Indicates rates come from WooCommerce
+      source: 'woocommerce',
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
@@ -80,22 +52,16 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const shippingCost = await calculateShipping(subtotal, country);
-    
-    const countryUpper = country.toUpperCase();
-    let freeShippingThreshold = null;
-    
-    if (countryUpper === 'NL') {
-      freeShippingThreshold = 40;
-    } else if (countryUpper === 'BE' || countryUpper === 'DE') {
-      freeShippingThreshold = 60;
-    }
+    const [shippingCost, info] = await Promise.all([
+      calculateShipping(subtotal, country),
+      getCountryShippingInfo(country),
+    ]);
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: freeShippingThreshold,
+      free_shipping_threshold: info.alwaysFree ? null : info.freeMin,
       country,
     });
   } catch (error) {

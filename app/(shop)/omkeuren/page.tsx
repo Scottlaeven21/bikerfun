@@ -7,7 +7,7 @@ export const metadata = getOmkeurenMetadata();
 export default function OmkeurenPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
-      <section className="relative h-[50vh] overflow-hidden">
+      <section className="relative h-[32vh] min-h-[220px] overflow-hidden">
         <video
           autoPlay
           loop
@@ -21,18 +21,18 @@ export default function OmkeurenPage() {
 
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>
 
-        <div className="relative h-full flex items-center">
+        <div className="relative h-full flex items-center pt-20 md:pt-24">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full text-center">
             <h1
               style={{
                 fontFamily: 'var(--font-inter)',
                 letterSpacing: '0.05em',
               }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold mb-6 text-white drop-shadow-2xl uppercase"
+              className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 text-white drop-shadow-2xl uppercase"
             >
               Motor <span className="text-biker-yellow">Omkeuren</span>
             </h1>
-            <p className="text-lg md:text-xl text-white/80 max-w-3xl mx-auto">
+            <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto">
               Motor omkeuren naar A2 / 35kW? Wij regelen het papierwerk voor je.
             </p>
           </div>
@@ -51,20 +51,32 @@ export default function OmkeurenPage() {
             Prijzen zijn inclusief papierwerk. De exacte prijs bevestigen we na je aanvraag.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="bg-black rounded-2xl p-8 border-2 border-biker-gray text-center">
+            <a
+              href="#aanvraag"
+              className="bg-black rounded-2xl p-8 border-2 border-biker-gray text-center hover:border-biker-yellow hover:-translate-y-1 transition-all"
+            >
               <p className="text-sm font-bold uppercase tracking-wider text-biker-muted mb-3">
                 Minder dan 70 kW
               </p>
               <p className="text-5xl font-bold text-biker-yellow mb-2">€ 495</p>
               <p className="text-biker-light">Adviesprijs voor motoren onder 70 kW</p>
-            </div>
-            <div className="bg-black rounded-2xl p-8 border-2 border-biker-yellow text-center">
+              <p className="mt-4 text-sm font-bold uppercase tracking-wider text-biker-yellow">
+                Vraag aan
+              </p>
+            </a>
+            <a
+              href="#aanvraag"
+              className="bg-black rounded-2xl p-8 border-2 border-biker-yellow text-center hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all"
+            >
               <p className="text-sm font-bold uppercase tracking-wider text-biker-muted mb-3">
                 Meer dan 70 kW
               </p>
               <p className="text-5xl font-bold text-biker-yellow mb-2">€ 695</p>
               <p className="text-biker-light">Adviesprijs voor motoren boven 70 kW</p>
-            </div>
+              <p className="mt-4 text-sm font-bold uppercase tracking-wider text-biker-yellow">
+                Vraag aan
+              </p>
+            </a>
           </div>
         </div>
       </section>

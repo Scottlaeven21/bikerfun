@@ -5,6 +5,7 @@
 
 import { wooCommerce } from '@/lib/woocommerce/client';
 import { syncOrderToWooCommerce } from '@/lib/woocommerce/sync';
+import { syncShippingRates } from '@/lib/woocommerce/shipping';
 import { isTestProduct } from '@/lib/shop/test-products';
 
 export interface WooCommerceFullSyncResult {
@@ -22,6 +23,10 @@ export interface WooCommerceFullSyncResult {
     failed: number;
   };
   orders?: {
+    synced: number;
+    failed: number;
+  };
+  shipping?: {
     synced: number;
     failed: number;
   };
@@ -550,6 +555,12 @@ export async function executeWooCommerceFullSync(supabase: any): Promise<WooComm
     result.orders = await syncOrders(supabase);
   } catch (error: any) {
     errors.push(`Orders sync failed: ${error.message}`);
+  }
+
+  try {
+    result.shipping = await syncShippingRates(supabase);
+  } catch (error: any) {
+    errors.push(`Shipping sync failed: ${error.message}`);
   }
 
   result.success = errors.length === 0;

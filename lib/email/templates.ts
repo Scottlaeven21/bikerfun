@@ -398,12 +398,12 @@ export function omkeurenEmail({
   phone?: string;
   company?: string;
   isDealer: boolean;
-  brand: string;
-  model: string;
+  brand?: string;
+  model?: string;
   generation?: string;
   licensePlate?: string;
   typeApproval?: string;
-  year: string;
+  year?: string;
   vin?: string;
   message?: string;
 }): { subject: string; html: string } {
@@ -453,7 +453,7 @@ export function omkeurenEmail({
   return {
     subject: isDealer
       ? `Dealer-aanmelding omkeuren van ${name}`
-      : `Omkeur-aanvraag: ${brand} ${model} van ${name}`,
+      : `Omkeur-aanvraag: ${[brand, model].filter(Boolean).join(' ') || 'motor'} van ${name}`,
     html: emailLayout(content),
   };
 }

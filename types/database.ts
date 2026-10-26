@@ -94,6 +94,105 @@ export interface Database {
           updated_at?: string;
         };
       };
+      shipping_rates: {
+        Row: {
+          id: string;
+          woo_zone_id: number;
+          name: string;
+          countries: string[];
+          flat_rate: number | null;
+          free_min: number | null;
+          always_free: boolean;
+          method_title: string | null;
+          synced_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          woo_zone_id: number;
+          name: string;
+          countries?: string[];
+          flat_rate?: number | null;
+          free_min?: number | null;
+          always_free?: boolean;
+          method_title?: string | null;
+          synced_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          woo_zone_id?: number;
+          name?: string;
+          countries?: string[];
+          flat_rate?: number | null;
+          free_min?: number | null;
+          always_free?: boolean;
+          method_title?: string | null;
+          synced_at?: string;
+          updated_at?: string;
+        };
+      };
+      review_settings: {
+        Row: {
+          id: number;
+          overall_score: number;
+          review_count: number;
+          google_url: string | null;
+          updated_at: string;
+        };
+        Insert: {
+          id?: number;
+          overall_score?: number;
+          review_count?: number;
+          google_url?: string | null;
+          updated_at?: string;
+        };
+        Update: {
+          id?: number;
+          overall_score?: number;
+          review_count?: number;
+          google_url?: string | null;
+          updated_at?: string;
+        };
+      };
+      site_reviews: {
+        Row: {
+          id: string;
+          author: string;
+          body: string;
+          rating: number;
+          date_label: string | null;
+          is_verified: boolean;
+          is_active: boolean;
+          sort_order: number;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          author: string;
+          body: string;
+          rating?: number;
+          date_label?: string | null;
+          is_verified?: boolean;
+          is_active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          author?: string;
+          body?: string;
+          rating?: number;
+          date_label?: string | null;
+          is_verified?: boolean;
+          is_active?: boolean;
+          sort_order?: number;
+          created_at?: string;
+          updated_at?: string;
+        };
+      };
       products: {
         Row: {
           id: string;
@@ -468,3 +567,11 @@ export type OccasionView = Database['public']['Tables']['occasion_views']['Row']
 export type SiteBanner = Database['public']['Tables']['site_banners']['Row'];
 export type SiteBannerInsert = Database['public']['Tables']['site_banners']['Insert'];
 export type SiteBannerUpdate = Database['public']['Tables']['site_banners']['Update'];
+export type ShippingRate = Database['public']['Tables']['shipping_rates']['Row'];
+export type ShippingRateInsert = Database['public']['Tables']['shipping_rates']['Insert'];
+export type ShippingRateUpdate = Database['public']['Tables']['shipping_rates']['Update'];
+export type ReviewSettings = Database['public']['Tables']['review_settings']['Row'];
+export type ReviewSettingsUpdate = Database['public']['Tables']['review_settings']['Update'];
+export type SiteReview = Database['public']['Tables']['site_reviews']['Row'];
+export type SiteReviewInsert = Database['public']['Tables']['site_reviews']['Insert'];
+export type SiteReviewUpdate = Database['public']['Tables']['site_reviews']['Update'];

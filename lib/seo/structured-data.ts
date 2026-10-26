@@ -56,7 +56,7 @@ export function getOrganizationSchema() {
 }
 
 // ── Local Business Schema ─────────────────────────────────────────────────────
-export function getLocalBusinessSchema() {
+export function getLocalBusinessSchema(rating?: { ratingValue?: string | number; reviewCount?: string | number }) {
   return {
     '@context': 'https://schema.org',
     '@type': ['AutomotiveBusiness', 'LocalBusiness'],
@@ -74,8 +74,8 @@ export function getLocalBusinessSchema() {
     sameAs:      [TIKTOK_URL, GOOGLE_MAPS_URL],
     aggregateRating: {
       '@type':       'AggregateRating',
-      ratingValue:   '4.8',
-      reviewCount:   '6',
+      ratingValue:   String(rating?.ratingValue ?? '4.8'),
+      reviewCount:   String(rating?.reviewCount ?? '6'),
       bestRating:    '5',
       worstRating:   '1',
     },

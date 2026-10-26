@@ -5,6 +5,7 @@ import { formatPrice } from '@/lib/utils/format';
 import Link from 'next/link';
 import Image from 'next/image';
 import { WhiteBackgroundWrapper } from '@/components/white-background-wrapper';
+import { ShippingNote } from '@/components/cart/shipping-note';
 
 export default function CartPage() {
   const { cart, removeFromCart, updateQuantity } = useCart();
@@ -169,14 +170,7 @@ export default function CartPage() {
                 <p className="text-xs text-gray-400">Alle prijzen zijn incl. 21% BTW</p>
               </div>
 
-              <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-4">
-                <p className="text-biker-yellow font-bold text-sm">
-                  ✓ Gratis verzending binnen Nederland!
-                </p>
-              </div>
-              <p className="text-xs text-gray-500 mb-6">
-                België &amp; Duitsland: verzendkosten worden berekend bij afrekenen
-              </p>
+              <ShippingNote />
 
               <Link
                 href="/checkout"

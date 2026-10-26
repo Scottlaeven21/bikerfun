@@ -1,12 +1,17 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { formatShippingInfo, getShippingSummary } from '@/lib/woocommerce/shipping';
 
 export const metadata: Metadata = {
   title: 'Verzending & Levering | Bikerfun',
   description: 'Informatie over verzending, levertijden en track & trace bij Bikerfun.',
 };
 
-export default function VerzendingPage() {
+export default async function VerzendingPage() {
+  const shipping = await getShippingSummary();
+  const nlLabel = formatShippingInfo(shipping.NL);
+  const beLabel = formatShippingInfo(shipping.BE);
+
   return (
     <div className="min-h-screen bg-black text-white">
       {/* Hero Section */}
@@ -146,12 +151,13 @@ export default function VerzendingPage() {
                       </svg>
                     </div>
                     <p className="text-2xl font-bold text-biker-yellow">
-                      Nederland: ALTIJD Gratis Verzending
+                      Nederland: {nlLabel}
                     </p>
                   </div>
                   <p className="text-biker-light text-lg">
-                    Voor alle bestellingen binnen Nederland zijn de verzendkosten <strong className="text-white">volledig gratis</strong>, 
-                    ongeacht het orderbedrag.
+                    {shipping.NL.alwaysFree || shipping.NL.cost === 0
+                      ? <>Voor bestellingen binnen Nederland zijn de verzendkosten <strong className="text-white">gratis</strong>.</>
+                      : <>Voor Nederland geldt: <strong className="text-white">{nlLabel}</strong>.</>}
                   </p>
                 </div>
 
@@ -159,16 +165,16 @@ export default function VerzendingPage() {
                   <div className="flex items-center space-x-3 mb-3">
                     <div className="w-12 h-12 rounded-full bg-biker-yellow/10 border-2 border-biker-yellow flex items-center justify-center flex-shrink-0">
                       <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2 2v14a2 2 0 002 2z" />
                       </svg>
                     </div>
                     <p className="text-xl font-bold text-white">
-                      België: Verzendkosten bij Afrekenen
+                      België: {beLabel}
                     </p>
                   </div>
                   <p className="text-biker-light">
-                    Voor leveringen naar België worden de verzendkosten berekend en weergegeven tijdens het afrekenproces, 
-                    afhankelijk van het gewicht en de afmetingen van je bestelling.
+                    Voor leveringen naar België: <strong className="text-white">{beLabel}</strong>.
+                    De exacte kosten zie je altijd bij het afrekenen.
                   </p>
                 </div>
               </div>

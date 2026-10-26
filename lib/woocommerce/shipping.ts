@@ -1,40 +1,113 @@
 /**
- * WooCommerce Shipping Calculator
- * Fetches shipping methods and costs from WooCommerce
+ * WooCommerce shipping rates for NL / BE (and other zones).
+ * Nightly/admin sync stores them in Supabase so checkout stays in sync
+ * even if the WooCommerce API is slow or down.
  */
+
+import { createClient } from '@supabase/supabase-js';
+import { unstable_cache } from 'next/cache';
+import type { ShippingRate } from '@/types/database';
 
 export interface ShippingMethod {
   id: string;
   title: string;
   cost: number;
   enabled: boolean;
-  minAmount?: number; // Free shipping minimum amount
+  minAmount?: number;
+  requires?: string;
 }
 
 export interface ShippingZone {
   id: number;
   name: string;
   methods: ShippingMethod[];
-  countries: string[]; // List of country codes for this zone
+  countries: string[];
 }
 
-/**
- * Get shipping zones from WooCommerce
- */
+export interface CountryShippingInfo {
+  country: string;
+  cost: number;
+  freeMin: number | null;
+  alwaysFree: boolean;
+  zoneName: string | null;
+}
+
+function wcAuthHeader(): string | null {
+  const key = process.env.WOOCOMMERCE_CONSUMER_KEY;
+  const secret = process.env.WOOCOMMERCE_CONSUMER_SECRET;
+  if (!key || !secret) return null;
+  return `Basic ${Buffer.from(`${key}:${secret}`).toString('base64')}`;
+}
+
+function parseMoney(value: unknown): number | null {
+  if (value === undefined || value === null || value === '') return null;
+  const parsed = parseFloat(String(value).replace(',', '.'));
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function settingValue(settings: any, key: string): unknown {
+  const field = settings?.[key];
+  if (field && typeof field === 'object' && 'value' in field) return field.value;
+  return field;
+}
+
+function countriesFromZoneName(name: string): string[] {
+  const zoneName = name.toLowerCase();
+  const countries: string[] = [];
+  if (zoneName.includes('nederland') || zoneName.includes('netherlands')) countries.push('NL');
+  if (zoneName.includes('belg')) countries.push('BE');
+  if (zoneName.includes('duitsland') || zoneName.includes('germany') || zoneName.includes('deutsch')) {
+    countries.push('DE');
+  }
+  return countries;
+}
+
+function flattenZone(zone: ShippingZone): Omit<ShippingRate, 'id' | 'synced_at' | 'updated_at'> {
+  const free = zone.methods.find((m) => m.enabled && m.id === 'free_shipping');
+  const flat = zone.methods.find((m) => m.enabled && m.id === 'flat_rate');
+  const requires = (free?.requires || '').toLowerCase();
+  const alwaysFree = Boolean(
+    free && !free.minAmount && (requires === '' || requires === 'coupon')
+  );
+
+  return {
+    woo_zone_id: zone.id,
+    name: zone.name,
+    countries: zone.countries.length > 0 ? zone.countries : countriesFromZoneName(zone.name),
+    flat_rate: flat?.cost ?? null,
+    free_min: free?.minAmount ?? null,
+    always_free: alwaysFree || Boolean(free && !flat),
+    method_title: flat?.title || free?.title || null,
+  };
+}
+
+function findRateForCountry(rates: ShippingRate[], country: string): ShippingRate | null {
+  const code = country.toUpperCase();
+  const byCountry = rates.find((r) => r.countries.map((c) => c.toUpperCase()).includes(code));
+  if (byCountry) return byCountry;
+
+  return (
+    rates.find((r) => countriesFromZoneName(r.name).includes(code)) ||
+    null
+  );
+}
+
+function costFromRate(rate: ShippingRate, subtotal: number, country: string): number {
+  if (rate.always_free) return 0;
+  if (rate.free_min !== null && subtotal >= Number(rate.free_min)) return 0;
+  if (rate.flat_rate !== null) return Number(rate.flat_rate);
+  return getFallbackShippingCost(subtotal, country);
+}
+
 export async function getShippingZones(): Promise<ShippingZone[]> {
-  const baseUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL!;
-  const consumerKey = process.env.WOOCOMMERCE_CONSUMER_KEY!;
-  const consumerSecret = process.env.WOOCOMMERCE_CONSUMER_SECRET!;
+  const baseUrl = process.env.NEXT_PUBLIC_WOOCOMMERCE_URL;
+  const auth = wcAuthHeader();
+  if (!baseUrl || !auth) return [];
 
   try {
-    const auth = Buffer.from(`${consumerKey}:${consumerSecret}`).toString('base64');
-    
-    // Fetch shipping zones
     const zonesResponse = await fetch(`${baseUrl}/wp-json/wc/v3/shipping/zones`, {
-      headers: {
-        'Authorization': `Basic ${auth}`,
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: auth, 'Content-Type': 'application/json' },
+      signal: AbortSignal.timeout(8000),
     });
 
     if (!zonesResponse.ok) {
@@ -43,218 +116,208 @@ export async function getShippingZones(): Promise<ShippingZone[]> {
     }
 
     const zones = await zonesResponse.json();
-    
-    // Fetch methods AND locations for each zone
+
     const zonesWithMethods = await Promise.all(
       zones.map(async (zone: any) => {
-        // Fetch methods
-        const methodsResponse = await fetch(
-          `${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/methods`,
-          {
-            headers: {
-              'Authorization': `Basic ${auth}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
+        const [methodsResponse, locationsResponse] = await Promise.all([
+          fetch(`${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/methods`, {
+            headers: { Authorization: auth, 'Content-Type': 'application/json' },
+            signal: AbortSignal.timeout(8000),
+          }),
+          fetch(`${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/locations`, {
+            headers: { Authorization: auth, 'Content-Type': 'application/json' },
+            signal: AbortSignal.timeout(8000),
+          }),
+        ]);
 
         const methods = methodsResponse.ok ? await methodsResponse.json() : [];
-
-        // Fetch locations (countries for this zone)
-        const locationsResponse = await fetch(
-          `${baseUrl}/wp-json/wc/v3/shipping/zones/${zone.id}/locations`,
-          {
-            headers: {
-              'Authorization': `Basic ${auth}`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-
         const locations = locationsResponse.ok ? await locationsResponse.json() : [];
-        const countries = locations
+        const countries = (Array.isArray(locations) ? locations : [])
           .filter((l: any) => l.type === 'country')
-          .map((l: any) => l.code);
+          .map((l: any) => String(l.code).toUpperCase());
 
         return {
           id: zone.id,
           name: zone.name,
-          countries,
-          methods: methods.map((m: any) => ({
+          countries: countries.length > 0 ? countries : countriesFromZoneName(zone.name),
+          methods: (Array.isArray(methods) ? methods : []).map((m: any) => ({
             id: m.method_id,
             title: m.method_title,
-            cost: parseFloat(m.settings?.cost?.value || '0'),
-            enabled: m.enabled,
-            minAmount: m.settings?.min_amount?.value ? parseFloat(m.settings.min_amount.value) : undefined,
+            cost: parseMoney(settingValue(m.settings, 'cost')) ?? 0,
+            enabled: Boolean(m.enabled),
+            minAmount: parseMoney(settingValue(m.settings, 'min_amount')) ?? undefined,
+            requires: String(settingValue(m.settings, 'requires') ?? ''),
           })),
-        };
+        } satisfies ShippingZone;
       })
     );
 
-    return zonesWithMethods;
+    return zonesWithMethods.filter((z) => z.id !== 0);
   } catch (error) {
     console.error('Error fetching shipping zones:', error);
     return [];
   }
 }
 
-/**
- * Calculate shipping cost dynamically from WooCommerce zones/methods
- * Automatically syncs with WooCommerce shipping settings!
- * 
- * @param subtotal Order subtotal
- * @param country Country code (default: NL)
- * @returns Shipping cost
- */
+export async function syncShippingRates(supabase: any): Promise<{
+  synced: number;
+  failed: number;
+}> {
+  console.log('🚚 Syncing shipping rates from WooCommerce...');
+  const zones = await getShippingZones();
+  if (zones.length === 0) {
+    throw new Error('Geen WooCommerce-verzendzones gevonden');
+  }
+
+  const rows = zones.map((zone) => ({
+    ...flattenZone(zone),
+    synced_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }));
+
+  const { error } = await supabase.from('shipping_rates').upsert(rows, {
+    onConflict: 'woo_zone_id',
+  });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  console.log(`✅ Synced ${rows.length} shipping zones`);
+  return { synced: rows.length, failed: 0 };
+}
+
+async function fetchSyncedRates(): Promise<ShippingRate[]> {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !key || url.includes('dummy')) return [];
+
+  try {
+    const supabase = createClient(url, key);
+    const { data, error } = await supabase
+      .from('shipping_rates')
+      .select('*')
+      .order('woo_zone_id');
+    if (error || !data) return [];
+    return data as ShippingRate[];
+  } catch {
+    return [];
+  }
+}
+
+const getCachedSyncedRates = unstable_cache(
+  fetchSyncedRates,
+  ['shipping-rates'],
+  { revalidate: 300, tags: ['shipping-rates'] }
+);
+
+async function getEffectiveRates(): Promise<ShippingRate[]> {
+  const stored = await getCachedSyncedRates();
+  if (stored.length > 0) return stored;
+
+  const zones = await getShippingZones();
+  if (zones.length === 0) return [];
+
+  return zones.map((zone) => ({
+    id: String(zone.id),
+    ...flattenZone(zone),
+    synced_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  }));
+}
+
 export async function calculateShipping(
   subtotal: number,
   country: string = 'NL'
 ): Promise<number> {
   const countryUpper = country.toUpperCase();
-  
+
   try {
-    // Try to get real-time rates from WooCommerce
-    const zones = await getShippingZones();
-    
-    if (zones.length === 0) {
-      console.warn('⚠️  No zones found, using fallback rates');
-      return getFallbackShippingCost(subtotal, countryUpper);
+    const rates = await getEffectiveRates();
+    const rate = findRateForCountry(rates, countryUpper);
+    if (rate) {
+      return costFromRate(rate, subtotal, countryUpper);
     }
-    
-    // Find zone that includes this country
-    let matchingZone = zones.find(z => 
-      z.countries.includes(countryUpper) || 
-      z.countries.includes(country.toLowerCase())
-    );
-    
-    // If no match by country code, try zone name matching
-    if (!matchingZone) {
-      matchingZone = zones.find(z => {
-        const zoneName = z.name.toLowerCase();
-        return (
-          (zoneName.includes('nederland') && countryUpper === 'NL') ||
-          (zoneName.includes('netherlands') && countryUpper === 'NL') ||
-          (zoneName.includes('belgie') && countryUpper === 'BE') ||
-          (zoneName.includes('belgium') && countryUpper === 'BE') ||
-          (zoneName.includes('duitsland') && countryUpper === 'DE') ||
-          (zoneName.includes('germany') && countryUpper === 'DE')
-        );
-      });
-    }
-    
-    // Fallback to "Rest of World" zone or first zone
-    if (!matchingZone) {
-      matchingZone = zones.find(z => 
-        z.name.toLowerCase().includes('rest') || 
-        z.name.toLowerCase().includes('world')
-      ) || zones[0];
-    }
-    
-    if (!matchingZone || matchingZone.methods.length === 0) {
-      console.warn('⚠️  No matching zone found, using fallback');
-      return getFallbackShippingCost(subtotal, countryUpper);
-    }
-    
-    console.log(`✅ Using zone: "${matchingZone.name}" for ${country}`);
-    
-    // 1. Check for free shipping method first
-    const freeShippingMethod = matchingZone.methods.find(
-      m => m.enabled && m.id === 'free_shipping'
-    );
-    
-    if (freeShippingMethod && freeShippingMethod.minAmount) {
-      if (subtotal >= freeShippingMethod.minAmount) {
-        console.log(`✅ Free shipping applies (≥€${freeShippingMethod.minAmount})`);
-        return 0;
-      }
-    }
-    
-    // 2. Use flat rate method
-    const flatRateMethod = matchingZone.methods.find(
-      m => m.enabled && m.id === 'flat_rate'
-    );
-    
-    if (flatRateMethod) {
-      console.log(`✅ Using flat rate: €${flatRateMethod.cost}`);
-      return flatRateMethod.cost;
-    }
-    
-    // 3. Use any other enabled method with a cost
-    const anyMethod = matchingZone.methods.find(m => m.enabled);
-    if (anyMethod) {
-      console.log(`✅ Using method: ${anyMethod.title} - €${anyMethod.cost}`);
-      return anyMethod.cost;
-    }
-    
-    // No enabled methods found
-    console.warn('⚠️  No enabled methods in zone, using fallback');
+    console.warn('⚠️  No matching shipping rate, using fallback');
     return getFallbackShippingCost(subtotal, countryUpper);
-    
   } catch (error) {
-    console.error('❌ Error fetching from WooCommerce:', error);
-    // Use fallback on error
+    console.error('❌ Error calculating shipping:', error);
     return getFallbackShippingCost(subtotal, countryUpper);
   }
 }
 
-/**
- * Fallback shipping costs (used when WooCommerce API fails)
- * Based on current WooCommerce settings as of 2026-02-26
- */
 function getFallbackShippingCost(subtotal: number, country: string): number {
   const countryUpper = country.toUpperCase();
-  
-  // Netherlands: Free from €40
+
   if (countryUpper === 'NL') {
-    return subtotal >= 40 ? 0 : 0; // NL only has free shipping in WC
+    return 0;
   }
-  
-  // Belgium & Germany: €4.95, free from €60
+
   if (countryUpper === 'BE' || countryUpper === 'DE') {
     return subtotal >= 60 ? 0 : 4.95;
   }
-  
-  // Default for other countries
+
   return 9.95;
 }
 
-/**
- * Get default shipping cost from WooCommerce settings
- * Returns the first flat rate method and free shipping threshold if available
- */
 export async function getDefaultShippingCost(): Promise<{
   cost: number;
   freeShippingThreshold: number | null;
 }> {
-  try {
-    const zones = await getShippingZones();
-    
-    if (zones.length === 0) {
-      return {
-        cost: 6.95,
-        freeShippingThreshold: 50,
-      };
-    }
+  const info = await getCountryShippingInfo('NL');
+  return {
+    cost: info.alwaysFree ? 0 : info.cost,
+    freeShippingThreshold: info.freeMin,
+  };
+}
 
-    // Get first enabled flat rate method from any zone
-    const flatRateMethod = zones
-      .flatMap(z => z.methods)
-      .find(m => m.enabled && m.id === 'flat_rate' && m.cost > 0);
+export async function getCountryShippingInfo(country: string): Promise<CountryShippingInfo> {
+  const code = country.toUpperCase();
+  const rates = await getEffectiveRates();
+  const rate = findRateForCountry(rates, code);
 
-    // Check if any zone has free shipping enabled
-    const hasFreeShipping = zones
-      .flatMap(z => z.methods)
-      .some(m => m.enabled && m.id === 'free_shipping');
-
+  if (!rate) {
     return {
-      cost: flatRateMethod?.cost || 6.95,
-      freeShippingThreshold: hasFreeShipping ? 50 : null, // Default WooCommerce threshold
-    };
-  } catch (error) {
-    console.error('Error getting default shipping cost:', error);
-    return {
-      cost: 6.95,
-      freeShippingThreshold: 50,
+      country: code,
+      cost: getFallbackShippingCost(0, code),
+      freeMin: code === 'NL' ? null : code === 'BE' || code === 'DE' ? 60 : null,
+      alwaysFree: code === 'NL',
+      zoneName: null,
     };
   }
+
+  return {
+    country: code,
+    cost: rate.always_free ? 0 : Number(rate.flat_rate ?? 0),
+    freeMin: rate.free_min !== null ? Number(rate.free_min) : null,
+    alwaysFree: rate.always_free,
+    zoneName: rate.name,
+  };
+}
+
+export async function getShippingSummary(): Promise<{
+  NL: CountryShippingInfo;
+  BE: CountryShippingInfo;
+  DE: CountryShippingInfo;
+}> {
+  const [NL, BE, DE] = await Promise.all([
+    getCountryShippingInfo('NL'),
+    getCountryShippingInfo('BE'),
+    getCountryShippingInfo('DE'),
+  ]);
+  return { NL, BE, DE };
+}
+
+export function formatShippingInfo(info: CountryShippingInfo): string {
+  if (info.alwaysFree || (info.cost === 0 && !info.freeMin)) {
+    return 'Gratis verzending';
+  }
+  if (info.freeMin) {
+    const base = info.cost > 0 ? `€ ${info.cost.toFixed(2)}` : 'Verzendkosten';
+    return `${base}, gratis vanaf € ${info.freeMin.toFixed(2)}`;
+  }
+  if (info.cost > 0) {
+    return `€ ${info.cost.toFixed(2)}`;
+  }
+  return 'Wordt berekend bij afrekenen';
 }

@@ -18,6 +18,10 @@ interface SyncResult {
     synced: number;
     failed: number;
   };
+  shipping?: {
+    synced: number;
+    failed: number;
+  };
   errors?: string[];
 }
 
@@ -321,6 +325,31 @@ export function SyncButton() {
                     <span className="text-gray-600">Gefaald:</span>
                     <span className={`font-semibold ${result.orders.failed > 0 ? 'text-red-600' : 'text-gray-400'}`}>
                       {result.orders.failed}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {result.shipping && (
+              <div className="bg-white rounded-lg shadow p-5 border border-gray-200">
+                <div className="flex items-center space-x-3 mb-3">
+                  <div className="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center">
+                    <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                    </svg>
+                  </div>
+                  <h3 className="font-bold text-gray-900">Verzending</h3>
+                </div>
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Zones gesync:</span>
+                    <span className="font-semibold text-green-600">{result.shipping.synced}</span>
+                  </div>
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Gefaald:</span>
+                    <span className={`font-semibold ${result.shipping.failed > 0 ? 'text-red-600' : 'text-gray-400'}`}>
+                      {result.shipping.failed}
                     </span>
                   </div>
                 </div>

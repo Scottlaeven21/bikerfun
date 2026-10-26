@@ -74,8 +74,8 @@ export function OmkeurenForm() {
           </h2>
           <p className="text-lg md:text-xl text-biker-light mb-10 max-w-3xl mx-auto">
             Ben jij een motorzaak en wil jij motoren omkeuren voor jouw klanten?
-            Meld je dan aan als dealer bij ons. Vul het formulier hieronder in en
-            dan nemen wij contact met je op.
+            Meld je dan aan als dealer. Dit is een eerste aanmelding, geen
+            motor nodig. Vul je gegevens in, dan nemen wij contact met je op.
           </p>
           <button
             type="button"
@@ -99,7 +99,7 @@ export function OmkeurenForm() {
             </h2>
             <p className="text-biker-light mb-8">
               {isDealer
-                ? 'Vul je gegevens in. We nemen contact met je op over het omkeuren voor jouw klanten.'
+                ? 'Eerste aanmelding: vul je gegevens in, dan nemen wij contact met je op. Een specifieke motor is nu niet nodig.'
                 : 'Vul je gegevens en motorgegevens in. We nemen zo snel mogelijk contact met je op.'}
             </p>
 
@@ -211,6 +211,7 @@ export function OmkeurenForm() {
                 </div>
               </div>
 
+              {!isDealer && (
               <div className="border-t-2 border-biker-gray pt-6 mt-2">
                 <h3 className="text-xl font-bold mb-6 uppercase tracking-tight">Motorgegevens</h3>
 
@@ -223,7 +224,7 @@ export function OmkeurenForm() {
                       type="text"
                       id="brand"
                       name="brand"
-                      required
+                      required={!isDealer}
                       disabled={isLoading}
                       value={formData.brand}
                       onChange={handleChange}
@@ -239,7 +240,7 @@ export function OmkeurenForm() {
                       type="text"
                       id="model"
                       name="model"
-                      required
+                      required={!isDealer}
                       disabled={isLoading}
                       value={formData.model}
                       onChange={handleChange}
@@ -259,7 +260,7 @@ export function OmkeurenForm() {
                       value={formData.generation}
                       onChange={handleChange}
                       className={inputClass}
-                      placeholder="Bijv. 2006-2007"
+                      placeholder="Bijv. RJ11 of RJ15"
                     />
                   </div>
                   <div>
@@ -327,6 +328,7 @@ export function OmkeurenForm() {
                   </div>
                 </div>
               </div>
+              )}
 
               <div>
                 <label htmlFor="message" className="block text-sm font-bold mb-2 uppercase tracking-wider">
@@ -340,7 +342,11 @@ export function OmkeurenForm() {
                   value={formData.message}
                   onChange={handleChange}
                   className={`${inputClass} resize-none`}
-                  placeholder="Bijvoorbeeld het vermogen, of extra toelichting"
+                  placeholder={
+                    isDealer
+                      ? 'Vertel kort iets over je zaak, of laat leeg. Wij nemen contact met je op.'
+                      : 'Bijvoorbeeld het vermogen, of extra toelichting'
+                  }
                 />
               </div>
 

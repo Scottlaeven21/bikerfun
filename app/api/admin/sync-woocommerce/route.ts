@@ -8,6 +8,7 @@ import {
   syncProducts,
   syncOrders,
 } from '@/lib/woocommerce/full-sync';
+import { syncShippingRates } from '@/lib/woocommerce/shipping';
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -57,7 +58,7 @@ export async function POST(request: NextRequest) {
     console.log('🔄 Starting WooCommerce sync (background)...');
 
     const errors: string[] = [];
-    let occasions, products, orders;
+    let occasions, products, orders, shipping;
 
     try {
       occasions = await syncOccasions(db);
@@ -80,6 +81,13 @@ export async function POST(request: NextRequest) {
       console.error('❌ Orders sync failed:', err.message);
     }
 
+    try {
+      shipping = await syncShippingRates(db);
+    } catch (err: any) {
+      errors.push(`Verzending: ${err.message}`);
+      console.error('❌ Shipping sync failed:', err.message);
+    }
+
     // Sla eindresultaat op — frontend leest dit via poll
     await (db as any).from('audit_logs').insert({
       user_id: user.id,
@@ -92,6 +100,7 @@ export async function POST(request: NextRequest) {
         occasions: occasions ?? null,
         products: products ?? null,
         orders: orders ?? null,
+        shipping: shipping ?? null,
         errors,
       },
       ip_address: 'server',

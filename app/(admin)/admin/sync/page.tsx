@@ -13,7 +13,7 @@ export default function SyncPage() {
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 font-['Inter'] mb-2">WooCommerce Synchronisatie</h1>
         <p className="text-gray-600">
-          Synchroniseer occasions, producten en bestellingen tussen WooCommerce en Supabase
+          Synchroniseer occasions, producten, verzendkosten en bestellingen tussen WooCommerce en Supabase
         </p>
       </div>
 
