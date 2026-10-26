@@ -1,7 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import Link from 'next/link';
 
@@ -11,15 +10,13 @@ interface AdminHeaderProps {
 }
 
 export function AdminHeader({ userName, userEmail }: AdminHeaderProps) {
-  const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
     setIsLoggingOut(true);
     const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
+    window.location.href = '/api/auth/signout';
   };
 
   return (

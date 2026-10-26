@@ -476,6 +476,27 @@ export function omkeurenEmail({
   };
 }
 
+export function admin2faEmail(code: string): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Je inlogcode
+    </h2>
+    <p style="margin: 0 0 20px; color: #333; font-size: 15px; line-height: 1.6;">
+      Iemand probeert in te loggen op het Bikerfun admin-panel. Gebruik deze code binnen 10 minuten:
+    </p>
+    <div style="background-color: #111; color: ${BIKER_YELLOW}; font-size: 36px; letter-spacing: 8px; font-weight: bold; text-align: center; padding: 22px 12px; border-radius: 8px; margin: 0 0 24px;">
+      ${escapeHtml(code)}
+    </div>
+    <p style="margin: 0; color: #666; font-size: 13px;">
+      Was jij dit niet? Wijzig dan meteen je wachtwoord en neem contact op.
+    </p>
+  `;
+  return {
+    subject: `${code} is je Bikerfun admin-code`,
+    html: emailLayout(content),
+  };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')

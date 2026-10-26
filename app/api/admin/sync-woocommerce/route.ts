@@ -9,6 +9,7 @@ import {
   syncOrders,
 } from '@/lib/woocommerce/full-sync';
 import { syncShippingRates } from '@/lib/woocommerce/shipping';
+import { isAdmin2faVerified, shouldSkipAdmin2fa } from '@/lib/auth/admin-2fa';
 
 export const maxDuration = 300;
 export const dynamic = 'force-dynamic';
@@ -36,6 +37,10 @@ export async function POST(request: NextRequest) {
   const profile = profileData as { is_admin: boolean } | null;
   if (!profile?.is_admin) {
     return NextResponse.json({ success: false, error: 'Geen admin-toegang' }, { status: 403 });
+  }
+
+  if (!shouldSkipAdmin2fa() && !(await isAdmin2faVerified(user.id))) {
+    return NextResponse.json({ success: false, error: 'Bevestig eerst je admin-login via e-mail.' }, { status: 401 });
   }
 
   const jobId = crypto.randomUUID();

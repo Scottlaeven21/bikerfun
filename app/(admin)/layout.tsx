@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { AdminHeader } from '@/components/admin/admin-header';
+import { isAdmin2faVerified, setAdmin2faCookie, shouldSkipAdmin2fa } from '@/lib/auth/admin-2fa';
 
 export default async function AdminLayout({
   children,
@@ -25,6 +26,14 @@ export default async function AdminLayout({
 
   if (!profile?.is_admin) {
     redirect('/');
+  }
+
+  if (!(await isAdmin2faVerified(user.id))) {
+    if (shouldSkipAdmin2fa()) {
+      await setAdmin2faCookie(user.id);
+    } else {
+      redirect('/login/verify?redirect=/admin');
+    }
   }
 
   return (

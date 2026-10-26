@@ -19,6 +19,46 @@ interface AuditLog {
   created_at: string;
 }
 
+function loginTargetLabel(details: any): string | null {
+  const target = details?.target;
+  if (target === 'admin') return 'Admin-panel';
+  if (target === 'webshop_account') return 'Webshop-account';
+  if (target === 'shop') return 'Website';
+  const redirect = String(details?.redirect || '');
+  if (redirect.startsWith('/admin')) return 'Admin-panel';
+  if (redirect.startsWith('/account') || redirect.startsWith('/dashboard')) return 'Webshop-account';
+  if (redirect) return 'Website';
+  return null;
+}
+
+function actionBadge(log: AuditLog) {
+  if (log.action === 'login') {
+    const failed = log.details?.success === false;
+    return {
+      label: failed ? 'Login mislukt' : 'Login gelukt',
+      className: failed ? 'bg-red-600 text-white' : 'bg-green-600 text-white',
+    };
+  }
+  if (log.action === 'create' && log.resource_type === 'user') {
+    const failed = log.details?.success === false;
+    return {
+      label: failed ? 'Account mislukt' : 'Account aangemaakt',
+      className: failed ? 'bg-red-600 text-white' : 'bg-green-600 text-white',
+    };
+  }
+  const styles: Record<string, string> = {
+    create: 'bg-green-600 text-white',
+    update: 'bg-blue-600 text-white',
+    delete: 'bg-red-600 text-white',
+    sync: 'bg-purple-600 text-white',
+    logout: 'bg-gray-500 text-white',
+  };
+  return {
+    label: log.action,
+    className: styles[log.action] || 'bg-gray-600 text-white',
+  };
+}
+
 export default async function AuditLogsPage({
   searchParams,
 }: {
@@ -142,7 +182,7 @@ export default async function AuditLogsPage({
                     Actie
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
-                    Resource
+                    Waar
                   </th>
                   <th className="px-6 py-4 text-left text-xs font-bold text-gray-400 uppercase tracking-wider">
                     Details
@@ -160,7 +200,10 @@ export default async function AuditLogsPage({
                     </td>
                   </tr>
                 ) : (
-                  auditLogs.map((log) => (
+                  auditLogs.map((log) => {
+                    const badge = actionBadge(log);
+                    const target = loginTargetLabel(log.details);
+                    return (
                     <tr key={log.id} className="hover:bg-biker-black transition-colors">
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
                         {new Date(log.created_at).toLocaleString('nl-NL', {
@@ -180,23 +223,25 @@ export default async function AuditLogsPage({
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-3 py-1 text-xs font-bold rounded-full ${
-                          log.action === 'create' ? 'bg-green-600 text-white' :
-                          log.action === 'update' ? 'bg-blue-600 text-white' :
-                          log.action === 'delete' ? 'bg-red-600 text-white' :
-                          log.action === 'sync' ? 'bg-purple-600 text-white' :
-                          log.action === 'login' ? 'bg-yellow-600 text-black' :
-                          'bg-gray-600 text-white'
-                        }`}>
-                          {log.action.toUpperCase()}
+                        <span className={`px-3 py-1 text-xs font-bold rounded-full ${badge.className}`}>
+                          {badge.label}
                         </span>
+                        {log.details?.is_admin === true && (
+                          <div className="text-xs text-biker-yellow mt-1">Admin-account</div>
+                        )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300">
-                        <div>{log.resource_type}</div>
-                        {log.resource_id && (
+                        <div>
+                          {target
+                            || (log.action === 'login' ? 'Onbekend (oude log)' : log.resource_type)}
+                        </div>
+                        {log.resource_id && !target && (
                           <div className="text-xs text-gray-500 font-mono">
                             ID: {log.resource_id}
                           </div>
+                        )}
+                        {log.details?.redirect && (
+                          <div className="text-xs text-gray-500 mt-1">{log.details.redirect}</div>
                         )}
                       </td>
                       <td className="px-6 py-4 text-sm text-gray-300">
@@ -215,7 +260,8 @@ export default async function AuditLogsPage({
                         {log.ip_address || '-'}
                       </td>
                     </tr>
-                  ))
+                    );
+                  })
                 )}
               </tbody>
             </table>

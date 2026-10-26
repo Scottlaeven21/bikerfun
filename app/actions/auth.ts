@@ -4,11 +4,25 @@ import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { logAuditEvent } from '@/lib/audit/logger';
+import {
+  clearAdmin2faCookie,
+  issueAdmin2faCode,
+  setAdmin2faCookie,
+  shouldSkipAdmin2fa,
+} from '@/lib/auth/admin-2fa';
+
+function loginTarget(redirectTo: string) {
+  const path = redirectTo || '/';
+  if (path.startsWith('/admin')) return 'admin';
+  if (path.startsWith('/account') || path.startsWith('/dashboard')) return 'webshop_account';
+  return 'shop';
+}
 
 export async function login(prevState: any, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const redirectTo = formData.get('redirect') as string || '/';
+  const target = loginTarget(redirectTo);
 
   const supabase = await createClient();
 
@@ -23,7 +37,7 @@ export async function login(prevState: any, formData: FormData) {
       userEmail: email,
       action: 'login',
       resourceType: 'user',
-      details: { success: false, error: error.message },
+      details: { success: false, error: error.message, redirect: redirectTo, target },
     });
     
     // Translate common Supabase errors to Dutch
@@ -37,14 +51,34 @@ export async function login(prevState: any, formData: FormData) {
     return { error: 'Er is iets misgegaan bij het inloggen. Probeer het opnieuw.' };
   }
 
-  // Log successful login
+  let isAdmin = false;
+  if (data.user?.id) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', data.user.id)
+      .single();
+    isAdmin = Boolean((profile as { is_admin?: boolean } | null)?.is_admin);
+  }
+
   await logAuditEvent({
     userId: data.user?.id,
     userEmail: email,
     action: 'login',
     resourceType: 'user',
-    details: { success: true },
+    details: { success: true, redirect: redirectTo, target, is_admin: isAdmin, step: 'password' },
   });
+
+  if (isAdmin && data.user?.id) {
+    if (shouldSkipAdmin2fa()) {
+      await setAdmin2faCookie(data.user.id);
+    } else {
+      await issueAdmin2faCode(data.user.id, email, true);
+      revalidatePath('/', 'layout');
+      const next = redirectTo.startsWith('/') ? redirectTo : '/admin';
+      redirect(`/login/verify?redirect=${encodeURIComponent(next)}`);
+    }
+  }
 
   revalidatePath('/', 'layout');
   redirect(redirectTo);
@@ -120,7 +154,8 @@ export async function signout() {
   const { data: { user } } = await supabase.auth.getUser();
   
   await supabase.auth.signOut();
-  
+  await clearAdmin2faCookie();
+
   // Log logout
   if (user) {
     await logAuditEvent({
