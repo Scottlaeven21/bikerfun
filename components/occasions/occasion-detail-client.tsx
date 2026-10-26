@@ -530,8 +530,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             {/* Right Column - Details & CTA */}
             <div className="lg:col-span-1">
               {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:flex lg:flex-col lg:overflow-hidden">
-                <div className="p-8 pb-4 lg:overflow-y-auto lg:min-h-0">
+              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-8 lg:sticky lg:top-24">
                 {/* Main Title */}
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
                   {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
@@ -606,10 +605,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                   )}
                 </div>
 
-                </div>{/* end scrollable section */}
-
-                {/* CTA buttons + checklist — in the card on desktop */}
-                <div className="hidden lg:block px-8 pb-8 pt-4 border-t border-gray-800 lg:shrink-0">
+                <div className="hidden lg:block">
                   <OccasionActionButtons occasion={occasion} />
                   <OccasionChecklist />
                 </div>
