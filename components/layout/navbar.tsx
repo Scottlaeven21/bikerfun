@@ -17,6 +17,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
   const pathname = usePathname();
   
   // Show cart/account icons only on webshop pages
+  const isHome = pathname === '/';
   const showShopIcons = pathname?.startsWith('/products') || 
                         pathname?.startsWith('/cart') || 
                         pathname?.startsWith('/checkout') ||
@@ -52,16 +53,15 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
             {/* Desktop Navigation - Rechts */}
             <div className="flex items-center justify-end gap-1 sm:gap-1.5 md:gap-3 shrink-0">
-              {/* Cart & Account Icons - Only on webshop pages, desktop only (4 nav pills need the space) */}
               {showShopIcons && (
                 <>
-                  <div className="hidden md:block bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
+                  <div className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
                     <CartDropdown />
                   </div>
 
                   <Link
                     href={user ? "/account" : "/login?redirect=/account"}
-                    className="hidden md:inline-flex bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-2.5 sm:p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-2.5 sm:p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -71,15 +71,19 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 </>
               )}
 
-              <Link href="/occasions" className={navPillClass}>
-                AANBOD
-              </Link>
-              <Link href="/omkeuren" className={navPillClass}>
-                OMKEUREN
-              </Link>
-              <Link href="/products" className={navPillClass}>
-                WEBSHOP
-              </Link>
+              {isHome && (
+                <>
+                  <Link href="/occasions" className={navPillClass}>
+                    AANBOD
+                  </Link>
+                  <Link href="/omkeuren" className={navPillClass}>
+                    OMKEUREN
+                  </Link>
+                  <Link href="/products" className={navPillClass}>
+                    WEBSHOP
+                  </Link>
+                </>
+              )}
 
               <button
                 onClick={() => setMenuOpen(true)}
@@ -143,6 +147,13 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             Occasions
           </Link>
           <Link
+            href="/omkeuren"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
+            onClick={() => setMenuOpen(false)}
+          >
+            Omkeuren
+          </Link>
+          <Link
             href="/over-ons"
             className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
             onClick={() => setMenuOpen(false)}
@@ -155,13 +166,6 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             onClick={() => setMenuOpen(false)}
           >
             Webshop
-          </Link>
-          <Link
-            href="/omkeuren"
-            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
-            onClick={() => setMenuOpen(false)}
-          >
-            Omkeuren
           </Link>
           <Link
             href="/motor-op-aanvraag"

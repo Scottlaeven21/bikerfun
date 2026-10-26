@@ -161,32 +161,71 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-biker-dark noise-overlay border-y border-biker-gray/30">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
-            Motor <span className="text-biker-yellow">Omkeuren</span>
-          </h2>
-          <p className="text-base md:text-lg text-biker-light max-w-2xl mx-auto mb-8">
-            Motor omkeuren naar A2 / 35kW? Wij regelen het papierwerk. Ook voor motorzaken.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-            <p className="text-white font-bold">
-              <span className="text-biker-yellow">â‚¬ 495</span>
-              <span className="text-biker-light font-normal"> onder 70 kW</span>
-            </p>
-            <span className="hidden sm:block text-biker-gray">Â·</span>
-            <p className="text-white font-bold">
-              <span className="text-biker-yellow">â‚¬ 695</span>
-              <span className="text-biker-light font-normal"> boven 70 kW</span>
-            </p>
+      <section className="py-20 bg-biker-dark noise-overlay border-y border-biker-gray/30">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+              <p className="text-biker-yellow text-sm font-bold uppercase tracking-[0.2em] mb-4">
+                A2 / 35kW
+              </p>
+              <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
+                Motor <span className="text-biker-yellow">Omkeuren</span>
+              </h2>
+              <p className="text-lg md:text-xl text-biker-light mb-8 max-w-xl">
+                Motor omkeuren naar A2 / 35kW? Wij nemen het papierwerk uit handen — voor particulieren én motorzaken.
+              </p>
+              <ul className="space-y-3 mb-10">
+                {[
+                  'Papierwerk volledig geregeld',
+                  'Voor particulier en dealer',
+                  'Adviesprijs inclusief afhandeling',
+                ].map((item) => (
+                  <li key={item} className="flex items-center gap-3 text-white">
+                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href="/omkeuren"
+                style={{ fontFamily: 'var(--font-montserrat)' }}
+                className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+              >
+                Meer over omkeuren
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Link
+                href="/omkeuren#aanvraag"
+                className="bg-black rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
+              >
+                <p className="text-xs font-bold uppercase tracking-wider text-biker-muted mb-4">
+                  Minder dan 70 kW
+                </p>
+                <p className="text-4xl md:text-5xl font-black text-biker-yellow mb-2">€ 495</p>
+                <p className="text-sm text-biker-light">Adviesprijs</p>
+                <p className="mt-6 text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                  Vraag aan
+                </p>
+              </Link>
+              <Link
+                href="/omkeuren#aanvraag"
+                className="bg-black rounded-2xl p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
+              >
+                <p className="text-xs font-bold uppercase tracking-wider text-biker-muted mb-4">
+                  Meer dan 70 kW
+                </p>
+                <p className="text-4xl md:text-5xl font-black text-biker-yellow mb-2">€ 695</p>
+                <p className="text-sm text-biker-light">Adviesprijs</p>
+                <p className="mt-6 text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                  Vraag aan
+                </p>
+              </Link>
+            </div>
           </div>
-          <Link
-            href="/omkeuren"
-            style={{ fontFamily: 'var(--font-montserrat)' }}
-            className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-3 rounded-full text-sm font-bold uppercase tracking-wider transition-all duration-300"
-          >
-            Meer over omkeuren
-          </Link>
         </div>
       </section>
 

@@ -16,7 +16,7 @@ export default function OmkeurenPage() {
           className="absolute inset-0 w-full h-full object-cover"
           style={{ objectPosition: 'center center' }}
         >
-          <source src="/hero-contact.mp4" type="video/mp4" />
+          <source src="/hero-omkeuren.mp4" type="video/mp4" />
         </video>
 
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/90"></div>

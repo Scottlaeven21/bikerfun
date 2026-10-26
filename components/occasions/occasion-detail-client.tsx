@@ -97,6 +97,117 @@ function ReservedContactForm({ occasion }: { occasion: Occasion }) {
   );
 }
 
+function OccasionChecklist({ className = 'pt-6 border-t border-gray-800' }: { className?: string }) {
+  return (
+    <div className={`space-y-3 ${className}`}>
+      {['Proefrit mogelijk', 'Inruil mogelijk', 'Altijd gestald'].map((label) => (
+        <div key={label} className="flex items-center space-x-3 text-white">
+          <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+          <span>{label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function OccasionActionButtons({ occasion, compact = false }: { occasion: Occasion; compact?: boolean }) {
+  const btn = compact
+    ? 'py-2.5 text-xs'
+    : 'py-4';
+  const btnClass = `block w-full ${btn} rounded-full font-bold uppercase tracking-wider text-center transition-all duration-300`;
+
+  if (occasion.status === 'sold') {
+    return (
+      <div className={compact ? '' : 'mb-8'}>
+        {!compact && (
+          <div className="bg-red-600/10 border-2 border-red-600 rounded-2xl p-6 mb-6">
+            <div className="flex items-center gap-3 mb-4">
+              <svg className="w-8 h-8 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+              <h4 className="text-red-600 font-black text-xl uppercase">Deze motor is verkocht</h4>
+            </div>
+            <p className="text-white/90 leading-relaxed mb-4">
+              Deze occasion is helaas al verkocht, maar geen zorgen!
+            </p>
+            <p className="text-biker-yellow font-bold leading-relaxed">
+              Op zoek naar een soortgelijke motor? Vraag deze aan via onderstaande knop en wij gaan voor u op zoek naar een vergelijkbare motor.
+            </p>
+          </div>
+        )}
+        <Link
+          href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
+          className={`${btnClass} bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow shadow-lg hover:shadow-xl`}
+        >
+          Motor Op Aanvraag
+        </Link>
+      </div>
+    );
+  }
+
+  if (occasion.status === 'reserved') {
+    return (
+      <div className={compact ? '' : 'mb-8'}>
+        {!compact && (
+          <>
+            <div className="bg-orange-500/10 border-2 border-orange-500 rounded-2xl p-6 mb-6">
+              <div className="flex items-center gap-3 mb-3">
+                <svg className="w-8 h-8 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                </svg>
+                <h4 className="text-orange-400 font-black text-xl uppercase">Gereserveerd – In de wacht</h4>
+              </div>
+              <p className="text-white/90 leading-relaxed text-sm mb-3">
+                Deze motor is momenteel gereserveerd en staat in de wacht. U kunt zich hieronder aanmelden voor de wachtlijst.
+              </p>
+              <p className="text-orange-400 font-bold text-sm">
+                Zodra de reservering vervalt, nemen wij direct contact met u op.
+              </p>
+            </div>
+            <ReservedContactForm occasion={occasion} />
+          </>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className={`space-y-3 ${compact ? '' : 'mb-8'}`}>
+      <Link
+        href={`/occasions/${occasion.id}/aanvraag`}
+        className={`${btnClass} bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow`}
+      >
+        Plan Bezichtiging
+      </Link>
+      <a
+        href="tel:0615452108"
+        className={`${btnClass} bg-transparent border-2 border-white text-white hover:bg-white hover:text-black`}
+      >
+        Bel Ons
+      </a>
+      <Link
+        href="/contact"
+        className={`${btnClass} bg-transparent border-2 border-white text-white hover:bg-white hover:text-black`}
+      >
+        Mail Ons
+      </Link>
+      <a
+        href={`https://wa.me/31615452108?text=${encodeURIComponent(`Hallo, ik heb interesse in de ${occasion.brand} ${occasion.model} (${occasion.year}). Kunnen jullie mij meer informatie geven?`)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`flex items-center justify-center gap-2 w-full ${btn} rounded-full font-bold uppercase tracking-wider bg-[#25D366] hover:bg-[#1ebe5d] text-white border-2 border-[#25D366] transition-all duration-300`}
+      >
+        <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        WhatsApp Ons
+      </a>
+    </div>
+  );
+}
+
 interface OccasionDetailClientProps {
   occasion: Occasion;
 }
@@ -114,7 +225,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const show = (key: string) => vis === undefined || vis[key] !== false;
 
   return (
-    <div className="min-h-screen bg-black noise-overlay">
+    <div className={`min-h-screen bg-black noise-overlay ${occasion.status === 'available' ? 'pb-64 lg:pb-0' : ''}`}>
       {/* Hero Image - Static with Back Button Overlay */}
       <section className="relative bg-biker-black overflow-hidden h-[45vh] md:h-[50vh]">
         {occasion.main_image ? (
@@ -419,8 +530,8 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
             {/* Right Column - Details & CTA */}
             <div className="lg:col-span-1">
               {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray sticky top-24">
-                <div className="p-8 pb-4">
+              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray lg:sticky lg:top-24 lg:max-h-[calc(100vh-6rem)] lg:flex lg:flex-col lg:overflow-hidden">
+                <div className="p-8 pb-4 lg:overflow-y-auto lg:min-h-0">
                 {/* Main Title */}
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
                   {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
@@ -497,111 +608,29 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
 
                 </div>{/* end scrollable section */}
 
-                {/* CTA buttons + checklist */}
-                <div className="px-8 pb-8 pt-4 border-t border-gray-800">
-                {/* CTA Buttons - Conditional based on status */}
-                {occasion.status === 'sold' ? (
-                  <div className="mb-8">
-                    <div className="bg-red-600/10 border-2 border-red-600 rounded-2xl p-6 mb-6">
-                      <div className="flex items-center gap-3 mb-4">
-                        <svg className="w-8 h-8 text-red-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                        </svg>
-                        <div>
-                          <h4 className="text-red-600 font-black text-xl uppercase">Deze motor is verkocht</h4>
-                        </div>
-                      </div>
-                      <p className="text-white/90 leading-relaxed mb-4">
-                        Deze occasion is helaas al verkocht, maar geen zorgen!
-                      </p>
-                      <p className="text-biker-yellow font-bold leading-relaxed">
-                        Op zoek naar een soortgelijke motor? Vraag deze aan via onderstaande knop en wij gaan voor u op zoek naar een vergelijkbare motor.
-                      </p>
-                    </div>
-                    
-                    <Link
-                      href={`/motor-op-aanvraag?brand=${encodeURIComponent(occasion.brand)}&model=${encodeURIComponent(occasion.model)}&year=${occasion.year}&message=${encodeURIComponent(`Ik ben geïnteresseerd in de ${occasion.brand} ${occasion.model} uit ${occasion.year}, maar deze is helaas al verkocht. Kunnen jullie voor mij op zoek gaan naar een soortgelijke motor?`)}`}
-                      className="block w-full bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300 shadow-lg hover:shadow-xl"
-                    >
-                      Motor Op Aanvraag
-                    </Link>
-                  </div>
-                ) : occasion.status === 'reserved' ? (
-                  <div className="mb-8">
-                    <div className="bg-orange-500/10 border-2 border-orange-500 rounded-2xl p-6 mb-6">
-                      <div className="flex items-center gap-3 mb-3">
-                        <svg className="w-8 h-8 text-orange-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                        </svg>
-                        <h4 className="text-orange-400 font-black text-xl uppercase">Gereserveerd – In de wacht</h4>
-                      </div>
-                      <p className="text-white/90 leading-relaxed text-sm mb-3">
-                        Deze motor is momenteel gereserveerd en staat in de wacht. U kunt zich hieronder aanmelden voor de wachtlijst.
-                      </p>
-                      <p className="text-orange-400 font-bold text-sm">
-                        Zodra de reservering vervalt, nemen wij direct contact met u op.
-                      </p>
-                    </div>
-                    <ReservedContactForm occasion={occasion} />
-                  </div>
-                ) : (
-                  <div className="space-y-3 mb-8">
-                    <Link
-                      href={`/occasions/${occasion.id}/aanvraag`}
-                      className="block w-full bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                    >
-                      Plan Bezichtiging
-                    </Link>
-                    <a
-                      href="tel:0615452108"
-                      className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                    >
-                      Bel Ons
-                    </a>
-                    <Link
-                      href="/contact"
-                      className="block w-full bg-transparent border-2 border-white text-white hover:bg-white hover:text-black text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                    >
-                      Mail Ons
-                    </Link>
-                    <a
-                      href={`https://wa.me/31615452108?text=${encodeURIComponent(`Hallo, ik heb interesse in de ${occasion.brand} ${occasion.model} (${occasion.year}). Kunnen jullie mij meer informatie geven?`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2 w-full bg-[#25D366] hover:bg-[#1ebe5d] text-white border-2 border-[#25D366] text-center py-4 rounded-full font-bold uppercase tracking-wider transition-all duration-300"
-                    >
-                      <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                      </svg>
-                      WhatsApp Ons
-                    </a>
-                  </div>
-                )}
-
-                {/* Features Checklist */}
-                <div className="space-y-3 pt-6 border-t border-gray-800">
-                  <div className="flex items-center space-x-3 text-white">
-                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Proefrit mogelijk</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-white">
-                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Inruil mogelijk</span>
-                  </div>
-                  <div className="flex items-center space-x-3 text-white">
-                    <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    <span>Altijd gestald</span>
-                  </div>
+                {/* CTA buttons + checklist — in the card on desktop */}
+                <div className="hidden lg:block px-8 pb-8 pt-4 border-t border-gray-800 lg:shrink-0">
+                  <OccasionActionButtons occasion={occasion} />
+                  <OccasionChecklist />
                 </div>
-                </div>{/* end fixed bottom section */}
-              </div>{/* end card */}
+              </div>
+
+              {occasion.status !== 'available' && (
+                <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
+                  <OccasionActionButtons occasion={occasion} />
+                </div>
+              )}
+
+              <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
+                <OccasionChecklist className="" />
+              </div>
             </div>
+
+            {occasion.status === 'available' && (
+              <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#1a1a1a] border-t-2 border-biker-gray px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+                <OccasionActionButtons occasion={occasion} compact />
+              </div>
+            )}
           </div>
         </div>
       </section>
