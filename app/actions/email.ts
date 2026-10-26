@@ -376,13 +376,8 @@ export async function submitOmkeurenForm(formData: {
       return { success: false, error: 'Vul alle verplichte velden in.' };
     }
 
-    if (formData.isDealer) {
-      if (!formData.company || !formData.location || !formData.kvk || !formData.phone) {
-        return { success: false, error: 'Vul alle verplichte velden in.' };
-      }
-      if (!formData.rdwRecognized || !formData.hasWorkshop || !formData.estimatedOmkeuren) {
-        return { success: false, error: 'Vul alle verplichte velden in.' };
-      }
+    if (formData.isDealer && (!formData.company || !formData.phone)) {
+      return { success: false, error: 'Vul alle verplichte velden in.' };
     }
 
     if (!formData.isDealer && (!formData.brand || !formData.model || !formData.year)) {

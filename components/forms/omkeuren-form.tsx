@@ -223,17 +223,17 @@ export function OmkeurenForm() {
 
               {isDealer && (
                 <div className="border-t-2 border-biker-gray pt-6 mt-2">
-                  <h3 className="text-xl font-bold mb-6 uppercase tracking-tight">Gegevens motorzaak</h3>
+                  <h3 className="text-xl font-bold mb-2 uppercase tracking-tight">Gegevens motorzaak</h3>
+                  <p className="text-sm text-biker-muted mb-6">Niet verplicht, maar helpt ons je sneller te helpen.</p>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="location" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                        Locatie *
+                        Locatie
                       </label>
                       <input
                         type="text"
                         id="location"
                         name="location"
-                        required={isDealer}
                         disabled={isLoading}
                         value={formData.location}
                         onChange={handleChange}
@@ -243,13 +243,12 @@ export function OmkeurenForm() {
                     </div>
                     <div>
                       <label htmlFor="kvk" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                        KVK *
+                        KVK
                       </label>
                       <input
                         type="text"
                         id="kvk"
                         name="kvk"
-                        required={isDealer}
                         disabled={isLoading}
                         value={formData.kvk}
                         onChange={handleChange}
@@ -274,12 +273,11 @@ export function OmkeurenForm() {
                     </div>
                     <div>
                       <label htmlFor="estimatedOmkeuren" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                        Geschatte omkeuringen *
+                        Geschatte omkeuringen
                       </label>
                       <select
                         id="estimatedOmkeuren"
                         name="estimatedOmkeuren"
-                        required={isDealer}
                         disabled={isLoading}
                         value={formData.estimatedOmkeuren}
                         onChange={handleChange}
@@ -295,12 +293,11 @@ export function OmkeurenForm() {
                     </div>
                     <div>
                       <label htmlFor="rdwRecognized" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                        RDW-erkend? *
+                        RDW-erkend?
                       </label>
                       <select
                         id="rdwRecognized"
                         name="rdwRecognized"
-                        required={isDealer}
                         disabled={isLoading}
                         value={formData.rdwRecognized}
                         onChange={handleChange}
@@ -313,12 +310,11 @@ export function OmkeurenForm() {
                     </div>
                     <div>
                       <label htmlFor="hasWorkshop" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                        Werkplaats? *
+                        Werkplaats?
                       </label>
                       <select
                         id="hasWorkshop"
                         name="hasWorkshop"
-                        required={isDealer}
                         disabled={isLoading}
                         value={formData.hasWorkshop}
                         onChange={handleChange}
