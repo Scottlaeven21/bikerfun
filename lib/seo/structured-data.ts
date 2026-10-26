@@ -42,7 +42,8 @@ export function getOrganizationSchema() {
     url: baseUrl,
     logo: LOGO,
     image: LOGO,
-    description: 'Specialist in motoroccasions en motoraccessoires in Susteren, Limburg.',
+    description:
+      'Specialist in motoroccasions, motoraccessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.',
     address: ADDRESS,
     contactPoint: {
       '@type':             'ContactPoint',
@@ -79,9 +80,39 @@ export function getLocalBusinessSchema(rating?: { ratingValue?: string | number;
       bestRating:    '5',
       worstRating:   '1',
     },
-    areaServed: {
-      '@type': 'AdministrativeArea',
-      name: 'Nederland',
+    areaServed: [
+      { '@type': 'Country', name: 'Nederland' },
+      { '@type': 'AdministrativeArea', name: 'Limburg' },
+    ],
+    hasOfferCatalog: {
+      '@type': 'OfferCatalog',
+      name: 'Bikerfun diensten',
+      itemListElement: [
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Motoroccasions',
+            url: `${baseUrl}/occasions`,
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Motor omkeuren A2 / 35kW',
+            url: `${baseUrl}/omkeuren`,
+          },
+        },
+        {
+          '@type': 'Offer',
+          itemOffered: {
+            '@type': 'Service',
+            name: 'Motoraccessoires',
+            url: `${baseUrl}/products`,
+          },
+        },
+      ],
     },
   };
 }
@@ -144,7 +175,8 @@ export function getWebsiteSchema() {
     '@type': 'WebSite',
     name: 'Bikerfun',
     url: baseUrl,
-    description: 'Specialist in motoroccasions en motoraccessoires in Susteren, Limburg.',
+    description:
+      'Specialist in motoroccasions, motoraccessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.',
     potentialAction: {
       '@type': 'SearchAction',
       target: {
@@ -182,5 +214,60 @@ export function getItemListSchema(occasions: Occasion[]) {
         },
       },
     })),
+  };
+}
+
+export function getFaqSchema(items: { question: string; answer: string }[]) {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: items.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  };
+}
+
+export function getOmkeurenServiceSchema() {
+  return {
+    '@context': 'https://schema.org',
+    '@type': 'Service',
+    name: 'Motor omkeuren A2 / 35kW',
+    serviceType: 'Motor omkeuren',
+    description:
+      'Laat je motor omkeuren naar A2 / 35kW bij Bikerfun in Susteren. Wij regelen het papierwerk voor particulieren en dealers. Adviesprijs vanaf € 495.',
+    url: `${baseUrl}/omkeuren`,
+    provider: {
+      '@type': 'AutomotiveBusiness',
+      name: 'Bikerfun',
+      url: baseUrl,
+      telephone: PHONE,
+      email: EMAIL,
+      address: ADDRESS,
+    },
+    areaServed: [
+      { '@type': 'Country', name: 'Nederland' },
+      { '@type': 'AdministrativeArea', name: 'Limburg' },
+    ],
+    offers: [
+      {
+        '@type': 'Offer',
+        name: 'Motor omkeuren onder 70 kW',
+        price: '495.00',
+        priceCurrency: 'EUR',
+        url: `${baseUrl}/omkeuren#aanvraag`,
+      },
+      {
+        '@type': 'Offer',
+        name: 'Motor omkeuren boven 70 kW',
+        price: '695.00',
+        priceCurrency: 'EUR',
+        url: `${baseUrl}/omkeuren#aanvraag`,
+      },
+    ],
   };
 }

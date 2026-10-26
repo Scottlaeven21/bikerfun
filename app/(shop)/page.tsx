@@ -12,6 +12,7 @@ import { getWebsiteSchema } from '@/lib/seo/structured-data';
 import { FAQAccordion } from '@/components/faq/faq-accordion';
 import { ReviewsSection } from '@/components/home/reviews-section';
 import { getActiveReviews, getReviewSettings } from '@/lib/supabase/reviews';
+import { getHomepageCategoryTiles } from '@/lib/supabase/products';
 
 const homeFAQ = [
   {
@@ -33,6 +34,10 @@ const homeFAQ = [
   {
     question: 'Hoe snel kan ik de motor meenemen?',
     answer: 'Als alle papieren in orde zijn, kun je de motor vaak direct meenemen. We houden je altijd op de hoogte van de verwachte levertijd.',
+  },
+  {
+    question: 'Kunnen jullie een motor omkeuren naar A2 / 35kW?',
+    answer: 'Ja. Bikerfun keurt motoren om naar A2 / 35kW voor particulieren en dealers. Wij regelen het papierwerk. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW. Meer info op de omkeuren-pagina.',
   },
 ];
 
@@ -66,15 +71,16 @@ export default async function HomePage() {
     .limit(8);
 
   const occasionsList = (occasions as Occasion[]) || [];
-  const [reviewSettings, reviews] = await Promise.all([
+  const [reviewSettings, reviews, shopTiles] = await Promise.all([
     getReviewSettings(),
     getActiveReviews(),
+    getHomepageCategoryTiles(),
   ]);
   return (
     <>
       <BusinessStructuredData />
-      <StructuredData data={getWebsiteSchema()} />
-      <StructuredData data={homeFAQSchema} />
+      <StructuredData id="website-schema" data={getWebsiteSchema()} />
+      <StructuredData id="home-faq-schema" data={homeFAQSchema} />
       <div className="overflow-x-hidden">
       {/* Hero Section with Video Background */}
       <section className="relative h-screen overflow-hidden">
@@ -328,110 +334,28 @@ export default async function HomePage() {
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6">
-            {/* Helmcovers */}
-            <Link
-              href="/products/helmcovers"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-helmcover-white-bg-v3.jpg"
-                  alt="Helmcovers"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Helmcovers
-                </h3>
-              </div>
-            </Link>
-
-            {/* Kentekenplaathouders */}
-            <Link
-              href="/products/kentekenplaathouders"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-license-plate-holder-white-bg.jpg"
-                  alt="Kentekenhouder"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Kentekenhouder
-                </h3>
-              </div>
-            </Link>
-
-            {/* Knipperlichten */}
-            <Link
-              href="/products/knipperlichten"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-turn-signals-white-bg.jpg"
-                  alt="Knipperlichten"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Knipperlichten
-                </h3>
-              </div>
-            </Link>
-
-            {/* Rugzakken */}
-            <Link
-              href="/products/rugzakken"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-backpack-white-bg.jpg"
-                  alt="Rugzakken"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Rugzakken
-                </h3>
-              </div>
-            </Link>
-
-            {/* Sleutelhangers */}
-            <Link
-              href="/products/sleutelhangers"
-              className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
-            >
-              <div className="relative aspect-square overflow-hidden bg-white">
-                <Image
-                  src="/product-keychain-white-bg.jpg"
-                  alt="Sleutelhangers"
-                  fill
-                  className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
-                />
-              </div>
-              <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
-                <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
-                  Sleutelhangers
-                </h3>
-              </div>
-            </Link>
+            {shopTiles.map((tile) => (
+              <Link
+                key={tile.href}
+                href={tile.href}
+                className="group bg-white rounded-2xl overflow-hidden border-2 border-gray-300 hover:border-biker-yellow transition-all hover:-translate-y-1 duration-300"
+              >
+                <div className="relative aspect-square overflow-hidden bg-white">
+                  <Image
+                    src={tile.image}
+                    alt={tile.alt}
+                    fill
+                    className="object-contain p-2 md:p-4 group-hover:scale-110 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 20vw"
+                  />
+                </div>
+                <div className="p-3 md:p-6 text-center bg-biker-dark border-t-2 border-biker-gray">
+                  <h3 style={{ fontFamily: 'var(--font-inter)' }} className="font-bold text-base md:text-xl text-white group-hover:text-biker-yellow transition-colors uppercase tracking-tight">
+                    {tile.label}
+                  </h3>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

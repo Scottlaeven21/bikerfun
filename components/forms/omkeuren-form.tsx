@@ -74,8 +74,7 @@ export function OmkeurenForm() {
           </h2>
           <p className="text-lg md:text-xl text-biker-light mb-10 max-w-3xl mx-auto">
             Ben jij een motorzaak en wil jij motoren omkeuren voor jouw klanten?
-            Meld je dan aan als dealer. Dit is een eerste aanmelding, geen
-            motor nodig. Vul je gegevens in, dan nemen wij contact met je op.
+            Meld je dan aan als dealer. Vul je gegevens in, dan nemen wij contact met je op.
           </p>
           <button
             type="button"
@@ -99,7 +98,7 @@ export function OmkeurenForm() {
             </h2>
             <p className="text-biker-light mb-8">
               {isDealer
-                ? 'Eerste aanmelding: vul je gegevens in, dan nemen wij contact met je op. Een specifieke motor is nu niet nodig.'
+                ? 'Vul je gegevens in, dan nemen wij contact met je op.'
                 : 'Vul je gegevens en motorgegevens in. We nemen zo snel mogelijk contact met je op.'}
             </p>
 

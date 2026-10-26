@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { headers } from 'next/headers';
+import { normalizeTrafficSource } from '@/lib/analytics/sources';
 
 // Track page view
 export async function trackPageView(pagePath: string, pageTitle?: string) {
@@ -196,6 +197,72 @@ export async function getAnalyticsData() {
       tablet: deviceData?.filter((d: any) => d.device_type === 'tablet').length || 0,
     };
 
+    const { data: monthViewsRows } = await supabase
+      .from('page_views')
+      .select('page_path, referrer')
+      .gte('created_at', lastMonth.toISOString())
+      .limit(100000);
+
+    const { data: monthEvents } = await supabase
+      .from('analytics_events')
+      .select('event_name, event_data, page_path')
+      .gte('created_at', lastMonth.toISOString())
+      .limit(100000);
+
+    const referrerCounts = new Map<string, number>();
+    monthViewsRows?.forEach((row: any) => {
+      const source = normalizeTrafficSource(row.referrer);
+      referrerCounts.set(source, (referrerCounts.get(source) || 0) + 1);
+    });
+    const topReferrers = Array.from(referrerCounts.entries())
+      .map(([source, count]) => ({ source, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+
+    const clickCounts = new Map<string, number>();
+    monthEvents
+      ?.filter((event: any) => event.event_name === 'button_click')
+      .forEach((event: any) => {
+        const label = String(event.event_data?.label || 'Onbekend').slice(0, 80);
+        clickCounts.set(label, (clickCounts.get(label) || 0) + 1);
+      });
+    const topClicks = Array.from(clickCounts.entries())
+      .map(([label, count]) => ({ label, count }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 8);
+
+    const durationTotals = new Map<string, { total: number; count: number }>();
+    monthEvents
+      ?.filter((event: any) => event.event_name === 'page_duration')
+      .forEach((event: any) => {
+        const path = String(event.page_path || '/');
+        const seconds = Number(event.event_data?.seconds) || 0;
+        if (seconds <= 0 || seconds > 60 * 60 * 2) return;
+        const current = durationTotals.get(path) || { total: 0, count: 0 };
+        durationTotals.set(path, { total: current.total + seconds, count: current.count + 1 });
+      });
+
+    const pageViewCounts = new Map<string, number>();
+    monthViewsRows?.forEach((row: any) => {
+      const path = row.page_path || '/';
+      pageViewCounts.set(path, (pageViewCounts.get(path) || 0) + 1);
+    });
+
+    const pageDurations = Array.from(durationTotals.entries())
+      .map(([path, stats]) => ({
+        path,
+        avgSeconds: stats.total / stats.count,
+        views: pageViewCounts.get(path) || stats.count,
+      }))
+      .sort((a, b) => b.views - a.views)
+      .slice(0, 8);
+
+    const { count: omkeurenSubmissions } = await supabase
+      .from('analytics_events')
+      .select('*', { count: 'exact', head: true })
+      .eq('event_name', 'omkeuren_submit')
+      .gte('created_at', lastMonth.toISOString());
+
     return {
       success: true,
       data: {
@@ -210,10 +277,14 @@ export async function getAnalyticsData() {
         conversions: {
           contactForms: contactSubmissions || 0,
           motorAanvragen: motorAanvragen || 0,
-          total: (contactSubmissions || 0) + (motorAanvragen || 0),
+          omkeuren: omkeurenSubmissions || 0,
+          total: (contactSubmissions || 0) + (motorAanvragen || 0) + (omkeurenSubmissions || 0),
         },
         topOccasions: topOccasionsWithCounts,
         devices: deviceBreakdown,
+        topReferrers,
+        topClicks,
+        pageDurations,
       },
     };
   } catch (error) {

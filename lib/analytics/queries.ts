@@ -1,5 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/admin';
 import { startOfDay, endOfDay, subDays, format } from 'date-fns';
+import { normalizeTrafficSource } from '@/lib/analytics/sources';
 
 export interface DailyStats {
   date: string;
@@ -13,6 +14,7 @@ export interface PageStats {
   page_path: string;
   views: number;
   unique_visitors: number;
+  avg_seconds?: number;
 }
 
 export interface EventStats {
@@ -37,6 +39,10 @@ export interface DetailedAnalytics {
   };
   referrerStats: Array<{
     referrer: string;
+    count: number;
+  }>;
+  topClicks: Array<{
+    label: string;
     count: number;
   }>;
 }
@@ -77,25 +83,40 @@ export async function getDetailedAnalytics(
     }
   });
 
+  const { data: eventsData } = await (supabase as any)
+    .from('analytics_events')
+    .select('event_name, event_data, page_path')
+    .gte('created_at', start)
+    .lte('created_at', end)
+    .limit(100000);
+
+  const durationTotals = new Map<string, { total: number; count: number }>();
+  eventsData
+    ?.filter((event: any) => event.event_name === 'page_duration')
+    .forEach((event: any) => {
+      const path = String(event.page_path || '/');
+      const seconds = Number(event.event_data?.seconds) || 0;
+      if (seconds <= 0 || seconds > 60 * 60 * 2) return;
+      const current = durationTotals.get(path) || { total: 0, count: 0 };
+      durationTotals.set(path, { total: current.total + seconds, count: current.count + 1 });
+    });
+
   const topPages: PageStats[] = Array.from(pageViewsMap.entries())
-    .map(([page_path, ips]) => ({
-      page_path,
-      views: pageViewsData?.filter((v: any) => v.page_path === page_path).length || 0,
-      unique_visitors: ips.size,
-    }))
+    .map(([page_path, ips]) => {
+      const duration = durationTotals.get(page_path);
+      return {
+        page_path,
+        views: pageViewsData?.filter((v: any) => v.page_path === page_path).length || 0,
+        unique_visitors: ips.size,
+        avg_seconds: duration ? duration.total / duration.count : undefined,
+      };
+    })
     .sort((a, b) => b.views - a.views)
     .slice(0, 10);
 
-  // Get events
-  const { data: eventsData } = await (supabase as any)
-    .from('analytics_events')
-    .select('event_name')
-    .gte('created_at', start)
-    .lte('created_at', end)
-    .limit(100000); // Increase limit to handle more data
-
   const eventCounts = new Map<string, number>();
   eventsData?.forEach((event: any) => {
+    if (event.event_name === 'page_duration' || event.event_name === 'button_click') return;
     eventCounts.set(event.event_name, (eventCounts.get(event.event_name) || 0) + 1);
   });
 
@@ -128,7 +149,7 @@ export async function getDetailedAnalytics(
 
   const referrerCounts = new Map<string, number>();
   referrerData?.forEach((r: any) => {
-    const ref = r.referrer || 'Direct';
+    const ref = normalizeTrafficSource(r.referrer);
     referrerCounts.set(ref, (referrerCounts.get(ref) || 0) + 1);
   });
 
@@ -155,6 +176,18 @@ export async function getDetailedAnalytics(
   ).length || 0;
   const conversionRate = totalViews > 0 ? (conversionEvents / totalViews) * 100 : 0;
 
+  const clickCounts = new Map<string, number>();
+  eventsData
+    ?.filter((event: any) => event.event_name === 'button_click')
+    .forEach((event: any) => {
+      const label = String(event.event_data?.label || 'Onbekend').slice(0, 80);
+      clickCounts.set(label, (clickCounts.get(label) || 0) + 1);
+    });
+  const topClicks = Array.from(clickCounts.entries())
+    .map(([label, count]) => ({ label, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 12);
+
   return {
     dailyStats,
     topPages,
@@ -167,6 +200,7 @@ export async function getDetailedAnalytics(
     },
     deviceBreakdown,
     referrerStats,
+    topClicks,
   };
 }
 

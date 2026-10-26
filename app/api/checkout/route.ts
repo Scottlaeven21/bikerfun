@@ -23,8 +23,19 @@ export async function POST(request: NextRequest) {
       return sum + (parseFloat(item.product.price) * item.quantity);
     }, 0);
     
-    // Get shipping cost from WooCommerce
-    const shippingCost = await calculateShipping(subtotal, billing?.country || 'NL');
+    const quoteItems = cartItems
+      .map((item: any) => ({
+        id: Number(item.product?.id),
+        quantity: Number(item.quantity) || 1,
+      }))
+      .filter((item: { id: number; quantity: number }) => item.id > 0);
+
+    const shippingCost = await calculateShipping(
+      subtotal,
+      billing?.country || 'NL',
+      quoteItems,
+      { postcode: billing?.postalCode, city: billing?.city }
+    );
     const total = subtotal + shippingCost;
 
     // Create order in Supabase

@@ -20,6 +20,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { DetailedAnalytics } from '@/lib/analytics/queries';
+import { formatDuration, friendlyPageName } from '@/lib/analytics/sources';
 
 interface StatisticsClientProps {
   initialData: DetailedAnalytics;
@@ -386,6 +387,9 @@ export function StatisticsClient({
                 <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">
                   Views/Bezoeker
                 </th>
+                <th className="px-6 py-4 text-right text-xs font-bold text-white uppercase tracking-wider">
+                  Gem. tijd
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-biker-gray">
@@ -395,7 +399,8 @@ export function StatisticsClient({
                     {index + 1}
                   </td>
                   <td className="px-6 py-4 text-sm text-white font-medium">
-                    {page.page_path || '/'}
+                    <div>{friendlyPageName(page.page_path || '/')}</div>
+                    <div className="text-xs text-gray-400">{page.page_path || '/'}</div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-white text-right font-bold">
                     {page.views.toLocaleString()}
@@ -404,7 +409,10 @@ export function StatisticsClient({
                     {page.unique_visitors.toLocaleString()}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-300 text-right">
-                    {(page.views / page.unique_visitors).toFixed(1)}
+                    {page.unique_visitors > 0 ? (page.views / page.unique_visitors).toFixed(1) : '-'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-biker-yellow text-right font-bold">
+                    {page.avg_seconds ? formatDuration(page.avg_seconds) : '–'}
                   </td>
                 </tr>
               ))}
@@ -430,7 +438,7 @@ export function StatisticsClient({
               <div key={index}>
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-white text-sm font-medium">
-                    {referrer.referrer === 'Direct' ? '🔗 Direct' : `🌐 ${referrer.referrer.replace(/^https?:\/\//, '').split('/')[0]}`}
+                    {referrer.referrer}
                   </span>
                   <span className="text-gray-400 text-sm">
                     {referrer.count} ({percentage.toFixed(1)}%)
@@ -446,6 +454,35 @@ export function StatisticsClient({
             );
           })}
         </div>
+      </div>
+
+      <div className="bg-biker-dark rounded-lg border-2 border-biker-gray p-6">
+        <h2 className="text-xl font-bold text-white mb-6 uppercase tracking-tight">
+          Meest geklikte knoppen
+        </h2>
+        {(data.topClicks || []).length > 0 ? (
+          <div className="space-y-3">
+            {(data.topClicks || []).map((click) => {
+              const total = (data.topClicks || []).reduce((sum, row) => sum + row.count, 0) || 1;
+              const percentage = (click.count / total) * 100;
+              return (
+                <div key={click.label}>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-white text-sm font-medium truncate pr-3">{click.label}</span>
+                    <span className="text-gray-400 text-sm shrink-0">
+                      {click.count} ({percentage.toFixed(1)}%)
+                    </span>
+                  </div>
+                  <div className="w-full bg-biker-gray/30 rounded-full h-2 overflow-hidden">
+                    <div className="bg-biker-yellow h-full rounded-full" style={{ width: `${percentage}%` }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
+          <p className="text-gray-400 text-sm">Nog geen knopklikken in deze periode.</p>
+        )}
       </div>
 
       {/* Daily Breakdown Table */}

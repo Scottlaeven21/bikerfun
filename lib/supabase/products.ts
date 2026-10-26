@@ -213,6 +213,83 @@ export async function getProductCount(): Promise<number> {
   return count || 0;
 }
 
+export interface HomepageCategoryTile {
+  label: string;
+  href: string;
+  image: string;
+  alt: string;
+}
+
+const HOMEPAGE_CATEGORY_TILES: Array<{
+  label: string;
+  slug: string;
+  matches: string[];
+  fallback: string;
+}> = [
+  {
+    label: 'Helmcovers',
+    slug: 'helmcovers',
+    matches: ['helmcover'],
+    fallback: 'https://admin.bikerfun.nl/wp-content/uploads/2023/10/Helmcover-bunny.jpg',
+  },
+  {
+    label: 'Kentekenhouder',
+    slug: 'kentekenplaathouders',
+    matches: ['kenteken'],
+    fallback: 'https://admin.bikerfun.nl/wp-content/uploads/2023/10/variant_38156_2023-08-06.png',
+  },
+  {
+    label: 'Knipperlichten',
+    slug: 'knipperlichten',
+    matches: ['knipperlicht'],
+    fallback: 'https://admin.bikerfun.nl/wp-content/uploads/2023/10/variant_38154_2023-08-06.png',
+  },
+  {
+    label: 'Bougies',
+    slug: 'boegies',
+    matches: ['boegie', 'bougie'],
+    fallback: 'https://admin.bikerfun.nl/wp-content/uploads/2026/10/variant_988121_2026-10-22.jpg',
+  },
+  {
+    label: 'Sleutelhangers',
+    slug: 'sleutelhangers',
+    matches: ['sleutelhanger'],
+    fallback: 'https://admin.bikerfun.nl/wp-content/uploads/2023/10/variant_38118_2023-08-06.jpg',
+  },
+];
+
+function productImage(product: SupabaseProduct | undefined): string | null {
+  const src = product?.images?.[0]?.src;
+  return src && src.trim() !== '' ? src : null;
+}
+
+export async function getHomepageCategoryTiles(): Promise<HomepageCategoryTile[]> {
+  const products = await getAllProducts(400);
+
+  return HOMEPAGE_CATEGORY_TILES.map((tile) => {
+    const product = products.find((item) =>
+      item.categories?.some((cat) => {
+        const value = cat.toLowerCase();
+        return tile.matches.some((match) => value.includes(match));
+      }) || tile.matches.some((match) => item.name.toLowerCase().includes(match))
+    );
+
+    const categoryName = product?.categories?.find((cat) =>
+      tile.matches.some((match) => cat.toLowerCase().includes(match))
+    );
+    const slug = categoryName
+      ? categoryName.toLowerCase().replace(/\s+/g, '-')
+      : tile.slug;
+
+    return {
+      label: tile.label,
+      href: `/products/${slug}`,
+      image: productImage(product) || tile.fallback,
+      alt: product?.name || tile.label,
+    };
+  });
+}
+
 function filterShopProducts(products: SupabaseProduct[]): SupabaseProduct[] {
   return products.filter((product) => {
     if (isTestProduct(product)) return false;

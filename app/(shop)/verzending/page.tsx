@@ -151,13 +151,14 @@ export default async function VerzendingPage() {
                       </svg>
                     </div>
                     <p className="text-2xl font-bold text-biker-yellow">
-                      Nederland: {nlLabel}
+                      Zelfde tarieven als WooCommerce
                     </p>
                   </div>
                   <p className="text-biker-light text-lg">
-                    {shipping.NL.alwaysFree || shipping.NL.cost === 0
-                      ? <>Voor bestellingen binnen Nederland zijn de verzendkosten <strong className="text-white">gratis</strong>.</>
-                      : <>Voor Nederland geldt: <strong className="text-white">{nlLabel}</strong>.</>}
+                    De verzendkosten hangen af van je producten en land — bijvoorbeeld
+                    een sleutelhanger (briefpost) is goedkoper dan een helmcover (pakket).
+                    Bij het afrekenen rekenen we het bedrag live uit in WooCommerce,
+                    zodat je altijd hetzelfde tarief ziet als in de webshop.
                   </p>
                 </div>
 
@@ -169,12 +170,17 @@ export default async function VerzendingPage() {
                       </svg>
                     </div>
                     <p className="text-xl font-bold text-white">
-                      België: {beLabel}
+                      Nederland & België
                     </p>
                   </div>
                   <p className="text-biker-light">
-                    Voor leveringen naar België: <strong className="text-white">{beLabel}</strong>.
-                    De exacte kosten zie je altijd bij het afrekenen.
+                    {nlLabel !== 'Wordt berekend bij afrekenen' && (
+                      <>Nederland: <strong className="text-white">{nlLabel}</strong>. </>
+                    )}
+                    {beLabel !== 'Wordt berekend bij afrekenen' && (
+                      <>België: <strong className="text-white">{beLabel}</strong>. </>
+                    )}
+                    Het exacte bedrag voor jouw winkelwagen zie je bij het afrekenen.
                   </p>
                 </div>
               </div>

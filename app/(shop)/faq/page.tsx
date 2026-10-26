@@ -1,11 +1,12 @@
 import { Metadata } from 'next';
 import { FAQAccordion } from '@/components/faq/faq-accordion';
 import Link from 'next/link';
+import { omkeurenFaq } from '@/lib/seo/omkeuren';
 
 export const metadata: Metadata = {
   title: 'Veelgestelde Vragen (FAQ) | Bikerfun',
-  description: 'Vind antwoorden op veelgestelde vragen over onze occasions, garantie en meer.',
-  keywords: ['faq', 'veelgestelde vragen', 'motor kopen', 'occasions', 'garantie'],
+  description: 'Vind antwoorden over occasions, motor omkeuren naar A2 / 35kW, garantie en de webshop.',
+  keywords: ['faq', 'veelgestelde vragen', 'motor kopen', 'occasions', 'garantie', 'motor omkeuren', 'A2 omkeuren'],
   alternates: { canonical: 'https://bikerfun.nl/faq' },
   openGraph: {
     title: 'Veelgestelde Vragen | Bikerfun',
@@ -99,7 +100,7 @@ const webshopFAQ = [
 const faqJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
-  mainEntity: [...faqData, ...webshopFAQ].map((item) => ({
+  mainEntity: [...faqData, ...omkeurenFaq, ...webshopFAQ].map((item) => ({
     '@type': 'Question',
     name: item.question,
     acceptedAnswer: {
@@ -142,7 +143,7 @@ export default function FAQPage() {
             Veelgestelde <span className="text-biker-yellow">Vragen</span>
           </h1>
           <p className="text-lg md:text-xl text-biker-light max-w-2xl mx-auto">
-            Vind hier antwoorden op de meest gestelde vragen over onze occasions, 
+            Vind hier antwoorden over occasions, motor omkeuren naar A2 / 35kW,
             webshop en diensten. Staat je vraag er niet bij? Neem gerust contact met ons op!
           </p>
         </div>
@@ -171,6 +172,23 @@ export default function FAQPage() {
             Occasions
           </h2>
           <FAQAccordion items={faqData} />
+        </div>
+      </section>
+
+      <section className="py-16">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            style={{ fontFamily: 'var(--font-inter)' }}
+            className="text-3xl font-bold mb-8 uppercase tracking-tight"
+          >
+            Motor <span className="text-biker-yellow">Omkeuren</span>
+          </h2>
+          <FAQAccordion items={omkeurenFaq} />
+          <div className="mt-8">
+            <Link href="/omkeuren" className="text-biker-yellow font-bold uppercase tracking-wider hover:underline">
+              Meer over omkeuren →
+            </Link>
+          </div>
         </div>
       </section>
 

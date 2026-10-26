@@ -1,40 +1,59 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useCart } from '@/contexts/cart-context';
 
-interface ShippingLabel {
-  alwaysFree?: boolean;
-  label: string;
+function formatCost(cost: number | null): string {
+  if (cost === null) return 'wordt berekend bij afrekenen';
+  if (cost === 0) return 'gratis';
+  return `€ ${cost.toFixed(2)}`;
 }
 
 export function ShippingNote() {
-  const [nl, setNl] = useState<ShippingLabel | null>(null);
-  const [be, setBe] = useState<ShippingLabel | null>(null);
+  const { cart, total } = useCart();
+  const [nl, setNl] = useState<number | null>(null);
+  const [be, setBe] = useState<number | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/shipping/info')
-      .then((res) => (res.ok ? res.json() : null))
-      .then((data) => {
-        if (!data) return;
-        setNl(data.NL);
-        setBe(data.BE);
+    if (cart.length === 0) return;
+
+    const items = cart.map((item) => ({ id: item.product.id, quantity: item.quantity }));
+    const quote = (country: string) =>
+      fetch('/api/shipping/calculate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subtotal: total, country, items }),
+      }).then(async (res) => {
+        if (!res.ok) return null;
+        const data = await res.json();
+        return typeof data.shipping_cost === 'number' ? data.shipping_cost : null;
+      });
+
+    setLoading(true);
+    Promise.all([quote('NL'), quote('BE')])
+      .then(([nlCost, beCost]) => {
+        setNl(nlCost);
+        setBe(beCost);
       })
       .catch(() => {
-        // Keep fallback copy
-      });
-  }, []);
+        setNl(null);
+        setBe(null);
+      })
+      .finally(() => setLoading(false));
+  }, [cart, total]);
 
   return (
     <>
       <div className="bg-biker-yellow/10 border-2 border-biker-yellow/30 rounded-xl p-4 mb-4">
         <p className="text-biker-yellow font-bold text-sm">
-          {nl?.alwaysFree || nl?.label === 'Gratis verzending'
-            ? '✓ Gratis verzending binnen Nederland!'
-            : `✓ Nederland: ${nl?.label || 'verzending bij afrekenen'}`}
+          {loading
+            ? 'Verzendkosten worden berekend…'
+            : `Nederland: ${formatCost(nl)}`}
         </p>
       </div>
       <p className="text-xs text-gray-500 mb-6">
-        België: {be?.label || 'verzendkosten worden berekend bij afrekenen'}
+        België: {loading ? 'wordt berekend…' : formatCost(be)}
       </p>
     </>
   );

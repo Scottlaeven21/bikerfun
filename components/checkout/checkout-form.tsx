@@ -118,38 +118,41 @@ export function CheckoutForm() {
     }
   };
 
-  // Fetch shipping cost from WooCommerce when subtotal or country changes
-  const fetchShippingCost = async (country: string) => {
-    if (subtotal === 0) return;
-    
+  const fetchShippingCost = async (country: string, postcode?: string, city?: string) => {
+    if (cart.length === 0) return;
+
     setLoadingShipping(true);
     try {
       const response = await fetch('/api/shipping/calculate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ subtotal, country }),
+        body: JSON.stringify({
+          subtotal,
+          country,
+          postcode,
+          city,
+          items: cart.map((item) => ({ id: item.product.id, quantity: item.quantity })),
+        }),
       });
 
       if (response.ok) {
         const data = await response.json();
-        setShippingCost(data.shipping_cost ?? 0); // Default to 0 if undefined
-        setFreeShippingThreshold(data.free_shipping_threshold ?? null); // null = no threshold
-      } else {
-        // On error, set default shipping cost
-        setShippingCost(formData.country === 'NL' ? 0 : 4.95);
+        setShippingCost(typeof data.shipping_cost === 'number' ? data.shipping_cost : 0);
+        setFreeShippingThreshold(null);
       }
     } catch (error) {
       console.error('Failed to fetch shipping cost:', error);
-      // Keep fallback value
     } finally {
       setLoadingShipping(false);
     }
   };
 
-  // Fetch shipping on mount and when subtotal changes
   React.useEffect(() => {
-    fetchShippingCost(formData.country);
-  }, [subtotal]); // eslint-disable-line react-hooks/exhaustive-deps
+    const timeout = window.setTimeout(() => {
+      fetchShippingCost(formData.country, formData.postcode, formData.city);
+    }, formData.postcode || formData.city ? 400 : 0);
+    return () => window.clearTimeout(timeout);
+  }, [subtotal, cart, formData.country, formData.postcode, formData.city]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -159,10 +162,6 @@ export function CheckoutForm() {
       [name]: value,
     }));
 
-    // Refetch shipping when country changes
-    if (name === 'country') {
-      fetchShippingCost(value);
-    }
   };
 
   if (cart.length === 0) {

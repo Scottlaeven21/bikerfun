@@ -77,8 +77,12 @@ export default function OverOnsPage() {
                   bij Bikerfun krijg je eerlijk advies.
                 </p>
                 <p>
-                  Naast occasions bieden we ook een zorgvuldig geselecteerde collectie motorkleding 
-                  en accessoires. Want veiligheid en stijl gaan bij ons hand in hand.
+                  Naast occasions bieden we ook een zorgvuldig geselecteerde collectie motorkleding
+                  en accessoires. En we{' '}
+                  <Link href="/omkeuren" className="text-biker-yellow hover:underline">
+                    keuren motoren om naar A2 / 35kW
+                  </Link>
+                  {' '}— het papierwerk nemen we uit handen, voor particulieren en dealers.
                 </p>
               </div>
             </div>

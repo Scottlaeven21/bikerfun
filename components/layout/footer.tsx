@@ -89,8 +89,8 @@ export function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="/products/rugzakken" className="hover:text-biker-yellow transition-colors">
-                  Rugzakken
+                <Link href="/products/boegies" className="hover:text-biker-yellow transition-colors">
+                  Bougies
                 </Link>
               </li>
               <li>

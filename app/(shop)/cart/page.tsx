@@ -11,7 +11,7 @@ export default function CartPage() {
   const { cart, removeFromCart, updateQuantity } = useCart();
 
   // Prices from WooCommerce already include 21% BTW — no extra tax calculation needed.
-  // NL shipping is always free; other countries are calculated at checkout.
+  // Shipping is quoted from WooCommerce at checkout (and in the note) per product + country.
   const subtotal = cart.reduce((sum, item) => {
     const price = parseFloat(item.product.price || '0');
     return sum + (price * item.quantity);

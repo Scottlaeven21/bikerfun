@@ -4,7 +4,7 @@ import { Occasion } from '@/types';
 const baseUrl  = process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl';
 const siteName = 'Bikerfun';
 const defaultDescription =
-  'Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.';
+  'Specialist in motoroccasions, accessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.';
 
 // Base metadata shared by all pages
 export function getBaseMetadata(): Metadata {
@@ -41,16 +41,17 @@ export function getBaseMetadata(): Metadata {
 export function getHomeMetadata(): Metadata {
   return {
     ...getBaseMetadata(),
-    title: 'Bikerfun | Specialist in Motoroccasions & Accessoires Susteren',
+    title: 'Bikerfun | Occasions, Omkeuren A2 & Accessoires | Susteren',
     description: defaultDescription,
     keywords: [
       'motor occasions', 'motoroccasions', 'tweedehands motoren', 'motor dealer',
       'motor accessoires', 'bikerfun', 'motoroccasions Susteren', 'motor Limburg',
       'tweedehands motor kopen', 'motor dealer Limburg',
+      'motor omkeuren', 'motor omkeuren A2', '35kW omkeuren', 'motor omkeuren Limburg',
     ],
     alternates: { canonical: baseUrl },
     openGraph: {
-      title:       'Bikerfun | Specialist in Motoroccasions & Accessoires',
+      title:       'Bikerfun | Occasions, Omkeuren A2 & Accessoires',
       description: defaultDescription,
       url:         baseUrl,
       siteName,
@@ -65,7 +66,7 @@ export function getHomeMetadata(): Metadata {
     },
     twitter: {
       card:        'summary_large_image',
-      title:       'Bikerfun | Specialist in Motoroccasions & Accessoires',
+      title:       'Bikerfun | Occasions, Omkeuren A2 & Accessoires',
       description: defaultDescription,
       images:      [`${baseUrl}/og-image.jpg`],
     },
@@ -219,7 +220,7 @@ export function getContactMetadata(): Metadata {
 // ── Over ons ──────────────────────────────────────────────────────────────────
 export function getAboutMetadata(): Metadata {
   const desc =
-    'Leer Bikerfun kennen – jouw partner voor motoroccasions en accessoires in Susteren, Limburg. Passie, kwaliteit en persoonlijk advies.';
+    'Leer Bikerfun kennen – motoroccasions, accessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.';
   return {
     ...getBaseMetadata(),
     title: 'Over Ons | Bikerfun – Motorspecialist Susteren',
@@ -279,18 +280,29 @@ export function getAanvraagMetadata(): Metadata {
 // ── Omkeuren ──────────────────────────────────────────────────────────────────
 export function getOmkeurenMetadata(): Metadata {
   const desc =
-    'Laat je motor omkeuren naar A2 / 35kW bij Bikerfun in Susteren. Wij regelen het papierwerk. Bel of stuur een bericht voor een afspraak.';
+    'Motor omkeuren naar A2 / 35kW bij Bikerfun in Susteren. Papierwerk voor particulier en dealer. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW.';
   return {
     ...getBaseMetadata(),
-    title: 'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+    title: 'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
     description: desc,
     keywords: [
-      'motor omkeuren', 'A2 omkeuren', '35kW omkeuren', 'motor omkeuren Limburg',
-      'motor omkeuren Susteren', 'bikerfun omkeuren',
+      'motor omkeuren',
+      'motor omkeuren A2',
+      'motor omkeuren 35kW',
+      'A2 omkeuren',
+      '35kW omkeuren',
+      'motor beperken A2',
+      'motor omkeuren prijs',
+      'motor omkeuren kosten',
+      'motor omkeuren Limburg',
+      'motor omkeuren Susteren',
+      'dealer motor omkeuren',
+      'A2 rijbewijs motor',
+      'bikerfun omkeuren',
     ],
     alternates: { canonical: `${baseUrl}/omkeuren` },
     openGraph: {
-      title:       'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+      title:       'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
       description: desc,
       url:         `${baseUrl}/omkeuren`,
       siteName,
@@ -300,7 +312,7 @@ export function getOmkeurenMetadata(): Metadata {
     },
     twitter: {
       card:        'summary_large_image',
-      title:       'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+      title:       'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
       description: desc,
       images:      [`${baseUrl}/og-image.jpg`],
     },

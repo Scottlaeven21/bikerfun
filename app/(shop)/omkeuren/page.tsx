@@ -1,12 +1,29 @@
 import Link from 'next/link';
 import { OmkeurenForm } from '@/components/forms/omkeuren-form';
+import { FAQAccordion } from '@/components/faq/faq-accordion';
+import { StructuredData } from '@/components/seo/structured-data';
 import { getOmkeurenMetadata } from '@/lib/seo/metadata';
+import { omkeurenFaq } from '@/lib/seo/omkeuren';
+import {
+  getBreadcrumbSchema,
+  getFaqSchema,
+  getOmkeurenServiceSchema,
+} from '@/lib/seo/structured-data';
 
 export const metadata = getOmkeurenMetadata();
 
 export default function OmkeurenPage() {
   return (
     <div className="min-h-screen bg-black noise-overlay text-white">
+      <StructuredData id="omkeuren-service" data={getOmkeurenServiceSchema()} />
+      <StructuredData id="omkeuren-faq" data={getFaqSchema(omkeurenFaq)} />
+      <StructuredData
+        id="omkeuren-breadcrumb"
+        data={getBreadcrumbSchema([
+          { name: 'Home', url: '/' },
+          { name: 'Motor omkeuren', url: '/omkeuren' },
+        ])}
+      />
       <section className="relative h-[32vh] min-h-[220px] overflow-hidden">
         <video
           autoPlay
@@ -34,6 +51,34 @@ export default function OmkeurenPage() {
             </h1>
             <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto">
               Motor omkeuren naar A2 / 35kW? Wij regelen het papierwerk voor je.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-black">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <nav className="text-sm text-biker-muted mb-8" aria-label="Broodkruimel">
+            <Link href="/" className="hover:text-biker-yellow">Home</Link>
+            <span className="mx-2">/</span>
+            <span className="text-white">Motor omkeuren</span>
+          </nav>
+          <h2
+            style={{ fontFamily: 'var(--font-inter)' }}
+            className="text-3xl md:text-4xl font-bold mb-6 uppercase tracking-tight"
+          >
+            Wat is motor <span className="text-biker-yellow">omkeuren</span>?
+          </h2>
+          <div className="space-y-4 text-biker-light text-lg leading-relaxed">
+            <p>
+              Met een A2-rijbewijs mag je een motor tot 35kW rijden. Heeft jouw motor meer vermogen,
+              dan kun je hem laten <strong className="text-white">omkeuren naar A2 / 35kW</strong>.
+              Bikerfun in Susteren (Limburg) regelt het papierwerk voor je.
+            </p>
+            <p>
+              Dat doen we voor particulieren én voor motorzaken. Vul het formulier in, dan nemen
+              wij contact met je op. Adviesprijs: € 495 onder 70 kW en € 695 boven 70 kW,
+              inclusief papierwerk.
             </p>
           </div>
         </div>
@@ -118,6 +163,18 @@ export default function OmkeurenPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-biker-dark/40 border-y border-biker-gray/30">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2
+            style={{ fontFamily: 'var(--font-inter)' }}
+            className="text-3xl md:text-4xl font-bold mb-10 uppercase tracking-tight text-center"
+          >
+            Veelgestelde vragen over <span className="text-biker-yellow">omkeuren</span>
+          </h2>
+          <FAQAccordion items={omkeurenFaq} />
         </div>
       </section>
 

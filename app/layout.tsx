@@ -26,11 +26,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl'),
   title: {
-    default: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
+    default: "Bikerfun – Occasions, Omkeuren A2 & Accessoires | Susteren",
     template: "%s | Bikerfun",
   },
-  description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
-  keywords: ["motoroccasions", "motor dealer", "motorkleding", "motorgear", "Susteren", "Limburg", "bikerfun"],
+  description: "Specialist in motoroccasions, accessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.",
+  keywords: ["motoroccasions", "motor dealer", "motorkleding", "motorgear", "Susteren", "Limburg", "bikerfun", "motor omkeuren", "A2 omkeuren"],
   authors: [{ name: "Bikerfun" }],
   icons: {
     icon: [
@@ -50,14 +50,14 @@ export const metadata: Metadata = {
     locale: "nl_NL",
     url: "https://bikerfun.nl",
     siteName: "Bikerfun",
-    title: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
-    description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
+    title: "Bikerfun – Occasions, Omkeuren A2 & Accessoires | Susteren",
+    description: "Specialist in motoroccasions, accessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.",
     images: ['/bikerfun-new-logo.png'],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Bikerfun – Motoroccasions & Accessoires | Susteren, Limburg",
-    description: "Specialist in motoroccasions en motoraccessoires in Susteren, Limburg. Kwaliteit, service en passie voor motoren.",
+    title: "Bikerfun – Occasions, Omkeuren A2 & Accessoires | Susteren",
+    description: "Specialist in motoroccasions, accessoires en motor omkeuren naar A2 / 35kW in Susteren, Limburg.",
     images: ['/bikerfun-new-logo.png'],
   },
 };

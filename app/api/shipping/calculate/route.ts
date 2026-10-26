@@ -1,33 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { calculateShipping, getCountryShippingInfo } from '@/lib/woocommerce/shipping';
+import { calculateShipping, quoteWooCommerceShipping } from '@/lib/woocommerce/shipping';
 
 export const dynamic = 'force-dynamic';
 export const runtime = 'nodejs';
 
+function normalizeItems(raw: unknown): { id: number; quantity: number }[] {
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map((item: any) => ({
+      id: Number(item?.id ?? item?.product?.id),
+      quantity: Number(item?.quantity) || 1,
+    }))
+    .filter((item) => item.id > 0 && item.quantity > 0);
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { subtotal, country = 'NL' } = body;
+    const { subtotal = 0, country = 'NL', items, postcode, city } = body;
+    const quoteItems = normalizeItems(items);
 
-    if (typeof subtotal !== 'number') {
+    const shippingCost =
+      quoteItems.length > 0
+        ? await quoteWooCommerceShipping(quoteItems, country, { postcode, city })
+        : await calculateShipping(Number(subtotal) || 0, country);
+
+    if (shippingCost === null) {
       return NextResponse.json(
-        { error: 'Subtotal is verplicht' },
-        { status: 400 }
+        { error: 'Kon verzendkosten niet ophalen uit WooCommerce' },
+        { status: 502 }
       );
     }
-
-    const [shippingCost, info] = await Promise.all([
-      calculateShipping(subtotal, country),
-      getCountryShippingInfo(country),
-    ]);
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
-      total: subtotal + shippingCost,
-      free_shipping_threshold: info.alwaysFree ? null : info.freeMin,
+      total: (Number(subtotal) || 0) + shippingCost,
+      free_shipping_threshold: null,
       country,
-      source: 'woocommerce',
+      source: quoteItems.length > 0 ? 'woocommerce-store' : 'woocommerce',
     });
   } catch (error) {
     console.error('Error calculating shipping:', error);
@@ -52,16 +63,13 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const [shippingCost, info] = await Promise.all([
-      calculateShipping(subtotal, country),
-      getCountryShippingInfo(country),
-    ]);
+    const shippingCost = await calculateShipping(subtotal, country);
 
     return NextResponse.json({
       subtotal,
       shipping_cost: shippingCost,
       total: subtotal + shippingCost,
-      free_shipping_threshold: info.alwaysFree ? null : info.freeMin,
+      free_shipping_threshold: null,
       country,
     });
   } catch (error) {

@@ -32,6 +32,140 @@ export interface CountryShippingInfo {
   zoneName: string | null;
 }
 
+export interface ShippingQuoteItem {
+  id: number;
+  quantity: number;
+}
+
+const STORE_DEFAULT_ADDRESS: Record<string, { postcode: string; city: string }> = {
+  NL: { postcode: '6114 AH', city: 'Susteren' },
+  BE: { postcode: '2000', city: 'Antwerpen' },
+  DE: { postcode: '10115', city: 'Berlin' },
+};
+
+function wooBaseUrl(): string {
+  return (process.env.NEXT_PUBLIC_WOOCOMMERCE_URL || 'https://admin.bikerfun.nl').replace(/\/$/, '');
+}
+
+function moneyFromStore(value: unknown, minorUnit = 2): number {
+  const raw = parseInt(String(value ?? '0'), 10);
+  if (!Number.isFinite(raw)) return 0;
+  return raw / 10 ** minorUnit;
+}
+
+async function storeFetch(
+  path: string,
+  init: RequestInit & { token?: string; nonce?: string } = {}
+): Promise<{ data: any; token: string; nonce: string; ok: boolean; status: number }> {
+  const headers = new Headers(init.headers);
+  headers.set('Content-Type', 'application/json');
+  if (init.token) headers.set('Cart-Token', init.token);
+  if (init.nonce) {
+    headers.set('Nonce', init.nonce);
+    headers.set('X-WC-Store-API-Nonce', init.nonce);
+  }
+
+  const response = await fetch(`${wooBaseUrl()}${path}`, {
+    ...init,
+    headers,
+    cache: 'no-store',
+    signal: init.signal ?? AbortSignal.timeout(12000),
+  });
+
+  const token = response.headers.get('Cart-Token') || init.token || '';
+  const nonce = response.headers.get('Nonce') || response.headers.get('nonce') || init.nonce || '';
+  let data: any = null;
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  return { data, token, nonce, ok: response.ok, status: response.status };
+}
+
+/**
+ * Ask WooCommerce itself what shipping costs for these products + country.
+ * This matches checkout in WooCommerce, including shipping classes
+ * (briefpost vs pakket).
+ */
+export async function quoteWooCommerceShipping(
+  items: ShippingQuoteItem[],
+  country: string,
+  address?: { postcode?: string; city?: string }
+): Promise<number | null> {
+  const usable = items.filter((item) => Number(item.id) > 0 && Number(item.quantity) > 0);
+  if (usable.length === 0) return null;
+
+  const countryUpper = country.toUpperCase();
+  const fallback = STORE_DEFAULT_ADDRESS[countryUpper] || STORE_DEFAULT_ADDRESS.NL;
+  const postcode = (address?.postcode || '').trim() || fallback.postcode;
+  const city = (address?.city || '').trim() || fallback.city;
+
+  try {
+    let session = await storeFetch('/wp-json/wc/store/v1/cart');
+    if (!session.ok) {
+      console.error('Woo Store cart failed:', session.status);
+      return null;
+    }
+
+    for (const item of usable) {
+      session = await storeFetch('/wp-json/wc/store/v1/cart/add-item', {
+        method: 'POST',
+        token: session.token,
+        nonce: session.nonce,
+        body: JSON.stringify({ id: item.id, quantity: item.quantity }),
+      });
+      if (!session.ok) {
+        console.error('Woo Store add-item failed:', session.status, session.data);
+        return null;
+      }
+    }
+
+    session = await storeFetch('/wp-json/wc/store/v1/cart/update-customer', {
+      method: 'POST',
+      token: session.token,
+      nonce: session.nonce,
+      body: JSON.stringify({
+        shipping_address: {
+          first_name: 'Bikerfun',
+          last_name: 'Quote',
+          address_1: 'Dorpsstraat 1',
+          city,
+          postcode,
+          country: countryUpper,
+        },
+      }),
+    });
+
+    if (!session.ok || !session.data?.totals) {
+      console.error('Woo Store update-customer failed:', session.status, session.data);
+      return null;
+    }
+
+    const minor = Number(session.data.totals.currency_minor_unit ?? 2);
+    const selected = session.data.shipping_rates
+      ?.flatMap((pkg: any) => pkg.shipping_rates || [])
+      ?.find((rate: any) => rate.selected);
+
+    if (selected) {
+      return moneyFromStore(selected.price, minor) + moneyFromStore(selected.taxes, minor);
+    }
+
+    if (session.data.totals.total_shipping != null) {
+      return (
+        moneyFromStore(session.data.totals.total_shipping, minor) +
+        moneyFromStore(session.data.totals.total_shipping_tax, minor)
+      );
+    }
+
+    return 0;
+  } catch (error) {
+    console.error('Woo Store shipping quote failed:', error);
+    return null;
+  }
+}
+
 function wcAuthHeader(): string | null {
   const key = process.env.WOOCOMMERCE_CONSUMER_KEY;
   const secret = process.env.WOOCOMMERCE_CONSUMER_SECRET;
@@ -76,7 +210,7 @@ function flattenZone(zone: ShippingZone): Omit<ShippingRate, 'id' | 'synced_at' 
     countries: zone.countries.length > 0 ? zone.countries : countriesFromZoneName(zone.name),
     flat_rate: flat?.cost ?? null,
     free_min: free?.minAmount ?? null,
-    always_free: alwaysFree || Boolean(free && !flat),
+    always_free: alwaysFree,
     method_title: flat?.title || free?.title || null,
   };
 }
@@ -96,7 +230,7 @@ function costFromRate(rate: ShippingRate, subtotal: number, country: string): nu
   if (rate.always_free) return 0;
   if (rate.free_min !== null && subtotal >= Number(rate.free_min)) return 0;
   if (rate.flat_rate !== null) return Number(rate.flat_rate);
-  return getFallbackShippingCost(subtotal, country);
+  return 0;
 }
 
 export async function getShippingZones(): Promise<ShippingZone[]> {
@@ -228,9 +362,17 @@ async function getEffectiveRates(): Promise<ShippingRate[]> {
 
 export async function calculateShipping(
   subtotal: number,
-  country: string = 'NL'
+  country: string = 'NL',
+  items?: ShippingQuoteItem[],
+  address?: { postcode?: string; city?: string }
 ): Promise<number> {
   const countryUpper = country.toUpperCase();
+
+  if (items && items.length > 0) {
+    const quoted = await quoteWooCommerceShipping(items, countryUpper, address);
+    if (quoted !== null) return quoted;
+    console.warn('⚠️  WooCommerce quote failed, trying synced zone rates');
+  }
 
   try {
     const rates = await getEffectiveRates();
@@ -238,26 +380,12 @@ export async function calculateShipping(
     if (rate) {
       return costFromRate(rate, subtotal, countryUpper);
     }
-    console.warn('⚠️  No matching shipping rate, using fallback');
-    return getFallbackShippingCost(subtotal, countryUpper);
+    console.warn('⚠️  No matching shipping rate');
+    return 0;
   } catch (error) {
     console.error('❌ Error calculating shipping:', error);
-    return getFallbackShippingCost(subtotal, countryUpper);
-  }
-}
-
-function getFallbackShippingCost(subtotal: number, country: string): number {
-  const countryUpper = country.toUpperCase();
-
-  if (countryUpper === 'NL') {
     return 0;
   }
-
-  if (countryUpper === 'BE' || countryUpper === 'DE') {
-    return subtotal >= 60 ? 0 : 4.95;
-  }
-
-  return 9.95;
 }
 
 export async function getDefaultShippingCost(): Promise<{
@@ -279,9 +407,9 @@ export async function getCountryShippingInfo(country: string): Promise<CountrySh
   if (!rate) {
     return {
       country: code,
-      cost: getFallbackShippingCost(0, code),
-      freeMin: code === 'NL' ? null : code === 'BE' || code === 'DE' ? 60 : null,
-      alwaysFree: code === 'NL',
+      cost: 0,
+      freeMin: null,
+      alwaysFree: false,
       zoneName: null,
     };
   }
