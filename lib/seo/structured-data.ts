@@ -74,7 +74,7 @@ export function getLocalBusinessSchema() {
     sameAs:      [TIKTOK_URL, GOOGLE_MAPS_URL],
     aggregateRating: {
       '@type':       'AggregateRating',
-      ratingValue:   '5',
+      ratingValue:   '4.8',
       reviewCount:   '6',
       bestRating:    '5',
       worstRating:   '1',

@@ -37,6 +37,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/omkeuren" className="hover:text-biker-yellow transition-colors">
+                  Omkeuren
+                </Link>
+              </li>
+              <li>
                 <Link href="/motor-op-aanvraag" className="hover:text-biker-yellow transition-colors">
                   Motor Op Aanvraag
                 </Link>

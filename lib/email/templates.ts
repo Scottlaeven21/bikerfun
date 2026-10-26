@@ -378,6 +378,86 @@ export function adminOrderPaidEmail(payload: {
   };
 }
 
+export function omkeurenEmail({
+  name,
+  email,
+  phone,
+  company,
+  isDealer,
+  brand,
+  model,
+  generation,
+  licensePlate,
+  typeApproval,
+  year,
+  vin,
+  message,
+}: {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  isDealer: boolean;
+  brand: string;
+  model: string;
+  generation?: string;
+  licensePlate?: string;
+  typeApproval?: string;
+  year: string;
+  vin?: string;
+  message?: string;
+}): { subject: string; html: string } {
+  const row = (label: string, value?: string) =>
+    value
+      ? `<tr>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee;">
+            <strong style="color: #666; font-size: 14px;">${label}:</strong>
+          </td>
+          <td style="padding: 10px 0; border-bottom: 1px solid #eee; text-align: right;">
+            <span style="color: ${BIKER_BLACK}; font-size: 14px;">${escapeHtml(value)}</span>
+          </td>
+        </tr>`
+      : '';
+
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      ${isDealer ? 'Nieuwe dealer-aanmelding omkeuren' : 'Nieuwe omkeur-aanvraag'}
+    </h2>
+    <div style="background-color: ${BIKER_YELLOW}; padding: 3px; margin-bottom: 30px;"></div>
+    <table role="presentation" style="width: 100%; border-collapse: collapse;">
+      ${row('Type', isDealer ? 'Dealer / motorzaak' : 'Particulier')}
+      ${row('Naam', name)}
+      ${row('Bedrijf', company)}
+      ${row('Email', email)}
+      ${row('Telefoon', phone)}
+      ${row('Merk', brand)}
+      ${row('Model', model)}
+      ${row('Generatie', generation)}
+      ${row('Kenteken', licensePlate)}
+      ${row('Typegoedkeuring', typeApproval)}
+      ${row('Bouwjaar', year)}
+      ${row('Framenummer', vin)}
+    </table>
+    ${
+      message
+        ? `<div style="margin-top: 30px;">
+            <h3 style="margin: 0 0 15px; color: ${BIKER_BLACK}; font-size: 18px;">Bericht:</h3>
+            <div style="background-color: #f9f9f9; padding: 20px; border-left: 3px solid ${BIKER_YELLOW}; border-radius: 4px;">
+              <p style="margin: 0; color: #333; font-size: 14px; line-height: 1.6; white-space: pre-wrap;">${escapeHtml(message)}</p>
+            </div>
+          </div>`
+        : ''
+    }
+  `;
+
+  return {
+    subject: isDealer
+      ? `Dealer-aanmelding omkeuren van ${name}`
+      : `Omkeur-aanvraag: ${brand} ${model} van ${name}`,
+    html: emailLayout(content),
+  };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')

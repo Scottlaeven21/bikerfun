@@ -106,11 +106,11 @@ export default async function HomePage() {
                   BEKIJK AANBOD
                 </Link>
                 <Link
-                  href="/contact"
+                  href="/omkeuren"
                   style={{ fontFamily: 'var(--font-montserrat)' }}
                   className="btn-secondary bg-transparent text-white px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300 border-2 border-white"
                 >
-                  CONTACT
+                  OMKEUREN
                 </Link>
               </div>
             </div>
@@ -381,7 +381,7 @@ export default async function HomePage() {
                   </svg>
                 ))}
               </div>
-              <span className="text-biker-light font-bold">5.0 uit 5 sterren</span>
+              <span className="text-biker-light font-bold">4.8 uit 5 sterren</span>
             </div>
           </div>
 

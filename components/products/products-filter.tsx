@@ -275,7 +275,6 @@ export function ProductsFilter({
         </div>
       ) : (
         <div className="text-center py-16">
-          <div className="text-6xl mb-4">🔍</div>
           <h3 className="text-2xl font-bold text-biker-black mb-2">Geen producten gevonden</h3>
           <p className="text-gray-600 mb-6">
             Probeer je zoekopdracht of filters aan te passen

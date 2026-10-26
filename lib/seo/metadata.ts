@@ -275,3 +275,34 @@ export function getAanvraagMetadata(): Metadata {
     },
   };
 }
+
+// ── Omkeuren ──────────────────────────────────────────────────────────────────
+export function getOmkeurenMetadata(): Metadata {
+  const desc =
+    'Laat je motor omkeuren naar A2 / 35kW bij Bikerfun in Susteren. Wij regelen het papierwerk. Bel of stuur een bericht voor een afspraak.';
+  return {
+    ...getBaseMetadata(),
+    title: 'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+    description: desc,
+    keywords: [
+      'motor omkeuren', 'A2 omkeuren', '35kW omkeuren', 'motor omkeuren Limburg',
+      'motor omkeuren Susteren', 'bikerfun omkeuren',
+    ],
+    alternates: { canonical: `${baseUrl}/omkeuren` },
+    openGraph: {
+      title:       'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+      description: desc,
+      url:         `${baseUrl}/omkeuren`,
+      siteName,
+      images: [{ url: `${baseUrl}/og-image.jpg`, width: 1200, height: 630, alt: 'Motor Omkeuren – Bikerfun' }],
+      locale: 'nl_NL',
+      type:   'website',
+    },
+    twitter: {
+      card:        'summary_large_image',
+      title:       'Motor Omkeuren | A2 / 35kW | Bikerfun Susteren',
+      description: desc,
+      images:      [`${baseUrl}/og-image.jpg`],
+    },
+  };
+}

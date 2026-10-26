@@ -22,6 +22,12 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                         pathname?.startsWith('/checkout') ||
                         pathname?.startsWith('/account');
 
+  const navPillClass = `btn-secondary bg-transparent px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-3.5 rounded-full font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider transition-all duration-300 border-2 whitespace-nowrap ${
+    showShopIcons
+      ? 'text-biker-black border-biker-black md:text-white md:border-white'
+      : 'text-white border-white'
+  }`;
+
   return (
     <>
       <nav className={`absolute top-0 left-0 right-0 z-50 ${
@@ -45,19 +51,17 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
           </Link>
 
             {/* Desktop Navigation - Rechts */}
-            <div className="flex items-center justify-end gap-1 sm:gap-2 md:space-x-3 shrink-0">
-              {/* Cart & Account Icons - Only on Webshop Pages */}
+            <div className="flex items-center justify-end gap-1 sm:gap-1.5 md:gap-3 shrink-0">
+              {/* Cart & Account Icons - Only on webshop pages, desktop only (4 nav pills need the space) */}
               {showShopIcons && (
                 <>
-                  {/* Cart Dropdown */}
-                  <div className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
+                  <div className="hidden md:block bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300">
                     <CartDropdown />
                   </div>
 
-                  {/* Account Icon */}
                   <Link
                     href={user ? "/account" : "/login?redirect=/account"}
-                    className="bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-2.5 sm:p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
+                    className="hidden md:inline-flex bg-gray-200 md:bg-biker-dark/50 md:backdrop-blur-sm text-biker-black md:text-white p-2.5 sm:p-3 rounded-full hover:bg-biker-yellow hover:text-biker-black transition-all duration-300"
                     title={user ? "Mijn Account" : "Inloggen"}
                   >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2}>
@@ -67,23 +71,22 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                 </>
               )}
 
-              {/* Aanbod Button - Hidden on mobile when shop icons are shown */}
-              <Link
-                href="/occasions"
-                className={`btn-secondary bg-transparent text-white px-6 md:px-8 py-3.5 rounded-full font-bold text-sm uppercase tracking-wider transition-all duration-300 border-2 border-white ${
-                  showShopIcons ? 'hidden md:inline-block' : ''
-                }`}
-              >
+              <Link href="/occasions" className={navPillClass}>
                 AANBOD
               </Link>
+              <Link href="/omkeuren" className={navPillClass}>
+                OMKEUREN
+              </Link>
+              <Link href="/products" className={navPillClass}>
+                WEBSHOP
+              </Link>
 
-              {/* Menu Button */}
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-3.5 sm:px-6 md:px-8 py-2.5 sm:py-3.5 rounded-full font-bold text-xs sm:text-sm uppercase tracking-wider flex items-center gap-1.5 sm:space-x-2 transition-all duration-300"
+                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-2 sm:px-4 md:px-8 py-2 sm:py-3 md:py-3.5 rounded-full font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 transition-all duration-300"
               >
                 <span>MENU</span>
-                <svg className="w-4 h-4 shrink-0 transition-transform group-hover:rotate-180 duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>
@@ -152,6 +155,13 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
             onClick={() => setMenuOpen(false)}
           >
             Webshop
+          </Link>
+          <Link
+            href="/omkeuren"
+            className="py-2.5 sm:py-3 text-2xl sm:text-4xl font-bold hover:text-biker-yellow transition-colors uppercase tracking-tight break-words"
+            onClick={() => setMenuOpen(false)}
+          >
+            Omkeuren
           </Link>
           <Link
             href="/motor-op-aanvraag"

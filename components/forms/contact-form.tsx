@@ -6,7 +6,7 @@ import { sendContactEmail } from '@/app/actions/email';
 import { LoadingButton } from '@/components/loading/spinner';
 import { trackEvent } from '@/app/actions/analytics';
 
-export function ContactForm() {
+export function ContactForm({ defaultSubject }: { defaultSubject?: string } = {}) {
   const [isPending, startTransition] = useTransition();
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -114,10 +114,12 @@ export function ContactForm() {
             name="subject"
             required
             disabled={isPending}
+            defaultValue={defaultSubject ?? ''}
             className="w-full px-4 py-3 bg-biker-black text-white border-2 border-biker-gray rounded-lg focus:border-biker-yellow focus:outline-none transition-colors disabled:opacity-50"
           >
             <option value="">Selecteer een onderwerp</option>
             <option value="Vraag over een occasion">Vraag over een occasion</option>
+            <option value="Omkeuren">Omkeuren</option>
             <option value="Motor op aanvraag">Motor op aanvraag</option>
             <option value="Motorkleding & accessoires">Motorkleding & accessoires</option>
             <option value="Service & onderhoud">Service & onderhoud</option>

@@ -15,6 +15,7 @@ import {
   contactFormEmail,
   motorAanvraagEmail,
   contactAutoReplyEmail,
+  omkeurenEmail,
 } from '@/lib/email/templates';
 
 async function saveFormSubmission(data: {
@@ -345,6 +346,94 @@ export async function submitMotorAanvraagForm(formData: {
     };
   } catch (error) {
     console.error('Motor aanvraag form error:', error);
+    return { success: false, error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 15 45 21 08' };
+  }
+}
+
+export async function submitOmkeurenForm(formData: {
+  name: string;
+  email: string;
+  phone?: string;
+  company?: string;
+  isDealer: boolean;
+  brand: string;
+  model: string;
+  generation?: string;
+  licensePlate?: string;
+  typeApproval?: string;
+  year: string;
+  vin?: string;
+  message?: string;
+}) {
+  try {
+    if (!formData.name || !formData.email || !formData.brand || !formData.model || !formData.year) {
+      return { success: false, error: 'Vul alle verplichte velden in.' };
+    }
+
+    if (formData.isDealer && !formData.company) {
+      return { success: false, error: 'Vul je bedrijfsnaam in.' };
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      return { success: false, error: 'Voer een geldig e-mailadres in.' };
+    }
+
+    const messageParts = [
+      formData.isDealer ? 'Type: Dealer / motorzaak' : 'Type: Particulier',
+      formData.company && `Bedrijf: ${formData.company}`,
+      `Motor: ${formData.brand} ${formData.model}`,
+      formData.generation && `Generatie: ${formData.generation}`,
+      formData.licensePlate && `Kenteken: ${formData.licensePlate}`,
+      formData.typeApproval && `Typegoedkeuring: ${formData.typeApproval}`,
+      `Bouwjaar: ${formData.year}`,
+      formData.vin && `Framenummer: ${formData.vin}`,
+      formData.message && `\nBericht:\n${formData.message}`,
+    ].filter(Boolean);
+
+    await saveFormSubmission({
+      type: 'contact',
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      subject: formData.isDealer ? 'Dealer omkeuren' : 'Omkeuren',
+      message: messageParts.join('\n'),
+      motor_details: {
+        brand: formData.brand,
+        model: formData.model,
+        generation: formData.generation,
+        licensePlate: formData.licensePlate,
+        typeApproval: formData.typeApproval,
+        year: formData.year,
+        vin: formData.vin,
+        company: formData.company,
+        isDealer: formData.isDealer,
+      },
+    });
+
+    if (isEmailConfigured()) {
+      const emailContent = omkeurenEmail(formData);
+      await sendEmail({
+        to: getToEmail(),
+        subject: emailContent.subject,
+        html: emailContent.html,
+      });
+      if (isMotorFormsAutoreplyEnabled()) {
+        try {
+          const autoReply = contactAutoReplyEmail(formData.name);
+          await sendEmail({ to: formData.email, subject: autoReply.subject, html: autoReply.html });
+        } catch {
+          // Non-critical
+        }
+      }
+    }
+
+    return {
+      success: true,
+      message: 'Aanvraag ontvangen! We nemen zo snel mogelijk contact met je op.',
+    };
+  } catch (error) {
+    console.error('Omkeuren form error:', error);
     return { success: false, error: 'Er is een onverwachte fout opgetreden. Bel ons direct: 06 15 45 21 08' };
   }
 }
