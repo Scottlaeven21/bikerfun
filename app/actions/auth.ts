@@ -73,7 +73,7 @@ export async function login(prevState: any, formData: FormData) {
     if (shouldSkipAdmin2fa()) {
       await setAdmin2faCookie(data.user.id);
     } else {
-      await issueAdmin2faCode(data.user.id, email, true);
+      await issueAdmin2faCode(data.user.id, data.user.email || email, true);
       revalidatePath('/', 'layout');
       const next = redirectTo.startsWith('/') ? redirectTo : '/admin';
       redirect(`/login/verify?redirect=${encodeURIComponent(next)}`);

@@ -39,13 +39,17 @@ export async function sendAdmin2fa(force = false) {
   }
 
   const result = await issueAdmin2faCode(user.id, email, force);
-  if (result.error && !result.skipped) {
-    return { success: false, error: 'We konden de code niet mailen. Probeer opnieuw.' };
-  }
   if (result.cooldown) {
     return { success: false, error: 'Even wachten: je kunt over een minuut een nieuwe code vragen.' };
   }
-  return { success: true, skipped: result.skipped };
+  if (result.error) {
+    return { success: false, error: 'We konden de code niet mailen. Probeer opnieuw.' };
+  }
+  return {
+    success: true,
+    skipped: result.skipped,
+    recipients: result.recipients,
+  };
 }
 
 export async function verifyAdmin2fa(prevState: { error?: string } | null, formData: FormData) {

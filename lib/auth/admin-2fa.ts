@@ -68,30 +68,49 @@ export function shouldSkipAdmin2fa() {
   return process.env.NODE_ENV !== 'production' && !isEmailConfigured();
 }
 
-export async function issueAdmin2faCode(userId: string, email: string, force = false) {
+/** Account-mail + shop-inbox, zodat de code niet alleen op een Gmail belandt. */
+export function getAdmin2faRecipients(accountEmail: string): string[] {
+  const map = new Map<string, string>();
+  const add = (value?: string) => {
+    const email = (value || '').trim();
+    if (!email.includes('@')) return;
+    const key = email.toLowerCase();
+    if (!map.has(key)) map.set(key, email);
+  };
+  add(accountEmail);
+  add(process.env.ADMIN_2FA_EMAIL);
+  add(process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl');
+  return [...map.values()];
+}
+
+export async function issueAdmin2faCode(userId: string, accountEmail: string, force = false) {
+  const recipients = getAdmin2faRecipients(accountEmail);
+
   if (shouldSkipAdmin2fa()) {
-    return { sent: false, skipped: true as const };
+    return { sent: false, skipped: true as const, recipients };
   }
 
   const supabase = createAdminClient();
   const now = new Date();
 
-  if (!force) {
-    const { data: existing } = await (supabase as any)
-      .from('admin_2fa_codes')
-      .select('id, created_at, expires_at')
-      .eq('user_id', userId)
-      .is('consumed_at', null)
-      .gt('expires_at', now.toISOString())
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .maybeSingle();
+  const { data: existing } = await (supabase as any)
+    .from('admin_2fa_codes')
+    .select('id, created_at, expires_at')
+    .eq('user_id', userId)
+    .is('consumed_at', null)
+    .gt('expires_at', now.toISOString())
+    .order('created_at', { ascending: false })
+    .limit(1)
+    .maybeSingle();
 
-    if (existing) {
-      const ageMs = Date.now() - new Date(existing.created_at).getTime();
-      if (ageMs < 60_000) {
-        return { sent: false, skipped: false as const, cooldown: true as const };
-      }
+  if (existing && !force) {
+    return { sent: false, already: true as const, skipped: false as const, recipients };
+  }
+
+  if (existing && force) {
+    const ageMs = Date.now() - new Date(existing.created_at).getTime();
+    if (ageMs < 60_000) {
+      return { sent: false, cooldown: true as const, skipped: false as const, recipients };
     }
   }
 
@@ -110,21 +129,22 @@ export async function issueAdmin2faCode(userId: string, email: string, force = f
 
   if (error) {
     console.error('Admin 2FA insert failed:', error.message);
-    return { sent: false, skipped: true as const, error: error.message };
+    return { sent: false, skipped: false as const, recipients, error: error.message };
   }
 
   const mail = admin2faEmail(code);
+  console.log('Admin 2FA mail naar:', recipients.join(', '));
   const result = await sendEmail({
-    to: email,
+    to: recipients,
     subject: mail.subject,
     html: mail.html,
   });
 
   if (!result.success) {
-    return { sent: false, skipped: false as const, error: result.error };
+    return { sent: false, skipped: false as const, recipients, error: result.error };
   }
 
-  return { sent: true, skipped: false as const };
+  return { sent: true, skipped: false as const, recipients };
 }
 
 export async function consumeAdmin2faCode(userId: string, code: string) {

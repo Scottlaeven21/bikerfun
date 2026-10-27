@@ -17,7 +17,7 @@ function SubmitButton() {
   );
 }
 
-export function Admin2faForm({ redirectTo, email }: { redirectTo: string; email: string }) {
+export function Admin2faForm({ redirectTo, emails }: { redirectTo: string; emails: string[] }) {
   const [state, formAction] = useFormState(verifyAdmin2fa, null);
   const [resend, setResend] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
@@ -46,7 +46,9 @@ export function Admin2faForm({ redirectTo, email }: { redirectTo: string; email:
       <input type="hidden" name="redirect" value={redirectTo} />
 
       <p className="text-sm text-gray-600">
-        We hebben een code gestuurd naar <strong>{email}</strong>.
+        We hebben een code gestuurd naar{' '}
+        <strong>{emails.filter(Boolean).join(' en ') || 'je admin-mailbox'}</strong>.
+        Check ook spam.
       </p>
 
       <div>

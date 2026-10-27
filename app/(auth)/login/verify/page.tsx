@@ -44,7 +44,8 @@ export default async function Admin2faPage({
     redirect(redirectTo);
   }
 
-  await issueAdmin2faCode(user.id, user.email || (profile as { email?: string } | null)?.email || '');
+  const accountEmail = user.email || (profile as { email?: string } | null)?.email || '';
+  const issued = await issueAdmin2faCode(user.id, accountEmail);
 
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 shadow-2xl">
@@ -57,9 +58,14 @@ export default async function Admin2faPage({
         </h1>
         <p className="text-gray-600 text-lg">Admin-login bevestigen via e-mail</p>
       </div>
+      {issued.error && (
+        <div className="mb-4 bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
+          De code kon niet worden verstuurd. Controleer SMTP of vraag een nieuwe code aan.
+        </div>
+      )}
       <Admin2faForm
         redirectTo={redirectTo}
-        email={user.email || (profile as { email?: string } | null)?.email || ''}
+        emails={issued.recipients?.length ? issued.recipients : [accountEmail]}
       />
     </div>
   );
