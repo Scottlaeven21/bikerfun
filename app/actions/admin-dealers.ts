@@ -5,12 +5,7 @@ import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { notifyApplicationStatus } from '@/lib/dealer/notify';
-import {
-  canSubmitToRdw,
-  isApplicationStatus,
-  nextSignedFormStatus,
-  type SignedFormStatus,
-} from '@/lib/dealer/status';
+import { isApplicationStatus } from '@/lib/dealer/status';
 import type { Dealer, DealerApplication } from '@/lib/dealer/types';
 
 async function requireAdmin() {
@@ -104,11 +99,7 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
   if (gate.error) return { error: gate.error };
 
   const status = String(formData.get('status') || '');
-  const signedForm = String(formData.get('signed_form_status') || '') as SignedFormStatus;
   if (!isApplicationStatus(status)) return { error: 'Ongeldige status.' };
-  if (!['none', 'waiting', 'received'].includes(signedForm)) {
-    return { error: 'Ongeldige formulierstatus.' };
-  }
 
   const admin = createAdminClient();
   const { data: existing } = await (admin as any)
@@ -119,19 +110,10 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
 
   if (!existing) return { error: 'Aanvraag niet gevonden.' };
 
-  let nextForm = signedForm;
-  if (existing.form_path) nextForm = 'received';
-  else if (status !== 'received' && nextForm === 'none') nextForm = nextSignedFormStatus(nextForm, status);
-
-  if ((status === 'rdw_submitted' || status === 'completed') && !canSubmitToRdw(nextForm)) {
-    return { error: 'Eerst het ondertekende formulier nodig voordat we bij de RDW indienen of afronden.' };
-  }
-
   const { data: updated, error } = await (admin as any)
     .from('dealer_applications')
     .update({
       status,
-      signed_form_status: nextForm,
       updated_at: new Date().toISOString(),
     })
     .eq('id', applicationId)
@@ -142,7 +124,7 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
 
   const dealer = existing.dealers as Dealer | null;
   if (dealer) {
-    await notifyApplicationStatus(dealer, updated as DealerApplication, status, nextForm);
+    await notifyApplicationStatus(dealer, updated as DealerApplication, status);
   }
 
   revalidatePath('/admin/omkeuren');
@@ -303,32 +285,3 @@ export async function createDealerFromAdmin(formData: FormData) {
   };
 }
 
-export async function uploadDealerFormTemplate(formData: FormData) {
-  const gate = await requireAdmin();
-  if (gate.error) return { error: gate.error };
-
-  const file = formData.get('template_file');
-  if (!(file instanceof File) || file.size === 0) {
-    return { error: 'Kies een PDF.' };
-  }
-  if (file.type !== 'application/pdf') {
-    return { error: 'Het sjabloon moet een PDF zijn.' };
-  }
-
-  const admin = createAdminClient();
-  const path = `templates/omkeur-formulier.pdf`;
-  const buffer = Buffer.from(await file.arrayBuffer());
-  const { error } = await admin.storage.from('dealer-documents').upload(path, buffer, {
-    contentType: 'application/pdf',
-    upsert: true,
-  });
-  if (error) return { error: 'Upload mislukt.' };
-
-  await (admin as any)
-    .from('dealer_portal_settings')
-    .upsert({ id: 1, form_path: path, updated_at: new Date().toISOString() });
-
-  revalidatePath('/admin/omkeuren');
-  revalidatePath('/dealer/formulier');
-  return { success: true };
-}

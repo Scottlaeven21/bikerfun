@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate } from '@/lib/utils/format';
-import { ApplicationStatusBadge, SignedFormBadge } from '@/components/dealer/status-badge';
+import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Dealerportaal - Bikerfun', robots: { index: false, follow: false } };
@@ -24,7 +24,7 @@ export default async function DealerHomePage() {
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Openstaande omkeuringen</h1>
-          <p className="text-gray-600 mt-1">Meld een motor aan, upload het formulier en volg de status.</p>
+          <p className="text-gray-600 mt-1">Meld een motor aan en volg de status.</p>
         </div>
         <Link
           href="/dealer/aanvragen/nieuw"
@@ -56,10 +56,7 @@ export default async function DealerHomePage() {
                     {[app.brand, app.model].filter(Boolean).join(' ') || 'Motor'} · {formatDate(app.created_at)}
                   </p>
                 </div>
-                <div className="flex flex-wrap gap-2">
-                  <ApplicationStatusBadge status={app.status} />
-                  <SignedFormBadge status={app.signed_form_status} />
-                </div>
+                <ApplicationStatusBadge status={app.status} />
               </div>
             </Link>
           ))}

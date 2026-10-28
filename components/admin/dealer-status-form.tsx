@@ -2,22 +2,14 @@
 
 import { useState } from 'react';
 import { setApplicationWorkflow } from '@/app/actions/admin-dealers';
-import {
-  APPLICATION_STATUSES,
-  APPLICATION_STATUS_LABELS,
-  SIGNED_FORM_LABELS,
-  type ApplicationStatus,
-  type SignedFormStatus,
-} from '@/lib/dealer/status';
+import { APPLICATION_STATUSES, APPLICATION_STATUS_LABELS, type ApplicationStatus } from '@/lib/dealer/status';
 
 export function DealerStatusForm({
   applicationId,
   status,
-  signedFormStatus,
 }: {
   applicationId: string;
   status: ApplicationStatus;
-  signedFormStatus: SignedFormStatus;
 }) {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -34,7 +26,7 @@ export function DealerStatusForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <label className="block">
-        <span className="block text-sm font-semibold mb-2">Hoofdstatus</span>
+        <span className="block text-sm font-semibold mb-2">Status</span>
         <select
           name="status"
           defaultValue={status}
@@ -47,23 +39,6 @@ export function DealerStatusForm({
           ))}
         </select>
       </label>
-      <label className="block">
-        <span className="block text-sm font-semibold mb-2">Ondertekend formulier (kan parallel lopen)</span>
-        <select
-          name="signed_form_status"
-          defaultValue={signedFormStatus}
-          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg bg-white"
-        >
-          {(Object.keys(SIGNED_FORM_LABELS) as SignedFormStatus[]).map((value) => (
-            <option key={value} value={value}>
-              {SIGNED_FORM_LABELS[value]}
-            </option>
-          ))}
-        </select>
-      </label>
-      <p className="text-xs text-gray-500">
-        “Ingediend bij RDW” en “Omgekeurd” kan alleen als het formulier binnen is.
-      </p>
       <button
         type="submit"
         disabled={loading}

@@ -11,8 +11,24 @@ import {
 } from '@/lib/auth/admin-2fa';
 import { passwordChangePath } from '@/lib/auth/must-change-password';
 
-function loginTarget(redirectTo: string) {
-  const path = redirectTo || '/';
+function portalHome(isAdmin: boolean, isDealer: boolean) {
+  if (isAdmin) return '/admin';
+  if (isDealer) return '/dealer';
+  return '/account';
+}
+
+function resolveLoginRedirect(redirectTo: string, isAdmin: boolean, isDealer: boolean) {
+  const home = portalHome(isAdmin, isDealer);
+  const requested = redirectTo.startsWith('/') ? redirectTo : '/';
+  if (isAdmin && requested.startsWith('/admin')) return requested;
+  if (!isAdmin && isDealer && requested.startsWith('/dealer')) return requested;
+  if (!isAdmin && !isDealer && (requested.startsWith('/account') || requested.startsWith('/dashboard'))) {
+    return requested;
+  }
+  return home;
+}
+
+function loginTarget(path: string) {
   if (path.startsWith('/admin')) return 'admin';
   if (path.startsWith('/dealer')) return 'dealer';
   if (path.startsWith('/account') || path.startsWith('/dashboard')) return 'webshop_account';
@@ -22,8 +38,7 @@ function loginTarget(redirectTo: string) {
 export async function login(prevState: any, formData: FormData) {
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
-  const redirectTo = formData.get('redirect') as string || '/';
-  const target = loginTarget(redirectTo);
+  const redirectTo = (formData.get('redirect') as string) || '/';
 
   const supabase = await createClient();
 
@@ -38,7 +53,7 @@ export async function login(prevState: any, formData: FormData) {
       userEmail: email,
       action: 'login',
       resourceType: 'user',
-      details: { success: false, error: error.message, redirect: redirectTo, target },
+      details: { success: false, error: error.message, redirect: redirectTo, target: loginTarget(redirectTo) },
     });
     
     // Translate common Supabase errors to Dutch
@@ -66,24 +81,18 @@ export async function login(prevState: any, formData: FormData) {
     mustChangePassword = Boolean((profile as { must_change_password?: boolean } | null)?.must_change_password);
   }
 
+  const next = resolveLoginRedirect(redirectTo, isAdmin, isDealer);
+
   await logAuditEvent({
     userId: data.user?.id,
     userEmail: email,
     action: 'login',
     resourceType: 'user',
-    details: { success: true, redirect: redirectTo, target, is_admin: isAdmin, is_dealer: isDealer, step: 'password' },
+    details: { success: true, redirect: next, target: loginTarget(next), is_admin: isAdmin, is_dealer: isDealer, step: 'password' },
   });
 
   if (mustChangePassword && data.user?.id) {
     revalidatePath('/', 'layout');
-    const next =
-      isAdmin && (!redirectTo || redirectTo === '/')
-        ? '/admin'
-        : !isAdmin && isDealer && (!redirectTo || redirectTo === '/')
-          ? '/dealer'
-          : redirectTo.startsWith('/')
-            ? redirectTo
-            : '/';
     redirect(passwordChangePath(next));
   }
 
@@ -92,16 +101,12 @@ export async function login(prevState: any, formData: FormData) {
       await setAdmin2faCookie(data.user.id);
     } else {
       revalidatePath('/', 'layout');
-      const next = redirectTo.startsWith('/') ? redirectTo : '/admin';
       redirect(`/login/verify?redirect=${encodeURIComponent(next)}`);
     }
   }
 
   revalidatePath('/', 'layout');
-  if (!isAdmin && isDealer && (!redirectTo || redirectTo === '/')) {
-    redirect('/dealer');
-  }
-  redirect(redirectTo);
+  redirect(next);
 }
 
 export async function signup(prevState: any, formData: FormData) {
@@ -224,9 +229,15 @@ export async function changeForcedPassword(prevState: { error?: string } | null,
     .select('is_admin, is_dealer')
     .maybeSingle();
 
+  const destination = resolveLoginRedirect(
+    next,
+    Boolean(profile?.is_admin),
+    Boolean(profile?.is_dealer)
+  );
+
   revalidatePath('/', 'layout');
   if (profile?.is_admin) {
-    redirect(`/login/verify?redirect=${encodeURIComponent(next.startsWith('/admin') ? next : '/admin')}`);
+    redirect(`/login/verify?redirect=${encodeURIComponent(destination)}`);
   }
-  redirect(next);
+  redirect(destination);
 }

@@ -6,9 +6,7 @@ import {
 import {
   APPLICATION_STATUS_HINTS,
   APPLICATION_STATUS_LABELS,
-  SIGNED_FORM_LABELS,
   type ApplicationStatus,
-  type SignedFormStatus,
 } from './status';
 import type { Dealer, DealerApplication } from './types';
 import { dealerPortalUrl } from './auth';
@@ -50,7 +48,6 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
     licensePlate: application.license_plate,
     statusLabel: APPLICATION_STATUS_LABELS.received,
     statusHint: APPLICATION_STATUS_HINTS.received,
-    formLabel: SIGNED_FORM_LABELS[application.signed_form_status],
     portalUrl: dealerPortalUrl(),
   });
   await sendEmail({ to, subject: mail.subject, html: mail.html });
@@ -59,8 +56,7 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
 export async function notifyApplicationStatus(
   dealer: Dealer,
   application: DealerApplication,
-  status: ApplicationStatus,
-  signedFormStatus: SignedFormStatus
+  status: ApplicationStatus
 ) {
   if (!isEmailConfigured()) return;
   const to = recipients(dealer, application);
@@ -72,7 +68,6 @@ export async function notifyApplicationStatus(
     licensePlate: application.license_plate,
     statusLabel: APPLICATION_STATUS_LABELS[status],
     statusHint: APPLICATION_STATUS_HINTS[status],
-    formLabel: SIGNED_FORM_LABELS[signedFormStatus],
     portalUrl: dealerPortalUrl(),
   });
   await sendEmail({ to, subject: mail.subject, html: mail.html });

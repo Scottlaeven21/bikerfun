@@ -1,8 +1,7 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
-import { ApplicationStatusBadge, SignedFormBadge } from '@/components/dealer/status-badge';
-import { DealerTemplateUpload } from '@/components/admin/dealer-template-upload';
+import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuren | Admin' };
@@ -37,11 +36,6 @@ export default async function AdminOmkeurenPage({
         </div>
       )}
 
-      <div className="bg-white rounded-lg shadow-md p-5 mb-6">
-        <h2 className="font-bold mb-2">Formulier voor dealers</h2>
-        <DealerTemplateUpload />
-      </div>
-
       <div className="flex gap-2 mb-4">
         <FilterLink href="/admin/omkeuren" active={!filter} label="Alles" />
         <FilterLink href="/admin/omkeuren?filter=open" active={filter === 'open'} label="Openstaand" />
@@ -55,7 +49,6 @@ export default async function AdminOmkeurenPage({
               <th className="px-4 py-3">Kenteken</th>
               <th className="px-4 py-3">Dealer</th>
               <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Formulier</th>
               <th className="px-4 py-3">Datum</th>
             </tr>
           </thead>
@@ -71,15 +64,12 @@ export default async function AdminOmkeurenPage({
                 <td className="px-4 py-3">
                   <ApplicationStatusBadge status={app.status} />
                 </td>
-                <td className="px-4 py-3">
-                  <SignedFormBadge status={app.signed_form_status} />
-                </td>
                 <td className="px-4 py-3 text-gray-600">{formatDate(app.created_at)}</td>
               </tr>
             ))}
             {!applications.length && !error && (
               <tr>
-                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
                   Nog geen aanvragen.
                 </td>
               </tr>

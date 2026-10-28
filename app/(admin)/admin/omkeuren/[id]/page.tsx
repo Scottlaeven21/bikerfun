@@ -5,7 +5,6 @@ import { formatDate, formatPrice } from '@/lib/utils/format';
 import { DealerStatusForm } from '@/components/admin/dealer-status-form';
 import { DealerInvoiceForm } from '@/components/admin/dealer-invoice-form';
 import { DealerInvoicePaidButton } from '@/components/admin/dealer-invoice-paid-button';
-import { DocumentLink } from '@/components/dealer/document-link';
 import { InvoiceStatusBadge } from '@/components/dealer/status-badge';
 import type { DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
@@ -53,16 +52,11 @@ export default async function AdminOmkeurenDetailPage({
           <Item label="Klant" value={[application.customer_name, application.customer_email].filter(Boolean).join(' · ')} />
           <Item label="Aangemeld" value={formatDate(application.created_at)} />
         </dl>
-        {application.form_path && <DocumentLink path={application.form_path} label="Download ingevuld formulier" />}
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Status bijwerken</h2>
-        <DealerStatusForm
-          applicationId={application.id}
-          status={application.status}
-          signedFormStatus={application.signed_form_status}
-        />
+        <DealerStatusForm applicationId={application.id} status={application.status} />
       </div>
 
       {application.dealers && (

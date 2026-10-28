@@ -30,12 +30,6 @@ export const APPLICATION_STATUS_HINTS: Record<ApplicationStatus, string> = {
   completed: 'De motor is correct geregistreerd bij de RDW.',
 };
 
-export const SIGNED_FORM_LABELS: Record<SignedFormStatus, string> = {
-  none: 'Formulier nog niet gestart',
-  waiting: 'Wachten op ondertekend formulier',
-  received: 'Ondertekend formulier ontvangen',
-};
-
 export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
   open: 'Nog te betalen',
   paid: 'Betaald',
@@ -43,14 +37,4 @@ export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
 
 export function isApplicationStatus(value: string): value is ApplicationStatus {
   return (APPLICATION_STATUSES as readonly string[]).includes(value);
-}
-
-export function canSubmitToRdw(signedFormStatus: SignedFormStatus) {
-  return signedFormStatus === 'received';
-}
-
-export function nextSignedFormStatus(current: SignedFormStatus, nextStatus: ApplicationStatus): SignedFormStatus {
-  if (current === 'received') return 'received';
-  if (nextStatus === 'received') return current;
-  return current === 'none' ? 'waiting' : current;
 }

@@ -1,10 +1,8 @@
 import {
   APPLICATION_STATUS_LABELS,
   INVOICE_STATUS_LABELS,
-  SIGNED_FORM_LABELS,
   type ApplicationStatus,
   type InvoiceStatus,
-  type SignedFormStatus,
 } from '@/lib/dealer/status';
 
 const statusClass: Record<ApplicationStatus, string> = {
@@ -20,20 +18,6 @@ export function ApplicationStatusBadge({ status }: { status: ApplicationStatus }
   return (
     <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${statusClass[status]}`}>
       {APPLICATION_STATUS_LABELS[status]}
-    </span>
-  );
-}
-
-export function SignedFormBadge({ status }: { status: SignedFormStatus }) {
-  const cls =
-    status === 'received'
-      ? 'bg-emerald-50 text-emerald-800'
-      : status === 'waiting'
-        ? 'bg-amber-50 text-amber-800'
-        : 'bg-gray-100 text-gray-600';
-  return (
-    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${cls}`}>
-      {SIGNED_FORM_LABELS[status]}
     </span>
   );
 }

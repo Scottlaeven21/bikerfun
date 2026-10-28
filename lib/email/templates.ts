@@ -595,7 +595,7 @@ export function dealerWelcomeEmail({
     </h2>
     <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
       Hallo ${escapeHtml(name)}, we hebben een account gemaakt voor ${escapeHtml(company)}.
-      Daarmee meld je motoren aan voor omkeuren, upload je het formulier en volg je de status.
+      Daarmee meld je motoren aan voor omkeuren en volg je de status.
     </p>
     <table role="presentation" style="width:100%;border-collapse:collapse;margin:20px 0;">
       <tr>
@@ -682,7 +682,6 @@ export function dealerStatusUpdateEmail({
   licensePlate,
   statusLabel,
   statusHint,
-  formLabel,
   portalUrl,
 }: {
   greetingName: string;
@@ -690,7 +689,6 @@ export function dealerStatusUpdateEmail({
   licensePlate: string;
   statusLabel: string;
   statusHint: string;
-  formLabel: string;
   portalUrl: string;
 }): { subject: string; html: string } {
   const content = `
@@ -703,11 +701,8 @@ export function dealerStatusUpdateEmail({
     <div style="background:#111;color:${BIKER_YELLOW};font-weight:bold;padding:16px 18px;border-radius:8px;margin:0 0 16px;">
       ${escapeHtml(statusLabel)}
     </div>
-    <p style="margin: 0 0 12px; color: #333; font-size: 15px; line-height: 1.6;">
+    <p style="margin: 0 0 24px; color: #333; font-size: 15px; line-height: 1.6;">
       ${escapeHtml(statusHint)}
-    </p>
-    <p style="margin: 0 0 24px; color: #666; font-size: 14px;">
-      Formulier: ${escapeHtml(formLabel)}
     </p>
     <p style="margin: 0;">
       <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">

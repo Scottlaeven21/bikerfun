@@ -4,10 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { APPLICATION_STATUS_HINTS } from '@/lib/dealer/status';
 import { formatDate } from '@/lib/utils/format';
-import { ApplicationStatusBadge, SignedFormBadge } from '@/components/dealer/status-badge';
-import { DealerFormUpload } from '@/components/dealer/form-upload';
+import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import { CustomerEmailForm } from '@/components/dealer/customer-email-form';
-import { DocumentLink } from '@/components/dealer/document-link';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuring - Dealerportaal', robots: { index: false, follow: false } };
@@ -44,10 +42,7 @@ export default async function DealerApplicationDetailPage({
             </p>
             <p className="text-sm text-gray-500 mt-1">Aangemeld {formatDate(application.created_at)}</p>
           </div>
-          <div className="flex flex-col items-end gap-2">
-            <ApplicationStatusBadge status={application.status} />
-            <SignedFormBadge status={application.signed_form_status} />
-          </div>
+          <ApplicationStatusBadge status={application.status} />
         </div>
 
         <p className="text-gray-700">{APPLICATION_STATUS_HINTS[application.status]}</p>
@@ -66,22 +61,6 @@ export default async function DealerApplicationDetailPage({
         {application.notes && (
           <p className="text-sm text-gray-600 whitespace-pre-wrap">{application.notes}</p>
         )}
-      </div>
-
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
-        <h2 className="text-xl font-bold">Formulier</h2>
-        <p className="text-sm text-gray-600">
-          Download het formulier, vul het in en upload het hier. Vanaf goedkeuring loopt dit parallel met de andere stappen.
-        </p>
-        <Link href="/dealer/formulier" className="inline-block font-bold underline">
-          Formulier downloaden / printen
-        </Link>
-        {application.form_path && (
-          <div>
-            <DocumentLink path={application.form_path} label="Bekijk geüpload formulier" />
-          </div>
-        )}
-        <DealerFormUpload applicationId={application.id} />
       </div>
 
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
