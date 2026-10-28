@@ -12,9 +12,20 @@ CREATE INDEX IF NOT EXISTS idx_admin_2fa_codes_user ON admin_2fa_codes(user_id, 
 
 ALTER TABLE admin_2fa_codes ENABLE ROW LEVEL SECURITY;
 
+DROP POLICY IF EXISTS "Service role manages admin 2fa codes" ON admin_2fa_codes;
 CREATE POLICY "Service role manages admin 2fa codes"
   ON admin_2fa_codes
   FOR ALL
   TO service_role
   USING (true)
   WITH CHECK (true);
+
+GRANT SELECT, INSERT, UPDATE ON admin_2fa_codes TO authenticated;
+
+DROP POLICY IF EXISTS "Users manage own admin 2fa codes" ON admin_2fa_codes;
+CREATE POLICY "Users manage own admin 2fa codes"
+  ON admin_2fa_codes
+  FOR ALL
+  TO authenticated
+  USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);
