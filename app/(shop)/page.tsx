@@ -21,7 +21,7 @@ const homeFAQ = [
   },
   {
     question: 'Bieden jullie garantie op occasions?',
-    answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geÃ¯nteresseerd bent.',
+    answer: 'We bieden verschillende garantiemogelijkheden afhankelijk van de motor. Alle motors worden grondig gecontroleerd voordat ze te koop worden aangeboden. Vraag bij ons naar de specifieke garantievoorwaarden voor de motor waarin je geïnteresseerd bent.',
   },
   {
     question: 'Kan ik mijn huidige motor inruilen?',

@@ -128,7 +128,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex items-start overflow-x-auto gap-6 md:gap-8 pb-4 scrollbar-hide px-4 md:px-0"
+        className="flex items-stretch overflow-x-auto gap-6 md:gap-8 pb-4 scrollbar-hide px-4 md:px-0"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -146,7 +146,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             draggable={false}
             onClick={(e) => { if (draggedRef.current) e.preventDefault(); }}
             onDragStart={(e) => e.preventDefault()}
-            className="flex-none w-[330px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col cursor-pointer"
+            className="flex-none w-[330px] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-center flex flex-col cursor-pointer self-stretch"
           >
             {/* Image */}
             <div className="relative aspect-[16/10] md:aspect-[4/3] bg-biker-black overflow-hidden block">
@@ -193,13 +193,13 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             </div>
 
             {/* Content */}
-            <div className="p-4 md:p-6 flex flex-col">
+            <div className="p-4 md:p-6 flex flex-col flex-1">
               {/* Brand & Model */}
               <div className="mb-2 md:mb-4">
-                <h3 className="text-biker-yellow font-bold text-xs md:text-sm uppercase tracking-wider mb-0.5 md:mb-1">
+                <h3 className="text-biker-yellow font-bold text-xs md:text-sm uppercase tracking-wider mb-0.5 md:mb-1 truncate">
                   {occasion.brand}
                 </h3>
-                <h4 className="text-white font-bold text-xl md:text-2xl">{occasion.model}</h4>
+                <h4 className="text-white font-bold text-xl md:text-2xl truncate">{occasion.model}</h4>
               </div>
 
               {/* Pricing */}
@@ -257,7 +257,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
               </div>
 
               {occasion.features.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-4">
+                <div className="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-4 max-h-[4.25rem] overflow-hidden">
                   {occasion.features.slice(0, 5).map((feature, idx) => (
                     <span
                       key={idx}
@@ -282,7 +282,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
               )}
 
               {/* CTA Button */}
-              <div className="btn-primary block w-full bg-biker-yellow group-hover:bg-biker-black text-biker-black group-hover:text-biker-yellow border-2 border-biker-yellow text-center py-2.5 md:py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300">
+              <div className="btn-primary mt-auto block w-full bg-biker-yellow group-hover:bg-biker-black text-biker-black group-hover:text-biker-yellow border-2 border-biker-yellow text-center py-2.5 md:py-3 rounded-full font-bold uppercase text-sm tracking-wider transition-all duration-300">
                 BEKIJK DETAILS
               </div>
             </div>

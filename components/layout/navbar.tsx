@@ -108,7 +108,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
       )}
 
       {/* Slide-in Menu van Rechts */}
-      <div className={`fixed top-0 right-0 h-full w-full max-w-md shadow-2xl transform transition-transform duration-300 ease-in-out z-[60] ${
+      <div className={`fixed top-0 right-0 h-full w-[80%] md:w-full md:max-w-md shadow-2xl transform transition-transform duration-300 ease-in-out z-[60] ${
         menuOpen ? 'translate-x-0' : 'translate-x-full'
       } ${
         showShopIcons 
