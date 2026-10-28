@@ -2,6 +2,7 @@
 // Compatible with StackCP hosting email
 
 import nodemailer from 'nodemailer';
+import type SMTPTransport from 'nodemailer/lib/smtp-transport';
 
 /**
  * Check if email is properly configured
@@ -70,19 +71,16 @@ export function isAdminOrderPaidNotificationEnabled(): boolean {
  * Create SMTP transporter
  */
 function createTransporter() {
-  return nodemailer.createTransport({
+  const options: SMTPTransport.Options = {
     host: process.env.SMTP_HOST,
     port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true', // true for 465, false for other ports
+    secure: process.env.SMTP_SECURE === 'true',
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASSWORD,
     },
-    family: 4,
-    connectionTimeout: 15_000,
-    greetingTimeout: 15_000,
-    socketTimeout: 15_000,
-  });
+  };
+  return nodemailer.createTransport(options);
 }
 
 /**
