@@ -71,13 +71,16 @@ export function isAdminOrderPaidNotificationEnabled(): boolean {
  * Create SMTP transporter
  */
 function createTransporter() {
+  const port = parseInt((process.env.SMTP_PORT || '587').trim(), 10);
+  const secureFlag = (process.env.SMTP_SECURE || '').trim().toLowerCase();
+  const secure = secureFlag === 'true' || secureFlag === '1' || port === 465;
   const options: SMTPTransport.Options = {
-    host: process.env.SMTP_HOST,
-    port: parseInt(process.env.SMTP_PORT || '587'),
-    secure: process.env.SMTP_SECURE === 'true',
+    host: (process.env.SMTP_HOST || '').trim(),
+    port,
+    secure,
     auth: {
-      user: process.env.SMTP_USER,
-      pass: process.env.SMTP_PASSWORD,
+      user: (process.env.SMTP_USER || '').trim(),
+      pass: (process.env.SMTP_PASSWORD || '').trim(),
     },
   };
   return nodemailer.createTransport(options);
@@ -109,7 +112,7 @@ export async function sendEmail({
     const transporter = createTransporter();
     
     const mailOptions = {
-      from: { name: 'Bikerfun', address: getFromEmail() },
+      from: getFromEmail(),
       to: Array.isArray(to) ? to.join(', ') : to,
       subject,
       html,
