@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 import { logAuditEvent } from '@/lib/audit/logger';
 import {
   clearAdmin2faCookie,
-  issueAdmin2faCode,
   setAdmin2faCookie,
   shouldSkipAdmin2fa,
 } from '@/lib/auth/admin-2fa';
@@ -76,7 +75,6 @@ export async function login(prevState: any, formData: FormData) {
     if (shouldSkipAdmin2fa()) {
       await setAdmin2faCookie(data.user.id);
     } else {
-      await issueAdmin2faCode(data.user.id, data.user.email || email, true);
       revalidatePath('/', 'layout');
       const next = redirectTo.startsWith('/') ? redirectTo : '/admin';
       redirect(`/login/verify?redirect=${encodeURIComponent(next)}`);

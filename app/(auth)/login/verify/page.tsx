@@ -60,10 +60,15 @@ export default async function Admin2faPage({
       </div>
       {issued.error && (
         <div className="mb-4 bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
-          De code kon niet worden verstuurd. Controleer SMTP of vraag een nieuwe code aan.
+          De code kon niet worden verstuurd naar {accountEmail}.
+          {issued.error ? ` (${issued.error})` : ' Vraag een nieuwe code aan.'}
         </div>
       )}
-      <Admin2faForm redirectTo={redirectTo} email={accountEmail} />
+      <Admin2faForm
+        redirectTo={redirectTo}
+        email={accountEmail}
+        sent={Boolean(issued.sent || issued.already) && !issued.error}
+      />
     </div>
   );
 }

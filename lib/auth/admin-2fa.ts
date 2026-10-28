@@ -101,13 +101,6 @@ export async function issueAdmin2faCode(userId: string, accountEmail: string, fo
     return { sent: false, already: true as const, skipped: false as const, recipients };
   }
 
-  if (existing && force) {
-    const ageMs = Date.now() - new Date(existing.created_at).getTime();
-    if (ageMs < 60_000) {
-      return { sent: false, cooldown: true as const, skipped: false as const, recipients };
-    }
-  }
-
   await (supabase as any)
     .from('admin_2fa_codes')
     .update({ consumed_at: now.toISOString() })
@@ -135,6 +128,12 @@ export async function issueAdmin2faCode(userId: string, accountEmail: string, fo
   });
 
   if (!result.success) {
+    await (supabase as any)
+      .from('admin_2fa_codes')
+      .update({ consumed_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .is('consumed_at', null);
+    console.error('Admin 2FA mail mislukt:', result.error);
     return { sent: false, skipped: false as const, recipients, error: result.error };
   }
 
