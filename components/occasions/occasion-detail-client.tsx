@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Occasion } from '@/types';
@@ -214,6 +214,7 @@ interface OccasionDetailClientProps {
 
 export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const touchStartX = useRef(0);
   
   // Track occasion view
   useOccasionView(occasion.id);
@@ -225,7 +226,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const show = (key: string) => vis === undefined || vis[key] !== false;
 
   return (
-    <div className={`min-h-screen bg-black noise-overlay ${occasion.status === 'available' ? 'pb-64 lg:pb-0' : ''}`}>
+    <div className="min-h-screen bg-black noise-overlay">
       {/* Hero Image - Static with Back Button Overlay */}
       <section className="relative bg-biker-black overflow-hidden h-[45vh] md:h-[50vh]">
         {occasion.main_image ? (
@@ -260,16 +261,15 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               </div>
             )}
             
-            {/* Back Button - onder navbar voor volledige klikbaarheid */}
-            <div className="absolute top-32 left-8 z-20">
+            <div className="absolute top-20 left-4 md:top-28 md:left-6 z-20">
               <Link
                 href="/occasions"
-                className="inline-flex items-center gap-2 text-white font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-biker-yellow hover:text-biker-black min-h-[48px]"
+                className="inline-flex items-center gap-1 text-white text-xs font-bold uppercase tracking-wider bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-biker-yellow hover:text-biker-black"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                TERUG
+                Terug
               </Link>
             </div>
             
@@ -278,16 +278,15 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
           </div>
         ) : (
           <div className="relative h-full bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
-            {/* Back Button - onder navbar voor volledige klikbaarheid */}
-            <div className="absolute top-32 left-8 z-20">
+            <div className="absolute top-20 left-4 md:top-28 md:left-6 z-20">
               <Link
                 href="/occasions"
-                className="inline-flex items-center gap-2 text-white font-bold transition-all bg-black/60 backdrop-blur-sm px-6 py-3 rounded-full hover:bg-biker-yellow hover:text-biker-black min-h-[48px]"
+                className="inline-flex items-center gap-1 text-white text-xs font-bold uppercase tracking-wider bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-biker-yellow hover:text-biker-black"
               >
-                <svg className="w-5 h-5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
                 </svg>
-                TERUG
+                Terug
               </Link>
             </div>
             <div className="text-center">
@@ -307,74 +306,109 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               {/* Media Section */}
               {allImages.length > 0 && (
                 <div className="mb-8">
-                  {/* Large Current Image */}
-                  <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray group">
-                    <Image
-                      src={allImages[currentImageIndex]}
-                      alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
-                      fill
-                      className="object-cover"
-                      quality={100}
-                      unoptimized
-                      sizes="(max-width: 1024px) 100vw, 66vw"
-                    />
-
-                    {/* Prev arrow */}
+                  <div
+                    className="md:hidden relative"
+                    onTouchStart={(e) => {
+                      touchStartX.current = e.changedTouches[0].clientX;
+                    }}
+                    onTouchEnd={(e) => {
+                      const dx = e.changedTouches[0].clientX - touchStartX.current;
+                      if (Math.abs(dx) < 40 || allImages.length < 2) return;
+                      setCurrentImageIndex((index) =>
+                        dx < 0
+                          ? (index + 1) % allImages.length
+                          : (index - 1 + allImages.length) % allImages.length
+                      );
+                    }}
+                  >
+                    <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray">
+                      <Image
+                        src={allImages[currentImageIndex]}
+                        alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
+                        fill
+                        className="object-cover"
+                        quality={100}
+                        unoptimized
+                        sizes="100vw"
+                      />
+                      {allImages.length > 1 && (
+                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                          {currentImageIndex + 1} / {allImages.length}
+                        </div>
+                      )}
+                    </div>
                     {allImages.length > 1 && (
-                      <button
-                        onClick={() => setCurrentImageIndex((currentImageIndex - 1 + allImages.length) % allImages.length)}
-                        className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                        aria-label="Vorige afbeelding"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                        </svg>
-                      </button>
-                    )}
-
-                    {/* Next arrow */}
-                    {allImages.length > 1 && (
-                      <button
-                        onClick={() => setCurrentImageIndex((currentImageIndex + 1) % allImages.length)}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                        aria-label="Volgende afbeelding"
-                      >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </button>
-                    )}
-
-                    {/* Counter */}
-                    {allImages.length > 1 && (
-                      <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                        {currentImageIndex + 1} / {allImages.length}
-                      </div>
+                      <p className="mt-2 text-center text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                        Swipe voor meer foto&apos;s
+                      </p>
                     )}
                   </div>
 
-                  {/* Thumbnails */}
-                  <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
-                    {allImages.map((img: string, idx: number) => (
-                      <button
-                        key={idx}
-                        onClick={() => setCurrentImageIndex(idx)}
-                        className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
-                          currentImageIndex === idx
-                            ? 'border-biker-yellow scale-105'
-                            : 'border-biker-gray hover:border-biker-yellow/50'
-                        }`}
-                      >
-                        <Image
-                          src={img}
-                          alt={`Thumbnail ${idx + 1}`}
-                          fill
-                          className="object-cover"
-                          quality={100}
-                          unoptimized
-                        />
-                      </button>
-                    ))}
+                  <div className="hidden md:block">
+                    <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray group">
+                      <Image
+                        src={allImages[currentImageIndex]}
+                        alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
+                        fill
+                        className="object-cover"
+                        quality={100}
+                        unoptimized
+                        sizes="66vw"
+                      />
+
+                      {allImages.length > 1 && (
+                        <button
+                          onClick={() => setCurrentImageIndex((currentImageIndex - 1 + allImages.length) % allImages.length)}
+                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                          aria-label="Vorige afbeelding"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                          </svg>
+                        </button>
+                      )}
+
+                      {allImages.length > 1 && (
+                        <button
+                          onClick={() => setCurrentImageIndex((currentImageIndex + 1) % allImages.length)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
+                          aria-label="Volgende afbeelding"
+                        >
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </button>
+                      )}
+
+                      {allImages.length > 1 && (
+                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                          {currentImageIndex + 1} / {allImages.length}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-6 gap-4">
+                      {allImages.map((img: string, idx: number) => (
+                        <button
+                          key={idx}
+                          onClick={() => setCurrentImageIndex(idx)}
+                          className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
+                            currentImageIndex === idx
+                              ? 'border-biker-yellow scale-105'
+                              : 'border-biker-gray hover:border-biker-yellow/50'
+                          }`}
+                        >
+                          <Image
+                            src={img}
+                            alt={`Thumbnail ${idx + 1}`}
+                            fill
+                            className="object-cover"
+                            quality={100}
+                            unoptimized
+                          />
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
@@ -611,22 +645,14 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                 </div>
               </div>
 
-              {occasion.status !== 'available' && (
-                <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
-                  <OccasionActionButtons occasion={occasion} />
-                </div>
-              )}
+              <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
+                <OccasionActionButtons occasion={occasion} />
+              </div>
 
               <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
                 <OccasionChecklist className="" />
               </div>
             </div>
-
-            {occasion.status === 'available' && (
-              <div className="lg:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#1a1a1a] border-t-2 border-biker-gray px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-                <OccasionActionButtons occasion={occasion} compact />
-              </div>
-            )}
           </div>
         </div>
       </section>

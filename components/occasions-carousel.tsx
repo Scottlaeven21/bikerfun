@@ -128,7 +128,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
       {/* Carousel */}
       <div
         ref={scrollRef}
-        className="flex items-stretch overflow-x-auto gap-4 md:gap-8 pb-4 scrollbar-hide px-4 md:px-0"
+        className="flex items-stretch overflow-x-auto gap-3 md:gap-8 pb-4 scrollbar-hide pl-4 pr-10 md:px-0"
         style={{
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -146,10 +146,10 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             draggable={false}
             onClick={(e) => { if (draggedRef.current) e.preventDefault(); }}
             onDragStart={(e) => e.preventDefault()}
-            className="flex-none w-[62vw] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start flex flex-col cursor-pointer self-stretch"
+            className="flex-none w-[72vw] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start flex flex-col cursor-pointer self-stretch"
           >
             {/* Image */}
-            <div className="relative aspect-[4/3] bg-biker-black overflow-hidden block">
+            <div className="relative aspect-[4/5] md:aspect-[4/3] bg-biker-black overflow-hidden block">
               {occasion.images.length > 0 ? (
                 <>
                   <Image
