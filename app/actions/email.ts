@@ -440,42 +440,13 @@ export async function submitOmkeurenForm(formData: {
         subject: emailContent.subject,
         html: emailContent.html,
       });
-      if (isMotorFormsAutoreplyEnabled() && !formData.isDealer) {
+      if (isMotorFormsAutoreplyEnabled()) {
         try {
           const autoReply = contactAutoReplyEmail(formData.name);
           await sendEmail({ to: formData.email, subject: autoReply.subject, html: autoReply.html });
         } catch {
           // Non-critical
         }
-      }
-    }
-
-    if (formData.isDealer && formData.company) {
-      try {
-        const { provisionDealerFromSignup } = await import('@/lib/dealer/provision');
-        const provisioned = await provisionDealerFromSignup({
-          name: formData.name,
-          email: formData.email,
-          phone: formData.phone,
-          company: formData.company,
-          location: formData.location,
-          kvk: formData.kvk,
-          vatNumber: formData.vatNumber,
-          rdwRecognized: formData.rdwRecognized,
-          hasWorkshop: formData.hasWorkshop,
-          estimatedOmkeuren: formData.estimatedOmkeuren,
-          message: formData.message,
-        });
-        if (provisioned.ok) {
-          return {
-            success: true,
-            message: provisioned.createdUser
-              ? 'Aanmelding ontvangen. We hebben een dealer-account voor je gemaakt — check je mail voor de inlog.'
-              : 'Aanmelding ontvangen. Je kunt inloggen op het dealerportaal met je bestaande account.',
-          };
-        }
-      } catch (err) {
-        console.error('Dealer provision failed:', err);
       }
     }
 

@@ -23,19 +23,30 @@ export function getFromEmail(): string {
   return process.env.SMTP_FROM_EMAIL || 'info@bikerfun.nl';
 }
 
+const LEGACY_ADMIN_EMAIL = '265749laeven@zuyd.nl';
+const ADMIN_INBOX = 'scottlaeven@hotmail.com';
+
+function resolveAdminInbox(value?: string) {
+  const email = (value || '').trim();
+  if (!email || email.toLowerCase() === LEGACY_ADMIN_EMAIL) {
+    return ADMIN_INBOX;
+  }
+  return email;
+}
+
 /**
  * Get configured "to" email address (for receiving notifications)
  * Default: admin inbox voor formulieren en — als SMTP_ADMIN_ORDER_EMAILS leeg is — betaalde orders.
  */
 export function getToEmail(): string {
-  return process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl';
+  return resolveAdminInbox(process.env.SMTP_TO_EMAIL || 'info@bikerfun.nl');
 }
 
 /** Eén of meerdere beheerders voor order-notificaties (komma-gescheiden). Valt terug op SMTP_TO_EMAIL. */
 export function getAdminOrderNotificationRecipients(): string[] {
   const extra = process.env.SMTP_ADMIN_ORDER_EMAILS?.trim();
   if (extra) {
-    return extra.split(',').map((e) => e.trim()).filter(Boolean);
+    return extra.split(',').map((e) => resolveAdminInbox(e)).filter(Boolean);
   }
   return [getToEmail()];
 }
