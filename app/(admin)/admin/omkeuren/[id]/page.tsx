@@ -73,8 +73,10 @@ export default async function AdminOmkeurenDetailPage({
             <div key={invoice.id} className="flex items-center justify-between border-t pt-3 text-sm">
               <span>
                 {invoice.description} · {formatPrice(Number(invoice.amount))}
+                {invoice.due_date ? ` · ${formatDate(invoice.due_date)}` : ''}
               </span>
               <span className="flex items-center gap-3">
+                {invoice.pdf_path && <DocumentLink path={invoice.pdf_path} label="PDF" />}
                 <InvoiceStatusBadge status={invoice.status} />
                 <DealerInvoicePaidButton invoiceId={invoice.id} paid={invoice.status === 'paid'} />
               </span>

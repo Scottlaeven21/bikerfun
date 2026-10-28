@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate, formatPrice } from '@/lib/utils/format';
+import { DocumentLink } from '@/components/dealer/document-link';
 import { InvoiceStatusBadge } from '@/components/dealer/status-badge';
 import type { DealerInvoice } from '@/lib/dealer/types';
 
@@ -55,6 +56,7 @@ function InvoiceList({ invoices, empty }: { invoices: DealerInvoice[]; empty: st
             <th className="px-4 py-3">Bedrag</th>
             <th className="px-4 py-3">Status</th>
             <th className="px-4 py-3">Datum</th>
+            <th className="px-4 py-3">Factuur</th>
           </tr>
         </thead>
         <tbody>
@@ -65,7 +67,16 @@ function InvoiceList({ invoices, empty }: { invoices: DealerInvoice[]; empty: st
               <td className="px-4 py-3">
                 <InvoiceStatusBadge status={invoice.status} />
               </td>
-              <td className="px-4 py-3 text-gray-600">{formatDate(invoice.paid_at || invoice.created_at)}</td>
+              <td className="px-4 py-3 text-gray-600">
+                {formatDate(invoice.due_date || invoice.paid_at || invoice.created_at)}
+              </td>
+              <td className="px-4 py-3">
+                {invoice.pdf_path ? (
+                  <DocumentLink path={invoice.pdf_path} label="Download PDF" />
+                ) : (
+                  <span className="text-gray-400">—</span>
+                )}
+              </td>
             </tr>
           ))}
         </tbody>

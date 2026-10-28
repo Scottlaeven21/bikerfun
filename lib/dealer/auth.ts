@@ -13,7 +13,7 @@ export async function getDealerSession() {
 
   const { data: profile } = await (supabase as any)
     .from('profiles')
-    .select('is_admin, is_dealer, email, full_name')
+    .select('is_admin, is_dealer, email, full_name, must_change_password')
     .eq('id', user.id)
     .maybeSingle();
 
@@ -30,6 +30,7 @@ export async function getDealerSession() {
       is_dealer: boolean;
       email: string;
       full_name: string | null;
+      must_change_password?: boolean;
     } | null,
     dealer: (dealer as Dealer | null) ?? null,
   };

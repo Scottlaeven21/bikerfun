@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import Link from 'next/link';
 import { AdminHeader } from '@/components/admin/admin-header';
 import { isAdmin2faVerified, setAdmin2faCookie, shouldSkipAdmin2fa } from '@/lib/auth/admin-2fa';
+import { passwordChangePath } from '@/lib/auth/must-change-password';
 
 export default async function AdminLayout({
   children,
@@ -16,16 +17,25 @@ export default async function AdminLayout({
     redirect('/login?redirect=/admin');
   }
 
-  const { data: profileData } = await supabase
+  const { data: profileData } = await (supabase as any)
     .from('profiles')
-    .select('is_admin, full_name, email')
+    .select('is_admin, full_name, email, must_change_password')
     .eq('id', user.id)
     .single();
 
-  const profile = profileData as { is_admin: boolean; full_name: string | null; email: string } | null;
+  const profile = profileData as {
+    is_admin: boolean;
+    full_name: string | null;
+    email: string;
+    must_change_password?: boolean;
+  } | null;
 
   if (!profile?.is_admin) {
     redirect('/');
+  }
+
+  if (profile.must_change_password) {
+    redirect(passwordChangePath('/admin'));
   }
 
   if (!(await isAdmin2faVerified(user.id))) {

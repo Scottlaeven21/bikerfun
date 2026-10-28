@@ -9,6 +9,7 @@ import {
   setAdmin2faCookie,
   shouldSkipAdmin2fa,
 } from '@/lib/auth/admin-2fa';
+import { passwordChangePath } from '@/lib/auth/must-change-password';
 
 function loginTarget(redirectTo: string) {
   const path = redirectTo || '/';
@@ -53,14 +54,16 @@ export async function login(prevState: any, formData: FormData) {
 
   let isAdmin = false;
   let isDealer = false;
+  let mustChangePassword = false;
   if (data.user?.id) {
     const { data: profile } = await (supabase as any)
       .from('profiles')
-      .select('is_admin, is_dealer')
+      .select('is_admin, is_dealer, must_change_password')
       .eq('id', data.user.id)
       .single();
     isAdmin = Boolean((profile as { is_admin?: boolean } | null)?.is_admin);
     isDealer = Boolean((profile as { is_dealer?: boolean } | null)?.is_dealer);
+    mustChangePassword = Boolean((profile as { must_change_password?: boolean } | null)?.must_change_password);
   }
 
   await logAuditEvent({
@@ -70,6 +73,19 @@ export async function login(prevState: any, formData: FormData) {
     resourceType: 'user',
     details: { success: true, redirect: redirectTo, target, is_admin: isAdmin, is_dealer: isDealer, step: 'password' },
   });
+
+  if (mustChangePassword && data.user?.id) {
+    revalidatePath('/', 'layout');
+    const next =
+      isAdmin && (!redirectTo || redirectTo === '/')
+        ? '/admin'
+        : !isAdmin && isDealer && (!redirectTo || redirectTo === '/')
+          ? '/dealer'
+          : redirectTo.startsWith('/')
+            ? redirectTo
+            : '/';
+    redirect(passwordChangePath(next));
+  }
 
   if (isAdmin && data.user?.id) {
     if (shouldSkipAdmin2fa()) {
@@ -173,4 +189,44 @@ export async function signout() {
   
   revalidatePath('/', 'layout');
   redirect('/');
+}
+
+export async function changeForcedPassword(prevState: { error?: string } | null, formData: FormData) {
+  const password = String(formData.get('password') || '');
+  const confirm = String(formData.get('confirm') || '');
+  const redirectTo = String(formData.get('redirect') || '/');
+  const next = redirectTo.startsWith('/') ? redirectTo : '/';
+
+  if (password.length < 8) {
+    return { error: 'Gebruik minimaal 8 tekens.' };
+  }
+  if (password !== confirm) {
+    return { error: 'De wachtwoorden komen niet overeen.' };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: 'Sessie verlopen. Log opnieuw in.' };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    return { error: 'Wachtwoord wijzigen mislukt. Kies een sterker wachtwoord.' };
+  }
+
+  const { data: profile } = await (supabase as any)
+    .from('profiles')
+    .update({ must_change_password: false, updated_at: new Date().toISOString() })
+    .eq('id', user.id)
+    .select('is_admin, is_dealer')
+    .maybeSingle();
+
+  revalidatePath('/', 'layout');
+  if (profile?.is_admin) {
+    redirect(`/login/verify?redirect=${encodeURIComponent(next.startsWith('/admin') ? next : '/admin')}`);
+  }
+  redirect(next);
 }

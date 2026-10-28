@@ -36,12 +36,6 @@ export const SIGNED_FORM_LABELS: Record<SignedFormStatus, string> = {
   received: 'Ondertekend formulier ontvangen',
 };
 
-export const DEALER_STATUS_LABELS: Record<DealerAccountStatus, string> = {
-  pending: 'In behandeling',
-  active: 'Actief',
-  rejected: 'Afgewezen',
-};
-
 export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
   open: 'Nog te betalen',
   paid: 'Betaald',

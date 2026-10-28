@@ -56,7 +56,7 @@ export function CreateAdminForm() {
         </label>
       </div>
       <p className="text-xs text-gray-500">
-        De 2FA-code gaat naar dit adres. Het zuyd-account blijft gewoon werken.
+        De 2FA-code gaat naar dit adres. Bij de eerste login moet het tijdelijke wachtwoord vervangen worden. Het zuyd-account blijft gewoon werken.
       </p>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {message && <p className="text-sm text-emerald-700">{message}</p>}

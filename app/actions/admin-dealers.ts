@@ -20,22 +20,6 @@ async function requireAdmin() {
   return { error: null };
 }
 
-export async function setDealerAccountStatus(dealerId: string, status: 'pending' | 'active' | 'rejected') {
-  const gate = await requireAdmin();
-  if (gate.error) return { error: gate.error };
-
-  const admin = createAdminClient();
-  const { error } = await (admin as any)
-    .from('dealers')
-    .update({ status, updated_at: new Date().toISOString() })
-    .eq('id', dealerId);
-
-  if (error) return { error: 'Status bijwerken mislukt.' };
-  revalidatePath('/admin/dealers');
-  revalidatePath(`/admin/dealers/${dealerId}`);
-  return { success: true };
-}
-
 export async function setApplicationWorkflow(applicationId: string, formData: FormData) {
   const gate = await requireAdmin();
   if (gate.error) return { error: gate.error };
@@ -88,6 +72,8 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
   return { success: true };
 }
 
+const MAX_INVOICE_PDF_BYTES = 12 * 1024 * 1024;
+
 export async function createDealerInvoice(formData: FormData) {
   const gate = await requireAdmin();
   if (gate.error) return { error: gate.error };
@@ -97,18 +83,44 @@ export async function createDealerInvoice(formData: FormData) {
   const amount = Number(String(formData.get('amount') || '').replace(',', '.'));
   const applicationId = String(formData.get('application_id') || '').trim();
   const dueDate = String(formData.get('due_date') || '').trim();
+  const file = formData.get('invoice_pdf');
 
-  if (!dealerId || !description || !Number.isFinite(amount) || amount < 0) {
-    return { error: 'Vul dealer, omschrijving en bedrag in.' };
+  if (!dealerId || !description || !Number.isFinite(amount) || amount < 0 || !dueDate) {
+    return { error: 'Vul omschrijving, bedrag en datum in.' };
+  }
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: 'Upload de factuur-PDF.' };
+  }
+  if (file.size > MAX_INVOICE_PDF_BYTES) {
+    return { error: 'PDF is te groot (max 12 MB).' };
+  }
+  const isPdf = file.type === 'application/pdf' || file.name.toLowerCase().endsWith('.pdf');
+  if (!isPdf) {
+    return { error: 'De factuur moet een PDF zijn.' };
   }
 
   const admin = createAdminClient();
+  const invoiceId = crypto.randomUUID();
+  const path = `${dealerId}/invoices/${invoiceId}.pdf`;
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const { error: uploadError } = await admin.storage.from('dealer-documents').upload(path, buffer, {
+    contentType: 'application/pdf',
+    upsert: true,
+  });
+
+  if (uploadError) {
+    console.error('Invoice PDF upload failed:', uploadError.message);
+    return { error: 'PDF uploaden mislukt. Controleer of de storage-bucket bestaat.' };
+  }
+
   const { error } = await (admin as any).from('dealer_invoices').insert({
+    id: invoiceId,
     dealer_id: dealerId,
     application_id: applicationId || null,
     description,
     amount,
-    due_date: dueDate || null,
+    due_date: dueDate,
+    pdf_path: path,
   });
 
   if (error) {
@@ -196,7 +208,6 @@ export async function createDealerFromAdmin(formData: FormData) {
     phone,
     location: String(formData.get('location') || '').trim() || undefined,
     kvk: String(formData.get('kvk') || '').trim() || undefined,
-    status: 'active',
   });
 
   if (!result.ok) {

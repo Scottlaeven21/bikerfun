@@ -67,7 +67,7 @@ export function CreateDealerForm() {
         </label>
       </div>
       <p className="text-xs text-gray-500">
-        Het portaal wordt meteen actief. De dealer krijgt een mail met inlog.
+        Het portaal wordt meteen actief. De dealer krijgt een mail met tijdelijk wachtwoord en moet dat bij de eerste login vervangen.
       </p>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {message && <p className="text-sm text-emerald-700">{message}</p>}

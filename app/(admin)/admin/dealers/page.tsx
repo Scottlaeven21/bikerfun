@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
-import { DEALER_STATUS_LABELS } from '@/lib/dealer/status';
 import { formatDate } from '@/lib/utils/format';
 import type { Dealer } from '@/lib/dealer/types';
 import { CreateDealerForm } from '@/components/admin/create-dealer-form';
@@ -20,7 +19,7 @@ export default async function AdminDealersPage() {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Dealers</h1>
-      <p className="text-gray-600 mb-6">Motorzaken die zich hebben aangemeld voor het omkeurportaal.</p>
+      <p className="text-gray-600 mb-6">Dealerportalen die jullie hebben aangemaakt.</p>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-2 border-biker-yellow">
         <h2 className="text-xl font-bold mb-4">Nieuw dealerportaal</h2>
@@ -39,7 +38,6 @@ export default async function AdminDealersPage() {
             <tr>
               <th className="px-4 py-3">Bedrijf</th>
               <th className="px-4 py-3">Contact</th>
-              <th className="px-4 py-3">Status</th>
               <th className="px-4 py-3">Sinds</th>
             </tr>
           </thead>
@@ -55,13 +53,12 @@ export default async function AdminDealersPage() {
                   {dealer.contact_name}
                   <div className="text-gray-500">{dealer.email}</div>
                 </td>
-                <td className="px-4 py-3">{DEALER_STATUS_LABELS[dealer.status]}</td>
                 <td className="px-4 py-3 text-gray-600">{formatDate(dealer.created_at)}</td>
               </tr>
             ))}
             {!dealers.length && !error && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={3} className="px-4 py-8 text-center text-gray-500">
                   Nog geen dealers.
                 </td>
               </tr>

@@ -2,9 +2,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate, formatPrice } from '@/lib/utils/format';
-import { DealerAccountStatusButtons } from '@/components/admin/dealer-account-status';
 import { DealerInvoiceForm } from '@/components/admin/dealer-invoice-form';
 import { DealerInvoicePaidButton } from '@/components/admin/dealer-invoice-paid-button';
+import { DocumentLink } from '@/components/dealer/document-link';
 import { ApplicationStatusBadge, InvoiceStatusBadge } from '@/components/dealer/status-badge';
 import type { Dealer, DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
@@ -44,11 +44,10 @@ export default async function AdminDealerDetailPage({
       </Link>
       <div className="bg-white rounded-lg shadow-md p-6">
         <h1 className="text-3xl font-bold mb-2">{dealer.company_name}</h1>
-        <p className="text-gray-600 mb-4">
+        <p className="text-gray-600">
           {dealer.contact_name} · {dealer.email}
           {dealer.phone ? ` · ${dealer.phone}` : ''}
         </p>
-        <DealerAccountStatusButtons dealerId={dealer.id} status={dealer.status} />
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
@@ -80,7 +79,14 @@ export default async function AdminDealerDetailPage({
                 <td className="py-3">
                   <InvoiceStatusBadge status={invoice.status} />
                 </td>
-                <td className="py-3 text-gray-500">{formatDate(invoice.created_at)}</td>
+                <td className="py-3 text-gray-500">{formatDate(invoice.due_date || invoice.created_at)}</td>
+                <td className="py-3">
+                  {invoice.pdf_path ? (
+                    <DocumentLink path={invoice.pdf_path} label="PDF" />
+                  ) : (
+                    <span className="text-gray-400">Geen PDF</span>
+                  )}
+                </td>
                 <td className="py-3">
                   <DealerInvoicePaidButton invoiceId={invoice.id} paid={invoice.status === 'paid'} />
                 </td>

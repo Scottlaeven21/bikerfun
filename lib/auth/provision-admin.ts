@@ -40,7 +40,12 @@ export async function provisionAdminAccount(name: string, emailRaw: string) {
 
   await (admin as any)
     .from('profiles')
-    .update({ is_admin: true, full_name: name, email })
+    .update({
+      is_admin: true,
+      full_name: name,
+      email,
+      ...(createdUser ? { must_change_password: true } : {}),
+    })
     .eq('id', userId);
 
   let emailed = false;

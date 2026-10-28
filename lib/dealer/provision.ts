@@ -21,7 +21,6 @@ export type DealerSignupInput = {
   hasWorkshop?: string;
   estimatedOmkeuren?: string;
   message?: string;
-  status?: 'pending' | 'active';
 };
 
 export async function provisionDealerFromSignup(input: DealerSignupInput) {
@@ -64,7 +63,12 @@ export async function provisionDealerFromSignup(input: DealerSignupInput) {
 
   await (admin as any)
     .from('profiles')
-    .update({ is_dealer: true, full_name: input.name, email })
+    .update({
+      is_dealer: true,
+      full_name: input.name,
+      email,
+      ...(createdUser ? { must_change_password: true } : {}),
+    })
     .eq('id', userId);
 
   const dealerRow = {
@@ -80,18 +84,17 @@ export async function provisionDealerFromSignup(input: DealerSignupInput) {
     has_workshop: input.hasWorkshop || null,
     estimated_omkeuren: input.estimatedOmkeuren || null,
     notes: input.message || null,
-    status: input.status || (existingDealer?.id ? undefined : 'pending'),
+    status: 'active',
   };
 
   let dealerId = existingDealer?.id as string | undefined;
   if (existingDealer?.id) {
     const update = { ...dealerRow, updated_at: new Date().toISOString() };
-    if (!input.status) delete (update as { status?: string }).status;
     await (admin as any).from('dealers').update(update).eq('id', existingDealer.id);
   } else {
     const { data: inserted, error: insertError } = await (admin as any)
       .from('dealers')
-      .insert({ ...dealerRow, status: input.status || 'pending' })
+      .insert(dealerRow)
       .select('id')
       .single();
     if (insertError) {

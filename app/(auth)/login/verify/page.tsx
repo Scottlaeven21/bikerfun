@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Admin2faForm } from '@/components/auth/admin-2fa-form';
 import { isAdmin2faVerified, shouldSkipAdmin2fa, setAdmin2faCookie } from '@/lib/auth/admin-2fa';
+import { passwordChangePath, userMustChangePassword } from '@/lib/auth/must-change-password';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,6 +26,10 @@ export default async function Admin2faPage({
 
   if (!user) {
     redirect(`/login?redirect=${encodeURIComponent(redirectTo)}`);
+  }
+
+  if (await userMustChangePassword(user.id)) {
+    redirect(passwordChangePath(redirectTo));
   }
 
   const { data: profile } = await supabase

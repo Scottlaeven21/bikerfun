@@ -54,6 +54,7 @@ export type DealerInvoice = {
   amount: number;
   status: InvoiceStatus;
   due_date: string | null;
+  pdf_path: string | null;
   paid_at: string | null;
   created_at: string;
   updated_at: string;

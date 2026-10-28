@@ -543,6 +543,9 @@ export function adminWelcomeEmail({
         <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(password || '')}</td>
       </tr>
     </table>
+    <p style="margin: 0 0 20px; color: #666; font-size: 13px;">
+      Bij de eerste login moet je dit tijdelijke wachtwoord vervangen door een eigen wachtwoord.
+    </p>
     <p style="margin: 24px 0 0;">
       <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
         Inloggen als admin
@@ -605,7 +608,7 @@ export function dealerWelcomeEmail({
       </tr>
     </table>
     <p style="margin: 0 0 20px; color: #666; font-size: 13px;">
-      Bewaar dit wachtwoord even. Je kunt later inloggen via bikerfun.nl/login.
+      Bij de eerste login moet je dit tijdelijke wachtwoord vervangen door een eigen wachtwoord.
     </p>
     <p style="margin: 24px 0 0;">
       <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">

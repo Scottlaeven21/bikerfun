@@ -16,9 +16,6 @@ async function requireActiveDealer() {
   if (!session.user || !session.dealer) {
     return { error: 'Niet ingelogd als dealer.', dealer: null as Dealer | null };
   }
-  if (session.dealer.status === 'rejected') {
-    return { error: 'Dit dealeraccount is niet actief.', dealer: null as Dealer | null };
-  }
   return { error: null, dealer: session.dealer };
 }
 
