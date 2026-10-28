@@ -14,6 +14,7 @@ import {
 function loginTarget(redirectTo: string) {
   const path = redirectTo || '/';
   if (path.startsWith('/admin')) return 'admin';
+  if (path.startsWith('/dealer')) return 'dealer';
   if (path.startsWith('/account') || path.startsWith('/dashboard')) return 'webshop_account';
   return 'shop';
 }
@@ -52,13 +53,15 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   let isAdmin = false;
+  let isDealer = false;
   if (data.user?.id) {
-    const { data: profile } = await supabase
+    const { data: profile } = await (supabase as any)
       .from('profiles')
-      .select('is_admin')
+      .select('is_admin, is_dealer')
       .eq('id', data.user.id)
       .single();
     isAdmin = Boolean((profile as { is_admin?: boolean } | null)?.is_admin);
+    isDealer = Boolean((profile as { is_dealer?: boolean } | null)?.is_dealer);
   }
 
   await logAuditEvent({
@@ -66,7 +69,7 @@ export async function login(prevState: any, formData: FormData) {
     userEmail: email,
     action: 'login',
     resourceType: 'user',
-    details: { success: true, redirect: redirectTo, target, is_admin: isAdmin, step: 'password' },
+    details: { success: true, redirect: redirectTo, target, is_admin: isAdmin, is_dealer: isDealer, step: 'password' },
   });
 
   if (isAdmin && data.user?.id) {
@@ -81,6 +84,9 @@ export async function login(prevState: any, formData: FormData) {
   }
 
   revalidatePath('/', 'layout');
+  if (!isAdmin && isDealer && (!redirectTo || redirectTo === '/')) {
+    redirect('/dealer');
+  }
   redirect(redirectTo);
 }
 

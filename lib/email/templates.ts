@@ -497,6 +497,169 @@ export function admin2faEmail(code: string): { subject: string; html: string } {
   };
 }
 
+export function dealerWelcomeEmail({
+  name,
+  company,
+  email,
+  password,
+  loginUrl,
+  existingAccount,
+}: {
+  name: string;
+  company: string;
+  email: string;
+  password: string | null;
+  loginUrl: string;
+  existingAccount: boolean;
+}): { subject: string; html: string } {
+  const content = existingAccount
+    ? `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Je dealerportaal staat klaar
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, je motorzaak ${escapeHtml(company)} is aangemeld bij Bikerfun.
+      Log in met dit e-mailadres (${escapeHtml(email)}) en je bestaande wachtwoord.
+    </p>
+    <p style="margin: 24px 0 0;">
+      <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Open dealerportaal
+      </a>
+    </p>
+  `
+    : `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Welkom in het dealerportaal
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, we hebben een account gemaakt voor ${escapeHtml(company)}.
+      Daarmee meld je motoren aan voor omkeuren, upload je het formulier en volg je de status.
+    </p>
+    <table role="presentation" style="width:100%;border-collapse:collapse;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">E-mail</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(email)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Tijdelijk wachtwoord</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(password || '')}</td>
+      </tr>
+    </table>
+    <p style="margin: 0 0 20px; color: #666; font-size: 13px;">
+      Bewaar dit wachtwoord even. Je kunt later inloggen via bikerfun.nl/login.
+    </p>
+    <p style="margin: 24px 0 0;">
+      <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Inloggen op het portaal
+      </a>
+    </p>
+  `;
+
+  return {
+    subject: existingAccount
+      ? `Dealerportaal Bikerfun voor ${company}`
+      : `Je Bikerfun dealer-account voor ${company}`,
+    html: emailLayout(content),
+  };
+}
+
+export function dealerApplicationAdminEmail({
+  company,
+  contact,
+  email,
+  licensePlate,
+  meldcode,
+  vin,
+  brand,
+  model,
+  customerEmail,
+}: {
+  company: string;
+  contact: string;
+  email: string;
+  licensePlate: string;
+  meldcode: string;
+  vin: string;
+  brand?: string | null;
+  model?: string | null;
+  customerEmail?: string | null;
+}): { subject: string; html: string } {
+  const row = (label: string, value?: string | null) =>
+    value
+      ? `<tr>
+          <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">${label}</td>
+          <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${escapeHtml(value)}</td>
+        </tr>`
+      : '';
+
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Nieuwe dealer-omkeuring
+    </h2>
+    <table role="presentation" style="width:100%;border-collapse:collapse;">
+      ${row('Dealer', company)}
+      ${row('Contact', contact)}
+      ${row('E-mail', email)}
+      ${row('Kenteken', licensePlate)}
+      ${row('Meldcode', meldcode)}
+      ${row('Framenummer', vin)}
+      ${row('Motor', [brand, model].filter(Boolean).join(' '))}
+      ${row('Klant e-mail', customerEmail)}
+    </table>
+  `;
+
+  return {
+    subject: `Dealer-omkeuring ${licensePlate} — ${company}`,
+    html: emailLayout(content),
+  };
+}
+
+export function dealerStatusUpdateEmail({
+  greetingName,
+  company,
+  licensePlate,
+  statusLabel,
+  statusHint,
+  formLabel,
+  portalUrl,
+}: {
+  greetingName: string;
+  company: string;
+  licensePlate: string;
+  statusLabel: string;
+  statusHint: string;
+  formLabel: string;
+  portalUrl: string;
+}): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Update omkeuring ${escapeHtml(licensePlate)}
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(greetingName)}, de status van de omkeuring bij ${escapeHtml(company)} is bijgewerkt.
+    </p>
+    <div style="background:#111;color:${BIKER_YELLOW};font-weight:bold;padding:16px 18px;border-radius:8px;margin:0 0 16px;">
+      ${escapeHtml(statusLabel)}
+    </div>
+    <p style="margin: 0 0 12px; color: #333; font-size: 15px; line-height: 1.6;">
+      ${escapeHtml(statusHint)}
+    </p>
+    <p style="margin: 0 0 24px; color: #666; font-size: 14px;">
+      Formulier: ${escapeHtml(formLabel)}
+    </p>
+    <p style="margin: 0;">
+      <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Bekijk in het portaal
+      </a>
+    </p>
+  `;
+
+  return {
+    subject: `Status ${licensePlate}: ${statusLabel}`,
+    html: emailLayout(content),
+  };
+}
+
 function escapeHtml(s: string): string {
   return s
     .replace(/&/g, '&amp;')

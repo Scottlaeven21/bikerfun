@@ -4,6 +4,7 @@ import { formatPrice } from '@/lib/utils/format';
 import { Order } from '@/types';
 import Link from 'next/link';
 import { AnalyticsDashboard } from '@/components/admin/analytics-dashboard';
+import { CreateDealerForm } from '@/components/admin/create-dealer-form';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -69,6 +70,21 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
         <AnalyticsDashboard />
+      </div>
+
+      <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-biker-yellow mb-8">
+        <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Dealerportaal aanmaken</h2>
+            <p className="text-gray-600 text-sm mt-1">
+              Maak een login voor een motorzaak. Zij kunnen daarna omkeuringen aanmelden.
+            </p>
+          </div>
+          <Link href="/admin/dealers" className="text-sm font-semibold text-biker-black underline shrink-0">
+            Alle dealers
+          </Link>
+        </div>
+        <CreateDealerForm />
       </div>
 
       {/* Stats Cards */}

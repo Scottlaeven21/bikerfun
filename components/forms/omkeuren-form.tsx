@@ -82,7 +82,7 @@ export function OmkeurenForm() {
           </h2>
           <p className="text-lg md:text-xl text-biker-light mb-10 max-w-3xl mx-auto">
             Ben jij een motorzaak en wil jij motoren omkeuren voor jouw klanten?
-            Meld je dan aan als dealer. Vul je gegevens in, dan nemen wij contact met je op.
+            Meld je aan: je krijgt een login voor het dealerportaal, zodat je motoren kunt aanmelden en de status kunt volgen.
           </p>
           <button
             type="button"
@@ -92,6 +92,12 @@ export function OmkeurenForm() {
           >
             Meld je aan als dealer
           </button>
+          <p className="mt-6 text-sm text-biker-light">
+            Al een account?{' '}
+            <a href="/login?redirect=/dealer" className="text-biker-yellow font-bold hover:underline">
+              Log in op het dealerportaal
+            </a>
+          </p>
         </div>
       </section>
 
@@ -106,7 +112,7 @@ export function OmkeurenForm() {
             </h2>
             <p className="text-biker-light mb-8">
               {isDealer
-                ? 'Vul de gegevens van je motorzaak in, dan nemen wij contact met je op.'
+                ? 'Vul de gegevens van je motorzaak in. We maken een account aan; de inlog volgt per mail.'
                 : 'Vul je gegevens en motorgegevens in. We nemen zo snel mogelijk contact met je op.'}
             </p>
 

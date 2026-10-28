@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '2mb',
+      bodySizeLimit: '16mb',
     },
   },
   // Redirect duplicate privacy URL to canonical

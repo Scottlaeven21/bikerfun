@@ -12,7 +12,7 @@ export const omkeurenFaq = [
   {
     question: 'Kunnen jullie ook motoren omkeuren voor dealers?',
     answer:
-      'Ja. Motorzaken en dealers kunnen zich aanmelden. Wij keuren motoren om voor jullie klanten en nemen contact met je op na de aanmelding.',
+      'Ja. Motorzaken en dealers kunnen zich aanmelden. Je krijgt een login voor het dealerportaal: motoren aanmelden, formulier uploaden en status volgen. De klant kan optioneel mee-updates per mail krijgen.',
   },
   {
     question: 'Hoe lang duurt het omkeuren van een motor?',
