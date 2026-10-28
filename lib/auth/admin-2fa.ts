@@ -1,6 +1,6 @@
 import { createHash, createHmac, randomInt, timingSafeEqual } from 'crypto';
 import { cookies } from 'next/headers';
-import { createClient } from '@/lib/supabase/server';
+import { createAdminClient } from '@/lib/supabase/admin';
 import { isEmailConfigured, sendEmail } from '@/lib/email/client';
 import { admin2faEmail } from '@/lib/email/templates';
 
@@ -84,7 +84,7 @@ export async function issueAdmin2faCode(userId: string, accountEmail: string, fo
     return { sent: false, skipped: true as const, recipients };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const now = new Date();
 
   const { data: existing } = await (supabase as any)
@@ -146,7 +146,7 @@ export async function consumeAdmin2faCode(userId: string, code: string) {
     return { ok: false, error: 'Vul de 6-cijferige code in.' };
   }
 
-  const supabase = await createClient();
+  const supabase = createAdminClient();
   const { data: row } = await (supabase as any)
     .from('admin_2fa_codes')
     .select('id, code_hash, expires_at, attempts, consumed_at')
