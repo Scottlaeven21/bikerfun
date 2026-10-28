@@ -1,7 +1,10 @@
+'use client';
+
+import { useRef } from 'react';
 import type { ReviewSettings, SiteReview } from '@/types';
 
 function Stars({ count, size = 'md' }: { count: number; size?: 'sm' | 'md' }) {
-  const className = size === 'sm' ? 'w-3.5 h-3.5 md:w-5 md:h-5' : 'w-6 h-6';
+  const className = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6';
   return (
     <div className="flex text-biker-yellow">
       {[...Array(5)].map((_, i) => (
@@ -31,6 +34,16 @@ export function ReviewsSection({
 }) {
   const score = Number(settings.overall_score).toFixed(1);
   const googleUrl = settings.google_url || '#';
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return;
+    const amount = scrollRef.current.clientWidth * 0.85;
+    scrollRef.current.scrollBy({
+      left: direction === 'left' ? -amount : amount,
+      behavior: 'smooth',
+    });
+  };
 
   return (
     <section className="py-20 bg-black noise-overlay border-t-2 border-biker-gray">
@@ -53,30 +66,67 @@ export function ReviewsSection({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
-          {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="bg-biker-dark rounded-xl md:rounded-2xl p-3 md:p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all"
-            >
-              <div className="flex items-center justify-between gap-1 mb-2 md:mb-4">
-                <Stars count={review.rating} size="sm" />
-                {review.date_label && (
-                  <span className="text-[10px] md:text-xs text-biker-muted shrink-0">{review.date_label}</span>
+        <div className="relative">
+          <div className="flex items-center justify-center gap-2 mb-6 text-biker-yellow lg:hidden">
+            <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+            </svg>
+            <span className="text-sm font-bold uppercase tracking-wider">Swipe om te bladeren</span>
+            <svg className="w-5 h-5 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => scroll('left')}
+            aria-label="Vorige reviews"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow p-4 rounded-full shadow-xl transition-all -translate-x-24 hidden lg:block"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <button
+            type="button"
+            onClick={() => scroll('right')}
+            aria-label="Volgende reviews"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow p-4 rounded-full shadow-xl transition-all translate-x-24 hidden lg:block"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div
+            ref={scrollRef}
+            className="flex items-stretch overflow-x-auto gap-6 pb-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
+            {reviews.map((review) => (
+              <div
+                key={review.id}
+                className="flex-none w-[85%] sm:w-[380px] lg:w-[calc((100%-3rem)/3)] snap-center bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all flex flex-col"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <Stars count={review.rating} size="sm" />
+                  {review.date_label && (
+                    <span className="text-xs text-biker-muted">{review.date_label}</span>
+                  )}
+                </div>
+                <h3 className="font-bold text-white mb-2">{review.author}</h3>
+                <p className="text-biker-light text-sm leading-relaxed flex-1">{review.body}</p>
+                {review.is_verified && (
+                  <div className="mt-4 flex items-center space-x-2">
+                    <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+                    </svg>
+                    <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
+                  </div>
                 )}
               </div>
-              <h3 className="font-bold text-white text-sm md:text-base mb-1.5 md:mb-2">{review.author}</h3>
-              <p className="text-biker-light text-xs md:text-sm leading-relaxed">{review.body}</p>
-              {review.is_verified && (
-                <div className="mt-2 md:mt-4 flex items-center space-x-1.5 md:space-x-2">
-                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4 text-biker-yellow shrink-0" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
-                  </svg>
-                  <span className="text-[10px] md:text-xs text-biker-muted">Geverifieerde aankoop</span>
-                </div>
-              )}
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
 
         <div className="text-center mt-12">

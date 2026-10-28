@@ -56,9 +56,9 @@ export default function OmkeurenPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-black">
+      <section className="pt-6 md:pt-10 pb-16 bg-black">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="text-sm text-biker-muted mb-8" aria-label="Broodkruimel">
+          <nav className="text-sm text-biker-muted mb-6 md:mb-8" aria-label="Broodkruimel">
             <Link href="/" className="hover:text-biker-yellow">Home</Link>
             <span className="mx-2">/</span>
             <span className="text-white">Motor omkeuren</span>
@@ -75,7 +75,7 @@ export default function OmkeurenPage() {
               dan kun je hem laten <strong className="text-white">omkeuren naar A2 / 35kW</strong>.
               Bikerfun in Susteren (Limburg) regelt het papierwerk voor je.
             </p>
-            <p>
+            <p className="hidden md:block">
               Dat doen we voor particulieren én voor motorzaken. Het duurt meestal 5 tot 10
               werkdagen. Vaak kan de omkeuring ook op afstand — je hoeft de motor dus niet
               altijd langs te brengen. Vul het formulier in, dan nemen wij contact met je op.
@@ -163,6 +163,15 @@ export default function OmkeurenPage() {
                 Als de papieren rond zijn, kun je met een gerust hart de weg op.
               </p>
             </div>
+          </div>
+          <div className="mt-12 text-center md:hidden">
+            <a
+              href="#aanvraag"
+              style={{ fontFamily: 'var(--font-montserrat)' }}
+              className="btn-primary inline-block w-full bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+            >
+              Omkeuring aanvragen
+            </a>
           </div>
         </div>
       </section>

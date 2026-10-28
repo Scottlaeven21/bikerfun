@@ -23,7 +23,7 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
                         pathname?.startsWith('/checkout') ||
                         pathname?.startsWith('/account');
 
-  const navPillClass = `btn-secondary bg-transparent px-2 sm:px-4 md:px-6 py-2 sm:py-3 md:py-3.5 rounded-full font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider transition-all duration-300 border-2 whitespace-nowrap ${
+  const navPillClass = `btn-secondary bg-transparent px-3.5 sm:px-4 md:px-6 py-2.5 sm:py-3 md:py-3.5 rounded-full font-bold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 border-2 whitespace-nowrap ${
     showShopIcons
       ? 'text-biker-black border-biker-black md:text-white md:border-white'
       : 'text-white border-white'
@@ -87,10 +87,10 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
               <button
                 onClick={() => setMenuOpen(true)}
-                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-2 sm:px-4 md:px-8 py-2 sm:py-3 md:py-3.5 rounded-full font-bold text-[10px] sm:text-xs md:text-sm uppercase tracking-wider flex items-center gap-1 sm:gap-1.5 transition-all duration-300"
+                className="btn-primary bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-3.5 sm:px-4 md:px-8 py-2.5 sm:py-3 md:py-3.5 rounded-full font-bold text-xs md:text-sm uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300"
               >
                 <span>MENU</span>
-                <svg className="w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
+                <svg className="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={3}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
                 </svg>
               </button>

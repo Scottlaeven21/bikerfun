@@ -91,7 +91,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/80"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center -translate-y-8 md:translate-y-0 pb-10 md:pb-0">
+        <div className="relative h-full flex items-center -translate-y-2 md:translate-y-0">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
             <div className="max-w-4xl">
               <h1 
@@ -130,7 +130,7 @@ export default async function HomePage() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-5 md:bottom-8 left-0 right-0 flex justify-center animate-bounce pb-[env(safe-area-inset-bottom)]">
+        <div className="absolute bottom-3 md:bottom-8 left-0 right-0 flex justify-center animate-bounce pb-[env(safe-area-inset-bottom)]">
           <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
@@ -194,41 +194,43 @@ export default async function HomePage() {
                   </li>
                 ))}
               </ul>
+            </div>
+
+            <div>
+              <div className="grid grid-cols-2 gap-3 sm:gap-4">
+                <Link
+                  href="/omkeuren#aanvraag"
+                  className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
+                >
+                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
+                    Minder dan 70 kW
+                  </p>
+                  <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 495</p>
+                  <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
+                  <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                    Vraag aan
+                  </p>
+                </Link>
+                <Link
+                  href="/omkeuren#aanvraag"
+                  className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
+                >
+                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
+                    Meer dan 70 kW
+                  </p>
+                  <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 695</p>
+                  <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
+                  <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                    Vraag aan
+                  </p>
+                </Link>
+              </div>
               <Link
                 href="/omkeuren"
                 style={{ fontFamily: 'var(--font-montserrat)' }}
-                className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+                className="btn-primary mt-5 sm:mt-6 w-full text-center inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
               >
                 Meer over omkeuren
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3 sm:gap-4">
-              <Link
-                href="/omkeuren#aanvraag"
-                className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
-              >
-                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
-                  Minder dan 70 kW
-                </p>
-                <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 495</p>
-                <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
-                <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
-                  Vraag aan
-                </p>
-              </Link>
-              <Link
-                href="/omkeuren#aanvraag"
-                className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
-              >
-                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
-                  Meer dan 70 kW
-                </p>
-                <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 695</p>
-                <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
-                <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
-                  Vraag aan
-                </p>
               </Link>
             </div>
           </div>
