@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Occasion } from '@/types';
@@ -120,7 +120,7 @@ function OccasionActionButtons({ occasion, compact = false }: { occasion: Occasi
 
   if (occasion.status === 'sold') {
     return (
-      <div className={compact ? '' : 'mb-8'}>
+      <div>
         {!compact && (
           <div className="bg-red-600/10 border-2 border-red-600 rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-3 mb-4">
@@ -149,7 +149,7 @@ function OccasionActionButtons({ occasion, compact = false }: { occasion: Occasi
 
   if (occasion.status === 'reserved') {
     return (
-      <div className={compact ? '' : 'mb-8'}>
+      <div>
         {!compact && (
           <>
             <div className="bg-orange-500/10 border-2 border-orange-500 rounded-2xl p-6 mb-6">
@@ -174,7 +174,7 @@ function OccasionActionButtons({ occasion, compact = false }: { occasion: Occasi
   }
 
   return (
-    <div className={`space-y-3 ${compact ? '' : 'mb-8'}`}>
+    <div className="space-y-3">
       <Link
         href={`/occasions/${occasion.id}/aanvraag`}
         className={`${btnClass} bg-biker-yellow hover:bg-biker-black text-black hover:text-biker-yellow border-2 border-biker-yellow`}
@@ -214,448 +214,478 @@ interface OccasionDetailClientProps {
 
 export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
   const touchStartX = useRef(0);
-  
-  // Track occasion view
+
   useOccasionView(occasion.id);
 
-  const allImages = occasion.images.length > 0 ? occasion.images : [];
+  const allImages = occasion.images.length > 0
+    ? occasion.images
+    : occasion.main_image
+      ? [occasion.main_image]
+      : [];
 
-  // Section visibility settings (default all visible)
   const vis = occasion.specs?.visible_sections as Record<string, boolean> | undefined;
   const show = (key: string) => vis === undefined || vis[key] !== false;
 
+  const goPrev = () => {
+    if (allImages.length < 2) return;
+    setCurrentImageIndex((index) => (index - 1 + allImages.length) % allImages.length);
+  };
+  const goNext = () => {
+    if (allImages.length < 2) return;
+    setCurrentImageIndex((index) => (index + 1) % allImages.length);
+  };
+
+  const onSwipeStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.changedTouches[0].clientX;
+  };
+  const onSwipeEnd = (e: React.TouchEvent) => {
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(dx) < 40 || allImages.length < 2) return;
+    if (dx < 0) goNext();
+    else goPrev();
+  };
+
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setLightboxOpen(false);
+      if (event.key === 'ArrowLeft') goPrev();
+      if (event.key === 'ArrowRight') goNext();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener('keydown', onKey);
+    };
+  }, [lightboxOpen, allImages.length]);
+
+  const statusBadge =
+    occasion.status === 'sold' ? (
+      <div className="absolute top-3 right-3 z-10 bg-red-600 text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+        Verkocht
+      </div>
+    ) : occasion.status === 'reserved' ? (
+      <div className="absolute top-3 right-3 z-10 bg-orange-500 text-white px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider">
+        Gereserveerd
+      </div>
+    ) : null;
+
   return (
     <div className="min-h-screen bg-black noise-overlay">
-      {/* Hero Image - Static with Back Button Overlay */}
-      <section className="relative bg-biker-black overflow-hidden h-[45vh] md:h-[50vh]">
-        {occasion.main_image ? (
-          <div className="relative w-full h-full">
-            <img
-              src={occasion.main_image}
-              alt={`${occasion.brand} ${occasion.model}`}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="eager"
-              decoding="sync"
-            />
-            
-            {/* Verkocht Overlay */}
-            {occasion.status === 'sold' && (
-              <div className="absolute inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-10">
-                <div className="bg-red-600 text-white px-16 py-10 rounded-2xl transform -rotate-6 shadow-2xl border-8 border-white">
-                  <div className="text-6xl font-black uppercase tracking-wider text-center">
-                    VERKOCHT
-                  </div>
-                </div>
-              </div>
-            )}
+      <section className="pt-24 pb-16">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+          <Link
+            href="/occasions"
+            className="inline-flex items-center gap-1 text-white text-xs font-bold uppercase tracking-wider bg-white/10 px-3 py-1.5 rounded-full hover:bg-biker-yellow hover:text-biker-black mb-5"
+          >
+            <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            Terug
+          </Link>
 
-            {/* Gereserveerd Overlay */}
-            {occasion.status === 'reserved' && (
-              <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-10">
-                <div className="bg-orange-500 text-white px-16 py-10 rounded-2xl transform -rotate-6 shadow-2xl border-8 border-white">
-                  <div className="text-5xl font-black uppercase tracking-wider text-center">
-                    GERESERVEERD
-                  </div>
-                </div>
-              </div>
-            )}
-            
-            <div className="absolute top-20 left-4 md:top-28 md:left-6 z-20">
-              <Link
-                href="/occasions"
-                className="inline-flex items-center gap-1 text-white text-xs font-bold uppercase tracking-wider bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-biker-yellow hover:text-biker-black"
+          {allImages.length > 0 ? (
+            <div className="mb-8">
+              <div
+                className="relative aspect-[4/3] md:aspect-[16/10] bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray"
+                onTouchStart={onSwipeStart}
+                onTouchEnd={onSwipeEnd}
               >
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Terug
-              </Link>
-            </div>
-            
-            {/* Gradient Overlay at bottom */}
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black to-transparent"></div>
-          </div>
-        ) : (
-          <div className="relative h-full bg-gradient-to-br from-biker-gray/50 to-biker-black flex items-center justify-center">
-            <div className="absolute top-20 left-4 md:top-28 md:left-6 z-20">
-              <Link
-                href="/occasions"
-                className="inline-flex items-center gap-1 text-white text-xs font-bold uppercase tracking-wider bg-black/55 backdrop-blur-sm px-3 py-1.5 rounded-full hover:bg-biker-yellow hover:text-biker-black"
-              >
-                <svg className="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                </svg>
-                Terug
-              </Link>
-            </div>
-            <div className="text-center">
-              <div className="text-8xl mb-4">🏍️</div>
-              <div className="text-white font-bold text-2xl">FOTO'S VOLGEN BINNENKORT</div>
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Main Content */}
-      <section className="py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Left Column - Media Gallery */}
-            <div className="lg:col-span-2">
-              {/* Media Section */}
-              {allImages.length > 0 && (
-                <div className="mb-8">
-                  <div
-                    className="md:hidden relative"
-                    onTouchStart={(e) => {
-                      touchStartX.current = e.changedTouches[0].clientX;
-                    }}
-                    onTouchEnd={(e) => {
-                      const dx = e.changedTouches[0].clientX - touchStartX.current;
-                      if (Math.abs(dx) < 40 || allImages.length < 2) return;
-                      setCurrentImageIndex((index) =>
-                        dx < 0
-                          ? (index + 1) % allImages.length
-                          : (index - 1 + allImages.length) % allImages.length
-                      );
-                    }}
-                  >
-                    <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden border-2 border-biker-gray">
-                      <Image
-                        src={allImages[currentImageIndex]}
-                        alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
-                        fill
-                        className="object-cover"
-                        quality={100}
-                        unoptimized
-                        sizes="100vw"
-                      />
-                      {allImages.length > 1 && (
-                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                          {currentImageIndex + 1} / {allImages.length}
-                        </div>
-                      )}
+                <button
+                  type="button"
+                  onClick={() => setLightboxOpen(true)}
+                  className="absolute inset-0 z-0 cursor-zoom-in"
+                  aria-label="Foto fullscreen openen"
+                >
+                  <Image
+                    src={allImages[currentImageIndex]}
+                    alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
+                    fill
+                    className="object-contain object-center"
+                    quality={100}
+                    unoptimized
+                    sizes="100vw"
+                    priority
+                  />
+                </button>
+                {statusBadge}
+                {allImages.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={goPrev}
+                      className="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center backdrop-blur-sm"
+                      aria-label="Vorige afbeelding"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={goNext}
+                      className="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-10 h-10 md:w-12 md:h-12 flex items-center justify-center backdrop-blur-sm"
+                      aria-label="Volgende afbeelding"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </button>
+                    <div className="absolute bottom-3 right-3 z-10 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
+                      {currentImageIndex + 1} / {allImages.length}
                     </div>
-                    {allImages.length > 1 && (
-                      <p className="mt-2 text-center text-xs font-bold uppercase tracking-wider text-biker-yellow">
-                        Swipe voor meer foto&apos;s
-                      </p>
-                    )}
-                  </div>
-
-                  <div className="hidden md:block">
-                    <div className="relative aspect-video bg-biker-black rounded-2xl overflow-hidden mb-4 border-2 border-biker-gray group">
-                      <Image
-                        src={allImages[currentImageIndex]}
-                        alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
-                        fill
-                        className="object-cover"
-                        quality={100}
-                        unoptimized
-                        sizes="66vw"
-                      />
-
-                      {allImages.length > 1 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((currentImageIndex - 1 + allImages.length) % allImages.length)}
-                          className="absolute left-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                          aria-label="Vorige afbeelding"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                          </svg>
-                        </button>
-                      )}
-
-                      {allImages.length > 1 && (
-                        <button
-                          onClick={() => setCurrentImageIndex((currentImageIndex + 1) % allImages.length)}
-                          className="absolute right-3 top-1/2 -translate-y-1/2 z-10 bg-black/60 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 backdrop-blur-sm"
-                          aria-label="Volgende afbeelding"
-                        >
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </button>
-                      )}
-
-                      {allImages.length > 1 && (
-                        <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm text-white text-xs font-bold px-3 py-1 rounded-full">
-                          {currentImageIndex + 1} / {allImages.length}
-                        </div>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-6 gap-4">
-                      {allImages.map((img: string, idx: number) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentImageIndex(idx)}
-                          className={`relative aspect-video rounded-lg overflow-hidden border-2 transition-all ${
-                            currentImageIndex === idx
-                              ? 'border-biker-yellow scale-105'
-                              : 'border-biker-gray hover:border-biker-yellow/50'
-                          }`}
-                        >
-                          <Image
-                            src={img}
-                            alt={`Thumbnail ${idx + 1}`}
-                            fill
-                            className="object-cover"
-                            quality={100}
-                            unoptimized
-                          />
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Description */}
-              {show('description') && (
-              <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray mb-8">
-                <h3 className="text-2xl font-bold text-white mb-4">Beschrijving</h3>
-                <div className="text-biker-light leading-relaxed whitespace-pre-line">
-                  {occasion.description
-                    ?.replace(/\\n/g, '\n')
-                    .replace(/<br\s*\/?>/gi, '\n')
-                    .replace(/<\/p>/gi, '\n\n')
-                    .replace(/<\/(li|div|h[1-6])>/gi, '\n')
-                    .replace(/<[^>]*>/g, '')
-                    .replace(/&amp;/g, '&')
-                    .replace(/&nbsp;/g, ' ')
-                    .replace(/\n{3,}/g, '\n\n')
-                    .trim()}
-                </div>
-              </div>
-              )}
-
-              {/* Technical Specifications - only show if at least one spec is visible */}
-              {(show('engine') || show('power') || show('transmission') || show('fuel') ||
-                show('finalDrive') || show('weight') || show('seatHeight') ||
-                show('tankCapacity') || show('topSpeed') || show('cooling') || show('cylinders') || show('gears')) && (
-              <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray">
-                <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    {show('engine') && occasion.specs?.engine && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
-                        <div className="text-white font-semibold">{occasion.specs.engine}</div>
-                      </div>
-                    )}
-                    {show('cylinders') && occasion.specs?.cylinders && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Cilinders</div>
-                        <div className="text-white font-semibold">{occasion.specs.cylinders}</div>
-                      </div>
-                    )}
-                    {show('power') && occasion.power && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
-                        <div className="text-white font-semibold">{occasion.power}</div>
-                      </div>
-                    )}
-                    {show('transmission') && occasion.transmission && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
-                        <div className="text-white font-semibold">{occasion.transmission}</div>
-                      </div>
-                    )}
-                    {show('fuel') && occasion.fuel && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
-                        <div className="text-white font-semibold">{occasion.fuel}</div>
-                      </div>
-                    )}
-                    {show('gears') && occasion.specs?.gears && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Versnellingen</div>
-                        <div className="text-white font-semibold">{occasion.specs.gears}</div>
-                      </div>
-                    )}
-                    {show('finalDrive') && occasion.specs?.finalDrive && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
-                        <div className="text-white font-semibold">{occasion.specs.finalDrive}</div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="space-y-4">
-                    {show('weight') && occasion.specs?.weight && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
-                        <div className="text-white font-semibold">{occasion.specs.weight}</div>
-                      </div>
-                    )}
-                    {show('seatHeight') && occasion.specs?.seatHeight && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
-                        <div className="text-white font-semibold">{occasion.specs.seatHeight}</div>
-                      </div>
-                    )}
-                    {show('tankCapacity') && occasion.specs?.tankCapacity && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
-                        <div className="text-white font-semibold">{occasion.specs.tankCapacity}</div>
-                      </div>
-                    )}
-                    {show('topSpeed') && occasion.specs?.topSpeed && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
-                        <div className="text-white font-semibold">{occasion.specs.topSpeed}</div>
-                      </div>
-                    )}
-                    {show('cooling') && occasion.specs?.cooling && (
-                      <div>
-                        <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
-                        <div className="text-white font-semibold">{occasion.specs.cooling}</div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-              )}
-
-              {/* Features & Extras */}
-              {(show('features') && occasion.features.length > 0) || (show('extras') && occasion.extras.length > 0) ? (
-                <div className="bg-biker-dark rounded-2xl p-8 border-2 border-biker-gray mt-8">
-                  <h3 className="text-2xl font-bold text-white mb-6">Features &amp; Extras</h3>
-                  
-                  {show('features') && occasion.features.length > 0 && (
-                    <div className="mb-6">
-                      <h4 className="text-biker-yellow font-bold mb-3">Features</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {occasion.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-biker-light">
-                            <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            <span>{feature}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {show('extras') && occasion.extras.length > 0 && (
-                    <div>
-                      <h4 className="text-biker-yellow font-bold mb-3">Extras</h4>
-                      <div className="grid grid-cols-2 gap-3">
-                        {occasion.extras.map((extra, idx) => (
-                          <div key={idx} className="flex items-center space-x-2 text-biker-light">
-                            <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                            </svg>
-                            <span>{extra}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-              ) : null}
-            </div>
-
-            {/* Right Column - Details & CTA */}
-            <div className="lg:col-span-1">
-              {/* Info Card */}
-              <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-8 lg:sticky lg:top-24">
-                {/* Main Title */}
-                <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 uppercase tracking-tight">
-                  {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
-                </h1>
-                
-                {/* Year Badge */}
-                {occasion.year && occasion.year > 1900 && (
-                  <div className="inline-block bg-biker-yellow text-biker-black px-4 py-1 rounded-full text-sm font-bold mb-4">
-                    {occasion.year}
-                  </div>
+                  </>
                 )}
-
-                {/* Price */}
-                <div className="mb-6 mt-2">
-                  {occasion.price > 0 ? (
-                    <div className="text-3xl font-black text-biker-yellow tracking-tight">
-                      € {occasion.price.toLocaleString('nl-NL')}
-                    </div>
-                  ) : (
-                    <div className="text-xl font-bold text-biker-yellow">
-                      Prijs op aanvraag
-                    </div>
-                  )}
-                </div>
-                
-                {/* Header */}
-                <h2 className="text-xl font-bold text-white mb-6">INFORMATIE</h2>
-
-                {/* Info List */}
-                <div className="space-y-0 mb-8">
-                  {show('mileage') && occasion.mileage && occasion.mileage > 0 && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">KM-stand</span>
-                      <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
-                    </div>
-                  )}
-                  {show('year') && occasion.year && occasion.year > 1900 && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">Bouwjaar</span>
-                      <span className="text-white font-bold">{occasion.year}</span>
-                    </div>
-                  )}
-                  {show('category') && occasion.category && occasion.category.trim() !== '' && occasion.category !== '0' && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">Categorie</span>
-                      <span className="text-white font-bold">{occasion.category}</span>
-                    </div>
-                  )}
-                  {show('condition') && occasion.condition && occasion.condition.trim() !== '' && occasion.condition !== '0' && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">Staat</span>
-                      <span className="text-biker-yellow font-bold">{occasion.condition}</span>
-                    </div>
-                  )}
-                  {show('owners') && occasion.owners && occasion.owners > 0 && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">Eigenaren</span>
-                      <span className="text-white font-bold">{occasion.owners}</span>
-                    </div>
-                  )}
-                  {show('service_history') && occasion.service_history && occasion.service_history.trim() !== '' && occasion.service_history !== '0' && (
-                    <div className="flex justify-between items-center py-4 border-b border-gray-800">
-                      <span className="text-white">Onderhoudshistorie</span>
-                      <span className="text-white font-bold">{occasion.service_history}</span>
-                    </div>
-                  )}
-                  {show('warranty') && occasion.warranty && occasion.warranty.trim() !== '' && occasion.warranty !== '0' && (
-                    <div className="flex justify-between items-center py-4">
-                      <span className="text-white">Garantie</span>
-                      <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="hidden lg:block">
-                  <OccasionActionButtons occasion={occasion} />
-                  <OccasionChecklist />
-                </div>
               </div>
+              {allImages.length > 1 && (
+                <p className="mt-2 text-center text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                  Swipe of tik voor meer foto&apos;s
+                </p>
+              )}
 
-              <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
-                <OccasionActionButtons occasion={occasion} />
-              </div>
-
-              <div className="lg:hidden mt-4 bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6">
-                <OccasionChecklist className="" />
+              {allImages.length > 1 && (
+                <div className="mt-3 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
+                  {allImages.map((img: string, idx: number) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setCurrentImageIndex(idx)}
+                      className={`relative aspect-square rounded-md overflow-hidden border transition-all ${
+                        currentImageIndex === idx
+                          ? 'border-biker-yellow'
+                          : 'border-biker-gray hover:border-biker-yellow/50'
+                      }`}
+                      aria-label={`Foto ${idx + 1}`}
+                    >
+                      <Image
+                        src={img}
+                        alt={`${occasion.brand} ${occasion.model} thumbnail ${idx + 1}`}
+                        fill
+                        className="object-contain object-center bg-biker-black"
+                        quality={70}
+                        unoptimized
+                        sizes="80px"
+                      />
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="mb-8 aspect-[4/3] bg-gradient-to-br from-biker-gray/50 to-biker-black rounded-2xl border-2 border-biker-gray flex items-center justify-center">
+              <div className="text-center">
+                <div className="text-6xl mb-3">🏍️</div>
+                <div className="text-white font-bold text-lg">FOTO&apos;S VOLGEN BINNENKORT</div>
               </div>
             </div>
+          )}
+
+          <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6 md:p-8 mb-6">
+            <h1 className="text-3xl md:text-4xl font-bold text-white mb-3 uppercase tracking-tight">
+              {occasion.brand} <span className="text-biker-yellow">{occasion.model}</span>
+            </h1>
+            {occasion.year && occasion.year > 1900 && (
+              <div className="inline-block bg-biker-yellow text-biker-black px-4 py-1 rounded-full text-sm font-bold mb-4">
+                {occasion.year}
+              </div>
+            )}
+            <div className="mb-6">
+              {occasion.price > 0 ? (
+                <div className="text-3xl font-black text-biker-yellow tracking-tight">
+                  € {occasion.price.toLocaleString('nl-NL')}
+                </div>
+              ) : (
+                <div className="text-xl font-bold text-biker-yellow">Prijs op aanvraag</div>
+              )}
+            </div>
+            <h2 className="text-xl font-bold text-white mb-2">INFORMATIE</h2>
+            <div className="space-y-0">
+              {show('mileage') && occasion.mileage && occasion.mileage > 0 && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">KM-stand</span>
+                  <span className="text-white font-bold">{occasion.mileage.toLocaleString('nl-NL')} km</span>
+                </div>
+              )}
+              {show('year') && occasion.year && occasion.year > 1900 && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">Bouwjaar</span>
+                  <span className="text-white font-bold">{occasion.year}</span>
+                </div>
+              )}
+              {show('category') && occasion.category && occasion.category.trim() !== '' && occasion.category !== '0' && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">Categorie</span>
+                  <span className="text-white font-bold">{occasion.category}</span>
+                </div>
+              )}
+              {show('condition') && occasion.condition && occasion.condition.trim() !== '' && occasion.condition !== '0' && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">Staat</span>
+                  <span className="text-biker-yellow font-bold">{occasion.condition}</span>
+                </div>
+              )}
+              {show('owners') && occasion.owners && occasion.owners > 0 && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">Eigenaren</span>
+                  <span className="text-white font-bold">{occasion.owners}</span>
+                </div>
+              )}
+              {show('service_history') && occasion.service_history && occasion.service_history.trim() !== '' && occasion.service_history !== '0' && (
+                <div className="flex justify-between items-center py-4 border-b border-gray-800">
+                  <span className="text-white">Onderhoudshistorie</span>
+                  <span className="text-white font-bold">{occasion.service_history}</span>
+                </div>
+              )}
+              {show('warranty') && occasion.warranty && occasion.warranty.trim() !== '' && occasion.warranty !== '0' && (
+                <div className="flex justify-between items-center py-4">
+                  <span className="text-white">Garantie</span>
+                  <span className="text-biker-yellow font-bold">{occasion.warranty}</span>
+                </div>
+              )}
+            </div>
           </div>
+
+          <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6 md:p-8 mb-6">
+            <OccasionActionButtons occasion={occasion} />
+          </div>
+
+          <div className="bg-[#1a1a1a] rounded-2xl border-2 border-biker-gray p-6 md:p-8 mb-6">
+            <OccasionChecklist className="" />
+          </div>
+
+          {(show('engine') || show('power') || show('transmission') || show('fuel') ||
+            show('finalDrive') || show('weight') || show('seatHeight') ||
+            show('tankCapacity') || show('topSpeed') || show('cooling') || show('cylinders') || show('gears')) && (
+            <div className="bg-biker-dark rounded-2xl p-6 md:p-8 border-2 border-biker-gray mb-6">
+              <h3 className="text-2xl font-bold text-white mb-6">Technische Specificaties</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  {show('engine') && occasion.specs?.engine && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Motor</div>
+                      <div className="text-white font-semibold">{occasion.specs.engine}</div>
+                    </div>
+                  )}
+                  {show('cylinders') && occasion.specs?.cylinders && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Cilinders</div>
+                      <div className="text-white font-semibold">{occasion.specs.cylinders}</div>
+                    </div>
+                  )}
+                  {show('power') && occasion.power && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Vermogen</div>
+                      <div className="text-white font-semibold">{occasion.power}</div>
+                    </div>
+                  )}
+                  {show('transmission') && occasion.transmission && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Transmissie</div>
+                      <div className="text-white font-semibold">{occasion.transmission}</div>
+                    </div>
+                  )}
+                  {show('fuel') && occasion.fuel && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Brandstof</div>
+                      <div className="text-white font-semibold">{occasion.fuel}</div>
+                    </div>
+                  )}
+                  {show('gears') && occasion.specs?.gears && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Versnellingen</div>
+                      <div className="text-white font-semibold">{occasion.specs.gears}</div>
+                    </div>
+                  )}
+                  {show('finalDrive') && occasion.specs?.finalDrive && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Aandrijving</div>
+                      <div className="text-white font-semibold">{occasion.specs.finalDrive}</div>
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-4">
+                  {show('weight') && occasion.specs?.weight && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Gewicht</div>
+                      <div className="text-white font-semibold">{occasion.specs.weight}</div>
+                    </div>
+                  )}
+                  {show('seatHeight') && occasion.specs?.seatHeight && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Zithoogte</div>
+                      <div className="text-white font-semibold">{occasion.specs.seatHeight}</div>
+                    </div>
+                  )}
+                  {show('tankCapacity') && occasion.specs?.tankCapacity && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Tankinhoud</div>
+                      <div className="text-white font-semibold">{occasion.specs.tankCapacity}</div>
+                    </div>
+                  )}
+                  {show('topSpeed') && occasion.specs?.topSpeed && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Topsnelheid</div>
+                      <div className="text-white font-semibold">{occasion.specs.topSpeed}</div>
+                    </div>
+                  )}
+                  {show('cooling') && occasion.specs?.cooling && (
+                    <div>
+                      <div className="text-biker-muted text-sm uppercase tracking-wider mb-1">Koeling</div>
+                      <div className="text-white font-semibold">{occasion.specs.cooling}</div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {(show('features') && occasion.features.length > 0) || (show('extras') && occasion.extras.length > 0) ? (
+            <div className="bg-biker-dark rounded-2xl p-6 md:p-8 border-2 border-biker-gray mb-6">
+              <h3 className="text-2xl font-bold text-white mb-6">Features &amp; Extras</h3>
+              {show('features') && occasion.features.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-biker-yellow font-bold mb-3">Features</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {occasion.features.map((feature, idx) => (
+                      <div key={idx} className="flex items-center space-x-2 text-biker-light">
+                        <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span>{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {show('extras') && occasion.extras.length > 0 && (
+                <div>
+                  <h4 className="text-biker-yellow font-bold mb-3">Extras</h4>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {occasion.extras.map((extra, idx) => (
+                      <div key={idx} className="flex items-center space-x-2 text-biker-light">
+                        <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                        </svg>
+                        <span>{extra}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          ) : null}
+
+          {show('description') && occasion.description && (
+            <div className="bg-biker-dark rounded-2xl p-6 md:p-8 border-2 border-biker-gray">
+              <h3 className="text-2xl font-bold text-white mb-4">Beschrijving</h3>
+              <div className="text-biker-light leading-relaxed whitespace-pre-line">
+                {occasion.description
+                  ?.replace(/\\n/g, '\n')
+                  .replace(/<br\s*\/?>/gi, '\n')
+                  .replace(/<\/p>/gi, '\n\n')
+                  .replace(/<\/(li|div|h[1-6])>/gi, '\n')
+                  .replace(/<[^>]*>/g, '')
+                  .replace(/&amp;/g, '&')
+                  .replace(/&nbsp;/g, ' ')
+                  .replace(/\n{3,}/g, '\n\n')
+                  .trim()}
+              </div>
+            </div>
+          )}
         </div>
       </section>
+
+      {lightboxOpen && allImages.length > 0 && (
+        <div
+          className="fixed inset-0 z-[80] bg-black/95 flex flex-col"
+          onTouchStart={onSwipeStart}
+          onTouchEnd={onSwipeEnd}
+        >
+          <div className="flex items-center justify-between px-4 pt-4 pb-2">
+            <p className="text-white text-sm font-bold">
+              {currentImageIndex + 1} / {allImages.length}
+            </p>
+            <button
+              type="button"
+              onClick={() => setLightboxOpen(false)}
+              className="text-white bg-white/10 hover:bg-biker-yellow hover:text-biker-black rounded-full w-10 h-10 flex items-center justify-center"
+              aria-label="Sluiten"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          <div className="relative flex-1 min-h-0">
+            <Image
+              src={allImages[currentImageIndex]}
+              alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
+              fill
+              className="object-contain object-center"
+              quality={100}
+              unoptimized
+              sizes="100vw"
+            />
+            {allImages.length > 1 && (
+              <>
+                <button
+                  type="button"
+                  onClick={goPrev}
+                  className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center"
+                  aria-label="Vorige afbeelding"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+                <button
+                  type="button"
+                  onClick={goNext}
+                  className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center"
+                  aria-label="Volgende afbeelding"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </>
+            )}
+          </div>
+
+          {allImages.length > 1 && (
+            <div className="px-3 py-3 overflow-x-auto">
+              <div className="flex gap-1.5 min-w-min justify-center">
+                {allImages.map((img: string, idx: number) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setCurrentImageIndex(idx)}
+                    className={`relative w-14 h-14 shrink-0 rounded-md overflow-hidden border ${
+                      currentImageIndex === idx ? 'border-biker-yellow' : 'border-white/20'
+                    }`}
+                    aria-label={`Ga naar foto ${idx + 1}`}
+                  >
+                    <Image
+                      src={img}
+                      alt=""
+                      fill
+                      className="object-contain object-center bg-black"
+                      quality={60}
+                      unoptimized
+                      sizes="56px"
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

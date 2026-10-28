@@ -149,14 +149,14 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             className="flex-none w-[72vw] md:w-[370px] bg-biker-dark rounded-2xl overflow-hidden border-2 border-biker-gray hover:border-biker-yellow transition-all group snap-start flex flex-col cursor-pointer self-stretch"
           >
             {/* Image */}
-            <div className="relative aspect-[4/5] md:aspect-[4/3] bg-biker-black overflow-hidden block">
+            <div className="relative aspect-[5/4] md:aspect-[4/3] bg-biker-black overflow-hidden block">
               {occasion.images.length > 0 ? (
                 <>
                   <Image
                     src={occasion.images[0]}
                     alt={`${occasion.brand} ${occasion.model}`}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-contain object-center p-1"
                     quality={100}
                     unoptimized
                     draggable={false}
@@ -193,13 +193,15 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
             </div>
 
             {/* Content */}
-            <div className="p-4 md:p-6 flex flex-col flex-1">
+            <div className="p-5 md:p-6 flex flex-col flex-1">
               {/* Brand & Model */}
-              <div className="mb-2 md:mb-4">
+              <div className="mb-3 md:mb-4">
                 <h3 className="text-biker-yellow font-bold text-xs md:text-sm uppercase tracking-wider mb-0.5 md:mb-1 truncate">
                   {occasion.brand}
                 </h3>
-                <h4 className="text-white font-bold text-xl md:text-2xl truncate">{occasion.model}</h4>
+                <h4 className="text-white font-bold text-xl md:text-2xl leading-tight">
+                  {occasion.model}
+                </h4>
               </div>
 
               {/* Pricing */}
@@ -210,6 +212,12 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                     : 'Prijs op aanvraag'}
                 </div>
               </div>
+
+              {occasion.description && (
+                <p className="text-biker-light text-sm leading-relaxed mb-3 md:mb-4 line-clamp-2">
+                  {occasion.description.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()}
+                </p>
+              )}
 
               {/* Specs */}
               <div className="grid grid-cols-2 gap-x-3 gap-y-2 md:gap-x-4 md:gap-y-3 mb-3 md:mb-4">
@@ -247,35 +255,36 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                   </div>
                 )}
                 {occasion.power && occasion.power.trim() !== '' && occasion.power !== '0' && (
-                  <div className="flex items-center space-x-2 text-biker-light text-sm col-span-2">
+                  <div className="flex items-center space-x-2 text-biker-light text-sm">
                     <svg className="w-4 h-4 text-biker-yellow flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                     <span className="truncate">{occasion.power}</span>
                   </div>
                 )}
+                {occasion.color && occasion.color.trim() !== '' && (
+                  <div className="flex items-center space-x-2 text-biker-light text-sm">
+                    <svg className="w-4 h-4 text-biker-yellow flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                    </svg>
+                    <span className="truncate">{occasion.color}</span>
+                  </div>
+                )}
               </div>
 
               {occasion.features.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 md:gap-2 mb-3 md:mb-4 max-h-[4.25rem] overflow-hidden">
-                  {occasion.features.slice(0, 5).map((feature, idx) => (
+                <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-5">
+                  {occasion.features.slice(0, 6).map((feature, idx) => (
                     <span
                       key={idx}
-                      className={`text-[11px] md:text-xs px-2 py-1 bg-biker-black text-biker-light rounded border border-biker-gray ${
-                        idx >= 2 ? 'hidden md:inline' : ''
-                      }`}
+                      className="text-[11px] md:text-xs px-2 py-1 bg-biker-black text-biker-light rounded border border-biker-gray"
                     >
                       {feature}
                     </span>
                   ))}
-                  {occasion.features.length > 2 && (
-                    <span className="md:hidden text-[11px] px-2 py-1 bg-biker-gray/30 text-biker-yellow rounded border border-biker-gray">
-                      +{occasion.features.length - 2} andere
-                    </span>
-                  )}
-                  {occasion.features.length > 5 && (
-                    <span className="hidden md:inline text-xs px-2 py-1 bg-biker-gray/30 text-biker-yellow rounded border border-biker-gray">
-                      +{occasion.features.length - 5} andere
+                  {occasion.features.length > 6 && (
+                    <span className="text-[11px] md:text-xs px-2 py-1 bg-biker-gray/30 text-biker-yellow rounded border border-biker-gray">
+                      +{occasion.features.length - 6} andere
                     </span>
                   )}
                 </div>
