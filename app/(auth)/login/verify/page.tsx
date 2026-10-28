@@ -2,7 +2,9 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { Admin2faForm } from '@/components/auth/admin-2fa-form';
-import { isAdmin2faVerified, issueAdmin2faCode, shouldSkipAdmin2fa, setAdmin2faCookie } from '@/lib/auth/admin-2fa';
+import { isAdmin2faVerified, shouldSkipAdmin2fa, setAdmin2faCookie } from '@/lib/auth/admin-2fa';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Bevestig admin-login - Bikerfun',
@@ -45,7 +47,6 @@ export default async function Admin2faPage({
   }
 
   const accountEmail = user.email || (profile as { email?: string } | null)?.email || '';
-  const issued = await issueAdmin2faCode(user.id, accountEmail);
 
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 shadow-2xl">
@@ -58,17 +59,7 @@ export default async function Admin2faPage({
         </h1>
         <p className="text-gray-600 text-lg">Admin-login bevestigen via e-mail</p>
       </div>
-      {issued.error && (
-        <div className="mb-4 bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
-          De code kon niet worden verstuurd naar {accountEmail}.
-          {issued.error ? ` (${issued.error})` : ' Vraag een nieuwe code aan.'}
-        </div>
-      )}
-      <Admin2faForm
-        redirectTo={redirectTo}
-        email={accountEmail}
-        sent={Boolean(issued.sent || issued.already) && !issued.error}
-      />
+      <Admin2faForm redirectTo={redirectTo} email={accountEmail} />
     </div>
   );
 }

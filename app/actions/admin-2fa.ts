@@ -43,7 +43,10 @@ export async function sendAdmin2fa(force = false) {
     return { success: false, error: 'Even wachten: je kunt over een minuut een nieuwe code vragen.' };
   }
   if (result.error) {
-    return { success: false, error: 'We konden de code niet mailen. Probeer opnieuw.' };
+    return {
+      success: false,
+      error: `We konden de code niet mailen naar ${email}. ${result.error}`,
+    };
   }
   return {
     success: true,

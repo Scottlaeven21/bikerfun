@@ -78,6 +78,10 @@ function createTransporter() {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASSWORD,
     },
+    family: 4,
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 15_000,
   });
 }
 
@@ -107,7 +111,7 @@ export async function sendEmail({
     const transporter = createTransporter();
     
     const mailOptions = {
-      from: getFromEmail(),
+      from: { name: 'Bikerfun', address: getFromEmail() },
       to: Array.isArray(to) ? to.join(', ') : to,
       subject,
       html,

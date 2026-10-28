@@ -2,7 +2,7 @@
 
 import { useFormState, useFormStatus } from 'react-dom';
 import { sendAdmin2fa, verifyAdmin2fa } from '@/app/actions/admin-2fa';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -20,22 +20,46 @@ function SubmitButton() {
 export function Admin2faForm({
   redirectTo,
   email,
-  sent,
 }: {
   redirectTo: string;
   email: string;
-  sent?: boolean;
 }) {
   const [state, formAction] = useFormState(verifyAdmin2fa, null);
   const [resend, setResend] = useState<string | null>(null);
-  const [sending, setSending] = useState(false);
+  const [mailError, setMailError] = useState<string | null>(null);
+  const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const result = await sendAdmin2fa(true);
+      if (cancelled) return;
+      setSending(false);
+      if (result.success) {
+        setSent(true);
+        setMailError(null);
+      } else {
+        setMailError(result.error || 'Versturen mislukt.');
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function handleResend() {
     setSending(true);
     setResend(null);
+    setMailError(null);
     const result = await sendAdmin2fa(true);
     setSending(false);
-    setResend(result.success ? 'Nieuwe code verstuurd.' : result.error || 'Versturen mislukt.');
+    if (result.success) {
+      setSent(true);
+      setResend('Nieuwe code verstuurd.');
+    } else {
+      setMailError(result.error || 'Versturen mislukt.');
+    }
   }
 
   return (
@@ -43,6 +67,11 @@ export function Admin2faForm({
       {state?.error && (
         <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
           {state.error}
+        </div>
+      )}
+      {mailError && (
+        <div className="bg-red-50 border-2 border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm">
+          {mailError}
         </div>
       )}
       {resend && (
