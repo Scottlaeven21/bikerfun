@@ -107,7 +107,7 @@ export default async function HomePage() {
                 style={{ fontFamily: 'var(--font-montserrat)' }}
                 className="text-sm md:text-base text-white/70 mb-12 tracking-widest uppercase font-light"
               >
-                Motoroccasions &amp; Accessoires Â· Susteren, Limburg
+                Motoroccasions &amp; Accessoires · Susteren, Limburg
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link
