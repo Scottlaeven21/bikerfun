@@ -5,6 +5,7 @@ import { formatDate, formatPrice } from '@/lib/utils/format';
 import { DealerStatusForm } from '@/components/admin/dealer-status-form';
 import { DealerInvoiceForm } from '@/components/admin/dealer-invoice-form';
 import { DealerInvoicePaidButton } from '@/components/admin/dealer-invoice-paid-button';
+import { DocumentLink } from '@/components/dealer/document-link';
 import { InvoiceStatusBadge } from '@/components/dealer/status-badge';
 import type { DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
