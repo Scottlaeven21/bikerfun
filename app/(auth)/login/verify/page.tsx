@@ -63,10 +63,7 @@ export default async function Admin2faPage({
           De code kon niet worden verstuurd. Controleer SMTP of vraag een nieuwe code aan.
         </div>
       )}
-      <Admin2faForm
-        redirectTo={redirectTo}
-        emails={issued.recipients?.length ? issued.recipients : [accountEmail]}
-      />
+      <Admin2faForm redirectTo={redirectTo} email={accountEmail} />
     </div>
   );
 }

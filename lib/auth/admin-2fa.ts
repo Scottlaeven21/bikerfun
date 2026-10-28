@@ -68,26 +68,17 @@ export function shouldSkipAdmin2fa() {
   return process.env.NODE_ENV !== 'production' && !isEmailConfigured();
 }
 
-/** Account-mail + shop-inbox, zodat de code niet alleen op een Gmail belandt. */
+/** Alleen het e-mailadres waarmee de admin inlogt. */
 export function getAdmin2faRecipients(accountEmail: string): string[] {
-  const map = new Map<string, string>();
-  const add = (value?: string) => {
-    const email = (value || '').trim();
-    if (!email.includes('@')) return;
-    const key = email.toLowerCase();
-    if (!map.has(key)) map.set(key, email);
-  };
-  add(accountEmail);
-  add(process.env.ADMIN_2FA_EMAIL);
-  add(process.env.SMTP_TO_EMAIL);
-  add('scottlaeven@hotmail.com');
-  if (map.has('265749laeven@zuyd.nl')) map.delete('265749laeven@zuyd.nl');
-  if (map.size === 0) add('scottlaeven@hotmail.com');
-  return [...map.values()];
+  const email = (accountEmail || '').trim();
+  return email.includes('@') ? [email] : [];
 }
 
 export async function issueAdmin2faCode(userId: string, accountEmail: string, force = false) {
   const recipients = getAdmin2faRecipients(accountEmail);
+  if (!recipients.length) {
+    return { sent: false, skipped: false as const, recipients, error: 'Geen inlog-e-mail gevonden.' };
+  }
 
   if (shouldSkipAdmin2fa()) {
     return { sent: false, skipped: true as const, recipients };
