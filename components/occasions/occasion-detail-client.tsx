@@ -358,10 +358,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => {
-                        setCurrentImageIndex(idx);
-                        setLightboxOpen(true);
-                      }}
+                      onClick={() => setCurrentImageIndex(idx)}
                       className={`relative w-20 h-20 shrink-0 snap-start rounded-md overflow-hidden border ${
                         currentImageIndex === idx
                           ? 'border-biker-yellow'
