@@ -22,7 +22,7 @@ export default async function DealerCompletedPage() {
   return (
     <div>
       <h1 className="text-3xl font-bold text-gray-900 mb-2">Omgekeurde motoren</h1>
-      <p className="text-gray-600 mb-8">Alles wat correct bij de RDW staat.</p>
+      <p className="text-gray-600 mb-8">Registratie afgerond. Het nieuwe kentekenbewijs is onderweg.</p>
 
       {applications.length === 0 ? (
         <div className="bg-white rounded-2xl border-2 border-gray-200 p-10 text-center text-gray-600">

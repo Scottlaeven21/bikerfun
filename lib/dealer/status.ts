@@ -18,7 +18,7 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   docs_requested: 'Documentatie aangevraagd',
   awaiting_delivery: 'Wachten op levering',
   rdw_submitted: 'Aanvraag ingediend bij de RDW',
-  completed: 'Omgekeurd',
+  completed: 'Registratie afgerond',
 };
 
 export const APPLICATION_STATUS_HINTS: Record<ApplicationStatus, string> = {
@@ -27,7 +27,8 @@ export const APPLICATION_STATUS_HINTS: Record<ApplicationStatus, string> = {
   docs_requested: 'Er is extra documentatie nodig. Check je mail of het portaal.',
   awaiting_delivery: 'We wachten tot de motor of de stukken bij ons zijn.',
   rdw_submitted: 'De aanvraag staat bij de RDW. Zodra die rond is, hoor je het.',
-  completed: 'De motor is correct geregistreerd bij de RDW.',
+  completed:
+    'Nieuw kentekenbewijs wordt aangemaakt en verzonden. Deze wordt binnen 1-3 werkdagen geleverd.',
 };
 
 export const INVOICE_STATUS_LABELS: Record<InvoiceStatus, string> = {
