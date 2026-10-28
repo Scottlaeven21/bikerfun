@@ -143,6 +143,35 @@ export async function setDealerInvoicePaid(invoiceId: string, paid: boolean) {
   return { success: true };
 }
 
+export async function createAdminFromAdmin(formData: FormData) {
+  const gate = await requireAdmin();
+  if (gate.error) return { error: gate.error };
+
+  const name = String(formData.get('name') || '').trim();
+  const email = String(formData.get('email') || '').trim();
+  if (!name || !email) {
+    return { error: 'Vul naam en e-mail in.' };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: 'Vul een geldig e-mailadres in.' };
+  }
+
+  const { provisionAdminAccount } = await import('@/lib/auth/provision-admin');
+  const result = await provisionAdminAccount(name, email);
+  if (!result.ok) {
+    return { error: result.error || 'Admin aanmaken mislukt.' };
+  }
+
+  revalidatePath('/admin');
+  return {
+    success: true,
+    createdUser: result.createdUser,
+    alreadyExisted: result.alreadyExisted,
+    password: result.password,
+    emailed: result.emailed,
+  };
+}
+
 export async function createDealerFromAdmin(formData: FormData) {
   const gate = await requireAdmin();
   if (gate.error) return { error: gate.error };

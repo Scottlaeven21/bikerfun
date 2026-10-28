@@ -497,6 +497,65 @@ export function admin2faEmail(code: string): { subject: string; html: string } {
   };
 }
 
+export function adminWelcomeEmail({
+  name,
+  email,
+  password,
+  loginUrl,
+  existingAccount,
+}: {
+  name: string;
+  email: string;
+  password: string | null;
+  loginUrl: string;
+  existingAccount: boolean;
+}): { subject: string; html: string } {
+  const content = existingAccount
+    ? `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Je hebt nu admin-toegang
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, dit account (${escapeHtml(email)}) kan inloggen op het Bikerfun admin-panel.
+      Gebruik je bestaande wachtwoord.
+    </p>
+    <p style="margin: 24px 0 0;">
+      <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Inloggen als admin
+      </a>
+    </p>
+  `
+    : `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Je Bikerfun admin-account
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, er is een extra admin-account voor je gemaakt.
+      De 2FA-code gaat naar dit e-mailadres.
+    </p>
+    <table role="presentation" style="width:100%;border-collapse:collapse;margin:20px 0;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">E-mail</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(email)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Tijdelijk wachtwoord</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(password || '')}</td>
+      </tr>
+    </table>
+    <p style="margin: 24px 0 0;">
+      <a href="${loginUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Inloggen als admin
+      </a>
+    </p>
+  `;
+
+  return {
+    subject: existingAccount ? 'Admin-toegang Bikerfun' : 'Je Bikerfun admin-account',
+    html: emailLayout(content),
+  };
+}
+
 export function dealerWelcomeEmail({
   name,
   company,

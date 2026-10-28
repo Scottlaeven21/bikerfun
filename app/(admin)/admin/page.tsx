@@ -5,6 +5,7 @@ import { Order } from '@/types';
 import Link from 'next/link';
 import { AnalyticsDashboard } from '@/components/admin/analytics-dashboard';
 import { CreateDealerForm } from '@/components/admin/create-dealer-form';
+import { CreateAdminForm } from '@/components/admin/create-admin-form';
 
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
@@ -85,6 +86,14 @@ export default async function AdminDashboardPage() {
           </Link>
         </div>
         <CreateDealerForm />
+      </div>
+
+      <div className="bg-white rounded-xl shadow-lg p-6 border border-gray-200 mb-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-1">Extra admin-account</h2>
+        <p className="text-gray-600 text-sm mb-4">
+          Maak een tweede login, bijvoorbeeld Hotmail. 2FA gaat naar het adres waarmee je inlogt.
+        </p>
+        <CreateAdminForm />
       </div>
 
       {/* Stats Cards */}
