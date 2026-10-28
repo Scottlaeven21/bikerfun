@@ -216,6 +216,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const touchStartX = useRef(0);
+  const lightboxItemRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useOccasionView(occasion.id);
 
@@ -253,15 +254,16 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
     document.body.style.overflow = 'hidden';
     const onKey = (event: KeyboardEvent) => {
       if (event.key === 'Escape') setLightboxOpen(false);
-      if (event.key === 'ArrowLeft') goPrev();
-      if (event.key === 'ArrowRight') goNext();
     };
     window.addEventListener('keydown', onKey);
+    requestAnimationFrame(() => {
+      lightboxItemRefs.current[currentImageIndex]?.scrollIntoView({ block: 'start' });
+    });
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener('keydown', onKey);
     };
-  }, [lightboxOpen, allImages.length]);
+  }, [lightboxOpen]);
 
   const statusBadge =
     occasion.status === 'sold' ? (
@@ -305,7 +307,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                     src={allImages[currentImageIndex]}
                     alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
                     fill
-                    className="object-contain object-center"
+                    className="object-cover object-center"
                     quality={100}
                     unoptimized
                     sizes="100vw"
@@ -348,16 +350,22 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               )}
 
               {allImages.length > 1 && (
-                <div className="mt-3 grid grid-cols-5 sm:grid-cols-6 md:grid-cols-8 gap-1.5">
+                <div
+                  className="mt-3 flex overflow-x-auto gap-2 pb-1 snap-x snap-mandatory"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', WebkitOverflowScrolling: 'touch' }}
+                >
                   {allImages.map((img: string, idx: number) => (
                     <button
                       key={idx}
                       type="button"
-                      onClick={() => setCurrentImageIndex(idx)}
-                      className={`relative aspect-square rounded-md overflow-hidden border transition-all ${
+                      onClick={() => {
+                        setCurrentImageIndex(idx);
+                        setLightboxOpen(true);
+                      }}
+                      className={`relative w-20 h-20 shrink-0 snap-start rounded-md overflow-hidden border ${
                         currentImageIndex === idx
                           ? 'border-biker-yellow'
-                          : 'border-biker-gray hover:border-biker-yellow/50'
+                          : 'border-biker-gray'
                       }`}
                       aria-label={`Foto ${idx + 1}`}
                     >
@@ -365,7 +373,7 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
                         src={img}
                         alt={`${occasion.brand} ${occasion.model} thumbnail ${idx + 1}`}
                         fill
-                        className="object-contain object-center bg-biker-black"
+                        className="object-cover object-center"
                         quality={70}
                         unoptimized
                         sizes="80px"
@@ -600,14 +608,10 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
       </section>
 
       {lightboxOpen && allImages.length > 0 && (
-        <div
-          className="fixed inset-0 z-[80] bg-black/95 flex flex-col"
-          onTouchStart={onSwipeStart}
-          onTouchEnd={onSwipeEnd}
-        >
-          <div className="flex items-center justify-between px-4 pt-4 pb-2">
+        <div className="fixed inset-0 z-[80] bg-black overflow-y-auto">
+          <div className="sticky top-0 z-10 flex items-center justify-between px-4 py-3 bg-black/80 backdrop-blur-sm">
             <p className="text-white text-sm font-bold">
-              {currentImageIndex + 1} / {allImages.length}
+              {allImages.length} foto&apos;s
             </p>
             <button
               type="button"
@@ -620,70 +624,27 @@ export function OccasionDetailClient({ occasion }: OccasionDetailClientProps) {
               </svg>
             </button>
           </div>
-
-          <div className="relative flex-1 min-h-0">
-            <Image
-              src={allImages[currentImageIndex]}
-              alt={`${occasion.brand} ${occasion.model} - Afbeelding ${currentImageIndex + 1}`}
-              fill
-              className="object-contain object-center"
-              quality={100}
-              unoptimized
-              sizes="100vw"
-            />
-            {allImages.length > 1 && (
-              <>
-                <button
-                  type="button"
-                  onClick={goPrev}
-                  className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center"
-                  aria-label="Vorige afbeelding"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button
-                  type="button"
-                  onClick={goNext}
-                  className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 bg-black/70 hover:bg-biker-yellow text-white hover:text-biker-black rounded-full w-11 h-11 flex items-center justify-center"
-                  aria-label="Volgende afbeelding"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </>
-            )}
-          </div>
-
-          {allImages.length > 1 && (
-            <div className="px-3 py-3 overflow-x-auto">
-              <div className="flex gap-1.5 min-w-min justify-center">
-                {allImages.map((img: string, idx: number) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => setCurrentImageIndex(idx)}
-                    className={`relative w-14 h-14 shrink-0 rounded-md overflow-hidden border ${
-                      currentImageIndex === idx ? 'border-biker-yellow' : 'border-white/20'
-                    }`}
-                    aria-label={`Ga naar foto ${idx + 1}`}
-                  >
-                    <Image
-                      src={img}
-                      alt=""
-                      fill
-                      className="object-contain object-center bg-black"
-                      quality={60}
-                      unoptimized
-                      sizes="56px"
-                    />
-                  </button>
-                ))}
+          <div className="flex flex-col gap-2 px-0 pb-8">
+            {allImages.map((img: string, idx: number) => (
+              <div
+                key={idx}
+                ref={(el) => {
+                  lightboxItemRefs.current[idx] = el;
+                }}
+                className="relative w-full"
+              >
+                <Image
+                  src={img}
+                  alt={`${occasion.brand} ${occasion.model} - Afbeelding ${idx + 1}`}
+                  width={1600}
+                  height={1200}
+                  className="w-full h-auto"
+                  quality={100}
+                  unoptimized
+                />
               </div>
-            </div>
-          )}
+            ))}
+          </div>
         </div>
       )}
     </div>

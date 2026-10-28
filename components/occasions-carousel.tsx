@@ -156,7 +156,7 @@ export function OccasionsCarousel({ occasions }: OccasionsCarouselProps) {
                     src={occasion.images[0]}
                     alt={`${occasion.brand} ${occasion.model}`}
                     fill
-                    className="object-contain object-center p-1"
+                    className="object-cover object-center"
                     quality={100}
                     unoptimized
                     draggable={false}
