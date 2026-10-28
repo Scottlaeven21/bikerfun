@@ -39,9 +39,6 @@ export async function sendAdmin2fa(force = false) {
   }
 
   const result = await issueAdmin2faCode(user.id, email, force);
-  if (result.cooldown) {
-    return { success: false, error: 'Even wachten: je kunt over een minuut een nieuwe code vragen.' };
-  }
   if (result.error) {
     return {
       success: false,
