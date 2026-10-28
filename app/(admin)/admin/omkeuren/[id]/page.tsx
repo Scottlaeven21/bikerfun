@@ -38,7 +38,7 @@ export default async function AdminOmkeurenDetailPage({
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <Item label="Meldcode" value={application.meldcode} />
           <Item label="Framenummer" value={application.vin} />
-          <Item label="Typegoedkeuring" value={application.type_approval} />
+          <Item label="Typegoedkeuring" value={application.type_approval ?? undefined} />
           <Item label="Motor" value={[application.brand, application.model, application.year].filter(Boolean).join(' ')} />
           <Item label="Klant" value={[application.customer_name, application.customer_email].filter(Boolean).join(' · ')} />
           <Item label="Aangemeld" value={formatDate(application.created_at)} />
