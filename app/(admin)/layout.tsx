@@ -142,6 +142,15 @@ export default async function AdminLayout({
                 <span className="font-medium group-hover:text-biker-yellow transition-colors">Inzendingen</span>
               </Link>
               <Link
+                href="/admin/mailing"
+                className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-biker-yellow/20 transition-all group relative"
+              >
+                <svg className="w-5 h-5 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                </svg>
+                <span className="font-medium group-hover:text-biker-yellow transition-colors">Mailing</span>
+              </Link>
+              <Link
                 href="/admin/banners"
                 className="flex items-center space-x-3 px-4 py-3 rounded-lg hover:bg-biker-yellow/20 transition-all group relative"
               >

@@ -682,6 +682,7 @@ export function dealerStatusUpdateEmail({
   licensePlate,
   statusLabel,
   statusHint,
+  remark,
   portalUrl,
 }: {
   greetingName: string;
@@ -689,8 +690,17 @@ export function dealerStatusUpdateEmail({
   licensePlate: string;
   statusLabel: string;
   statusHint: string;
+  remark?: string;
   portalUrl: string;
 }): { subject: string; html: string } {
+  const remarkHtml = remark
+    ? `
+    <div style="background:#f9f9f9;border-left:4px solid ${BIKER_YELLOW};padding:14px 16px;margin:0 0 24px;">
+      <p style="margin:0 0 6px;color:#666;font-size:12px;font-weight:bold;text-transform:uppercase;letter-spacing:0.04em;">Opmerking van Bikerfun</p>
+      <p style="margin:0;color:#333;font-size:15px;line-height:1.6;">${escapeHtml(remark).replace(/\n/g, '<br>')}</p>
+    </div>`
+    : '';
+
   const content = `
     <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
       Update omkeuring ${escapeHtml(licensePlate)}
@@ -701,9 +711,10 @@ export function dealerStatusUpdateEmail({
     <div style="background:#111;color:${BIKER_YELLOW};font-weight:bold;padding:16px 18px;border-radius:8px;margin:0 0 16px;">
       ${escapeHtml(statusLabel)}
     </div>
-    <p style="margin: 0 0 24px; color: #333; font-size: 15px; line-height: 1.6;">
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
       ${escapeHtml(statusHint)}
     </p>
+    ${remarkHtml}
     <p style="margin: 0;">
       <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
         Bekijk in het portaal
@@ -715,6 +726,48 @@ export function dealerStatusUpdateEmail({
     subject: `Status ${licensePlate}: ${statusLabel}`,
     html: emailLayout(content),
   };
+}
+
+export function bikerfunMailingEmail({
+  title,
+  body,
+  buttonLabel,
+  buttonUrl,
+}: {
+  title: string;
+  body: string;
+  buttonLabel?: string;
+  buttonUrl?: string;
+}): { html: string } {
+  const paragraphs = body
+    .split(/\n{2,}/)
+    .map((block) => block.trim())
+    .filter(Boolean)
+    .map(
+      (block) =>
+        `<p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">${escapeHtml(block).replace(/\n/g, '<br>')}</p>`
+    )
+    .join('');
+
+  const button =
+    buttonLabel && buttonUrl
+      ? `
+    <p style="margin: 24px 0 0;">
+      <a href="${escapeHtml(buttonUrl)}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        ${escapeHtml(buttonLabel)}
+      </a>
+    </p>`
+      : '';
+
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      ${escapeHtml(title)}
+    </h2>
+    ${paragraphs || `<p style="margin: 0; color: #333; font-size: 15px;"> </p>`}
+    ${button}
+  `;
+
+  return { html: emailLayout(content) };
 }
 
 function escapeHtml(s: string): string {

@@ -11,8 +11,10 @@ export function DealerStatusForm({
   applicationId: string;
   status: ApplicationStatus;
 }) {
+  const [selected, setSelected] = useState<ApplicationStatus>(status);
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const statusChanged = selected !== status;
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,7 +31,8 @@ export function DealerStatusForm({
         <span className="block text-sm font-semibold mb-2">Status</span>
         <select
           name="status"
-          defaultValue={status}
+          value={selected}
+          onChange={(e) => setSelected(e.target.value as ApplicationStatus)}
           className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg bg-white"
         >
           {APPLICATION_STATUSES.map((value) => (
@@ -39,6 +42,17 @@ export function DealerStatusForm({
           ))}
         </select>
       </label>
+      {statusChanged && (
+        <label className="block">
+          <span className="block text-sm font-semibold mb-2">Opmerking</span>
+          <textarea
+            name="remark"
+            rows={4}
+            className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg bg-white"
+            placeholder="Deze tekst gaat mee in de statusmail naar dealer en klant."
+          />
+        </label>
+      )}
       <button
         type="submit"
         disabled={loading}

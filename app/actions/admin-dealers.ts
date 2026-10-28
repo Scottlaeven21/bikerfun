@@ -99,6 +99,7 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
   if (gate.error) return { error: gate.error };
 
   const status = String(formData.get('status') || '');
+  const remark = String(formData.get('remark') || '').trim();
   if (!isApplicationStatus(status)) return { error: 'Ongeldige status.' };
 
   const admin = createAdminClient();
@@ -124,7 +125,7 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
 
   const dealer = existing.dealers as Dealer | null;
   if (dealer) {
-    await notifyApplicationStatus(dealer, updated as DealerApplication, status);
+    await notifyApplicationStatus(dealer, updated as DealerApplication, status, remark || undefined);
   }
 
   revalidatePath('/admin/omkeuren');

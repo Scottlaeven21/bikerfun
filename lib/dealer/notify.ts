@@ -56,7 +56,8 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
 export async function notifyApplicationStatus(
   dealer: Dealer,
   application: DealerApplication,
-  status: ApplicationStatus
+  status: ApplicationStatus,
+  remark?: string
 ) {
   if (!isEmailConfigured()) return;
   const to = recipients(dealer, application);
@@ -68,6 +69,7 @@ export async function notifyApplicationStatus(
     licensePlate: application.license_plate,
     statusLabel: APPLICATION_STATUS_LABELS[status],
     statusHint: APPLICATION_STATUS_HINTS[status],
+    remark,
     portalUrl: dealerPortalUrl(),
   });
   await sendEmail({ to, subject: mail.subject, html: mail.html });
