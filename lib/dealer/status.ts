@@ -15,7 +15,7 @@ export type InvoiceStatus = 'open' | 'paid';
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   received: 'Aanvraag ontvangen',
   approved: 'Aanvraag goedgekeurd',
-  docs_requested: 'Documentatie aangevraagd',
+  docs_requested: 'Wachten op machtigingsformulier',
   awaiting_delivery: 'Wachten op levering',
   rdw_submitted: 'Aanvraag ingediend bij de RDW',
   completed: 'Registratie afgerond',
@@ -24,8 +24,9 @@ export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
 export const APPLICATION_STATUS_HINTS: Record<ApplicationStatus, string> = {
   received: 'We hebben de aanvraag binnen en kijken of omkeuren mogelijk is.',
   approved: 'Omkeuren is mogelijk. We gaan verder met de papieren.',
-  docs_requested: 'Er is extra documentatie nodig. Check je mail of het portaal.',
-  awaiting_delivery: 'We wachten tot de motor of de stukken bij ons zijn.',
+  docs_requested:
+    'We hebben een door de klant ondertekend machtigingsformulier nodig, zodat wij het vermogen namens de klant mogen wijzigen.',
+  awaiting_delivery: 'We wachten op levering van documentatie van onze leverancier.',
   rdw_submitted: 'De aanvraag staat bij de RDW. Zodra die rond is, hoor je het.',
   completed:
     'Nieuw kentekenbewijs wordt aangemaakt en verzonden. Deze wordt binnen 1-3 werkdagen geleverd.',

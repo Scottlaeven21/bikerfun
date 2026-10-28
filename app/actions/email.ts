@@ -15,6 +15,7 @@ import {
   contactFormEmail,
   motorAanvraagEmail,
   contactAutoReplyEmail,
+  dealerSignupAutoReplyEmail,
   omkeurenEmail,
 } from '@/lib/email/templates';
 
@@ -442,7 +443,9 @@ export async function submitOmkeurenForm(formData: {
       });
       if (isMotorFormsAutoreplyEnabled()) {
         try {
-          const autoReply = contactAutoReplyEmail(formData.name);
+          const autoReply = formData.isDealer
+            ? dealerSignupAutoReplyEmail(formData.name)
+            : contactAutoReplyEmail(formData.name);
           await sendEmail({ to: formData.email, subject: autoReply.subject, html: autoReply.html });
         } catch {
           // Non-critical

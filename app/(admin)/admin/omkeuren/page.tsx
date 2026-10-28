@@ -2,6 +2,11 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
 import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
+import {
+  APPLICATION_STATUSES,
+  APPLICATION_STATUS_LABELS,
+  isApplicationStatus,
+} from '@/lib/dealer/status';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuren | Admin' };
@@ -14,16 +19,14 @@ export default async function AdminOmkeurenPage({
 }) {
   const { filter } = await searchParams;
   const supabase = await createClient();
-  let query = (supabase as any)
+  const { data, error } = await (supabase as any)
     .from('dealer_applications')
     .select('*, dealers(company_name, email, contact_name, phone)')
     .order('created_at', { ascending: false });
 
-  if (filter === 'completed') query = query.eq('status', 'completed');
-  if (filter === 'open') query = query.neq('status', 'completed');
-
-  const { data, error } = await query;
-  const applications = (data as DealerApplication[] | null) || [];
+  const all = (data as DealerApplication[] | null) || [];
+  const activeFilter = filter && isApplicationStatus(filter) ? filter : null;
+  const applications = activeFilter ? all.filter((app) => app.status === activeFilter) : all;
 
   return (
     <div className="p-8">
@@ -36,10 +39,19 @@ export default async function AdminOmkeurenPage({
         </div>
       )}
 
-      <div className="flex gap-2 mb-4">
-        <FilterLink href="/admin/omkeuren" active={!filter} label="Alles" />
-        <FilterLink href="/admin/omkeuren?filter=open" active={filter === 'open'} label="Openstaand" />
-        <FilterLink href="/admin/omkeuren?filter=completed" active={filter === 'completed'} label="Omgekeurd" />
+      <div className="flex flex-wrap gap-2 mb-4">
+        <FilterLink href="/admin/omkeuren" active={!activeFilter} label={`Alles (${all.length})`} />
+        {APPLICATION_STATUSES.map((status) => {
+          const count = all.filter((app) => app.status === status).length;
+          return (
+            <FilterLink
+              key={status}
+              href={`/admin/omkeuren?filter=${status}`}
+              active={activeFilter === status}
+              label={`${APPLICATION_STATUS_LABELS[status]} (${count})`}
+            />
+          );
+        })}
       </div>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
@@ -70,7 +82,7 @@ export default async function AdminOmkeurenPage({
             {!applications.length && !error && (
               <tr>
                 <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
-                  Nog geen aanvragen.
+                  Geen aanvragen in deze status.
                 </td>
               </tr>
             )}

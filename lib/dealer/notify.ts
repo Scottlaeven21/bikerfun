@@ -11,17 +11,74 @@ import {
 import type { Dealer, DealerApplication } from './types';
 import { dealerPortalUrl } from './auth';
 
-function recipients(dealer: Dealer, application: DealerApplication) {
-  const map = new Map<string, string>();
-  const add = (value?: string | null) => {
-    const email = (value || '').trim();
-    if (!email.includes('@')) return;
-    const key = email.toLowerCase();
-    if (!map.has(key)) map.set(key, email);
-  };
-  add(dealer.email);
-  add(application.customer_email);
-  return [...map.values()];
+function validEmail(value?: string | null) {
+  const email = (value || '').trim();
+  return email.includes('@') ? email : null;
+}
+
+async function sendStatusMail({
+  to,
+  greetingName,
+  dealer,
+  application,
+  status,
+  remark,
+  withPortal,
+}: {
+  to: string;
+  greetingName: string;
+  dealer: Dealer;
+  application: DealerApplication;
+  status: ApplicationStatus;
+  remark?: string;
+  withPortal: boolean;
+}) {
+  const mail = dealerStatusUpdateEmail({
+    greetingName,
+    company: dealer.company_name,
+    licensePlate: application.license_plate,
+    statusLabel: APPLICATION_STATUS_LABELS[status],
+    statusHint: APPLICATION_STATUS_HINTS[status],
+    remark,
+    portalUrl: withPortal ? dealerPortalUrl() : undefined,
+    customerName: application.customer_name,
+    forDealer: withPortal,
+  });
+  await sendEmail({ to, subject: mail.subject, html: mail.html });
+}
+
+async function notifyDealerAndCustomer(
+  dealer: Dealer,
+  application: DealerApplication,
+  status: ApplicationStatus,
+  remark?: string
+) {
+  const dealerEmail = validEmail(dealer.email);
+  const customerEmail = validEmail(application.customer_email);
+
+  if (dealerEmail) {
+    await sendStatusMail({
+      to: dealerEmail,
+      greetingName: dealer.contact_name,
+      dealer,
+      application,
+      status,
+      remark,
+      withPortal: true,
+    });
+  }
+
+  if (customerEmail && customerEmail.toLowerCase() !== dealerEmail?.toLowerCase()) {
+    await sendStatusMail({
+      to: customerEmail,
+      greetingName: application.customer_name || 'klant',
+      dealer,
+      application,
+      status,
+      remark,
+      withPortal: false,
+    });
+  }
 }
 
 export async function notifyApplicationCreated(dealer: Dealer, application: DealerApplication) {
@@ -34,23 +91,14 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
     licensePlate: application.license_plate,
     meldcode: application.meldcode,
     vin: application.vin,
+    typeApproval: application.type_approval,
     brand: application.brand,
     model: application.model,
     customerEmail: application.customer_email,
   });
   await sendEmail({ to: getToEmail(), subject: adminMail.subject, html: adminMail.html });
 
-  const to = recipients(dealer, application);
-  if (!to.length) return;
-  const mail = dealerStatusUpdateEmail({
-    greetingName: application.customer_name || dealer.contact_name,
-    company: dealer.company_name,
-    licensePlate: application.license_plate,
-    statusLabel: APPLICATION_STATUS_LABELS.received,
-    statusHint: APPLICATION_STATUS_HINTS.received,
-    portalUrl: dealerPortalUrl(),
-  });
-  await sendEmail({ to, subject: mail.subject, html: mail.html });
+  await notifyDealerAndCustomer(dealer, application, 'received');
 }
 
 export async function notifyApplicationStatus(
@@ -60,17 +108,5 @@ export async function notifyApplicationStatus(
   remark?: string
 ) {
   if (!isEmailConfigured()) return;
-  const to = recipients(dealer, application);
-  if (!to.length) return;
-
-  const mail = dealerStatusUpdateEmail({
-    greetingName: application.customer_name || dealer.contact_name,
-    company: dealer.company_name,
-    licensePlate: application.license_plate,
-    statusLabel: APPLICATION_STATUS_LABELS[status],
-    statusHint: APPLICATION_STATUS_HINTS[status],
-    remark,
-    portalUrl: dealerPortalUrl(),
-  });
-  await sendEmail({ to, subject: mail.subject, html: mail.html });
+  await notifyDealerAndCustomer(dealer, application, status, remark);
 }

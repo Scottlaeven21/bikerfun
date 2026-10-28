@@ -91,7 +91,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/80"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center -translate-y-2 md:translate-y-0">
+        <div className="relative h-full flex items-center translate-y-10 md:translate-y-0">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
             <div className="max-w-4xl">
               <h1 
@@ -169,7 +169,7 @@ export default async function HomePage() {
 
       <section className="py-20 bg-biker-dark noise-overlay border-y border-biker-gray/30">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-16 items-center">
             <div>
               <p className="text-biker-yellow text-sm font-bold uppercase tracking-[0.2em] mb-4">
                 A2 / 35kW
@@ -177,10 +177,10 @@ export default async function HomePage() {
               <h2 style={{ fontFamily: 'var(--font-inter)' }} className="text-4xl md:text-5xl font-bold text-white mb-6 uppercase tracking-tight">
                 Motor <span className="text-biker-yellow">Omkeuren</span>
               </h2>
-              <p className="text-lg md:text-xl text-biker-light mb-8 max-w-xl">
+              <p className="text-lg md:text-xl text-biker-light mb-6 max-w-xl">
                 Motor omkeuren naar A2 / 35kW? Wij nemen het papierwerk uit handen — vaak ook op afstand, voor particulieren én motorzaken.
               </p>
-              <ul className="space-y-3 mb-10">
+              <ul className="space-y-3">
                 {[
                   'Meestal binnen 5 tot 10 werkdagen',
                   'Vaak ook op afstand mogelijk',
@@ -228,7 +228,7 @@ export default async function HomePage() {
               <Link
                 href="/omkeuren"
                 style={{ fontFamily: 'var(--font-montserrat)' }}
-                className="btn-primary mt-5 sm:mt-6 w-full text-center inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
+                className="btn-primary mt-6 w-full text-center inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
               >
                 Meer over omkeuren
               </Link>

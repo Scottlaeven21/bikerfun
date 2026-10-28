@@ -143,7 +143,6 @@ export async function createDealerInvoice(formData: FormData) {
   const dealerId = String(formData.get('dealer_id') || '');
   const description = String(formData.get('description') || '').trim();
   const amount = Number(String(formData.get('amount') || '').replace(',', '.'));
-  const applicationId = String(formData.get('application_id') || '').trim();
   const dueDate = String(formData.get('due_date') || '').trim();
   const file = formData.get('invoice_pdf');
 
@@ -178,7 +177,6 @@ export async function createDealerInvoice(formData: FormData) {
   const { error } = await (admin as any).from('dealer_invoices').insert({
     id: invoiceId,
     dealer_id: dealerId,
-    application_id: applicationId || null,
     description,
     amount,
     due_date: dueDate,
@@ -190,9 +188,35 @@ export async function createDealerInvoice(formData: FormData) {
     return { error: 'Factuur opslaan mislukt.' };
   }
 
+  try {
+    const { data: dealer } = await (admin as any)
+      .from('dealers')
+      .select('email, contact_name, company_name')
+      .eq('id', dealerId)
+      .maybeSingle();
+    if (dealer?.email) {
+      const { isEmailConfigured, sendEmail } = await import('@/lib/email/client');
+      const { dealerInvoiceEmail } = await import('@/lib/email/templates');
+      const { formatPrice, formatDate } = await import('@/lib/utils/format');
+      const { dealerPortalUrl } = await import('@/lib/dealer/auth');
+      if (isEmailConfigured()) {
+        const mail = dealerInvoiceEmail({
+          name: dealer.contact_name,
+          company: dealer.company_name,
+          description,
+          amount: formatPrice(amount),
+          dueDate: formatDate(dueDate),
+          portalUrl: `${dealerPortalUrl()}/facturen`,
+        });
+        await sendEmail({ to: dealer.email, subject: mail.subject, html: mail.html });
+      }
+    }
+  } catch (mailError) {
+    console.error('Invoice mail failed:', mailError);
+  }
+
   revalidatePath('/admin/dealers');
   revalidatePath(`/admin/dealers/${dealerId}`);
-  if (applicationId) revalidatePath(`/admin/omkeuren/${applicationId}`);
   revalidatePath('/dealer/facturen');
   return { success: true };
 }
@@ -284,5 +308,35 @@ export async function createDealerFromAdmin(formData: FormData) {
     createdUser: result.createdUser,
     alreadyExisted: result.alreadyExisted,
   };
+}
+
+export async function uploadDealerFormTemplate(formData: FormData) {
+  const gate = await requireAdmin();
+  if (gate.error) return { error: gate.error };
+
+  const file = formData.get('template_file');
+  if (!(file instanceof File) || file.size === 0) {
+    return { error: 'Kies een PDF.' };
+  }
+  if (file.type !== 'application/pdf' && !file.name.toLowerCase().endsWith('.pdf')) {
+    return { error: 'Het sjabloon moet een PDF zijn.' };
+  }
+
+  const admin = createAdminClient();
+  const path = 'templates/omkeur-formulier.pdf';
+  const buffer = Buffer.from(await file.arrayBuffer());
+  const { error } = await admin.storage.from('dealer-documents').upload(path, buffer, {
+    contentType: 'application/pdf',
+    upsert: true,
+  });
+  if (error) return { error: 'Upload mislukt.' };
+
+  await (admin as any)
+    .from('dealer_portal_settings')
+    .upsert({ id: 1, form_path: path, updated_at: new Date().toISOString() });
+
+  revalidatePath('/admin/dealers');
+  revalidatePath('/dealer/formulier');
+  return { success: true };
 }
 

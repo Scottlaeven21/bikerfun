@@ -312,6 +312,48 @@ export function contactAutoReplyEmail(name: string): { subject: string; html: st
   };
 }
 
+/** Bevestiging na dealer-aanmelding via het omkeurformulier. */
+export function dealerSignupAutoReplyEmail(name: string): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Bedankt voor je aanmelding!
+    </h2>
+
+    <div style="background-color: ${BIKER_YELLOW}; padding: 3px; margin-bottom: 30px;"></div>
+
+    <p style="margin: 0 0 20px; color: #333; font-size: 16px; line-height: 1.6;">
+      Beste ${escapeHtml(name)},
+    </p>
+
+    <p style="margin: 0 0 20px; color: #333; font-size: 16px; line-height: 1.6;">
+      We hebben je dealer-aanmelding goed ontvangen. We nemen zo spoedig mogelijk contact met je op over de volgende stappen. Je hoeft verder niets te doen.
+    </p>
+
+    <p style="margin: 0 0 20px; color: #333; font-size: 16px; line-height: 1.6;">
+      Neem alleen contact met ons op als je een correctie wilt doorgeven of een dringende vraag hebt:
+    </p>
+
+    <div style="background-color: #f9f9f9; padding: 20px; border-left: 3px solid ${BIKER_YELLOW}; border-radius: 4px; margin-bottom: 30px;">
+      <p style="margin: 0 0 10px; color: #666; font-size: 14px;">
+        <strong>Telefoon:</strong> <a href="tel:+31615452108" style="color: ${BIKER_YELLOW}; text-decoration: none;">06 15 45 21 08</a>
+      </p>
+      <p style="margin: 0; color: #666; font-size: 14px;">
+        <strong>Email:</strong> <a href="mailto:info@bikerfun.nl" style="color: ${BIKER_YELLOW}; text-decoration: none;">info@bikerfun.nl</a>
+      </p>
+    </div>
+
+    <p style="margin: 0; color: #333; font-size: 16px; line-height: 1.6;">
+      Met vriendelijke groet,<br>
+      <strong>Team Bikerfun</strong>
+    </p>
+  `;
+
+  return {
+    subject: 'Bedankt voor je dealer-aanmelding - Bikerfun',
+    html: emailLayout(content),
+  };
+}
+
 /** Notificatie naar beheerder: webshopbestelling betaald (klant krijgt WooCommerce-mail apart). */
 export function adminOrderPaidEmail(payload: {
   orderNumber: string;
@@ -632,6 +674,7 @@ export function dealerApplicationAdminEmail({
   licensePlate,
   meldcode,
   vin,
+  typeApproval,
   brand,
   model,
   customerEmail,
@@ -642,6 +685,7 @@ export function dealerApplicationAdminEmail({
   licensePlate: string;
   meldcode: string;
   vin: string;
+  typeApproval?: string | null;
   brand?: string | null;
   model?: string | null;
   customerEmail?: string | null;
@@ -665,6 +709,7 @@ export function dealerApplicationAdminEmail({
       ${row('Kenteken', licensePlate)}
       ${row('Meldcode', meldcode)}
       ${row('Framenummer', vin)}
+      ${row('Typegoedkeuring', typeApproval)}
       ${row('Motor', [brand, model].filter(Boolean).join(' '))}
       ${row('Klant e-mail', customerEmail)}
     </table>
@@ -684,6 +729,8 @@ export function dealerStatusUpdateEmail({
   statusHint,
   remark,
   portalUrl,
+  customerName,
+  forDealer,
 }: {
   greetingName: string;
   company: string;
@@ -691,7 +738,9 @@ export function dealerStatusUpdateEmail({
   statusLabel: string;
   statusHint: string;
   remark?: string;
-  portalUrl: string;
+  portalUrl?: string;
+  customerName?: string | null;
+  forDealer?: boolean;
 }): { subject: string; html: string } {
   const remarkHtml = remark
     ? `
@@ -701,12 +750,26 @@ export function dealerStatusUpdateEmail({
     </div>`
     : '';
 
+  const footer = portalUrl
+    ? `<p style="margin: 0;">
+      <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Bekijk in het portaal
+      </a>
+    </p>`
+    : `<p style="margin: 0; color: #333; font-size: 15px; line-height: 1.6;">
+      Vragen? Neem contact op met je motorzaak.
+    </p>`;
+
   const content = `
     <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
       Update omkeuring ${escapeHtml(licensePlate)}
     </h2>
     <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
-      Hallo ${escapeHtml(greetingName)}, de status van de omkeuring bij ${escapeHtml(company)} is bijgewerkt.
+      ${
+        forDealer
+          ? `Hallo ${escapeHtml(greetingName)}, de status van de omkeuring van ${escapeHtml(licensePlate)}${customerName ? ` (klant: ${escapeHtml(customerName)})` : ''} is bijgewerkt.`
+          : `Hallo ${escapeHtml(greetingName)}, de status van jouw omkeuring bij ${escapeHtml(company)} is bijgewerkt.`
+      }
     </p>
     <div style="background:#111;color:${BIKER_YELLOW};font-weight:bold;padding:16px 18px;border-radius:8px;margin:0 0 16px;">
       ${escapeHtml(statusLabel)}
@@ -715,15 +778,61 @@ export function dealerStatusUpdateEmail({
       ${escapeHtml(statusHint)}
     </p>
     ${remarkHtml}
+    ${footer}
+  `;
+
+  return {
+    subject: `Status ${licensePlate}: ${statusLabel}`,
+    html: emailLayout(content),
+  };
+}
+
+export function dealerInvoiceEmail({
+  name,
+  company,
+  description,
+  amount,
+  dueDate,
+  portalUrl,
+}: {
+  name: string;
+  company: string;
+  description: string;
+  amount: string;
+  dueDate: string;
+  portalUrl: string;
+}): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Nieuwe verzamelfactuur
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, er staat een nieuwe factuur klaar voor ${escapeHtml(company)}.
+      Deze geldt voor de omkeuringen van de afgelopen periode. Betaal binnen 30 dagen.
+    </p>
+    <table role="presentation" style="width:100%;border-collapse:collapse;margin:0 0 24px;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Omschrijving</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${escapeHtml(description)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Bedrag</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(amount)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Factuurdatum</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${escapeHtml(dueDate)}</td>
+      </tr>
+    </table>
     <p style="margin: 0;">
       <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
-        Bekijk in het portaal
+        Bekijk factuur in het portaal
       </a>
     </p>
   `;
 
   return {
-    subject: `Status ${licensePlate}: ${statusLabel}`,
+    subject: `Verzamelfactuur Bikerfun — ${description}`,
     html: emailLayout(content),
   };
 }

@@ -4,6 +4,7 @@ import { formatDate } from '@/lib/utils/format';
 import type { Dealer } from '@/lib/dealer/types';
 import { CreateDealerForm } from '@/components/admin/create-dealer-form';
 import { DeleteDealerButton } from '@/components/admin/delete-dealer-button';
+import { DealerTemplateUpload } from '@/components/admin/dealer-template-upload';
 
 export const metadata = { title: 'Dealers | Admin' };
 export const dynamic = 'force-dynamic';
@@ -27,6 +28,14 @@ export default async function AdminDealersPage() {
         <CreateDealerForm />
       </div>
 
+      <div className="bg-white rounded-lg shadow-md p-6 mb-8">
+        <h2 className="text-xl font-bold mb-2">Omkeurformulier voor dealers</h2>
+        <p className="text-gray-600 text-sm mb-4">
+          Upload een PDF. Dealers kunnen die in het portaal downloaden of printen.
+        </p>
+        <DealerTemplateUpload />
+      </div>
+
       {error && (
         <div className="bg-amber-50 border border-amber-200 text-amber-800 px-4 py-3 rounded mb-6">
           Kon dealers niet laden. Voer eerst <code className="font-mono text-sm">032_dealer_portal.sql</code> uit in Supabase.
@@ -40,6 +49,7 @@ export default async function AdminDealersPage() {
               <th className="px-4 py-3">Bedrijf</th>
               <th className="px-4 py-3">Contact</th>
               <th className="px-4 py-3">Sinds</th>
+              <th className="px-4 py-3"></th>
               <th className="px-4 py-3"></th>
             </tr>
           </thead>
@@ -56,6 +66,11 @@ export default async function AdminDealersPage() {
                   <div className="text-gray-500">{dealer.email}</div>
                 </td>
                 <td className="px-4 py-3 text-gray-600">{formatDate(dealer.created_at)}</td>
+                <td className="px-4 py-3">
+                  <Link href={`/admin/dealers/${dealer.id}#facturen`} className="font-semibold text-sm hover:underline">
+                    Factuur
+                  </Link>
+                </td>
                 <td className="px-4 py-3 text-right">
                   <DeleteDealerButton dealerId={dealer.id} companyName={dealer.company_name} compact />
                 </td>
@@ -63,7 +78,7 @@ export default async function AdminDealersPage() {
             ))}
             {!dealers.length && !error && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                   Nog geen dealers.
                 </td>
               </tr>

@@ -24,10 +24,14 @@ export async function createDealerApplication(formData: FormData) {
   const licensePlate = String(formData.get('license_plate') || '').trim().toUpperCase();
   const meldcode = String(formData.get('meldcode') || '').trim();
   const vin = String(formData.get('vin') || '').trim().toUpperCase();
+  const typeApproval = String(formData.get('type_approval') || '').trim();
   const customerEmail = String(formData.get('customer_email') || '').trim();
 
-  if (!licensePlate || !meldcode || !vin) {
-    return { error: 'Kenteken, meldcode en framenummer zijn verplicht.' };
+  if (formData.get('accept_terms') !== 'on') {
+    return { error: 'Ga akkoord met de voorwaarden om een aanvraag in te dienen.' };
+  }
+  if (!licensePlate || !meldcode || !vin || !typeApproval) {
+    return { error: 'Kenteken, meldcode, framenummer en typegoedkeuring zijn verplicht.' };
   }
   if (customerEmail && !EMAIL_RE.test(customerEmail)) {
     return { error: 'Vul een geldig klant-e-mailadres in, of laat het leeg.' };
@@ -41,6 +45,7 @@ export async function createDealerApplication(formData: FormData) {
       license_plate: licensePlate,
       meldcode,
       vin,
+      type_approval: typeApproval,
       brand: String(formData.get('brand') || '').trim() || null,
       model: String(formData.get('model') || '').trim() || null,
       year: String(formData.get('year') || '').trim() || null,
@@ -101,7 +106,13 @@ export async function getDealerDocumentUrl(path: string) {
     return { url: null, error: 'Geen toegang.' };
   }
 
-  if (session.dealer && !path.startsWith(`${session.dealer.id}/`) && !session.profile?.is_admin) {
+  const isTemplate = path.startsWith('templates/');
+  if (
+    session.dealer &&
+    !session.profile?.is_admin &&
+    !isTemplate &&
+    !path.startsWith(`${session.dealer.id}/`)
+  ) {
     return { url: null, error: 'Geen toegang tot dit bestand.' };
   }
 

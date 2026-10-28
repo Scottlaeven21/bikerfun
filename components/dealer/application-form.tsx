@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { createDealerApplication } from '@/app/actions/dealer';
 import { LoadingButton } from '@/components/loading/spinner';
+import { DealerTerms } from '@/components/dealer/dealer-terms';
 
 const inputClass =
   'w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg text-biker-black focus:border-biker-yellow focus:outline-none';
@@ -28,7 +29,7 @@ export function DealerApplicationForm() {
 
       <div>
         <h2 className="text-xl font-bold uppercase tracking-tight mb-1">Motorgegevens</h2>
-        <p className="text-sm text-gray-600 mb-4">Kenteken, meldcode en framenummer zijn verplicht.</p>
+        <p className="text-sm text-gray-600 mb-4">Kenteken, meldcode, framenummer en typegoedkeuring zijn verplicht.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Kenteken *</span>
@@ -41,6 +42,19 @@ export function DealerApplicationForm() {
           <label className="block md:col-span-2">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Framenummer *</span>
             <input name="vin" required className={inputClass} placeholder="VIN / chassisnummer" />
+          </label>
+          <label className="block md:col-span-2">
+            <span className="block text-sm font-bold uppercase tracking-wider mb-2">Typegoedkeuring *</span>
+            <input
+              name="type_approval"
+              required
+              className={inputClass}
+              placeholder="e4*92/61*0190*…"
+            />
+            <span className="mt-2 block text-sm text-gray-600">
+              Op de motor zit een typegoedkeuringsplaatje met dit nummer. In veel gevallen begint het
+              met een e-nummer, bijvoorbeeld e4*92/61*0190*…
+            </span>
           </label>
           <label className="block">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Merk</span>
@@ -80,8 +94,24 @@ export function DealerApplicationForm() {
 
       <label className="block">
         <span className="block text-sm font-bold uppercase tracking-wider mb-2">Toelichting</span>
-        <textarea name="notes" rows={4} className={`${inputClass} resize-none`} />
+        <textarea
+          name="notes"
+          rows={4}
+          className={`${inputClass} resize-none`}
+          placeholder="Vermeld het gewenste vermogen. Moet de motor terug naar het originele vermogen? Zet dat hier."
+        />
+        <span className="mt-2 block text-sm text-gray-600">
+          Vermeld het gewenste vermogen. Als de motor terug moet naar het originele vermogen, vermeld dat dan hier.
+        </span>
       </label>
+
+      <div className="rounded-xl border-2 border-gray-200 bg-gray-50 p-5">
+        <DealerTerms />
+        <label className="mt-4 flex items-start gap-3 text-sm text-gray-800">
+          <input type="checkbox" name="accept_terms" required className="mt-1 h-4 w-4 accent-biker-yellow" />
+          <span>Ik ga akkoord met deze voorwaarden.</span>
+        </label>
+      </div>
 
       <LoadingButton
         type="submit"

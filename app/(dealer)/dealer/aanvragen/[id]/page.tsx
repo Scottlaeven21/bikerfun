@@ -56,6 +56,12 @@ export default async function DealerApplicationDetailPage({
             <dt className="text-gray-500">Framenummer</dt>
             <dd className="font-semibold break-all">{application.vin}</dd>
           </div>
+          {application.type_approval && (
+            <div className="md:col-span-2">
+              <dt className="text-gray-500">Typegoedkeuring</dt>
+              <dd className="font-semibold break-all">{application.type_approval}</dd>
+            </div>
+          )}
         </dl>
 
         {application.notes && (
@@ -66,7 +72,7 @@ export default async function DealerApplicationDetailPage({
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
         <h2 className="text-xl font-bold">Klantupdates</h2>
         <p className="text-sm text-gray-600">
-          Als je hier een e-mailadres zet, krijgen jij en de klant allebei een mail bij elke statuswijziging.
+          Als je hier een e-mailadres zet, krijgen jij en de klant allebei een mail bij elke statuswijziging. De klant ziet geen dealerportaal.
         </p>
         <CustomerEmailForm
           applicationId={application.id}

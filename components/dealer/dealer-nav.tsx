@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 const links = [
   { href: '/dealer', label: 'Overzicht' },
   { href: '/dealer/aanvragen/nieuw', label: 'Nieuwe aanvraag' },
+  { href: '/dealer/formulier', label: 'Formulier' },
   { href: '/dealer/omgekeurd', label: 'Omgekeurd' },
   { href: '/dealer/facturen', label: 'Facturen' },
 ];

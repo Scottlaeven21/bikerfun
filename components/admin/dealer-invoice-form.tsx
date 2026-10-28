@@ -3,16 +3,17 @@
 import { useState } from 'react';
 import { createDealerInvoice } from '@/app/actions/admin-dealers';
 
-function todayInputValue() {
-  return new Date().toISOString().slice(0, 10);
+function defaultInvoiceDate() {
+  const now = new Date();
+  return new Date(now.getFullYear(), now.getMonth(), 12).toISOString().slice(0, 10);
 }
 
 export function DealerInvoiceForm({
   dealerId,
-  applicationId,
+  defaultDescription,
 }: {
   dealerId: string;
-  applicationId?: string;
+  defaultDescription?: string;
 }) {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -30,7 +31,6 @@ export function DealerInvoiceForm({
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
       <input type="hidden" name="dealer_id" value={dealerId} />
-      {applicationId && <input type="hidden" name="application_id" value={applicationId} />}
       <label className="block">
         <span className="block text-sm font-semibold mb-1">Factuur-PDF *</span>
         <input
@@ -46,7 +46,8 @@ export function DealerInvoiceForm({
         <input
           name="description"
           required
-          placeholder="Bijv. Omkeuren AB-123-C"
+          defaultValue={defaultDescription}
+          placeholder="Verzamelfactuur oktober 2026"
           className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
         />
       </label>
@@ -62,12 +63,12 @@ export function DealerInvoiceForm({
           />
         </label>
         <label className="block">
-          <span className="block text-sm font-semibold mb-1">Datum *</span>
+          <span className="block text-sm font-semibold mb-1">Factuurdatum *</span>
           <input
             name="due_date"
             type="date"
             required
-            defaultValue={todayInputValue()}
+            defaultValue={defaultInvoiceDate()}
             className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
           />
         </label>

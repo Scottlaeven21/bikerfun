@@ -26,6 +26,9 @@ export default async function DealerInvoicesPage() {
       <div>
         <h1 className="text-3xl font-bold text-gray-900">Facturen</h1>
         <p className="text-gray-600 mt-1">
+          Elke maand één verzamelfactuur voor de aanvragen van de maand ervoor. Betaal binnen 30 dagen.
+        </p>
+        <p className="text-gray-600 mt-1">
           Nog te betalen: <strong>{formatPrice(openTotal)}</strong> · {open.length} open · {paid.length} betaald
         </p>
       </div>

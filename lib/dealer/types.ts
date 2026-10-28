@@ -30,6 +30,7 @@ export type DealerApplication = {
   license_plate: string;
   meldcode: string;
   vin: string;
+  type_approval: string | null;
   brand: string | null;
   model: string | null;
   year: string | null;
