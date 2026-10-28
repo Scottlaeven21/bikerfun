@@ -96,30 +96,30 @@ export default function OmkeurenPage() {
           <p className="text-biker-light text-center mb-12">
             Prijzen zijn inclusief papierwerk. De exacte prijs bevestigen we na je aanvraag.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-3 md:gap-6">
             <a
               href="#aanvraag"
-              className="bg-black rounded-2xl p-8 border-2 border-biker-gray text-center hover:border-biker-yellow hover:-translate-y-1 transition-all"
+              className="bg-black rounded-2xl p-4 md:p-8 border-2 border-biker-gray text-center hover:border-biker-yellow hover:-translate-y-1 transition-all"
             >
-              <p className="text-sm font-bold uppercase tracking-wider text-biker-muted mb-3">
+              <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-muted mb-2 md:mb-3">
                 Minder dan 70 kW
               </p>
-              <p className="text-5xl font-bold text-biker-yellow mb-2">€ 495</p>
-              <p className="text-biker-light">Adviesprijs voor motoren onder 70 kW</p>
-              <p className="mt-4 text-sm font-bold uppercase tracking-wider text-biker-yellow">
+              <p className="text-2xl md:text-5xl font-bold text-biker-yellow mb-1 md:mb-2">€ 495</p>
+              <p className="text-xs md:text-base text-biker-light">Adviesprijs onder 70 kW</p>
+              <p className="mt-3 md:mt-4 text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-yellow">
                 Vraag aan
               </p>
             </a>
             <a
               href="#aanvraag"
-              className="bg-black rounded-2xl p-8 border-2 border-biker-yellow text-center hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all"
+              className="bg-black rounded-2xl p-4 md:p-8 border-2 border-biker-yellow text-center hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all"
             >
-              <p className="text-sm font-bold uppercase tracking-wider text-biker-muted mb-3">
+              <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-muted mb-2 md:mb-3">
                 Meer dan 70 kW
               </p>
-              <p className="text-5xl font-bold text-biker-yellow mb-2">€ 695</p>
-              <p className="text-biker-light">Adviesprijs voor motoren boven 70 kW</p>
-              <p className="mt-4 text-sm font-bold uppercase tracking-wider text-biker-yellow">
+              <p className="text-2xl md:text-5xl font-bold text-biker-yellow mb-1 md:mb-2">€ 695</p>
+              <p className="text-xs md:text-base text-biker-light">Adviesprijs boven 70 kW</p>
+              <p className="mt-3 md:mt-4 text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-yellow">
                 Vraag aan
               </p>
             </a>

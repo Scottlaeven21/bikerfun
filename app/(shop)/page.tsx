@@ -83,7 +83,7 @@ export default async function HomePage() {
       <StructuredData id="home-faq-schema" data={homeFAQSchema} />
       <div className="overflow-x-hidden">
       {/* Hero Section with Video Background */}
-      <section className="relative h-screen overflow-hidden">
+      <section className="relative h-[100svh] md:h-screen overflow-hidden">
         {/* Video Background - Positioned Higher */}
         <HeroVideo />
 
@@ -91,7 +91,7 @@ export default async function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-b from-biker-black/70 via-biker-black/50 to-biker-black/80"></div>
 
         {/* Hero Content */}
-        <div className="relative h-full flex items-center">
+        <div className="relative h-full flex items-center -translate-y-8 md:translate-y-0 pb-10 md:pb-0">
           <div className="max-w-7xl mx-auto px-8 sm:px-12 lg:px-16 w-full">
             <div className="max-w-4xl">
               <h1 
@@ -130,7 +130,7 @@ export default async function HomePage() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-0 right-0 flex justify-center animate-bounce">
+        <div className="absolute bottom-5 md:bottom-8 left-0 right-0 flex justify-center animate-bounce pb-[env(safe-area-inset-bottom)]">
           <svg className="w-6 h-6 text-biker-yellow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
           </svg>
@@ -203,30 +203,30 @@ export default async function HomePage() {
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-3 sm:gap-4">
               <Link
                 href="/omkeuren#aanvraag"
-                className="bg-black rounded-2xl p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
+                className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
               >
-                <p className="text-xs font-bold uppercase tracking-wider text-biker-muted mb-4">
+                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
                   Minder dan 70 kW
                 </p>
-                <p className="text-4xl md:text-5xl font-black text-biker-yellow mb-2">€ 495</p>
-                <p className="text-sm text-biker-light">Adviesprijs</p>
-                <p className="mt-6 text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 495</p>
+                <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
+                <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
                   Vraag aan
                 </p>
               </Link>
               <Link
                 href="/omkeuren#aanvraag"
-                className="bg-black rounded-2xl p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
+                className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
               >
-                <p className="text-xs font-bold uppercase tracking-wider text-biker-muted mb-4">
+                <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
                   Meer dan 70 kW
                 </p>
-                <p className="text-4xl md:text-5xl font-black text-biker-yellow mb-2">€ 695</p>
-                <p className="text-sm text-biker-light">Adviesprijs</p>
-                <p className="mt-6 text-xs font-bold uppercase tracking-wider text-biker-yellow">
+                <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 695</p>
+                <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
+                <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
                   Vraag aan
                 </p>
               </Link>
@@ -327,9 +327,14 @@ export default async function HomePage() {
               Web<span className="text-biker-yellow">shop</span>
             </h2>
             <p className="text-lg md:text-xl text-biker-light max-w-4xl mx-auto">
-              Bij een nieuwe occasion hoort ook een nieuwe outfit. Ontdek onze collectie premium motorkleding 
-              en accessoires - van veilige helmen tot stijlvolle handschoenen. Rijd niet alleen veilig, 
-              maar ook met stijl. Compleet je motor ervaring vandaag nog!
+              Bij een nieuwe occasion hoort ook een nieuwe outfit. Ontdek onze collectie premium motorkleding
+              en accessoires
+              <span className="md:hidden">.</span>
+              <span className="hidden md:inline">
+                {' '}
+                - van veilige helmen tot stijlvolle handschoenen. Rijd niet alleen veilig,
+                maar ook met stijl. Compleet je motor ervaring vandaag nog!
+              </span>
             </p>
           </div>
 

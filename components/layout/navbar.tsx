@@ -73,10 +73,10 @@ export function Navbar({ user, isAdmin, cartItemCount }: NavbarProps) {
 
               {isHome && (
                 <>
-                  <Link href="/occasions" className={navPillClass}>
+                  <Link href="/occasions" className={`${navPillClass} hidden md:inline-flex`}>
                     AANBOD
                   </Link>
-                  <Link href="/omkeuren" className={navPillClass}>
+                  <Link href="/omkeuren" className={`${navPillClass} hidden md:inline-flex`}>
                     OMKEUREN
                   </Link>
                   <Link href="/products" className={navPillClass}>

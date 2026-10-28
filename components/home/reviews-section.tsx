@@ -1,7 +1,7 @@
 import type { ReviewSettings, SiteReview } from '@/types';
 
 function Stars({ count, size = 'md' }: { count: number; size?: 'sm' | 'md' }) {
-  const className = size === 'sm' ? 'w-5 h-5' : 'w-6 h-6';
+  const className = size === 'sm' ? 'w-3.5 h-3.5 md:w-5 md:h-5' : 'w-6 h-6';
   return (
     <div className="flex text-biker-yellow">
       {[...Array(5)].map((_, i) => (
@@ -53,26 +53,26 @@ export function ReviewsSection({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6">
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="bg-biker-dark rounded-2xl p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all"
+              className="bg-biker-dark rounded-xl md:rounded-2xl p-3 md:p-6 border-2 border-biker-gray hover:border-biker-yellow transition-all"
             >
-              <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center justify-between gap-1 mb-2 md:mb-4">
                 <Stars count={review.rating} size="sm" />
                 {review.date_label && (
-                  <span className="text-xs text-biker-muted">{review.date_label}</span>
+                  <span className="text-[10px] md:text-xs text-biker-muted shrink-0">{review.date_label}</span>
                 )}
               </div>
-              <h3 className="font-bold text-white mb-2">{review.author}</h3>
-              <p className="text-biker-light text-sm leading-relaxed">{review.body}</p>
+              <h3 className="font-bold text-white text-sm md:text-base mb-1.5 md:mb-2">{review.author}</h3>
+              <p className="text-biker-light text-xs md:text-sm leading-relaxed">{review.body}</p>
               {review.is_verified && (
-                <div className="mt-4 flex items-center space-x-2">
-                  <svg className="w-4 h-4 text-biker-yellow" fill="currentColor" viewBox="0 0 24 24">
+                <div className="mt-2 md:mt-4 flex items-center space-x-1.5 md:space-x-2">
+                  <svg className="w-3.5 h-3.5 md:w-4 md:h-4 text-biker-yellow shrink-0" fill="currentColor" viewBox="0 0 24 24">
                     <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
                   </svg>
-                  <span className="text-xs text-biker-muted">Geverifieerde aankoop</span>
+                  <span className="text-[10px] md:text-xs text-biker-muted">Geverifieerde aankoop</span>
                 </div>
               )}
             </div>

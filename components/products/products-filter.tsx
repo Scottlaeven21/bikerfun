@@ -36,6 +36,16 @@ export function ProductsFilter({
     setSelectedCategory(initialSelectedCategory);
   }, [initialSelectedCategory]);
 
+  useEffect(() => {
+    const active = document.querySelector<HTMLElement>('[data-active-category="true"]');
+    const row = active?.parentElement;
+    if (!active || !row) return;
+    row.scrollTo({
+      left: active.offsetLeft - row.clientWidth / 2 + active.offsetWidth / 2,
+      behavior: 'smooth',
+    });
+  }, [selectedCategory]);
+
   const maxPrice = useMemo(() => {
     if (!products.length) return 500;
     const m = Math.max(0, ...products.map((p) => p.price || 0));
@@ -141,34 +151,42 @@ export function ProductsFilter({
         </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="mb-8 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch sm:items-center justify-center gap-2 md:gap-3 px-0 sm:px-2">
-        <button
-          type="button"
-          onClick={() => updateSelectedCategory('')}
-          className={`px-3 sm:px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-[10px] sm:text-xs tracking-wider transition-all text-center leading-tight break-words hyphens-auto ${
-            selectedCategory === ''
-              ? 'bg-biker-yellow text-biker-black'
-              : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
-          }`}
+      {/* Category swipe row */}
+      <div className="relative mb-8 -mx-4 sm:mx-0">
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-white to-transparent z-10" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent z-10" />
+        <div
+          className="flex gap-2 overflow-x-auto snap-x snap-mandatory px-4 sm:px-2 pb-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+          style={{ WebkitOverflowScrolling: 'touch' }}
         >
-          ALLE
-        </button>
-        {categories.map((category) => (
           <button
-            key={category}
             type="button"
-            onClick={() => updateSelectedCategory(category)}
-            className={`px-3 sm:px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-[10px] sm:text-xs tracking-wider transition-all text-center leading-tight break-words hyphens-auto ${
-              selectedCategory === category
+            data-active-category={selectedCategory === '' ? 'true' : undefined}
+            onClick={() => updateSelectedCategory('')}
+            className={`shrink-0 snap-start px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-xs tracking-wider whitespace-nowrap transition-all ${
+              selectedCategory === ''
                 ? 'bg-biker-yellow text-biker-black'
                 : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
             }`}
           >
-            <span className="hidden md:inline">{category}</span>
-            <span className="md:hidden">{category === 'Kentekenplaathouders' ? 'Kentekenhouders' : category}</span>
+            ALLE
           </button>
-        ))}
+          {categories.map((category) => (
+            <button
+              key={category}
+              type="button"
+              data-active-category={selectedCategory === category ? 'true' : undefined}
+              onClick={() => updateSelectedCategory(category)}
+              className={`shrink-0 snap-start px-4 py-2.5 min-h-[44px] rounded-full font-bold uppercase text-xs tracking-wider whitespace-nowrap transition-all ${
+                selectedCategory === category
+                  ? 'bg-biker-yellow text-biker-black'
+                  : 'bg-white text-biker-black border-2 border-gray-300 hover:border-biker-yellow'
+              }`}
+            >
+              {category === 'Kentekenplaathouders' ? 'Kentekenhouders' : category}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Filter Button */}
