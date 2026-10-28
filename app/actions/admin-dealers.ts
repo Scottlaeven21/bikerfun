@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { notifyApplicationStatus } from '@/lib/dealer/notify';
@@ -15,9 +16,87 @@ import type { Dealer, DealerApplication } from '@/lib/dealer/types';
 async function requireAdmin() {
   const session = await getDealerSession();
   if (!session.user || !session.profile?.is_admin) {
-    return { error: 'Geen admin.' };
+    return { error: 'Geen admin.', session: null };
   }
-  return { error: null };
+  return { error: null, session };
+}
+
+async function removeDealerDocuments(dealerId: string) {
+  const admin = createAdminClient();
+  const bucket = admin.storage.from('dealer-documents');
+  const paths: string[] = [];
+
+  async function walk(prefix: string) {
+    const { data } = await bucket.list(prefix, { limit: 1000 });
+    if (!data?.length) return;
+    for (const item of data) {
+      const full = prefix ? `${prefix}/${item.name}` : item.name;
+      if (!item.id) {
+        await walk(full);
+      } else {
+        paths.push(full);
+      }
+    }
+  }
+
+  await walk(dealerId);
+  if (paths.length) {
+    await bucket.remove(paths);
+  }
+}
+
+export async function deleteDealer(dealerId: string) {
+  const gate = await requireAdmin();
+  if (gate.error || !gate.session?.user) return { error: gate.error || 'Geen admin.' };
+
+  if (!dealerId) return { error: 'Geen dealer.' };
+
+  const admin = createAdminClient();
+  const { data: dealer } = await (admin as any)
+    .from('dealers')
+    .select('id, user_id, company_name')
+    .eq('id', dealerId)
+    .maybeSingle();
+
+  if (!dealer) return { error: 'Dealer niet gevonden.' };
+  if (dealer.user_id === gate.session.user.id) {
+    return { error: 'Je kunt je eigen account niet verwijderen.' };
+  }
+
+  const { data: profile } = await (admin as any)
+    .from('profiles')
+    .select('is_admin')
+    .eq('id', dealer.user_id)
+    .maybeSingle();
+
+  await removeDealerDocuments(dealerId);
+
+  const { error } = await (admin as any).from('dealers').delete().eq('id', dealerId);
+  if (error) {
+    console.error('Dealer delete failed:', error.message);
+    return { error: 'Dealer verwijderen mislukt.' };
+  }
+
+  if (profile?.is_admin) {
+    await (admin as any)
+      .from('profiles')
+      .update({ is_dealer: false, updated_at: new Date().toISOString() })
+      .eq('id', dealer.user_id);
+  } else if (dealer.user_id) {
+    const { error: userError } = await admin.auth.admin.deleteUser(dealer.user_id);
+    if (userError) {
+      await (admin as any)
+        .from('profiles')
+        .update({ is_dealer: false, updated_at: new Date().toISOString() })
+        .eq('id', dealer.user_id);
+      console.error('Dealer user delete failed:', userError.message);
+    }
+  }
+
+  revalidatePath('/admin/dealers');
+  revalidatePath('/admin/omkeuren');
+  revalidatePath('/dealer');
+  redirect('/admin/dealers');
 }
 
 export async function setApplicationWorkflow(applicationId: string, formData: FormData) {

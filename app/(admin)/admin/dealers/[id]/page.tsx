@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate, formatPrice } from '@/lib/utils/format';
+import { DeleteDealerButton } from '@/components/admin/delete-dealer-button';
 import { DealerInvoiceForm } from '@/components/admin/dealer-invoice-form';
 import { DealerInvoicePaidButton } from '@/components/admin/dealer-invoice-paid-button';
 import { DocumentLink } from '@/components/dealer/document-link';
@@ -42,12 +43,15 @@ export default async function AdminDealerDetailPage({
       <Link href="/admin/dealers" className="text-sm text-gray-600 hover:underline">
         ← Dealers
       </Link>
-      <div className="bg-white rounded-lg shadow-md p-6">
-        <h1 className="text-3xl font-bold mb-2">{dealer.company_name}</h1>
-        <p className="text-gray-600">
-          {dealer.contact_name} · {dealer.email}
-          {dealer.phone ? ` · ${dealer.phone}` : ''}
-        </p>
+      <div className="bg-white rounded-lg shadow-md p-6 flex flex-col md:flex-row md:items-start md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold mb-2">{dealer.company_name}</h1>
+          <p className="text-gray-600">
+            {dealer.contact_name} · {dealer.email}
+            {dealer.phone ? ` · ${dealer.phone}` : ''}
+          </p>
+        </div>
+        <DeleteDealerButton dealerId={dealer.id} companyName={dealer.company_name} />
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">

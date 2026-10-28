@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
 import type { Dealer } from '@/lib/dealer/types';
 import { CreateDealerForm } from '@/components/admin/create-dealer-form';
+import { DeleteDealerButton } from '@/components/admin/delete-dealer-button';
 
 export const metadata = { title: 'Dealers | Admin' };
 export const dynamic = 'force-dynamic';
@@ -39,6 +40,7 @@ export default async function AdminDealersPage() {
               <th className="px-4 py-3">Bedrijf</th>
               <th className="px-4 py-3">Contact</th>
               <th className="px-4 py-3">Sinds</th>
+              <th className="px-4 py-3"></th>
             </tr>
           </thead>
           <tbody>
@@ -54,11 +56,14 @@ export default async function AdminDealersPage() {
                   <div className="text-gray-500">{dealer.email}</div>
                 </td>
                 <td className="px-4 py-3 text-gray-600">{formatDate(dealer.created_at)}</td>
+                <td className="px-4 py-3 text-right">
+                  <DeleteDealerButton dealerId={dealer.id} companyName={dealer.company_name} compact />
+                </td>
               </tr>
             ))}
             {!dealers.length && !error && (
               <tr>
-                <td colSpan={3} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
                   Nog geen dealers.
                 </td>
               </tr>
