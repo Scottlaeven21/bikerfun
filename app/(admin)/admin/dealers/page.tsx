@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
 import type { Dealer } from '@/lib/dealer/types';
-import { CreateDealerForm } from '@/components/admin/create-dealer-form';
+import { CreateDealerForm, type DealerFormPrefill } from '@/components/admin/create-dealer-form';
 import { DeleteDealerButton } from '@/components/admin/delete-dealer-button';
 import { DealerTemplateUpload } from '@/components/admin/dealer-template-upload';
 
@@ -17,6 +17,38 @@ export default async function AdminDealersPage() {
     .order('created_at', { ascending: false });
 
   const dealers = (data as Dealer[] | null) || [];
+  const dealerEmails = new Set(dealers.map((dealer) => dealer.email.toLowerCase()));
+
+  const { data: signupData } = await (supabase as any)
+    .from('form_submissions')
+    .select('name, email, phone, motor_details, created_at')
+    .eq('subject', 'Dealer omkeuren')
+    .order('created_at', { ascending: false })
+    .limit(30);
+
+  const pendingSignups = ((signupData as Array<{
+    name: string;
+    email: string;
+    phone?: string;
+    motor_details?: Record<string, string | boolean | undefined>;
+  }> | null) || [])
+    .filter((signup) => signup.email && !dealerEmails.has(signup.email.toLowerCase()))
+    .map((signup): DealerFormPrefill => {
+      const details = signup.motor_details || {};
+      return {
+        name: signup.name,
+        email: signup.email,
+        phone: signup.phone,
+        company: String(details.company || ''),
+        location: String(details.location || ''),
+        kvk: String(details.kvk || ''),
+        vatNumber: String(details.vatNumber || ''),
+        rdwRecognized: String(details.rdwRecognized || ''),
+        hasWorkshop: String(details.hasWorkshop || ''),
+      };
+    })
+    .filter((signup, index, list) => list.findIndex((item) => item.email?.toLowerCase() === signup.email?.toLowerCase()) === index)
+    .slice(0, 8);
 
   return (
     <div className="p-8">
@@ -25,7 +57,7 @@ export default async function AdminDealersPage() {
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8 border-2 border-biker-yellow">
         <h2 className="text-xl font-bold mb-4">Nieuw dealerportaal</h2>
-        <CreateDealerForm />
+        <CreateDealerForm pendingSignups={pendingSignups} />
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6 mb-8">

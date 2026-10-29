@@ -37,7 +37,7 @@ const homeFAQ = [
   },
   {
     question: 'Kunnen jullie een motor omkeuren naar A2 / 35kW?',
-    answer: 'Ja. Bikerfun keurt motoren om naar A2 / 35kW voor particulieren en dealers. Wij regelen het papierwerk, vaak ook op afstand. Duur meestal 5 tot 10 werkdagen. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW. Meer info op de omkeuren-pagina.',
+    answer: 'Ja. Bikerfun keurt motoren om naar A2 / 35kW en ook terug naar origineel / vol vermogen, voor particulieren en dealers. Wij regelen het papierwerk, vaak ook op afstand. Duur meestal 5 tot 10 werkdagen. De prijs hangt af van NL of Belgisch kenteken, de richting van de keuring en kan per motor licht verschillen. Neem contact op voor meer info.',
   },
 ];
 
@@ -178,13 +178,14 @@ export default async function HomePage() {
                 Motor <span className="text-biker-yellow">Omkeuren</span>
               </h2>
               <p className="text-lg md:text-xl text-biker-light mb-6 max-w-xl">
-                Motor omkeuren naar A2 / 35kW? Wij nemen het papierwerk uit handen — vaak ook op afstand, voor particulieren én motorzaken.
+                Omkeuren naar A2 / 35kW of terug naar origineel vermogen? Wij nemen het papierwerk uit handen — vaak ook op afstand, voor particulieren én motorzaken.
               </p>
               <ul className="space-y-3">
                 {[
+                  'Naar 35kW of terug naar vol vermogen',
+                  'NL- en Belgisch kenteken',
                   'Meestal binnen 5 tot 10 werkdagen',
                   'Vaak ook op afstand mogelijk',
-                  'Voor particulier en dealer',
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-3 text-white">
                     <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -197,33 +198,28 @@ export default async function HomePage() {
             </div>
 
             <div>
-              <div className="grid grid-cols-2 gap-3 sm:gap-4">
-                <Link
-                  href="/omkeuren#aanvraag"
-                  className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-gray hover:border-biker-yellow hover:-translate-y-1 transition-all duration-300 text-center"
-                >
-                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
-                    Minder dan 70 kW
-                  </p>
-                  <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 495</p>
-                  <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
-                  <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
-                    Vraag aan
-                  </p>
-                </Link>
-                <Link
-                  href="/omkeuren#aanvraag"
-                  className="bg-black rounded-2xl p-4 sm:p-8 border-2 border-biker-yellow hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all duration-300 text-center"
-                >
-                  <p className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-muted mb-2 sm:mb-4">
-                    Meer dan 70 kW
-                  </p>
-                  <p className="text-2xl sm:text-4xl md:text-5xl font-black text-biker-yellow mb-1 sm:mb-2">€ 695</p>
-                  <p className="text-xs sm:text-sm text-biker-light">Adviesprijs</p>
-                  <p className="mt-3 sm:mt-6 text-[10px] sm:text-xs font-bold uppercase tracking-wider text-biker-yellow">
-                    Vraag aan
-                  </p>
-                </Link>
+              <div className="bg-black rounded-2xl p-6 sm:p-8 border-2 border-biker-yellow">
+                <p className="text-xs font-bold uppercase tracking-wider text-biker-yellow mb-4">
+                  Prijs op aanvraag
+                </p>
+                <ul className="space-y-3 text-biker-light">
+                  {[
+                    'NL of Belgisch kenteken',
+                    'Omkeuren naar 35kW',
+                    'Terugkeuren naar vol vermogen',
+                    'Kan per motor licht verschillen',
+                  ].map((item) => (
+                    <li key={item} className="flex items-center gap-3">
+                      <svg className="w-5 h-5 text-biker-yellow flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                <p className="mt-6 text-sm text-biker-muted">
+                  Neem contact op voor meer info.
+                </p>
               </div>
               <Link
                 href="/omkeuren"

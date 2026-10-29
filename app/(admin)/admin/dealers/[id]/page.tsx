@@ -3,8 +3,10 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 import { DeleteDealerButton } from '@/components/admin/delete-dealer-button';
+import { EditDealerForm } from '@/components/admin/edit-dealer-form';
 import { DealerInvoiceForm } from '@/components/admin/dealer-invoice-form';
-import { DealerInvoicePaidButton } from '@/components/admin/dealer-invoice-paid-button';
+import { DealerInvoicePaymentForm } from '@/components/admin/dealer-invoice-payment-form';
+import { invoiceAmountPaid, invoiceRemaining } from '@/lib/dealer/status';
 import { DocumentLink } from '@/components/dealer/document-link';
 import { ApplicationStatusBadge, InvoiceStatusBadge } from '@/components/dealer/status-badge';
 import { APPLICATION_STATUS_LABELS } from '@/lib/dealer/status';
@@ -72,6 +74,10 @@ export default async function AdminDealerDetailPage({
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">
+        <EditDealerForm dealer={dealer} />
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6">
         <h2 className="text-xl font-bold mb-4">Aanvragen</h2>
         <div className="space-y-2">
           {applications.map((app) => (
@@ -119,26 +125,40 @@ export default async function AdminDealerDetailPage({
         />
         <table className="w-full text-sm">
           <tbody>
-            {invoices.map((invoice) => (
-              <tr key={invoice.id} className="border-t">
-                <td className="py-3">{invoice.description}</td>
-                <td className="py-3">{formatPrice(Number(invoice.amount))}</td>
-                <td className="py-3">
-                  <InvoiceStatusBadge status={invoice.status} />
-                </td>
-                <td className="py-3 text-gray-500">{formatDate(invoice.due_date || invoice.created_at)}</td>
-                <td className="py-3">
-                  {invoice.pdf_path ? (
-                    <DocumentLink path={invoice.pdf_path} label="PDF" />
-                  ) : (
-                    <span className="text-gray-400">Geen PDF</span>
-                  )}
-                </td>
-                <td className="py-3">
-                  <DealerInvoicePaidButton invoiceId={invoice.id} paid={invoice.status === 'paid'} />
-                </td>
-              </tr>
-            ))}
+            {invoices.map((invoice) => {
+              const paidAmount = invoiceAmountPaid(invoice);
+              const remaining = invoiceRemaining(invoice);
+              return (
+                <tr key={invoice.id} className="border-t align-top">
+                  <td className="py-3">{invoice.description}</td>
+                  <td className="py-3">
+                    <div>{formatPrice(Number(invoice.amount))}</div>
+                    <div className="text-xs text-gray-500">
+                      Betaald {formatPrice(paidAmount)}
+                      {remaining > 0 ? ` · restant ${formatPrice(remaining)}` : ''}
+                    </div>
+                  </td>
+                  <td className="py-3">
+                    <InvoiceStatusBadge status={invoice.status} />
+                  </td>
+                  <td className="py-3 text-gray-500">{formatDate(invoice.due_date || invoice.created_at)}</td>
+                  <td className="py-3">
+                    {invoice.pdf_path ? (
+                      <DocumentLink path={invoice.pdf_path} label="PDF" />
+                    ) : (
+                      <span className="text-gray-400">Geen PDF</span>
+                    )}
+                  </td>
+                  <td className="py-3">
+                    <DealerInvoicePaymentForm
+                      invoiceId={invoice.id}
+                      remaining={remaining}
+                      paid={invoice.status === 'paid'}
+                    />
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

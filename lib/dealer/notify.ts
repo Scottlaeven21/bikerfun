@@ -6,6 +6,7 @@ import {
 import {
   APPLICATION_STATUS_HINTS,
   APPLICATION_STATUS_LABELS,
+  isDealerOnlyStatus,
   type ApplicationStatus,
 } from './status';
 import type { Dealer, DealerApplication } from './types';
@@ -44,7 +45,10 @@ async function sendStatusMail({
     customerName: application.customer_name,
     forDealer: withPortal,
   });
-  await sendEmail({ to, subject: mail.subject, html: mail.html });
+  const result = await sendEmail({ to, subject: mail.subject, html: mail.html });
+  if (!result.success) {
+    throw new Error(result.error || `Mail naar ${to} mislukt`);
+  }
 }
 
 async function notifyDealerAndCustomer(
@@ -55,29 +59,44 @@ async function notifyDealerAndCustomer(
 ) {
   const dealerEmail = validEmail(dealer.email);
   const customerEmail = validEmail(application.customer_email);
-
-  if (dealerEmail) {
-    await sendStatusMail({
-      to: dealerEmail,
-      greetingName: dealer.contact_name,
-      dealer,
-      application,
-      status,
-      remark,
-      withPortal: true,
-    });
+  if (!customerEmail && !isDealerOnlyStatus(status)) {
+    console.warn('Geen klantmail verstuurd: geen geldig klant-e-mailadres op aanvraag', application.id);
   }
 
-  if (customerEmail && customerEmail.toLowerCase() !== dealerEmail?.toLowerCase()) {
-    await sendStatusMail({
-      to: customerEmail,
-      greetingName: application.customer_name || 'klant',
-      dealer,
-      application,
-      status,
-      remark,
-      withPortal: false,
-    });
+  const tasks: Promise<void>[] = [];
+
+  if (dealerEmail) {
+    tasks.push(
+      sendStatusMail({
+        to: dealerEmail,
+        greetingName: dealer.contact_name,
+        dealer,
+        application,
+        status,
+        remark,
+        withPortal: true,
+      })
+    );
+  }
+
+  if (!isDealerOnlyStatus(status) && customerEmail && customerEmail.toLowerCase() !== dealerEmail?.toLowerCase()) {
+    tasks.push(
+      sendStatusMail({
+        to: customerEmail,
+        greetingName: application.customer_name || 'klant',
+        dealer,
+        application,
+        status,
+        remark,
+        withPortal: false,
+      })
+    );
+  }
+
+  const results = await Promise.allSettled(tasks);
+  const failed = results.filter((result) => result.status === 'rejected');
+  if (failed.length) {
+    console.error('Statusmail deels mislukt:', failed);
   }
 }
 

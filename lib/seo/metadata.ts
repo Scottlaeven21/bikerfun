@@ -280,10 +280,10 @@ export function getAanvraagMetadata(): Metadata {
 // ── Omkeuren ──────────────────────────────────────────────────────────────────
 export function getOmkeurenMetadata(): Metadata {
   const desc =
-    'Motor omkeuren naar A2 / 35kW bij Bikerfun. Vaak op afstand, meestal 5 tot 10 werkdagen. Adviesprijs € 495 onder 70 kW en € 695 boven 70 kW.';
+    'Motor omkeuren naar A2 / 35kW of terug naar origineel vermogen bij Bikerfun. Vaak op afstand, meestal 5 tot 10 werkdagen. NL- en Belgisch kenteken. Neem contact op voor de prijs.';
   return {
     ...getBaseMetadata(),
-    title: 'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
+    title: 'Motor Omkeuren A2 / 35kW | Bikerfun',
     description: desc,
     keywords: [
       'motor omkeuren',
@@ -302,7 +302,7 @@ export function getOmkeurenMetadata(): Metadata {
     ],
     alternates: { canonical: `${baseUrl}/omkeuren` },
     openGraph: {
-      title:       'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
+      title:       'Motor Omkeuren A2 / 35kW | Bikerfun',
       description: desc,
       url:         `${baseUrl}/omkeuren`,
       siteName,
@@ -312,7 +312,7 @@ export function getOmkeurenMetadata(): Metadata {
     },
     twitter: {
       card:        'summary_large_image',
-      title:       'Motor Omkeuren A2 / 35kW | vanaf €495 | Bikerfun',
+      title:       'Motor Omkeuren A2 / 35kW | Bikerfun',
       description: desc,
       images:      [`${baseUrl}/og-image.jpg`],
     },

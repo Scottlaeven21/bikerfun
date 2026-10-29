@@ -133,6 +133,24 @@ export function InzendingenTable({ submissions, type, columns }: InzendingenTabl
       base.splice(4, 0, { label: 'Onderwerp', value: sub.subject });
     }
 
+    if (type === 'contact' && motor) {
+      const dealerFields = [
+        { key: 'company', label: 'Bedrijf' },
+        { key: 'location', label: 'Locatie' },
+        { key: 'kvk', label: 'KVK' },
+        { key: 'vatNumber', label: 'BTW-nummer' },
+        { key: 'rdwRecognized', label: 'RDW-erkenning' },
+        { key: 'hasWorkshop', label: 'Werkplaats' },
+        { key: 'estimatedOmkeuren', label: 'Geschatte omkeuringen' },
+      ];
+      dealerFields.forEach(({ key, label }) => {
+        const val = motor[key];
+        if (val !== undefined && val !== null && val !== '') {
+          base.push({ label, value: String(val) });
+        }
+      });
+    }
+
     if ((type === 'motor_aanvraag' || type === 'bezichtiging') && motor) {
       const motorFields = [
         { key: 'brand', label: 'Merk' },

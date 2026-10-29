@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 import { ApplicationStatusBadge, InvoiceStatusBadge } from '@/components/dealer/status-badge';
+import { invoiceRemaining, isClosedApplication } from '@/lib/dealer/status';
 import type { DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Dealerportaal - Bikerfun', robots: { index: false, follow: false } };
@@ -36,11 +37,11 @@ export default async function DealerHomePage() {
 
   const applications = (appsData as DealerApplication[] | null) || [];
   const invoices = (invoicesData as DealerInvoice[] | null) || [];
-  const openApps = applications.filter((app) => app.status !== 'completed');
+  const openApps = applications.filter((app) => !isClosedApplication(app.status));
   const doneApps = applications.filter((app) => app.status === 'completed');
-  const openInvoices = invoices.filter((invoice) => invoice.status === 'open');
+  const openInvoices = invoices.filter((invoice) => invoice.status !== 'paid');
   const paidInvoices = invoices.filter((invoice) => invoice.status === 'paid');
-  const openTotal = openInvoices.reduce((sum, invoice) => sum + Number(invoice.amount), 0);
+  const openTotal = openInvoices.reduce((sum, invoice) => sum + invoiceRemaining(invoice), 0);
   const avgDays = averageDurationDays(applications);
 
   return (

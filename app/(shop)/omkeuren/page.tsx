@@ -50,7 +50,7 @@ export default function OmkeurenPage() {
               Motor <span className="text-biker-yellow">Omkeuren</span>
             </h1>
             <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto">
-              Motor omkeuren naar A2 / 35kW? Vaak op afstand, meestal 5 tot 10 werkdagen.
+              Omkeuren naar A2 / 35kW of terug naar origineel vermogen? Vaak op afstand, meestal 5 tot 10 werkdagen.
             </p>
           </div>
         </div>
@@ -73,13 +73,14 @@ export default function OmkeurenPage() {
             <p>
               Met een A2-rijbewijs mag je een motor tot 35kW rijden. Heeft jouw motor meer vermogen,
               dan kun je hem laten <strong className="text-white">omkeuren naar A2 / 35kW</strong>.
+              Moet hij later weer terug? Dat kan ook: we keuren hem weer{' '}
+              <strong className="text-white">terug naar origineel / vol vermogen</strong>.
               Bikerfun in Susteren (Limburg) regelt het papierwerk voor je.
             </p>
             <p className="hidden md:block">
               Dat doen we voor particulieren én voor motorzaken. Het duurt meestal 5 tot 10
-              werkdagen. Vaak kan de omkeuring ook op afstand — je hoeft de motor dus niet
-              altijd langs te brengen. Vul het formulier in, dan nemen wij contact met je op.
-              Adviesprijs: € 495 onder 70 kW en € 695 boven 70 kW, inclusief papierwerk.
+              werkdagen. Vaak kan het ook op afstand — je hoeft de motor dus niet altijd langs
+              te brengen. Vul het formulier in of neem contact op, dan denken we met je mee.
             </p>
           </div>
         </div>
@@ -91,37 +92,37 @@ export default function OmkeurenPage() {
             style={{ fontFamily: 'var(--font-inter)' }}
             className="text-4xl md:text-5xl font-bold text-center mb-4 uppercase tracking-tight"
           >
-            Advies<span className="text-biker-yellow">prijzen</span>
+            Wat bepaalt de <span className="text-biker-yellow">prijs</span>?
           </h2>
-          <p className="text-biker-light text-center mb-12">
-            Prijzen zijn inclusief papierwerk. De exacte prijs bevestigen we na je aanvraag.
+          <p className="text-biker-light text-center mb-12 max-w-2xl mx-auto">
+            Geen vaste adviesprijs — het hangt af van je situatie. Neem contact op voor een
+            gerichte prijs.
           </p>
-          <div className="grid grid-cols-2 gap-3 md:gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-6 mb-10">
+            {[
+              { title: 'NL of Belgisch kenteken', text: 'Nederlands of Belgisch kenteken maakt uit voor de afhandeling en de prijs.' },
+              { title: 'Omkeuren naar 35kW', text: 'Beperken naar A2 / 35kW, zodat je ermee mag rijden op A2-rijbewijs.' },
+              { title: 'Terugkeuren naar vol vermogen', text: 'Weer terug naar het originele / volle vermogen van de motor.' },
+              { title: 'Kan per motor licht verschillen', text: 'Merk, model en papieren kunnen de prijs een beetje beïnvloeden.' },
+            ].map((item) => (
+              <div
+                key={item.title}
+                className="bg-black rounded-2xl p-5 md:p-7 border-2 border-biker-gray"
+              >
+                <p className="text-sm md:text-base font-bold uppercase tracking-wider text-biker-yellow mb-2">
+                  {item.title}
+                </p>
+                <p className="text-sm md:text-base text-biker-light leading-relaxed">{item.text}</p>
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
             <a
               href="#aanvraag"
-              className="bg-black rounded-2xl p-4 md:p-8 border-2 border-biker-gray text-center hover:border-biker-yellow hover:-translate-y-1 transition-all"
+              style={{ fontFamily: 'var(--font-montserrat)' }}
+              className="btn-primary inline-block bg-biker-yellow hover:bg-biker-black text-biker-black hover:text-biker-yellow border-2 border-biker-yellow px-10 py-4 rounded-full text-base font-bold uppercase tracking-wider transition-all duration-300"
             >
-              <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-muted mb-2 md:mb-3">
-                Minder dan 70 kW
-              </p>
-              <p className="text-2xl md:text-5xl font-bold text-biker-yellow mb-1 md:mb-2">€ 495</p>
-              <p className="text-xs md:text-base text-biker-light">Adviesprijs onder 70 kW</p>
-              <p className="mt-3 md:mt-4 text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-yellow">
-                Vraag aan
-              </p>
-            </a>
-            <a
-              href="#aanvraag"
-              className="bg-black rounded-2xl p-4 md:p-8 border-2 border-biker-yellow text-center hover:bg-biker-yellow/5 hover:-translate-y-1 transition-all"
-            >
-              <p className="text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-muted mb-2 md:mb-3">
-                Meer dan 70 kW
-              </p>
-              <p className="text-2xl md:text-5xl font-bold text-biker-yellow mb-1 md:mb-2">€ 695</p>
-              <p className="text-xs md:text-base text-biker-light">Adviesprijs boven 70 kW</p>
-              <p className="mt-3 md:mt-4 text-[10px] md:text-sm font-bold uppercase tracking-wider text-biker-yellow">
-                Vraag aan
-              </p>
+              Contact opnemen
             </a>
           </div>
         </div>

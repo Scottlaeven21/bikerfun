@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
 import { DealerStatusForm } from '@/components/admin/dealer-status-form';
+import { DocumentLink } from '@/components/dealer/document-link';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuring | Admin' };
@@ -43,6 +44,27 @@ export default async function AdminOmkeurenDetailPage({
           <Item label="Klant" value={[application.customer_name, application.customer_email].filter(Boolean).join(' · ')} />
           <Item label="Aangemeld" value={formatDate(application.created_at)} />
         </dl>
+        {application.notes && (
+          <p className="text-sm text-gray-700 whitespace-pre-wrap pt-2">{application.notes}</p>
+        )}
+      </div>
+
+      <div className="bg-white rounded-lg shadow-md p-6 space-y-3">
+        <h2 className="text-xl font-bold">Machtigingsformulier</h2>
+        {application.form_path ? (
+          <>
+            <p className="text-sm text-gray-600">
+              Geüpload{application.form_uploaded_at ? ` op ${formatDate(application.form_uploaded_at)}` : ''}.
+            </p>
+            <DocumentLink
+              path={application.form_path}
+              label="Download formulier"
+              className="inline-flex bg-biker-yellow text-biker-black px-5 py-2.5 rounded-lg font-bold uppercase text-sm"
+            />
+          </>
+        ) : (
+          <p className="text-sm text-gray-500">De dealer heeft hier nog geen formulier geüpload.</p>
+        )}
       </div>
 
       <div className="bg-white rounded-lg shadow-md p-6">

@@ -239,7 +239,7 @@ export function getOmkeurenServiceSchema() {
     name: 'Motor omkeuren A2 / 35kW',
     serviceType: 'Motor omkeuren',
     description:
-      'Laat je motor omkeuren naar A2 / 35kW bij Bikerfun. Vaak op afstand, meestal 5 tot 10 werkdagen. Papierwerk voor particulieren en dealers. Adviesprijs vanaf € 495.',
+      'Laat je motor omkeuren naar A2 / 35kW of terug naar origineel vermogen bij Bikerfun. Vaak op afstand, meestal 5 tot 10 werkdagen. Papierwerk voor particulieren en dealers. Prijs afhankelijk van NL of Belgisch kenteken en de richting van de keuring.',
     url: `${baseUrl}/omkeuren`,
     provider: {
       '@type': 'AutomotiveBusiness',
@@ -251,23 +251,8 @@ export function getOmkeurenServiceSchema() {
     },
     areaServed: [
       { '@type': 'Country', name: 'Nederland' },
+      { '@type': 'Country', name: 'België' },
       { '@type': 'AdministrativeArea', name: 'Limburg' },
-    ],
-    offers: [
-      {
-        '@type': 'Offer',
-        name: 'Motor omkeuren onder 70 kW',
-        price: '495.00',
-        priceCurrency: 'EUR',
-        url: `${baseUrl}/omkeuren#aanvraag`,
-      },
-      {
-        '@type': 'Offer',
-        name: 'Motor omkeuren boven 70 kW',
-        price: '695.00',
-        priceCurrency: 'EUR',
-        url: `${baseUrl}/omkeuren#aanvraag`,
-      },
     ],
   };
 }

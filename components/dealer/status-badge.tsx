@@ -12,6 +12,9 @@ const statusClass: Record<ApplicationStatus, string> = {
   awaiting_delivery: 'bg-sky-50 text-sky-800',
   rdw_submitted: 'bg-indigo-50 text-indigo-800',
   completed: 'bg-biker-yellow/20 text-biker-black',
+  not_possible: 'bg-red-50 text-red-700',
+  invoiced: 'bg-orange-50 text-orange-800',
+  paid: 'bg-emerald-50 text-emerald-800',
 };
 
 export function ApplicationStatusBadge({ status }: { status: ApplicationStatus }) {
@@ -26,7 +29,11 @@ export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
   return (
     <span
       className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-        status === 'paid' ? 'bg-emerald-50 text-emerald-800' : 'bg-red-50 text-red-700'
+        status === 'paid'
+          ? 'bg-emerald-50 text-emerald-800'
+          : status === 'partial'
+            ? 'bg-orange-50 text-orange-800'
+            : 'bg-red-50 text-red-700'
       }`}
     >
       {INVOICE_STATUS_LABELS[status]}

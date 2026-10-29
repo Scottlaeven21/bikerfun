@@ -3,6 +3,7 @@ import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 import { DocumentLink } from '@/components/dealer/document-link';
 import { InvoiceStatusBadge } from '@/components/dealer/status-badge';
+import { invoiceRemaining } from '@/lib/dealer/status';
 import type { DealerInvoice } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Facturen - Dealerportaal', robots: { index: false, follow: false } };
@@ -17,9 +18,9 @@ export default async function DealerInvoicesPage() {
     .order('created_at', { ascending: false });
 
   const invoices = (data as DealerInvoice[] | null) || [];
-  const open = invoices.filter((i) => i.status === 'open');
+  const open = invoices.filter((i) => i.status !== 'paid');
   const paid = invoices.filter((i) => i.status === 'paid');
-  const openTotal = open.reduce((sum, i) => sum + Number(i.amount), 0);
+  const openTotal = open.reduce((sum, i) => sum + invoiceRemaining(i), 0);
 
   return (
     <div className="space-y-8">
@@ -66,7 +67,14 @@ function InvoiceList({ invoices, empty }: { invoices: DealerInvoice[]; empty: st
           {invoices.map((invoice) => (
             <tr key={invoice.id} className="border-t">
               <td className="px-4 py-3">{invoice.description}</td>
-              <td className="px-4 py-3 font-semibold">{formatPrice(Number(invoice.amount))}</td>
+              <td className="px-4 py-3 font-semibold">
+                <div>{formatPrice(Number(invoice.amount))}</div>
+                {invoice.status !== 'paid' && invoiceRemaining(invoice) !== Number(invoice.amount) && (
+                  <div className="text-xs font-normal text-gray-500">
+                    Restant {formatPrice(invoiceRemaining(invoice))}
+                  </div>
+                )}
+              </td>
               <td className="px-4 py-3">
                 <InvoiceStatusBadge status={invoice.status} />
               </td>

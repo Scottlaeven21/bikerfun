@@ -2,12 +2,17 @@ export const omkeurenFaq = [
   {
     question: 'Wat is motor omkeuren naar A2 / 35kW?',
     answer:
-      'Bij omkeuren beperken we het vermogen van je motor tot 35kW, zodat je ermee mag rijden op een A2-rijbewijs. Bikerfun in Susteren regelt het papierwerk voor particulieren en motorzaken.',
+      'Bij omkeuren beperken we het vermogen van je motor tot 35kW, zodat je ermee mag rijden op een A2-rijbewijs. Moet hij later weer terug naar origineel / vol vermogen? Dat keuren we ook. Bikerfun in Susteren regelt het papierwerk voor particulieren en motorzaken.',
+  },
+  {
+    question: 'Kunnen jullie ook terugkeuren naar origineel vermogen?',
+    answer:
+      'Ja. Naast omkeuren naar 35kW keuren we motoren ook terug naar het originele / volle vermogen.',
   },
   {
     question: 'Wat kost motor omkeuren bij Bikerfun?',
     answer:
-      'De adviesprijs is € 495 voor motoren onder 70 kW en € 695 voor motoren boven 70 kW, inclusief papierwerk. De exacte prijs bevestigen we na je aanvraag.',
+      'Dat hangt af van een Nederlands of Belgisch kenteken, of je naar 35kW of terug naar vol vermogen wilt, en kan per motor licht verschillen. Neem contact op voor meer info — we geven je dan een gerichte prijs.',
   },
   {
     question: 'Kunnen jullie ook motoren omkeuren voor dealers?',

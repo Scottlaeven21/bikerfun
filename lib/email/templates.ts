@@ -329,10 +329,6 @@ export function dealerSignupAutoReplyEmail(name: string): { subject: string; htm
       We hebben je dealer-aanmelding goed ontvangen. We nemen zo spoedig mogelijk contact met je op over de volgende stappen. Je hoeft verder niets te doen.
     </p>
 
-    <p style="margin: 0 0 20px; color: #333; font-size: 16px; line-height: 1.6;">
-      Neem alleen contact met ons op als je een correctie wilt doorgeven of een dringende vraag hebt:
-    </p>
-
     <div style="background-color: #f9f9f9; padding: 20px; border-left: 3px solid ${BIKER_YELLOW}; border-radius: 4px; margin-bottom: 30px;">
       <p style="margin: 0 0 10px; color: #666; font-size: 14px;">
         <strong>Telefoon:</strong> <a href="tel:+31615452108" style="color: ${BIKER_YELLOW}; text-decoration: none;">06 15 45 21 08</a>
@@ -833,6 +829,50 @@ export function dealerInvoiceEmail({
 
   return {
     subject: `Verzamelfactuur Bikerfun — ${description}`,
+    html: emailLayout(content),
+  };
+}
+
+export function dealerInvoicePaidEmail({
+  name,
+  company,
+  description,
+  amount,
+  portalUrl,
+}: {
+  name: string;
+  company: string;
+  description: string;
+  amount: string;
+  portalUrl: string;
+}): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Factuur ontvangen
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      Hallo ${escapeHtml(name)}, we hebben de betaling van ${escapeHtml(company)} ontvangen.
+      Deze factuur staat nu op betaald.
+    </p>
+    <table role="presentation" style="width:100%;border-collapse:collapse;margin:0 0 24px;">
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Omschrijving</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;">${escapeHtml(description)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;color:#666;">Bedrag</td>
+        <td style="padding:10px 0;border-bottom:1px solid #eee;text-align:right;font-weight:bold;">${escapeHtml(amount)}</td>
+      </tr>
+    </table>
+    <p style="margin: 0;">
+      <a href="${portalUrl}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Bekijk facturen in het portaal
+      </a>
+    </p>
+  `;
+
+  return {
+    subject: `Betaling ontvangen — ${description}`,
     html: emailLayout(content),
   };
 }

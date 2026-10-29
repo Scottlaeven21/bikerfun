@@ -5,7 +5,7 @@ import { redirect } from 'next/navigation';
 import { createAdminClient } from '@/lib/supabase/admin';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { notifyApplicationStatus } from '@/lib/dealer/notify';
-import { isApplicationStatus } from '@/lib/dealer/status';
+import { invoiceStatusFromAmounts, isApplicationStatus } from '@/lib/dealer/status';
 import type { Dealer, DealerApplication } from '@/lib/dealer/types';
 
 async function requireAdmin() {
@@ -105,7 +105,7 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
   const admin = createAdminClient();
   const { data: existing } = await (admin as any)
     .from('dealer_applications')
-    .select('*, dealers(*)')
+    .select('*')
     .eq('id', applicationId)
     .maybeSingle();
 
@@ -123,9 +123,18 @@ export async function setApplicationWorkflow(applicationId: string, formData: Fo
 
   if (error || !updated) return { error: 'Status opslaan mislukt.' };
 
-  const dealer = existing.dealers as Dealer | null;
+  const application = { ...existing, ...updated } as DealerApplication;
+  const { data: dealerData } = await (admin as any)
+    .from('dealers')
+    .select('*')
+    .eq('id', existing.dealer_id)
+    .maybeSingle();
+  const dealer = dealerData as Dealer | null;
+
   if (dealer) {
-    await notifyApplicationStatus(dealer, updated as DealerApplication, status, remark || undefined);
+    await notifyApplicationStatus(dealer, application, status, remark || undefined);
+  } else {
+    console.error('Statusmail overgeslagen: dealer niet gevonden voor', existing.dealer_id);
   }
 
   revalidatePath('/admin/omkeuren');
@@ -221,24 +230,116 @@ export async function createDealerInvoice(formData: FormData) {
   return { success: true };
 }
 
+async function notifyDealerInvoicePaid(invoice: {
+  dealer_id: string;
+  description: string;
+  amount: number;
+}) {
+  try {
+    const admin = createAdminClient();
+    const { data: dealer } = await (admin as any)
+      .from('dealers')
+      .select('email, contact_name, company_name')
+      .eq('id', invoice.dealer_id)
+      .maybeSingle();
+    if (!dealer?.email) return;
+
+    const { isEmailConfigured, sendEmail } = await import('@/lib/email/client');
+    const { dealerInvoicePaidEmail } = await import('@/lib/email/templates');
+    const { formatPrice } = await import('@/lib/utils/format');
+    const { dealerPortalUrl } = await import('@/lib/dealer/auth');
+    if (!isEmailConfigured()) return;
+
+    const mail = dealerInvoicePaidEmail({
+      name: dealer.contact_name,
+      company: dealer.company_name,
+      description: invoice.description,
+      amount: formatPrice(Number(invoice.amount)),
+      portalUrl: `${dealerPortalUrl()}/facturen`,
+    });
+    await sendEmail({ to: dealer.email, subject: mail.subject, html: mail.html });
+  } catch (mailError) {
+    console.error('Invoice paid mail failed:', mailError);
+  }
+}
+
 export async function setDealerInvoicePaid(invoiceId: string, paid: boolean) {
   const gate = await requireAdmin();
   if (gate.error) return { error: gate.error };
 
   const admin = createAdminClient();
+  const { data: invoice } = await (admin as any)
+    .from('dealer_invoices')
+    .select('id, amount, dealer_id, description, status')
+    .eq('id', invoiceId)
+    .maybeSingle();
+
+  if (!invoice) return { error: 'Factuur niet gevonden.' };
+
+  const amountPaid = paid ? Number(invoice.amount) : 0;
   const { error } = await (admin as any)
     .from('dealer_invoices')
     .update({
+      amount_paid: amountPaid,
       status: paid ? 'paid' : 'open',
       paid_at: paid ? new Date().toISOString() : null,
       updated_at: new Date().toISOString(),
     })
     .eq('id', invoiceId);
 
-  if (error) return { error: 'Factuur bijwerken mislukt.' };
+  if (error) return { error: 'Factuur bijwerken mislukt. Voer 040_invoice_partial_payments.sql uit.' };
+  if (paid && invoice.status !== 'paid') {
+    await notifyDealerInvoicePaid(invoice);
+  }
   revalidatePath('/admin/dealers');
   revalidatePath('/dealer/facturen');
+  revalidatePath('/dealer');
   return { success: true };
+}
+
+export async function recordDealerInvoicePayment(invoiceId: string, formData: FormData) {
+  const gate = await requireAdmin();
+  if (gate.error) return { error: gate.error };
+
+  const extra = Number(String(formData.get('amount') || '').replace(',', '.'));
+  if (!Number.isFinite(extra) || extra <= 0) {
+    return { error: 'Vul een geldig bedrag in.' };
+  }
+
+  const admin = createAdminClient();
+  const { data: invoice } = await (admin as any)
+    .from('dealer_invoices')
+    .select('id, amount, amount_paid, dealer_id, description, status')
+    .eq('id', invoiceId)
+    .maybeSingle();
+
+  if (!invoice) return { error: 'Factuur niet gevonden.' };
+
+  const currentPaid = Number(invoice.amount_paid) || 0;
+  const total = Number(invoice.amount) || 0;
+  const amountPaid = Math.round((currentPaid + extra) * 100) / 100;
+  const status = invoiceStatusFromAmounts(total, amountPaid);
+
+  const { error } = await (admin as any)
+    .from('dealer_invoices')
+    .update({
+      amount_paid: amountPaid,
+      status,
+      paid_at: status === 'paid' ? new Date().toISOString() : null,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', invoiceId);
+
+  if (error) return { error: 'Betaling opslaan mislukt. Voer 040_invoice_partial_payments.sql uit.' };
+  if (status === 'paid' && invoice.status !== 'paid') {
+    await notifyDealerInvoicePaid(invoice);
+  }
+
+  revalidatePath('/admin/dealers');
+  revalidatePath(`/admin/dealers/${invoice.dealer_id}`);
+  revalidatePath('/dealer/facturen');
+  revalidatePath('/dealer');
+  return { success: true, status };
 }
 
 export async function createAdminFromAdmin(formData: FormData) {
@@ -294,6 +395,9 @@ export async function createDealerFromAdmin(formData: FormData) {
     phone,
     location: String(formData.get('location') || '').trim() || undefined,
     kvk: String(formData.get('kvk') || '').trim() || undefined,
+    vatNumber: String(formData.get('vatNumber') || '').trim() || undefined,
+    rdwRecognized: String(formData.get('rdwRecognized') || '').trim() || undefined,
+    hasWorkshop: String(formData.get('hasWorkshop') || '').trim() || undefined,
   });
 
   if (!result.ok) {
@@ -308,6 +412,99 @@ export async function createDealerFromAdmin(formData: FormData) {
     createdUser: result.createdUser,
     alreadyExisted: result.alreadyExisted,
   };
+}
+
+export async function updateDealer(dealerId: string, formData: FormData) {
+  const gate = await requireAdmin();
+  if (gate.error) return { error: gate.error };
+  if (!dealerId) return { error: 'Geen dealer.' };
+
+  const name = String(formData.get('name') || '').trim();
+  const email = String(formData.get('email') || '').trim().toLowerCase();
+  const company = String(formData.get('company') || '').trim();
+  const phone = String(formData.get('phone') || '').trim() || null;
+  const location = String(formData.get('location') || '').trim() || null;
+  const kvk = String(formData.get('kvk') || '').trim() || null;
+  const vatNumber = String(formData.get('vatNumber') || '').trim() || null;
+  const rdwRecognized = String(formData.get('rdwRecognized') || '').trim() || null;
+  const hasWorkshop = String(formData.get('hasWorkshop') || '').trim() || null;
+  const estimatedOmkeuren = String(formData.get('estimatedOmkeuren') || '').trim() || null;
+  const notes = String(formData.get('notes') || '').trim() || null;
+
+  if (!name || !email || !company) {
+    return { error: 'Vul contactpersoon, e-mail en bedrijfsnaam in.' };
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: 'Vul een geldig e-mailadres in.' };
+  }
+
+  const admin = createAdminClient();
+  const { data: dealer } = await (admin as any)
+    .from('dealers')
+    .select('id, user_id, email')
+    .eq('id', dealerId)
+    .maybeSingle();
+
+  if (!dealer) return { error: 'Dealer niet gevonden.' };
+
+  const { data: emailTaken } = await (admin as any)
+    .from('dealers')
+    .select('id')
+    .ilike('email', email)
+    .neq('id', dealerId)
+    .maybeSingle();
+
+  if (emailTaken) {
+    return { error: 'Dit e-mailadres hoort al bij een andere dealer.' };
+  }
+
+  if (dealer.user_id && email !== String(dealer.email || '').toLowerCase()) {
+    const { error: authError } = await admin.auth.admin.updateUserById(dealer.user_id, { email });
+    if (authError) {
+      console.error('Dealer email update failed:', authError.message);
+      return { error: 'E-mail aanpassen in de login is mislukt.' };
+    }
+  }
+
+  if (dealer.user_id) {
+    await (admin as any)
+      .from('profiles')
+      .update({
+        full_name: name,
+        email,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', dealer.user_id);
+  }
+
+  const { error } = await (admin as any)
+    .from('dealers')
+    .update({
+      company_name: company,
+      contact_name: name,
+      email,
+      phone,
+      location,
+      kvk,
+      vat_number: vatNumber,
+      rdw_recognized: rdwRecognized,
+      has_workshop: hasWorkshop,
+      estimated_omkeuren: estimatedOmkeuren,
+      notes,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', dealerId);
+
+  if (error) {
+    console.error('Dealer update failed:', error.message);
+    return { error: 'Gegevens opslaan is mislukt.' };
+  }
+
+  revalidatePath('/admin/dealers');
+  revalidatePath(`/admin/dealers/${dealerId}`);
+  revalidatePath('/admin/omkeuren');
+  revalidatePath('/dealer');
+  return { success: true };
 }
 
 export async function uploadDealerFormTemplate(formData: FormData) {

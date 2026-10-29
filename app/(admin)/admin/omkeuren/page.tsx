@@ -61,6 +61,7 @@ export default async function AdminOmkeurenPage({
               <th className="px-4 py-3">Kenteken</th>
               <th className="px-4 py-3">Dealer</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Formulier</th>
               <th className="px-4 py-3">Datum</th>
             </tr>
           </thead>
@@ -76,12 +77,15 @@ export default async function AdminOmkeurenPage({
                 <td className="px-4 py-3">
                   <ApplicationStatusBadge status={app.status} />
                 </td>
+                <td className="px-4 py-3 text-gray-600">
+                  {app.form_path ? 'Geüpload' : 'Nog niet'}
+                </td>
                 <td className="px-4 py-3 text-gray-600">{formatDate(app.created_at)}</td>
               </tr>
             ))}
             {!applications.length && !error && (
               <tr>
-                <td colSpan={4} className="px-4 py-8 text-center text-gray-500">
+                <td colSpan={5} className="px-4 py-8 text-center text-gray-500">
                   Geen aanvragen in deze status.
                 </td>
               </tr>

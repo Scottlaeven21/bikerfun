@@ -6,6 +6,8 @@ import { APPLICATION_STATUS_HINTS } from '@/lib/dealer/status';
 import { formatDate } from '@/lib/utils/format';
 import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import { CustomerEmailForm } from '@/components/dealer/customer-email-form';
+import { DocumentLink } from '@/components/dealer/document-link';
+import { SignedFormUpload } from '@/components/dealer/signed-form-upload';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuring - Dealerportaal', robots: { index: false, follow: false } };
@@ -67,6 +69,23 @@ export default async function DealerApplicationDetailPage({
         {application.notes && (
           <p className="text-sm text-gray-600 whitespace-pre-wrap">{application.notes}</p>
         )}
+      </div>
+
+      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
+        <h2 className="text-xl font-bold">Machtigingsformulier</h2>
+        <p className="text-sm text-gray-600">
+          Download het lege formulier, laat de klant tekenen en upload hier de PDF of een duidelijke foto.
+        </p>
+        <Link href="/dealer/formulier" className="inline-block text-sm font-semibold text-biker-yellow hover:underline">
+          Leeg formulier downloaden
+        </Link>
+        {application.form_path && (
+          <p className="text-sm text-gray-700">
+            Geüpload{application.form_uploaded_at ? ` op ${formatDate(application.form_uploaded_at)}` : ''}.{' '}
+            <DocumentLink path={application.form_path} label="Bekijk formulier" />
+          </p>
+        )}
+        <SignedFormUpload applicationId={application.id} hasUpload={Boolean(application.form_path)} />
       </div>
 
       <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">

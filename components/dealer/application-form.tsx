@@ -29,7 +29,7 @@ export function DealerApplicationForm() {
 
       <div>
         <h2 className="text-xl font-bold uppercase tracking-tight mb-1">Motorgegevens</h2>
-        <p className="text-sm text-gray-600 mb-4">Kenteken, meldcode, framenummer en typegoedkeuring zijn verplicht.</p>
+        <p className="text-sm text-gray-600 mb-4">Kenteken, meldcode en framenummer zijn verplicht.</p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Kenteken *</span>
@@ -44,16 +44,15 @@ export function DealerApplicationForm() {
             <input name="vin" required className={inputClass} placeholder="VIN / chassisnummer" />
           </label>
           <label className="block md:col-span-2">
-            <span className="block text-sm font-bold uppercase tracking-wider mb-2">Typegoedkeuring *</span>
+            <span className="block text-sm font-bold uppercase tracking-wider mb-2">Typegoedkeuring</span>
             <input
               name="type_approval"
-              required
               className={inputClass}
               placeholder="e4*92/61*0190*…"
             />
             <span className="mt-2 block text-sm text-gray-600">
-              Op de motor zit een typegoedkeuringsplaatje met dit nummer. In veel gevallen begint het
-              met een e-nummer, bijvoorbeeld e4*92/61*0190*…
+              Niet altijd aanwezig, maar wel handig. Als er een typegoedkeuringsplaatje op de motor zit,
+              begint het nummer vaak met een e, bijvoorbeeld e4*92/61*0190*…
             </span>
           </label>
           <label className="block">
@@ -98,10 +97,11 @@ export function DealerApplicationForm() {
           name="notes"
           rows={4}
           className={`${inputClass} resize-none`}
-          placeholder="Vermeld het gewenste vermogen. Moet de motor terug naar het originele vermogen? Zet dat hier."
+          placeholder="Bijv. naar 35 kW, huidig vermogen 70 kW"
         />
         <span className="mt-2 block text-sm text-gray-600">
-          Vermeld het gewenste vermogen. Als de motor terug moet naar het originele vermogen, vermeld dat dan hier.
+          Vermeld het gewenste vermogen. Moet de motor terug naar het originele vermogen? Zet dat hier.
+          Vermeld ook het huidige of volle vermogen als je dat weet, dat scheelt ons uitzoekwerk.
         </span>
       </label>
 

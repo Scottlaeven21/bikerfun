@@ -143,8 +143,9 @@ export default function FAQPage() {
             Veelgestelde <span className="text-biker-yellow">Vragen</span>
           </h1>
           <p className="text-lg md:text-xl text-biker-light max-w-2xl mx-auto">
-            Vind hier antwoorden over occasions, motor omkeuren naar A2 / 35kW,
-            webshop en diensten. Staat je vraag er niet bij? Neem gerust contact met ons op!
+            Vind hier antwoorden over occasions, motor omkeuren naar A2 / 35kW
+            of terug naar origineel vermogen, webshop en diensten. Staat je vraag
+            er niet bij? Neem gerust contact met ons op!
           </p>
         </div>
       </section>
