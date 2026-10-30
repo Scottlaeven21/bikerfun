@@ -73,7 +73,7 @@ export function DealerApplicationForm() {
       <div>
         <h2 className="text-xl font-bold uppercase tracking-tight mb-1">Klant (optioneel)</h2>
         <p className="text-sm text-gray-600 mb-4">
-          Vul het e-mailadres van de klant in, dan krijgen jullie allebei statusupdates.
+          Vul het e-mailadres van de klant in, dan krijgt de klant ook statusupdates.
         </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="block">
@@ -89,6 +89,27 @@ export function DealerApplicationForm() {
             <input name="customer_phone" className={inputClass} />
           </label>
         </div>
+      </div>
+
+      <div className="rounded-xl border-2 border-gray-200 bg-gray-50 p-5">
+        <h2 className="text-xl font-bold uppercase tracking-tight mb-1">Na goedkeuring</h2>
+        <p className="text-sm text-gray-600 mb-4">
+          Wil je dat we meteen doorpakken, of eerst even overleggen?
+        </p>
+        <label className="flex items-start gap-3 text-sm text-gray-800">
+          <input
+            type="checkbox"
+            name="proceed_on_approval"
+            className="mt-1 h-4 w-4 accent-biker-yellow"
+          />
+          <span>
+            <span className="font-semibold">Start het omkeurproces direct na goedkeuring.</span>
+            <span className="mt-1 block text-gray-600">
+              We bestellen dan meteen de documentatie bij de leverancier. Vanaf dat moment maken
+              we kosten, die we in rekening brengen. Liever eerst contact? Laat dit vakje uit.
+            </span>
+          </span>
+        </label>
       </div>
 
       <label className="block">

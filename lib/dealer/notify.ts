@@ -7,6 +7,7 @@ import {
   APPLICATION_STATUS_HINTS,
   APPLICATION_STATUS_LABELS,
   isDealerOnlyStatus,
+  shouldNotifyDealer,
   type ApplicationStatus,
 } from './status';
 import type { Dealer, DealerApplication } from './types';
@@ -65,7 +66,7 @@ async function notifyDealerAndCustomer(
 
   const tasks: Promise<void>[] = [];
 
-  if (dealerEmail) {
+  if (dealerEmail && shouldNotifyDealer(dealer.email_updates, status)) {
     tasks.push(
       sendStatusMail({
         to: dealerEmail,
@@ -114,6 +115,7 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
     brand: application.brand,
     model: application.model,
     customerEmail: application.customer_email,
+    proceedOnApproval: application.proceed_on_approval,
   });
   await sendEmail({ to: getToEmail(), subject: adminMail.subject, html: adminMail.html });
 

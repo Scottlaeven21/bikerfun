@@ -14,6 +14,29 @@ export type ApplicationStatus = (typeof APPLICATION_STATUSES)[number];
 export type SignedFormStatus = 'none' | 'waiting' | 'received';
 export type DealerAccountStatus = 'pending' | 'active' | 'rejected';
 export type InvoiceStatus = 'open' | 'partial' | 'paid';
+export type DealerEmailUpdates = 'all' | 'action' | 'none';
+
+export const DEALER_EMAIL_UPDATE_OPTIONS: {
+  value: DealerEmailUpdates;
+  label: string;
+  hint: string;
+}[] = [
+  {
+    value: 'all',
+    label: 'Alle updates',
+    hint: 'Elke statuswijziging per mail.',
+  },
+  {
+    value: 'action',
+    label: 'Alleen als er actie nodig is',
+    hint: 'Bijvoorbeeld een machtigingsformulier of een openstaande factuur.',
+  },
+  {
+    value: 'none',
+    label: 'Geen statusmails',
+    hint: 'Geen mails over de voortgang. Facturen sturen we wél.',
+  },
+];
 
 export const APPLICATION_STATUS_LABELS: Record<ApplicationStatus, string> = {
   received: 'Aanvraag ontvangen',
@@ -71,4 +94,17 @@ export function isClosedApplication(status: ApplicationStatus) {
 
 export function isDealerOnlyStatus(status: ApplicationStatus) {
   return status === 'invoiced' || status === 'paid';
+}
+
+export function isDealerActionStatus(status: ApplicationStatus) {
+  return status === 'docs_requested' || status === 'invoiced';
+}
+
+export function shouldNotifyDealer(
+  preference: DealerEmailUpdates | null | undefined,
+  status: ApplicationStatus
+) {
+  if (preference === 'none') return false;
+  if (preference === 'action') return isDealerActionStatus(status);
+  return true;
 }

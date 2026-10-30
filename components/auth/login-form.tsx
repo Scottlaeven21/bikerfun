@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { login } from '@/app/actions/auth';
 import { useFormState } from 'react-dom';
@@ -68,6 +69,14 @@ export function LoginForm() {
           className="w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-biker-yellow focus:border-biker-yellow text-biker-black transition-all"
           placeholder="••••••••"
         />
+        <div className="mt-2 text-right">
+          <Link
+            href="/login/vergeten"
+            className="text-sm font-semibold text-biker-yellow hover:text-biker-yellowHover"
+          >
+            Wachtwoord vergeten?
+          </Link>
+        </div>
       </div>
 
       <SubmitButton />

@@ -1,6 +1,7 @@
 import type {
   ApplicationStatus,
   DealerAccountStatus,
+  DealerEmailUpdates,
   InvoiceStatus,
   SignedFormStatus,
 } from './status';
@@ -19,6 +20,7 @@ export type Dealer = {
   has_workshop: string | null;
   estimated_omkeuren: string | null;
   notes: string | null;
+  email_updates: DealerEmailUpdates;
   status: DealerAccountStatus;
   created_at: string;
   updated_at: string;
@@ -35,6 +37,7 @@ export type DealerApplication = {
   model: string | null;
   year: string | null;
   notes: string | null;
+  proceed_on_approval: boolean;
   customer_name: string | null;
   customer_email: string | null;
   customer_phone: string | null;

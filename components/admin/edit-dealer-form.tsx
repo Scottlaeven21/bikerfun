@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { updateDealer } from '@/app/actions/admin-dealers';
+import { DEALER_EMAIL_UPDATE_OPTIONS } from '@/lib/dealer/status';
 import type { Dealer } from '@/lib/dealer/types';
 
 const inputClass = 'w-full px-3 py-2 border-2 border-gray-300 rounded-lg bg-white text-gray-900';
@@ -76,6 +77,20 @@ export function EditDealerForm({ dealer }: { dealer: Dealer }) {
         <label className="block">
           <span className="block text-sm font-semibold mb-1">Geschatte omkeuringen</span>
           <input name="estimatedOmkeuren" defaultValue={dealer.estimated_omkeuren || ''} className={inputClass} />
+        </label>
+        <label className="block md:col-span-2">
+          <span className="block text-sm font-semibold mb-1">Statusmails</span>
+          <select
+            name="email_updates"
+            defaultValue={dealer.email_updates || 'all'}
+            className={inputClass}
+          >
+            {DEALER_EMAIL_UPDATE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
         </label>
         <label className="block md:col-span-2">
           <span className="block text-sm font-semibold mb-1">Notitie</span>

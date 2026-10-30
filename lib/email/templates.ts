@@ -674,6 +674,7 @@ export function dealerApplicationAdminEmail({
   brand,
   model,
   customerEmail,
+  proceedOnApproval,
 }: {
   company: string;
   contact: string;
@@ -685,6 +686,7 @@ export function dealerApplicationAdminEmail({
   brand?: string | null;
   model?: string | null;
   customerEmail?: string | null;
+  proceedOnApproval?: boolean | null;
 }): { subject: string; html: string } {
   const row = (label: string, value?: string | null) =>
     value
@@ -708,6 +710,12 @@ export function dealerApplicationAdminEmail({
       ${row('Typegoedkeuring', typeApproval)}
       ${row('Motor', [brand, model].filter(Boolean).join(' '))}
       ${row('Klant e-mail', customerEmail)}
+      ${row(
+        'Doorstarten',
+        proceedOnApproval
+          ? 'Ja — direct verder na goedkeuring'
+          : 'Nee — eerst contact'
+      )}
     </table>
   `;
 

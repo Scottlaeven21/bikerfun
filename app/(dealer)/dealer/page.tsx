@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate, formatPrice } from '@/lib/utils/format';
 import { ApplicationStatusBadge, InvoiceStatusBadge } from '@/components/dealer/status-badge';
+import { DealerEmailPreferenceForm } from '@/components/dealer/email-preference-form';
 import { invoiceRemaining, isClosedApplication } from '@/lib/dealer/status';
 import type { DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
@@ -101,6 +102,7 @@ export default async function DealerHomePage() {
                     <p className="text-sm text-gray-600">
                       {[app.brand, app.model].filter(Boolean).join(' ') || 'Motor'}
                       {app.customer_name ? ` · ${app.customer_name}` : ''}
+                      {app.proceed_on_approval ? ' · Direct doorstarten' : ''}
                       {' · '}
                       {formatDate(app.created_at)}
                     </p>
@@ -122,6 +124,15 @@ export default async function DealerHomePage() {
         </div>
         <InvoiceBlock title="Openstaand" invoices={openInvoices} empty="Geen openstaande facturen." />
         <InvoiceBlock title="Betaald" invoices={paidInvoices} empty="Nog geen betaalde facturen." />
+      </section>
+
+      <section id="instellingen" className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8">
+        <h2 className="text-xl font-bold text-gray-900 mb-1">Statusmails</h2>
+        <p className="text-sm text-gray-600 mb-5">
+          Kies wat je wilt ontvangen. Facturen sturen we altijd. Klanten krijgen updates als hun
+          e-mail is ingevuld.
+        </p>
+        <DealerEmailPreferenceForm current={dealer?.email_updates} />
       </section>
     </div>
   );

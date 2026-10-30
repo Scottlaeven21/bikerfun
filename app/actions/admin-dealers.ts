@@ -430,6 +430,7 @@ export async function updateDealer(dealerId: string, formData: FormData) {
   const hasWorkshop = String(formData.get('hasWorkshop') || '').trim() || null;
   const estimatedOmkeuren = String(formData.get('estimatedOmkeuren') || '').trim() || null;
   const notes = String(formData.get('notes') || '').trim() || null;
+  const emailUpdates = String(formData.get('email_updates') || '').trim();
 
   if (!name || !email || !company) {
     return { error: 'Vul contactpersoon, e-mail en bedrijfsnaam in.' };
@@ -491,6 +492,9 @@ export async function updateDealer(dealerId: string, formData: FormData) {
       has_workshop: hasWorkshop,
       estimated_omkeuren: estimatedOmkeuren,
       notes,
+      ...(emailUpdates === 'all' || emailUpdates === 'action' || emailUpdates === 'none'
+        ? { email_updates: emailUpdates }
+        : {}),
       updated_at: new Date().toISOString(),
     })
     .eq('id', dealerId);

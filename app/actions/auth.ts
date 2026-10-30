@@ -3,6 +3,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import { logAuditEvent } from '@/lib/audit/logger';
 import {
   clearAdmin2faCookie,
@@ -26,6 +27,14 @@ function resolveLoginRedirect(redirectTo: string, isAdmin: boolean, isDealer: bo
     return requested;
   }
   return home;
+}
+
+async function siteUrl() {
+  const requestHeaders = await headers();
+  const host = requestHeaders.get('x-forwarded-host') || requestHeaders.get('host');
+  const proto = requestHeaders.get('x-forwarded-proto') || (host?.includes('localhost') ? 'http' : 'https');
+  if (host) return `${proto}://${host}`;
+  return (process.env.NEXT_PUBLIC_APP_URL || 'https://bikerfun.nl').replace(/\/$/, '');
 }
 
 function loginTarget(path: string) {
@@ -240,4 +249,58 @@ export async function changeForcedPassword(prevState: { error?: string } | null,
     redirect(`/login/verify?redirect=${encodeURIComponent(destination)}`);
   }
   redirect(destination);
+}
+
+export async function requestPasswordReset(prevState: { error?: string; success?: string } | null, formData: FormData) {
+  const email = String(formData.get('email') || '').trim().toLowerCase();
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return { error: 'Vul een geldig e-mailadres in.' };
+  }
+
+  const supabase = await createClient();
+  const redirectTo = `${await siteUrl()}/auth/callback?next=/login/reset`;
+  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+
+  if (error) {
+    console.error('Password reset request failed:', error.message);
+    return { error: 'Resetmail versturen is nu niet gelukt. Probeer het zo opnieuw.' };
+  }
+
+  return {
+    success: 'Als dit e-mailadres bij ons bekend is, sturen we een mail met een link om je wachtwoord te resetten.',
+  };
+}
+
+export async function resetForgottenPassword(prevState: { error?: string } | null, formData: FormData) {
+  const password = String(formData.get('password') || '');
+  const confirm = String(formData.get('confirm') || '');
+
+  if (password.length < 8) {
+    return { error: 'Gebruik minimaal 8 tekens.' };
+  }
+  if (password !== confirm) {
+    return { error: 'De wachtwoorden komen niet overeen.' };
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: 'Deze resetlink is ongeldig of verlopen. Vraag een nieuwe aan.' };
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    return { error: 'Wachtwoord wijzigen mislukt. Kies een sterker wachtwoord.' };
+  }
+
+  await (supabase as any)
+    .from('profiles')
+    .update({ must_change_password: false, updated_at: new Date().toISOString() })
+    .eq('id', user.id);
+
+  await supabase.auth.signOut();
+  revalidatePath('/', 'layout');
+  redirect('/login?reset=ok');
 }

@@ -64,6 +64,14 @@ export default async function DealerApplicationDetailPage({
               <dd className="font-semibold break-all">{application.type_approval}</dd>
             </div>
           )}
+          <div className="md:col-span-2">
+            <dt className="text-gray-500">Na goedkeuring</dt>
+            <dd className="font-semibold">
+              {application.proceed_on_approval
+                ? 'Direct doorstarten — documentatie mag meteen besteld worden.'
+                : 'Eerst contact, nog niet automatisch verder.'}
+            </dd>
+          </div>
         </dl>
 
         {application.notes && (

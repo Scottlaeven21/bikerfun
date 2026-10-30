@@ -42,6 +42,14 @@ export default async function AdminOmkeurenDetailPage({
           <Item label="Typegoedkeuring" value={application.type_approval ?? undefined} />
           <Item label="Motor" value={[application.brand, application.model, application.year].filter(Boolean).join(' ')} />
           <Item label="Klant" value={[application.customer_name, application.customer_email].filter(Boolean).join(' · ')} />
+          <Item
+            label="Doorstarten na goedkeuring"
+            value={
+              application.proceed_on_approval
+                ? 'Ja — direct documentatie bestellen'
+                : 'Nee — eerst contact'
+            }
+          />
           <Item label="Aangemeld" value={formatDate(application.created_at)} />
         </dl>
         {application.notes && (

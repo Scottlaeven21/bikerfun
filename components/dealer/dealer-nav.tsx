@@ -10,6 +10,7 @@ const links = [
   { href: '/dealer/formulier', label: 'Formulier' },
   { href: '/dealer/omgekeurd', label: 'Omgekeurd' },
   { href: '/dealer/facturen', label: 'Facturen' },
+  { href: '/dealer#instellingen', label: 'Instellingen' },
 ];
 
 export function DealerNav({ company }: { company: string }) {

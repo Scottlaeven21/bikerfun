@@ -7,7 +7,13 @@ export const metadata: Metadata = {
   description: 'Log in op je Bikerfun account',
 };
 
-export default function LoginPage() {
+export default async function LoginPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ reset?: string }>;
+}) {
+  const { reset } = await searchParams;
+
   return (
     <div className="bg-white rounded-2xl border-2 border-gray-200 p-8 shadow-2xl">
       <div className="mb-8 text-center">
@@ -18,6 +24,12 @@ export default function LoginPage() {
           Log in op je account
         </p>
       </div>
+
+      {reset === 'ok' && (
+        <div className="mb-6 bg-emerald-50 border-2 border-emerald-200 text-emerald-800 px-4 py-3 rounded-lg text-sm">
+          Je wachtwoord is gewijzigd. Log in met je nieuwe wachtwoord.
+        </div>
+      )}
 
       <LoginForm />
 

@@ -53,6 +53,7 @@ export async function createDealerApplication(formData: FormData) {
       customer_name: String(formData.get('customer_name') || '').trim() || null,
       customer_email: customerEmail || null,
       customer_phone: String(formData.get('customer_phone') || '').trim() || null,
+      proceed_on_approval: formData.get('proceed_on_approval') === 'on',
     })
     .select('*')
     .single();
@@ -179,6 +180,33 @@ export async function uploadDealerSignedForm(applicationId: string, formData: Fo
   revalidatePath(`/dealer/aanvragen/${applicationId}`);
   revalidatePath('/admin/omkeuren');
   revalidatePath(`/admin/omkeuren/${applicationId}`);
+  return { success: true };
+}
+
+export async function updateDealerEmailPreference(formData: FormData) {
+  const gate = await requireActiveDealer();
+  if (!gate.dealer) return { error: gate.error || 'Geen dealer gevonden.' };
+
+  const value = String(formData.get('email_updates') || '').trim();
+  if (value !== 'all' && value !== 'action' && value !== 'none') {
+    return { error: 'Kies een geldige mailvoorkeur.' };
+  }
+
+  const admin = createAdminClient();
+  const { error } = await (admin as any)
+    .from('dealers')
+    .update({
+      email_updates: value,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', gate.dealer.id);
+
+  if (error) {
+    console.error('Dealer email preference update failed:', error.message);
+    return { error: 'Voorkeur opslaan is mislukt. Is de SQL al uitgevoerd?' };
+  }
+
+  revalidatePath('/dealer');
   return { success: true };
 }
 
