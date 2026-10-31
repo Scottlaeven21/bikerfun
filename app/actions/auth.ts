@@ -11,6 +11,9 @@ import {
   shouldSkipAdmin2fa,
 } from '@/lib/auth/admin-2fa';
 import { passwordChangePath } from '@/lib/auth/must-change-password';
+import { createAdminClient } from '@/lib/supabase/admin';
+import { isEmailConfigured, sendEmail } from '@/lib/email/client';
+import { passwordResetEmail } from '@/lib/email/templates';
 
 function portalHome(isAdmin: boolean, isDealer: boolean) {
   if (isAdmin) return '/admin';
@@ -257,18 +260,39 @@ export async function requestPasswordReset(prevState: { error?: string; success?
     return { error: 'Vul een geldig e-mailadres in.' };
   }
 
-  const supabase = await createClient();
-  const redirectTo = `${await siteUrl()}/auth/callback?next=/login/reset`;
-  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo });
+  const ok = {
+    success:
+      'Als dit e-mailadres bij ons bekend is, sturen we een mail met een link om je wachtwoord te resetten.',
+  };
 
-  if (error) {
-    console.error('Password reset request failed:', error.message);
+  if (!isEmailConfigured()) {
     return { error: 'Resetmail versturen is nu niet gelukt. Probeer het zo opnieuw.' };
   }
 
-  return {
-    success: 'Als dit e-mailadres bij ons bekend is, sturen we een mail met een link om je wachtwoord te resetten.',
-  };
+  const admin = createAdminClient();
+  const redirectTo = `${await siteUrl()}/auth/callback?next=/login/reset`;
+  const { data, error } = await admin.auth.admin.generateLink({
+    type: 'recovery',
+    email,
+    options: { redirectTo },
+  });
+
+  if (error || !data.properties?.action_link) {
+    if (error && !/not found|does not exist|user/i.test(error.message)) {
+      console.error('Password reset link failed:', error.message);
+      return { error: 'Resetmail versturen is nu niet gelukt. Probeer het zo opnieuw.' };
+    }
+    return ok;
+  }
+
+  const mail = passwordResetEmail({ resetUrl: data.properties.action_link });
+  const sent = await sendEmail({ to: email, subject: mail.subject, html: mail.html });
+  if (!sent.success) {
+    console.error('Password reset mail failed:', sent.error);
+    return { error: 'Resetmail versturen is nu niet gelukt. Probeer het zo opnieuw.' };
+  }
+
+  return ok;
 }
 
 export async function resetForgottenPassword(prevState: { error?: string } | null, formData: FormData) {

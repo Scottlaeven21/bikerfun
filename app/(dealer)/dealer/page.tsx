@@ -80,7 +80,12 @@ export default async function DealerHomePage() {
       </div>
 
       <section>
-        <h2 className="text-xl font-bold text-gray-900 mb-3">Alle motoren</h2>
+        <div className="flex items-end justify-between gap-3 mb-3">
+          <h2 className="text-xl font-bold text-gray-900">Alle motoren</h2>
+          {applications.length > 6 && (
+            <p className="text-sm text-gray-500">{applications.length} stuks · scroll voor meer</p>
+          )}
+        </div>
         {applications.length === 0 ? (
           <div className="bg-white rounded-2xl border-2 border-gray-200 p-10 text-center">
             <p className="text-gray-600 mb-4">Nog geen aanvragen.</p>
@@ -89,7 +94,7 @@ export default async function DealerHomePage() {
             </Link>
           </div>
         ) : (
-          <div className="space-y-3">
+          <div className="max-h-[38rem] overflow-y-auto space-y-3 pr-1">
             {applications.map((app) => (
               <Link
                 key={app.id}

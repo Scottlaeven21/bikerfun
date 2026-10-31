@@ -535,6 +535,34 @@ export function admin2faEmail(code: string): { subject: string; html: string } {
   };
 }
 
+export function passwordResetEmail({
+  resetUrl,
+}: {
+  resetUrl: string;
+}): { subject: string; html: string } {
+  const content = `
+    <h2 style="margin: 0 0 20px; color: ${BIKER_BLACK}; font-size: 24px;">
+      Wachtwoord resetten
+    </h2>
+    <p style="margin: 0 0 16px; color: #333; font-size: 15px; line-height: 1.6;">
+      We kregen een verzoek om het wachtwoord van je Bikerfun-account te resetten.
+      Klik op de knop hieronder. De link is een uur geldig.
+    </p>
+    <p style="margin: 24px 0;">
+      <a href="${escapeHtml(resetUrl)}" style="display:inline-block;background:${BIKER_YELLOW};color:${BIKER_BLACK};text-decoration:none;font-weight:bold;padding:14px 22px;border-radius:999px;">
+        Nieuw wachtwoord instellen
+      </a>
+    </p>
+    <p style="margin: 0; color: #666; font-size: 13px; line-height: 1.6;">
+      Was jij dit niet? Dan kun je deze mail negeren. Je wachtwoord blijft ongewijzigd.
+    </p>
+  `;
+  return {
+    subject: 'Reset je Bikerfun-wachtwoord',
+    html: emailLayout(content),
+  };
+}
+
 export function adminWelcomeEmail({
   name,
   email,
