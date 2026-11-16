@@ -32,8 +32,8 @@ export function SignedFormUpload({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3">
-      <label className="block">
-        <span className="block text-sm font-semibold mb-1">
+      <label className="block rounded-xl border-2 border-dashed border-gray-300 px-4 py-4 cursor-pointer">
+        <span className="block text-sm font-semibold mb-2">
           {hasUpload ? 'Vervang het formulier' : 'Upload het getekende formulier'}
         </span>
         <input
@@ -43,13 +43,14 @@ export function SignedFormUpload({
           accept="application/pdf,image/jpeg,image/png,.pdf,.jpg,.jpeg,.png"
           className="w-full text-sm"
         />
+        <span className="mt-2 block text-sm text-gray-600">PDF of een scherpe foto van het getekende formulier.</span>
       </label>
       {error && <p className="text-sm text-red-600">{error}</p>}
       {message && <p className="text-sm text-emerald-700">{message}</p>}
       <button
         type="submit"
         disabled={loading}
-        className="bg-biker-yellow text-biker-black px-5 py-2.5 rounded-lg font-bold uppercase text-sm disabled:opacity-50"
+        className="w-full sm:w-auto min-h-12 bg-biker-yellow text-biker-black px-5 py-3 rounded-full font-bold uppercase text-sm disabled:opacity-50"
       >
         {loading ? 'Uploaden...' : hasUpload ? 'Opnieuw uploaden' : 'Formulier uploaden'}
       </button>

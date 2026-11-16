@@ -27,17 +27,20 @@ export function CustomerEmailForm({
           name="customer_name"
           defaultValue={customerName}
           placeholder="Naam klant"
-          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+          className="w-full min-h-12 px-3 py-3 border-2 border-gray-300 rounded-lg"
         />
         <input
           name="customer_email"
           type="email"
           defaultValue={customerEmail}
           placeholder="klant@email.nl"
-          className="w-full px-3 py-2 border-2 border-gray-300 rounded-lg"
+          className="w-full min-h-12 px-3 py-3 border-2 border-gray-300 rounded-lg"
         />
       </div>
-      <button type="submit" className="text-sm font-bold uppercase text-biker-black underline">
+      <button
+        type="submit"
+        className="w-full sm:w-auto min-h-11 text-sm font-bold uppercase text-biker-black underline"
+      >
         Klantmail opslaan
       </button>
       {message && <p className="text-sm text-gray-600">{message}</p>}

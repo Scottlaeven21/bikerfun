@@ -29,7 +29,7 @@ export function DealerApplicationForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8">
+    <form onSubmit={handleSubmit} className="space-y-6 bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 md:p-8">
       {error && (
         <div className="bg-red-50 border-2 border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
       )}
@@ -106,7 +106,7 @@ export function DealerApplicationForm() {
           <input
             type="checkbox"
             name="proceed_on_approval"
-            className="mt-1 h-4 w-4 accent-biker-yellow"
+            className="mt-1 h-5 w-5 shrink-0 accent-biker-yellow"
           />
           <span>
             <span className="font-semibold">Start het omkeurproces direct na goedkeuring.</span>
@@ -135,7 +135,7 @@ export function DealerApplicationForm() {
       <div className="rounded-xl border-2 border-gray-200 bg-gray-50 p-5">
         <DealerTerms />
         <label className="mt-4 flex items-start gap-3 text-sm text-gray-800">
-          <input type="checkbox" name="accept_terms" required className="mt-1 h-4 w-4 accent-biker-yellow" />
+          <input type="checkbox" name="accept_terms" required className="mt-1 h-5 w-5 shrink-0 accent-biker-yellow" />
           <span>Ik ga akkoord met deze voorwaarden.</span>
         </label>
       </div>
@@ -144,7 +144,7 @@ export function DealerApplicationForm() {
         type="submit"
         loading={loading}
         loadingText="OPSLAAN..."
-        className="btn-primary w-full bg-biker-yellow text-biker-black border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider"
+        className="btn-primary w-full min-h-12 bg-biker-yellow text-biker-black border-2 border-biker-yellow px-8 py-4 rounded-full font-bold uppercase tracking-wider"
       >
         Motor aanmelden
       </LoadingButton>

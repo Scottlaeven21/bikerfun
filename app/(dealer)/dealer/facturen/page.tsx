@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
-import { formatDate, formatPrice } from '@/lib/utils/format';
-import { DocumentLink } from '@/components/dealer/document-link';
-import { InvoiceStatusBadge } from '@/components/dealer/status-badge';
+import { formatPrice } from '@/lib/utils/format';
+import { DealerInvoiceList } from '@/components/dealer/invoice-list';
 import { invoiceRemaining } from '@/lib/dealer/status';
 import type { DealerInvoice } from '@/lib/dealer/types';
 
@@ -25,7 +24,7 @@ export default async function DealerInvoicesPage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Facturen</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Facturen</h1>
         <p className="text-gray-600 mt-1">
           Elke maand één verzamelfactuur voor de aanvragen van de maand ervoor. Betaal binnen 30 dagen.
         </p>
@@ -36,62 +35,13 @@ export default async function DealerInvoicesPage() {
 
       <section>
         <h2 className="text-xl font-bold mb-3">Nog te betalen</h2>
-        <InvoiceList invoices={open} empty="Geen openstaande facturen." />
+        <DealerInvoiceList invoices={open} empty="Geen openstaande facturen." showPdf />
       </section>
       <section>
         <h2 className="text-xl font-bold mb-3">Betaald</h2>
-        <InvoiceList invoices={paid} empty="Nog geen betaalde facturen." />
+        <DealerInvoiceList invoices={paid} empty="Nog geen betaalde facturen." showPdf />
       </section>
     </div>
   );
 }
 
-function InvoiceList({ invoices, empty }: { invoices: DealerInvoice[]; empty: string }) {
-  if (!invoices.length) {
-    return <div className="bg-white rounded-xl border-2 border-gray-200 p-6 text-gray-600">{empty}</div>;
-  }
-
-  return (
-    <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
-      <table className="w-full text-sm">
-        <thead className="bg-gray-50 text-left">
-          <tr>
-            <th className="px-4 py-3">Omschrijving</th>
-            <th className="px-4 py-3">Bedrag</th>
-            <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3">Datum</th>
-            <th className="px-4 py-3">Factuur</th>
-          </tr>
-        </thead>
-        <tbody>
-          {invoices.map((invoice) => (
-            <tr key={invoice.id} className="border-t">
-              <td className="px-4 py-3">{invoice.description}</td>
-              <td className="px-4 py-3 font-semibold">
-                <div>{formatPrice(Number(invoice.amount))}</div>
-                {invoice.status !== 'paid' && invoiceRemaining(invoice) !== Number(invoice.amount) && (
-                  <div className="text-xs font-normal text-gray-500">
-                    Restant {formatPrice(invoiceRemaining(invoice))}
-                  </div>
-                )}
-              </td>
-              <td className="px-4 py-3">
-                <InvoiceStatusBadge status={invoice.status} />
-              </td>
-              <td className="px-4 py-3 text-gray-600">
-                {formatDate(invoice.due_date || invoice.paid_at || invoice.created_at)}
-              </td>
-              <td className="px-4 py-3">
-                {invoice.pdf_path ? (
-                  <DocumentLink path={invoice.pdf_path} label="Download PDF" />
-                ) : (
-                  <span className="text-gray-400">—</span>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}

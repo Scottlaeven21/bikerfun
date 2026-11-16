@@ -41,7 +41,7 @@ export function DealerEmailPreferenceForm({
               name="email_updates"
               value={option.value}
               defaultChecked={(current || 'all') === option.value}
-              className="mt-1 h-4 w-4 accent-biker-yellow"
+              className="mt-1 h-5 w-5 shrink-0 accent-biker-yellow"
             />
             <span>
               <span className="block font-semibold text-gray-900">{option.label}</span>
@@ -55,7 +55,7 @@ export function DealerEmailPreferenceForm({
       <button
         type="submit"
         disabled={loading}
-        className="bg-biker-yellow text-biker-black px-5 py-2.5 rounded-full font-bold uppercase text-sm disabled:opacity-50"
+        className="w-full sm:w-auto min-h-12 bg-biker-yellow text-biker-black px-5 py-3 rounded-full font-bold uppercase text-sm disabled:opacity-50"
       >
         {loading ? 'Opslaan...' : 'Voorkeur opslaan'}
       </button>

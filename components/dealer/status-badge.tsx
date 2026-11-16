@@ -19,7 +19,9 @@ const statusClass: Record<ApplicationStatus, string> = {
 
 export function ApplicationStatusBadge({ status }: { status: ApplicationStatus }) {
   return (
-    <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${statusClass[status]}`}>
+    <span
+      className={`inline-flex max-w-full shrink-0 px-3 py-1 rounded-full text-xs font-semibold leading-tight text-center ${statusClass[status]}`}
+    >
       {APPLICATION_STATUS_LABELS[status]}
     </span>
   );
@@ -28,7 +30,7 @@ export function ApplicationStatusBadge({ status }: { status: ApplicationStatus }
 export function InvoiceStatusBadge({ status }: { status: InvoiceStatus }) {
   return (
     <span
-      className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+      className={`inline-flex max-w-full shrink-0 px-3 py-1 rounded-full text-xs font-semibold leading-tight text-center ${
         status === 'paid'
           ? 'bg-emerald-50 text-emerald-800'
           : status === 'partial'

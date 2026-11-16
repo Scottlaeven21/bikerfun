@@ -1,8 +1,7 @@
 /**
  * Universal product/category route.
  *
- * NOTE: Next.js picks [category] over [slug] alphabetically when both exist at
- * the same level.  This file therefore handles BOTH cases:
+ * This file handles BOTH cases:
  *   1. /products/<product-slug>  → renders product detail page
  *   2. /products/<category-slug> → renders category overview page
  */

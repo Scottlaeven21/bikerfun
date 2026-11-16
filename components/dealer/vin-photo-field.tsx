@@ -79,7 +79,11 @@ export function VinPhotoField({
         />
         {onVinChange && <input type="hidden" name={vinName} value={vinValue || ''} />}
       </label>
-      <label className="block">
+      <label
+        className={`block rounded-xl border-2 border-dashed px-4 py-4 ${
+          dark ? 'border-biker-gray' : 'border-gray-300'
+        }`}
+      >
         <span className="block text-sm font-bold uppercase tracking-wider mb-2">
           Of foto van kentekenbewijs / frame *
         </span>
@@ -93,7 +97,7 @@ export function VinPhotoField({
         />
         <span className={`mt-2 block text-sm ${dark ? 'text-biker-light' : 'text-gray-600'}`}>
           Eén van de twee is verplicht: het nummer typen, of een scherpe foto van kentekenbewijs
-          of frame. Allebei mag ook.
+          of frame. Allebei mag ook. Op je telefoon kun je de camera of de galerij gebruiken.
         </span>
       </label>
       {preview && (

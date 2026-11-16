@@ -21,7 +21,7 @@ export default async function DealerCompletedPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-900 mb-2">Omgekeurde motoren</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Omgekeurde motoren</h1>
       <p className="text-gray-600 mb-8">Registratie afgerond. Het nieuwe kentekenbewijs is onderweg.</p>
 
       {applications.length === 0 ? (
@@ -34,9 +34,9 @@ export default async function DealerCompletedPage() {
             <Link
               key={app.id}
               href={`/dealer/aanvragen/${app.id}`}
-              className="block bg-white rounded-xl border-2 border-gray-200 p-5 hover:border-biker-yellow"
+              className="block bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-5 hover:border-biker-yellow"
             >
-              <div className="flex items-center justify-between gap-3">
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                   <p className="font-bold text-lg">{app.license_plate}</p>
                   <p className="text-sm text-gray-600">

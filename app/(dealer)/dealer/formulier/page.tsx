@@ -18,26 +18,35 @@ export default async function DealerFormPage() {
   return (
     <div className="max-w-5xl space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Formulier</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Formulier</h1>
         <p className="text-gray-600 mt-2">
           Download het officiële omkeurformulier, print het zelf uit en laat de klant tekenen.
         </p>
       </div>
 
       {formPath ? (
-        <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 space-y-4">
+        <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <p className="font-semibold">Officieel PDF-formulier</p>
-            <DocumentLink path={formPath} label="Download PDF" />
+            <DocumentLink
+              path={formPath}
+              label="Download PDF"
+              className="inline-flex min-h-12 items-center justify-center rounded-full bg-biker-yellow px-5 py-3 text-sm font-bold uppercase tracking-wider text-biker-black"
+            />
           </div>
+          <p className="md:hidden text-sm text-gray-600">
+            Open of download de PDF via de knop. Op telefoon werkt dat beter dan een voorbeeld in de pagina.
+          </p>
           {preview.url ? (
             <iframe
               src={preview.url}
               title="Voorbeeld omkeurformulier"
-              className="w-full h-[80vh] rounded-xl border border-gray-200 bg-gray-50"
+              className="hidden md:block w-full h-[80vh] rounded-xl border border-gray-200 bg-gray-50"
             />
           ) : (
-            <p className="text-sm text-gray-500">Het voorbeeld kon niet worden geladen. Gebruik de downloadknop.</p>
+            <p className="hidden md:block text-sm text-gray-500">
+              Het voorbeeld kon niet worden geladen. Gebruik de downloadknop.
+            </p>
           )}
         </div>
       ) : (

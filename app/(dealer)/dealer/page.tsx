@@ -2,8 +2,9 @@ import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { getDealerSession } from '@/lib/dealer/auth';
 import { formatDate, formatPrice } from '@/lib/utils/format';
-import { ApplicationStatusBadge, InvoiceStatusBadge } from '@/components/dealer/status-badge';
+import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import { DealerEmailPreferenceForm } from '@/components/dealer/email-preference-form';
+import { DealerInvoiceList } from '@/components/dealer/invoice-list';
 import { invoiceRemaining, isClosedApplication } from '@/lib/dealer/status';
 import type { DealerApplication, DealerInvoice } from '@/lib/dealer/types';
 
@@ -49,19 +50,19 @@ export default async function DealerHomePage() {
     <div className="space-y-10">
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Overzicht</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Overzicht</h1>
           <p className="text-gray-600 mt-1">Alle motoren, facturen en de status in één oogopslag.</p>
         </div>
-        <div className="flex flex-wrap gap-3">
+        <div className="grid grid-cols-1 sm:flex sm:flex-wrap gap-3">
           <Link
             href="/dealer/formulier"
-            className="bg-white text-biker-black border-2 border-gray-300 px-6 py-3 rounded-full font-bold uppercase text-sm hover:border-biker-yellow"
+            className="inline-flex min-h-12 items-center justify-center bg-white text-biker-black border-2 border-gray-300 px-6 py-3 rounded-full font-bold uppercase text-sm hover:border-biker-yellow"
           >
             Formulier downloaden
           </Link>
           <Link
             href="/dealer/aanvragen/nieuw"
-            className="bg-biker-yellow text-biker-black px-6 py-3 rounded-full font-bold uppercase text-sm"
+            className="inline-flex min-h-12 items-center justify-center bg-biker-yellow text-biker-black px-6 py-3 rounded-full font-bold uppercase text-sm"
           >
             Nieuwe aanvraag
           </Link>
@@ -80,7 +81,7 @@ export default async function DealerHomePage() {
       </div>
 
       <section>
-        <div className="flex items-end justify-between gap-3 mb-3">
+        <div className="flex flex-wrap items-end justify-between gap-2 mb-3">
           <h2 className="text-xl font-bold text-gray-900">Alle motoren</h2>
           {applications.length > 6 && (
             <p className="text-sm text-gray-500">{applications.length} stuks · scroll voor meer</p>
@@ -99,9 +100,9 @@ export default async function DealerHomePage() {
               <Link
                 key={app.id}
                 href={`/dealer/aanvragen/${app.id}`}
-                className="block bg-white rounded-xl border-2 border-gray-200 p-5 hover:border-biker-yellow"
+                className="block bg-white rounded-xl border-2 border-gray-200 p-4 sm:p-5 hover:border-biker-yellow"
               >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                   <div>
                     <p className="font-bold text-lg">{app.license_plate}</p>
                     <p className="text-sm text-gray-600">
@@ -123,7 +124,7 @@ export default async function DealerHomePage() {
       <section className="space-y-6">
         <div className="flex items-end justify-between gap-3">
           <h2 className="text-xl font-bold text-gray-900">Facturen</h2>
-          <Link href="/dealer/facturen" className="text-sm font-semibold underline">
+          <Link href="/dealer/facturen" className="text-sm font-semibold underline min-h-11 inline-flex items-center">
             Alles bekijken
           </Link>
         </div>
@@ -131,7 +132,7 @@ export default async function DealerHomePage() {
         <InvoiceBlock title="Betaald" invoices={paidInvoices} empty="Nog geen betaalde facturen." />
       </section>
 
-      <section id="instellingen" className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8">
+      <section id="instellingen" className="scroll-mt-24 bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 md:p-8">
         <h2 className="text-xl font-bold text-gray-900 mb-1">Statusmails</h2>
         <p className="text-sm text-gray-600 mb-5">
           Kies wat je wilt ontvangen. Facturen sturen we altijd. Klanten krijgen updates als hun
@@ -145,9 +146,9 @@ export default async function DealerHomePage() {
 
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="bg-white rounded-2xl border-2 border-gray-200 p-4">
+    <div className="bg-white rounded-2xl border-2 border-gray-200 p-3 sm:p-4">
       <p className="text-xs font-bold uppercase tracking-wider text-gray-500">{label}</p>
-      <p className="text-2xl font-bold mt-1">{value}</p>
+      <p className="text-xl sm:text-2xl font-bold mt-1 break-words">{value}</p>
       {hint && <p className="text-xs text-gray-500 mt-1">{hint}</p>}
     </div>
   );
@@ -165,28 +166,7 @@ function InvoiceBlock({
   return (
     <div>
       <h3 className="font-semibold mb-2">{title}</h3>
-      {invoices.length === 0 ? (
-        <div className="bg-white rounded-xl border-2 border-gray-200 p-5 text-sm text-gray-600">{empty}</div>
-      ) : (
-        <div className="bg-white rounded-xl border-2 border-gray-200 overflow-hidden">
-          <table className="w-full text-sm">
-            <tbody>
-              {invoices.map((invoice) => (
-                <tr key={invoice.id} className="border-t first:border-t-0">
-                  <td className="px-4 py-3">{invoice.description}</td>
-                  <td className="px-4 py-3 font-semibold">{formatPrice(Number(invoice.amount))}</td>
-                  <td className="px-4 py-3">
-                    <InvoiceStatusBadge status={invoice.status} />
-                  </td>
-                  <td className="px-4 py-3 text-gray-600">
-                    {formatDate(invoice.due_date || invoice.created_at)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+      <DealerInvoiceList invoices={invoices} empty={empty} />
     </div>
   );
 }

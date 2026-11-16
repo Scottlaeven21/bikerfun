@@ -24,7 +24,7 @@ export function VinImagePreview({ path }: { path: string }) {
           <img
             src={url}
             alt="Foto framenummer"
-            className="max-h-72 rounded-lg border border-gray-200 object-contain bg-gray-50"
+            className="w-full max-h-56 sm:max-h-72 rounded-lg border border-gray-200 object-contain bg-gray-50"
           />
         </a>
       ) : (

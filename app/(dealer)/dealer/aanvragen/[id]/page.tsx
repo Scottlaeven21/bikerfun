@@ -36,10 +36,10 @@ export default async function DealerApplicationDetailPage({
       <Link href="/dealer" className="text-sm font-semibold text-gray-600 hover:underline">
         ← Terug naar overzicht
       </Link>
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-6">
-        <div className="flex flex-wrap items-start justify-between gap-3">
+      <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 md:p-8 space-y-6">
+        <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
           <div>
-            <h1 className="text-3xl font-bold">{application.license_plate}</h1>
+            <h1 className="text-2xl sm:text-3xl font-bold break-words">{application.license_plate}</h1>
             <p className="text-gray-600">
               {[application.brand, application.model, application.year].filter(Boolean).join(' ') || 'Motor'}
             </p>
@@ -86,12 +86,12 @@ export default async function DealerApplicationDetailPage({
         )}
       </div>
 
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
+      <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 md:p-8 space-y-4">
         <h2 className="text-xl font-bold">Machtigingsformulier</h2>
         <p className="text-sm text-gray-600">
           Download het lege formulier, laat de klant tekenen en upload hier de PDF of een duidelijke foto.
         </p>
-        <Link href="/dealer/formulier" className="inline-block text-sm font-semibold text-biker-yellow hover:underline">
+        <Link href="/dealer/formulier" className="inline-flex min-h-11 items-center text-sm font-semibold text-biker-yellow hover:underline">
           Leeg formulier downloaden
         </Link>
         {application.form_path && (
@@ -103,7 +103,7 @@ export default async function DealerApplicationDetailPage({
         <SignedFormUpload applicationId={application.id} hasUpload={Boolean(application.form_path)} />
       </div>
 
-      <div className="bg-white rounded-2xl border-2 border-gray-200 p-6 md:p-8 space-y-4">
+      <div className="bg-white rounded-2xl border-2 border-gray-200 p-4 sm:p-6 md:p-8 space-y-4">
         <h2 className="text-xl font-bold">Klantupdates</h2>
         <p className="text-sm text-gray-600">
           Als je hier een e-mailadres zet, krijgen jij en de klant allebei een mail bij elke statuswijziging. De klant ziet geen dealerportaal.
