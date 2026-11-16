@@ -94,11 +94,13 @@ export async function sendEmail({
   subject,
   html,
   text,
+  attachments,
 }: {
   to: string | string[];
   subject: string;
   html: string;
   text?: string;
+  attachments?: { filename: string; content: Buffer; contentType?: string }[];
 }) {
   try {
     if (!isEmailConfigured()) {
@@ -117,6 +119,7 @@ export async function sendEmail({
       subject,
       html,
       text: text || stripHtml(html),
+      attachments,
     };
 
     const info = await transporter.sendMail(mailOptions);

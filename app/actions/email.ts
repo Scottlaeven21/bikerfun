@@ -371,7 +371,9 @@ export async function submitOmkeurenForm(formData: {
   year?: string;
   vin?: string;
   message?: string;
-}) {
+},
+  files?: FormData
+) {
   try {
     if (!formData.name || !formData.email) {
       return { success: false, error: 'Vul alle verplichte velden in.' };
@@ -383,6 +385,12 @@ export async function submitOmkeurenForm(formData: {
 
     if (!formData.isDealer && (!formData.brand || !formData.model || !formData.year)) {
       return { success: false, error: 'Vul alle verplichte velden in.' };
+    }
+
+    const vinFile = files?.get('vin_image');
+    const hasVinPhoto = vinFile instanceof File && vinFile.size > 0;
+    if (!formData.isDealer && !String(formData.vin || '').trim() && !hasVinPhoto) {
+      return { success: false, error: 'Vul het framenummer in of upload een foto van kentekenbewijs of frame.' };
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -405,6 +413,9 @@ export async function submitOmkeurenForm(formData: {
       formData.typeApproval && `Typegoedkeuring: ${formData.typeApproval}`,
       formData.year && `Bouwjaar: ${formData.year}`,
       formData.vin && `Framenummer: ${formData.vin}`,
+      files?.get('vin_image') instanceof File && (files.get('vin_image') as File).size > 0
+        ? 'VIN-foto: als bijlage'
+        : '',
       formData.message && `\nBericht:\n${formData.message}`,
     ].filter(Boolean);
 
@@ -434,12 +445,24 @@ export async function submitOmkeurenForm(formData: {
       },
     });
 
+    let attachment: { filename: string; content: Buffer; contentType?: string } | null = null;
+    if (hasVinPhoto) {
+      const name = vinFile.name.toLowerCase();
+      const ext = name.endsWith('.png') ? 'png' : name.endsWith('.webp') ? 'webp' : 'jpg';
+      attachment = {
+        filename: `framenummer.${ext}`,
+        content: Buffer.from(await vinFile.arrayBuffer()),
+        contentType: vinFile.type || 'image/jpeg',
+      };
+    }
+
     if (isEmailConfigured()) {
-      const emailContent = omkeurenEmail(formData);
+      const emailContent = omkeurenEmail({ ...formData, hasVinPhoto });
       await sendEmail({
         to: getToEmail(),
         subject: emailContent.subject,
         html: emailContent.html,
+        attachments: attachment ? [attachment] : undefined,
       });
       if (isMotorFormsAutoreplyEnabled()) {
         try {

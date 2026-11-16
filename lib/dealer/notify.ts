@@ -116,6 +116,7 @@ export async function notifyApplicationCreated(dealer: Dealer, application: Deal
     model: application.model,
     customerEmail: application.customer_email,
     proceedOnApproval: application.proceed_on_approval,
+    hasVinPhoto: Boolean(application.vin_image_path),
   });
   await sendEmail({ to: getToEmail(), subject: adminMail.subject, html: adminMail.html });
 

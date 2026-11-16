@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { submitOmkeurenForm } from '@/app/actions/email';
 import { LoadingButton } from '@/components/loading/spinner';
 import { trackEvent } from '@/app/actions/analytics';
+import { VinPhotoField } from '@/components/dealer/vin-photo-field';
 
 const emptyForm = {
   name: '',
@@ -34,6 +35,7 @@ export function OmkeurenForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState(emptyForm);
   const [status, setStatus] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [hasVinPhoto, setHasVinPhoto] = useState(false);
 
   function handleChange(
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -51,15 +53,28 @@ export function OmkeurenForm() {
     setStatus(null);
     setIsLoading(true);
 
-    const result = await submitOmkeurenForm({
-      ...formData,
-      isDealer,
-    });
+    if (!isDealer && !formData.vin.trim() && !hasVinPhoto) {
+      setStatus({
+        type: 'error',
+        text: 'Vul het framenummer in of upload een foto van kentekenbewijs of frame.',
+      });
+      return;
+    }
+
+    const files = new FormData(e.currentTarget);
+    const result = await submitOmkeurenForm(
+      {
+        ...formData,
+        isDealer,
+      },
+      files
+    );
 
     setIsLoading(false);
     if (result.success) {
       setStatus({ type: 'success', text: result.message || 'Aanvraag verzonden!' });
       setFormData(emptyForm);
+      setHasVinPhoto(false);
       await trackEvent('omkeuren_submit', {
         type: isDealer ? 'dealer' : 'particulier',
         brand: formData.brand,
@@ -435,21 +450,13 @@ export function OmkeurenForm() {
                       placeholder="e4*2002/24*0123"
                     />
                   </div>
-                  <div className="md:col-span-2">
-                    <label htmlFor="vin" className="block text-sm font-bold mb-2 uppercase tracking-wider">
-                      Framenummer
-                    </label>
-                    <input
-                      type="text"
-                      id="vin"
-                      name="vin"
-                      disabled={isLoading}
-                      value={formData.vin}
-                      onChange={handleChange}
-                      className={inputClass}
-                      placeholder="VIN / chassisnummer"
-                    />
-                  </div>
+                  <VinPhotoField
+                    vinValue={formData.vin}
+                    onVinChange={(vin) => setFormData((prev) => ({ ...prev, vin }))}
+                    onHasPhotoChange={setHasVinPhoto}
+                    variant="dark"
+                    disabled={isLoading}
+                  />
                 </div>
               </div>
               )}

@@ -7,6 +7,7 @@ import { formatDate } from '@/lib/utils/format';
 import { ApplicationStatusBadge } from '@/components/dealer/status-badge';
 import { CustomerEmailForm } from '@/components/dealer/customer-email-form';
 import { DocumentLink } from '@/components/dealer/document-link';
+import { VinImagePreview } from '@/components/dealer/vin-image-preview';
 import { SignedFormUpload } from '@/components/dealer/signed-form-upload';
 import type { DealerApplication } from '@/lib/dealer/types';
 
@@ -56,7 +57,7 @@ export default async function DealerApplicationDetailPage({
           </div>
           <div>
             <dt className="text-gray-500">Framenummer</dt>
-            <dd className="font-semibold break-all">{application.vin}</dd>
+            <dd className="font-semibold break-all">{application.vin || 'Zie foto'}</dd>
           </div>
           {application.type_approval && (
             <div className="md:col-span-2">
@@ -76,6 +77,12 @@ export default async function DealerApplicationDetailPage({
 
         {application.notes && (
           <p className="text-sm text-gray-600 whitespace-pre-wrap">{application.notes}</p>
+        )}
+        {application.vin_image_path && (
+          <div>
+            <p className="text-sm text-gray-500 mb-2">Foto framenummer</p>
+            <VinImagePreview path={application.vin_image_path} />
+          </div>
         )}
       </div>
 

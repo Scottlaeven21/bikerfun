@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { formatDate } from '@/lib/utils/format';
 import { DealerStatusForm } from '@/components/admin/dealer-status-form';
 import { DocumentLink } from '@/components/dealer/document-link';
+import { VinImagePreview } from '@/components/dealer/vin-image-preview';
 import type { DealerApplication } from '@/lib/dealer/types';
 
 export const metadata = { title: 'Omkeuring | Admin' };
@@ -38,7 +39,10 @@ export default async function AdminOmkeurenDetailPage({
         </p>
         <dl className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
           <Item label="Meldcode" value={application.meldcode} />
-          <Item label="Framenummer" value={application.vin} />
+          <Item
+            label="Framenummer"
+            value={application.vin || (application.vin_image_path ? 'Zie foto' : undefined)}
+          />
           <Item label="Typegoedkeuring" value={application.type_approval ?? undefined} />
           <Item label="Motor" value={[application.brand, application.model, application.year].filter(Boolean).join(' ')} />
           <Item label="Klant" value={[application.customer_name, application.customer_email].filter(Boolean).join(' · ')} />
@@ -54,6 +58,12 @@ export default async function AdminOmkeurenDetailPage({
         </dl>
         {application.notes && (
           <p className="text-sm text-gray-700 whitespace-pre-wrap pt-2">{application.notes}</p>
+        )}
+        {application.vin_image_path && (
+          <div className="pt-3">
+            <p className="text-sm text-gray-500 mb-2">Foto framenummer</p>
+            <VinImagePreview path={application.vin_image_path} />
+          </div>
         )}
       </div>
 

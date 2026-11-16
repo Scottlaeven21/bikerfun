@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { createDealerApplication } from '@/app/actions/dealer';
 import { LoadingButton } from '@/components/loading/spinner';
 import { DealerTerms } from '@/components/dealer/dealer-terms';
+import { VinPhotoField } from '@/components/dealer/vin-photo-field';
 
 const inputClass =
   'w-full px-4 py-3 bg-white border-2 border-gray-300 rounded-lg text-biker-black focus:border-biker-yellow focus:outline-none';
@@ -11,10 +12,16 @@ const inputClass =
 export function DealerApplicationForm() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [vin, setVin] = useState('');
+  const [hasVinPhoto, setHasVinPhoto] = useState(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
+    if (!vin.trim() && !hasVinPhoto) {
+      setError('Vul het framenummer in of upload een foto van kentekenbewijs of frame.');
+      return;
+    }
     setLoading(true);
     const result = await createDealerApplication(new FormData(e.currentTarget));
     setLoading(false);
@@ -29,7 +36,9 @@ export function DealerApplicationForm() {
 
       <div>
         <h2 className="text-xl font-bold uppercase tracking-tight mb-1">Motorgegevens</h2>
-        <p className="text-sm text-gray-600 mb-4">Kenteken, meldcode en framenummer zijn verplicht.</p>
+        <p className="text-sm text-gray-600 mb-4">
+          Kenteken en meldcode zijn verplicht. Bij het framenummer: typen of foto, één van de twee.
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <label className="block">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Kenteken *</span>
@@ -39,10 +48,7 @@ export function DealerApplicationForm() {
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Meldcode *</span>
             <input name="meldcode" required className={inputClass} placeholder="4 cijfers" />
           </label>
-          <label className="block md:col-span-2">
-            <span className="block text-sm font-bold uppercase tracking-wider mb-2">Framenummer *</span>
-            <input name="vin" required className={inputClass} placeholder="VIN / chassisnummer" />
-          </label>
+          <VinPhotoField vinValue={vin} onVinChange={setVin} onHasPhotoChange={setHasVinPhoto} />
           <label className="block md:col-span-2">
             <span className="block text-sm font-bold uppercase tracking-wider mb-2">Typegoedkeuring</span>
             <input

@@ -435,6 +435,7 @@ export function omkeurenEmail({
   typeApproval,
   year,
   vin,
+  hasVinPhoto,
   message,
 }: {
   name: string;
@@ -455,6 +456,7 @@ export function omkeurenEmail({
   typeApproval?: string;
   year?: string;
   vin?: string;
+  hasVinPhoto?: boolean;
   message?: string;
 }): { subject: string; html: string } {
   const row = (label: string, value?: string) =>
@@ -492,7 +494,8 @@ export function omkeurenEmail({
       ${row('Kenteken', licensePlate)}
       ${row('Typegoedkeuring', typeApproval)}
       ${row('Bouwjaar', year)}
-      ${row('Framenummer', vin)}
+      ${row('Framenummer', vin || (hasVinPhoto ? 'Zie foto in bijlage' : ''))}
+      ${row('VIN-foto', hasVinPhoto ? 'Als bijlage toegevoegd' : '')}
     </table>
     ${
       message
@@ -703,18 +706,20 @@ export function dealerApplicationAdminEmail({
   model,
   customerEmail,
   proceedOnApproval,
+  hasVinPhoto,
 }: {
   company: string;
   contact: string;
   email: string;
   licensePlate: string;
   meldcode: string;
-  vin: string;
+  vin?: string | null;
   typeApproval?: string | null;
   brand?: string | null;
   model?: string | null;
   customerEmail?: string | null;
   proceedOnApproval?: boolean | null;
+  hasVinPhoto?: boolean | null;
 }): { subject: string; html: string } {
   const row = (label: string, value?: string | null) =>
     value
@@ -734,7 +739,8 @@ export function dealerApplicationAdminEmail({
       ${row('E-mail', email)}
       ${row('Kenteken', licensePlate)}
       ${row('Meldcode', meldcode)}
-      ${row('Framenummer', vin)}
+      ${row('Framenummer', vin || (hasVinPhoto ? 'Zie foto' : ''))}
+      ${row('VIN-foto', hasVinPhoto ? 'Ja, in het admin-portaal' : '')}
       ${row('Typegoedkeuring', typeApproval)}
       ${row('Motor', [brand, model].filter(Boolean).join(' '))}
       ${row('Klant e-mail', customerEmail)}

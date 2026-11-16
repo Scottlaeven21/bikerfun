@@ -8,6 +8,7 @@ import { notifyApplicationCreated } from '@/lib/dealer/notify';
 import type { Dealer, DealerApplication } from '@/lib/dealer/types';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const MAX_SIGNED_FORM_BYTES = 12 * 1024 * 1024;
 
 async function requireActiveDealer() {
   const session = await getDealerSession();
@@ -26,15 +27,31 @@ export async function createDealerApplication(formData: FormData) {
   const vin = String(formData.get('vin') || '').trim().toUpperCase();
   const typeApproval = String(formData.get('type_approval') || '').trim();
   const customerEmail = String(formData.get('customer_email') || '').trim();
+  const vinFile = formData.get('vin_image');
+  const hasVinFile = vinFile instanceof File && vinFile.size > 0;
 
   if (formData.get('accept_terms') !== 'on') {
     return { error: 'Ga akkoord met de voorwaarden om een aanvraag in te dienen.' };
   }
-  if (!licensePlate || !meldcode || !vin) {
-    return { error: 'Kenteken, meldcode en framenummer zijn verplicht.' };
+  if (!licensePlate || !meldcode) {
+    return { error: 'Kenteken en meldcode zijn verplicht.' };
+  }
+  if (!vin && !hasVinFile) {
+    return { error: 'Vul het framenummer in of upload een foto van kentekenbewijs of frame.' };
   }
   if (customerEmail && !EMAIL_RE.test(customerEmail)) {
     return { error: 'Vul een geldig klant-e-mailadres in, of laat het leeg.' };
+  }
+
+  let vinMeta: { ext: string; contentType: string } | null = null;
+  if (hasVinFile) {
+    if (vinFile.size > MAX_SIGNED_FORM_BYTES) {
+      return { error: 'VIN-foto is te groot (max 12 MB).' };
+    }
+    vinMeta = imageFileMeta(vinFile);
+    if (!vinMeta) {
+      return { error: 'Upload een foto (JPG/PNG/WebP) van kentekenbewijs of frame.' };
+    }
   }
 
   const admin = createAdminClient();
@@ -44,7 +61,7 @@ export async function createDealerApplication(formData: FormData) {
       dealer_id: gate.dealer.id,
       license_plate: licensePlate,
       meldcode,
-      vin,
+      vin: vin || null,
       type_approval: typeApproval || null,
       brand: String(formData.get('brand') || '').trim() || null,
       model: String(formData.get('model') || '').trim() || null,
@@ -63,7 +80,26 @@ export async function createDealerApplication(formData: FormData) {
     return { error: 'Aanvraag opslaan mislukt. Is de dealer-SQL al uitgevoerd?' };
   }
 
-  await notifyApplicationCreated(gate.dealer, data as DealerApplication);
+  let application = data as DealerApplication;
+  if (hasVinFile && vinMeta) {
+    const path = `${gate.dealer.id}/${application.id}/vin.${vinMeta.ext}`;
+    const buffer = Buffer.from(await vinFile.arrayBuffer());
+    const { error: uploadError } = await admin.storage.from('dealer-documents').upload(path, buffer, {
+      contentType: vinMeta.contentType,
+      upsert: true,
+    });
+    if (uploadError) {
+      console.error('VIN image upload failed:', uploadError.message);
+      return { error: 'Aanvraag is opgeslagen, maar de VIN-foto uploaden mislukte. Probeer de foto later opnieuw.' };
+    }
+    await (admin as any)
+      .from('dealer_applications')
+      .update({ vin_image_path: path, updated_at: new Date().toISOString() })
+      .eq('id', application.id);
+    application = { ...application, vin_image_path: path };
+  }
+
+  await notifyApplicationCreated(gate.dealer, application);
   revalidatePath('/dealer');
   redirect(`/dealer/aanvragen/${data.id}`);
 }
@@ -101,13 +137,8 @@ export async function updateDealerCustomerEmail(applicationId: string, formData:
   return { success: true };
 }
 
-const MAX_SIGNED_FORM_BYTES = 12 * 1024 * 1024;
-
-function signedFormFileMeta(file: File) {
+function imageFileMeta(file: File) {
   const name = file.name.toLowerCase();
-  if (file.type === 'application/pdf' || name.endsWith('.pdf')) {
-    return { ext: 'pdf', contentType: 'application/pdf' };
-  }
   if (file.type === 'image/jpeg' || name.endsWith('.jpg') || name.endsWith('.jpeg')) {
     return { ext: 'jpg', contentType: 'image/jpeg' };
   }
@@ -118,6 +149,14 @@ function signedFormFileMeta(file: File) {
     return { ext: 'webp', contentType: 'image/webp' };
   }
   return null;
+}
+
+function signedFormFileMeta(file: File) {
+  const name = file.name.toLowerCase();
+  if (file.type === 'application/pdf' || name.endsWith('.pdf')) {
+    return { ext: 'pdf', contentType: 'application/pdf' };
+  }
+  return imageFileMeta(file);
 }
 
 export async function uploadDealerSignedForm(applicationId: string, formData: FormData) {
